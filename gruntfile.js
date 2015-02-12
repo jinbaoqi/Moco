@@ -3,12 +3,12 @@ module.exports = function(grunt) {
         concat: {
             dist: {
                 src: [
-                    "src/Event.js",
+                    "src/EventDispatcher.js",
                     "src/Base.js",
                     "src/Stage.js",
-                    "src/Display.js",
-                    "src/DisplayContainer.js",
-                    "src/Graphics.js",
+                    "src/DisplayObject.js",
+                    "src/DisplayObjectContainer.js",
+                    "src/Shape.js",
                     "src/Sprite.js",
                     "src/Bitmap.js",
                     "src/BitmapData.js",
