@@ -1,3 +1,4 @@
-(function(){
-    //initialize
-}())
+/**
+ * BitmapData位图数据类
+ */
+

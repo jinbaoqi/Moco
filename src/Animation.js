@@ -1,3 +1,4 @@
-(function(){
-    //initialize
-}())
+/**
+ * Animation帧动画类
+ */
+

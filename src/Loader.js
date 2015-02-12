@@ -1,3 +1,3 @@
-(function(){
-    //initialize
-}())
+/**
+ * Loader加载显示对象类
+ */

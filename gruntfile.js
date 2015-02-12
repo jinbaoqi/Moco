@@ -1,13 +1,22 @@
 module.exports = function(grunt) {
     grunt.initConfig({
         concat: {
-            options: {
-                separator: ';'
-            },
             dist: {
-                // 将要被合并的文件
-                src: ['src/**/*.js'],
-                // 合并后的JS文件的存放位置
+                src: [
+                    "src/Event.js",
+                    "src/Base.js",
+                    "src/Stage.js",
+                    "src/Display.js",
+                    "src/DisplayContainer.js",
+                    "src/Graphics.js",
+                    "src/Sprite.js",
+                    "src/Bitmap.js",
+                    "src/BitmapData.js",
+                    "src/Animation.js",
+                    "src/URLLoader.js",
+                    "src/Loader.js",
+                    "src/Tween.js"
+                ],
                 dest: 'dist/moco.js'
             }
         },

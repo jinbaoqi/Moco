@@ -1,3 +1,3 @@
-(function(){
-    //initialize
-}())
+/**
+ * Base继承类
+ */

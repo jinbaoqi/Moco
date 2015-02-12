@@ -1,3 +1,3 @@
-(function(){
-    //initialize
-}())
+/**
+ * Tween动画类
+ */

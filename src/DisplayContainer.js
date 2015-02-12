@@ -1,3 +1,3 @@
-(function(){
-    //initialize
-}())
+/**
+ * DisplayContainer显示容器抽象类
+ */

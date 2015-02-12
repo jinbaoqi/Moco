@@ -1,3 +1,4 @@
-(function(){
-    //initialize
-}())
+/**
+ * Stage全局画布类
+ */
+
