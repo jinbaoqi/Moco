@@ -4,13 +4,15 @@
  */
 
 function Stage(canvasId){
+    DisplayObjectContainer.call(this);
+
+    this.name = "Stage";
     this.domElem = document.getElementById(canvasId);
     this.width = parseFloat(this.domElem.getAttribute("width"),10);
     this.height = parseFloat(this.domElem.getAttribute("height"),10);
     this.offset = this._getOffset(this.domElem);
-    this.stageX = this.offset.left;
-    this.stageY = this.offset.top;
-    this.childList = [];
+    this.x = this.offset.left;
+    this.y = this.offset.top;
 
     this.initialize();
 }
@@ -87,4 +89,4 @@ Stage.prototype._getElementTop = function(elem){
     return actualTop;
 };
 
-Base.create(EventDispatcher.prototype,Stage);
+Base.inherit(Stage,DisplayObjectContainer);

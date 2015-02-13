@@ -6,6 +6,9 @@
 var arrProto = Array.prototype,
     objProto = Object.prototype;
 
+var fnRegExp = /\s+/g,
+    guid = 0;
+
 var Util = {
     isType: function(target,type){
         return objProto.toString.call(target) == "[object "+type+"]";
@@ -37,14 +40,22 @@ var Util = {
             return tmp;
         }
     },
-    inArray: function(item,arr){
-        var self = this;
+    inArray: function(item,arr,fn){
+        var self = this,
+            flag;
 
         if(arrProto.inArray){
             return arrProto.inArray.call(arr,item);
         }else{
             for(var i = 0,len = arr.length; i < len; i++){
-                if(arr[i] == item){
+                if(typeof fn == "function"){
+                    flag = fn.call(item,item,arr[i],i,arr);
+
+                    if(flag == true){
+                        return i;
+                    }
+
+                }else if(arr[i] == item){
                     return i;
                 }
             }
@@ -82,19 +93,14 @@ var EventCore = {
             item;
 
         objs = Util.filter(self._list,function(item){
-            if(
-                cord.x >= item.x &&
-                cord.x <= item.x + item.width &&
-                cord.y >= item.y &&
-                cord.y <= item.y + item.height
-                ){
+            if(item.isMouseon(cord)){
                 return true;
             }
         });
 
         objs = arrProto.sort.call(objs,function(i,j){
-            var a1 = i.split("."),
-                a2 = j.split("."),
+            var a1 = i.objectIndex.split("."),
+                a2 = j.objectIndex.split("."),
                 len = Math.max(a1.length,a2.length);
 
             for(var i = 0; i < len; i++){
@@ -152,9 +158,6 @@ Util.extends(KeyBoardEvent,EventCore);
  * @type {RegExp}
  */
 
-var fnRegExp = /\s+/g,
-    guid = 0;
-
 function EventDispatcher(){};
 
 /**
@@ -163,13 +166,9 @@ function EventDispatcher(){};
  * @param callback
  * @param useCapture
  */
-EventDispatcher.prototype.on = function(target,eventName,callback,useCapture){
+EventDispatcher.prototype.on = function(eventName,callback,useCapture){
     var self = this,
         handlers,fn;
-
-    if(!target){
-        return;
-    }
 
     if(eventName && callback){
         useCapture = useCapture ? useCapture : false;
@@ -180,7 +179,7 @@ EventDispatcher.prototype.on = function(target,eventName,callback,useCapture){
             });
         }else{
 
-            handlers = target.handlers;
+            handlers = self.handlers;
 
             fn = function(event){
                 var callbacks = handlers[eventName],
@@ -205,7 +204,7 @@ EventDispatcher.prototype.on = function(target,eventName,callback,useCapture){
             fn.guid = guid++;
 
             if(!handlers){
-                handlers = target.handlers = {};
+                handlers = self.handlers = {};
             }
 
             if(!handlers[eventName]){
@@ -215,9 +214,9 @@ EventDispatcher.prototype.on = function(target,eventName,callback,useCapture){
             handlers[eventName].push(fn);
 
             if(handlers[eventName].length == 1){
-                if(target.addEventListener){
-                    target.addEventListener(eventName,fn,useCapture);
-                }else if(target.attachEvent){
+                if(self.addEventListener){
+                    self.addEventListener(eventName,fn,useCapture);
+                }else if(self.attachEvent){
                     self.attachEvent(eventName,fn);
                 }
             }
@@ -232,30 +231,26 @@ EventDispatcher.prototype.on = function(target,eventName,callback,useCapture){
  * @param eventName
  * @param callback
  */
-EventDispatcher.prototype.off = function(target,eventName,callback){
+EventDispatcher.prototype.off = function(eventName,callback){
     var self = this,
         handlers,callbacks,fnStr,fnItem;
-
-    if(!target){
-        return;
-    }
 
     if(eventName || callback){
         if(Util.isType(eventName,"Array")){
             Util.each(eventName,function(item){
-                self.off(target,item,callback);
+                self.off(self,item,callback);
             });
         }else if(!callback){
-            handlers = target.handlers;
+            handlers = self.handlers;
 
             if(handlers){
                 callbacks = handlers[eventName] ? handlers[eventName] : [];
                 Util.each(callbacks,function(item){
-                    self.off(target,eventName,item);
+                    self.off(self,eventName,item);
                 });
             }
         }else{
-            handlers = target.handlers;
+            handlers = self.handlers;
 
             if(handlers){
                 callbacks = handlers[eventName] ? handlers[eventName] : [];
@@ -284,37 +279,33 @@ EventDispatcher.prototype.off = function(target,eventName,callback){
  * @param eventName
  * @param callback
  */
-EventDispatcher.prototype.once = function(target,eventName,callback){
+EventDispatcher.prototype.once = function(eventName,callback){
     var self = this,
         fn;
 
-    if(!target){
-        return;
-    }
-
     fn = function(event){
         callback.call(self,event);
-        self.off(target,eventName,fn);
+        self.off(self,eventName,fn);
     };
 
     fn.fnStr = callback.toString().replace(fnRegExp,'');
 
-    return self.on(target,eventName,fn);
+    return self.on(self,eventName,fn);
 };
 
 /**
  * 事件触发
  * @param eventName
  */
-EventDispatcher.prototype.trigger = function(target,eventName){
+EventDispatcher.prototype.trigger = function(eventName){
     var self = this,
         handlers,callbacks,event,item;
 
-    if(!target || !eventName){
+    if(!eventName){
         return;
     }
 
-    handlers = target.handlers;
+    handlers = self.handlers;
 
     if(handlers){
         callbacks = handlers[eventName] ? handlers[eventName] : [];
@@ -421,7 +412,7 @@ EventDispatcher.prototype._fixEvent = function(event){
  */
 
 var Base = {
-    _inherit: function(Child,Parent){
+    inherit: function(Child,Parent){
         var F = function(){},
             old = Child.prototype;
 
@@ -434,30 +425,134 @@ var Base = {
                 Child.prototype[key] = old[key];
             }
         }
-    },
-    create: function(Child,Parent){
+    }
+};
+/**
+ * Display显示对象抽象类
+ */
+
+function DisplayObject(){
+    EventDispatcher.call(this);
+
+    this.name = "DisplayObject";
+    this.alpha = 1;
+    this.height = 0;
+    this.width = 0;
+    this.mask = null;
+    this.rotation = 0;
+    this.translateX = 0;
+    this.translateY = 0;
+    this.scale = 1;
+    this.parent = null;
+    this.x = 0;
+    this.y = 0;
+    this.visible = true;
+    this.aIndex = this.objectIndex = guid++;
+}
+
+DisplayObject.prototype = {
+    constructor: DisplayObject,
+    show: function(){},
+    isMouseon: function(cord){
         var self = this;
 
-        if(objProto.create){
-            objProto.create.call(Object,Child,Parent);
-        }else{
-            self._inherit(Child,Parent);
+        if(self.visible == false || self.alpha <= 0.01){
+            return false;
+        }
+
+        if(
+            cord.x >= self.x &&
+            cord.x <= self.x + self.width &&
+            cord.y >= self.y &&
+            cord.y <= self.y + self.height
+          ){
+            return true;
+        }
+
+        return false;
+    }
+};
+
+Base.inherit(DisplayObject,EventDispatcher);
+
+/**
+ * DisplayContainer显示容器抽象类
+ */
+
+function DisplayObjectContainer(){
+    DisplayObject.call(this);
+
+    this.name = "DisplayObjectContainer";
+    this._childList = [];
+}
+
+DisplayObjectContainer.prototype = {
+    constructor: DisplayObjectContainer,
+    addChild: function(obj){
+        var self = this;
+
+        if(obj instanceof DisplayObject){
+            self._childList.push(obj);
+            obj.parent = self;
+            obj.objectIndex = self.objectIndex+"."+self._childList.length;
+        }
+
+        return self;
+    },
+    removeChild: function(obj){
+        var self = this,
+            item;
+
+        if(obj instanceof DisplayObject){
+            for(var i = self._childList.length - 1; i >= 0; i++){
+                item = self._childList[i];
+                if(item.aIndex == obj.aIndex){
+                    arrProto.splice.call(self._childList,i,1);
+                }
+            }
+        }
+
+        return self;
+    },
+    getChildAt: function(index){
+        var self = this,
+            len = self._childList.length;
+
+        if(Math.abs(index) > len){
+            return;
+        }else if(index < 0){
+            index = len + index;
+        }
+
+        return self._childList[index];
+    },
+    contains: function(obj){
+        var self = this;
+
+        if(obj instanceof DisplayObject){
+            return Util.inArray(self._childList,obj,function(obj,item){
+                return obj.aIndex == item.aIndex;
+            }) == -1 ? false : true;
         }
     }
 };
+
+Base.inherit(DisplayObjectContainer,DisplayObject);
 
 /**
  * Stage全局画布类
  */
 
 function Stage(canvasId){
+    DisplayObjectContainer.call(this);
+
+    this.name = "Stage";
     this.domElem = document.getElementById(canvasId);
     this.width = parseFloat(this.domElem.getAttribute("width"),10);
     this.height = parseFloat(this.domElem.getAttribute("height"),10);
     this.offset = this._getOffset(this.domElem);
-    this.stageX = this.offset.left;
-    this.stageY = this.offset.top;
-    this.childList = [];
+    this.x = this.offset.left;
+    this.y = this.offset.top;
 
     this.initialize();
 }
@@ -534,15 +629,7 @@ Stage.prototype._getElementTop = function(elem){
     return actualTop;
 };
 
-Base.create(EventDispatcher.prototype,Stage);
-/**
- * Display显示对象抽象类
- */
-
-/**
- * DisplayContainer显示容器抽象类
- */
-
+Base.inherit(Stage,DisplayObjectContainer);
 /**
  * Shape绘图类
  */

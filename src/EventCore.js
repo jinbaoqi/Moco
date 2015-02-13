@@ -9,19 +9,14 @@ var EventCore = {
             item;
 
         objs = Util.filter(self._list,function(item){
-            if(
-                cord.x >= item.x &&
-                cord.x <= item.x + item.width &&
-                cord.y >= item.y &&
-                cord.y <= item.y + item.height
-                ){
+            if(item.isMouseon(cord)){
                 return true;
             }
         });
 
         objs = arrProto.sort.call(objs,function(i,j){
-            var a1 = i.split("."),
-                a2 = j.split("."),
+            var a1 = i.objectIndex.split("."),
+                a2 = j.objectIndex.split("."),
                 len = Math.max(a1.length,a2.length);
 
             for(var i = 0; i < len; i++){

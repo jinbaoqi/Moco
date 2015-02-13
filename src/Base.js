@@ -3,7 +3,7 @@
  */
 
 var Base = {
-    _inherit: function(Child,Parent){
+    inherit: function(Child,Parent){
         var F = function(){},
             old = Child.prototype;
 
@@ -15,15 +15,6 @@ var Base = {
             if(old.hasOwnProperty(key)){
                 Child.prototype[key] = old[key];
             }
-        }
-    },
-    create: function(Child,Parent){
-        var self = this;
-
-        if(objProto.create){
-            objProto.create.call(Object,Child,Parent);
-        }else{
-            self._inherit(Child,Parent);
         }
     }
 };

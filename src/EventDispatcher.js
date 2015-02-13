@@ -4,9 +4,6 @@
  * @type {RegExp}
  */
 
-var fnRegExp = /\s+/g,
-    guid = 0;
-
 function EventDispatcher(){};
 
 /**
@@ -15,13 +12,9 @@ function EventDispatcher(){};
  * @param callback
  * @param useCapture
  */
-EventDispatcher.prototype.on = function(target,eventName,callback,useCapture){
+EventDispatcher.prototype.on = function(eventName,callback,useCapture){
     var self = this,
         handlers,fn;
-
-    if(!target){
-        return;
-    }
 
     if(eventName && callback){
         useCapture = useCapture ? useCapture : false;
@@ -32,7 +25,7 @@ EventDispatcher.prototype.on = function(target,eventName,callback,useCapture){
             });
         }else{
 
-            handlers = target.handlers;
+            handlers = self.handlers;
 
             fn = function(event){
                 var callbacks = handlers[eventName],
@@ -57,7 +50,7 @@ EventDispatcher.prototype.on = function(target,eventName,callback,useCapture){
             fn.guid = guid++;
 
             if(!handlers){
-                handlers = target.handlers = {};
+                handlers = self.handlers = {};
             }
 
             if(!handlers[eventName]){
@@ -67,9 +60,9 @@ EventDispatcher.prototype.on = function(target,eventName,callback,useCapture){
             handlers[eventName].push(fn);
 
             if(handlers[eventName].length == 1){
-                if(target.addEventListener){
-                    target.addEventListener(eventName,fn,useCapture);
-                }else if(target.attachEvent){
+                if(self.addEventListener){
+                    self.addEventListener(eventName,fn,useCapture);
+                }else if(self.attachEvent){
                     self.attachEvent(eventName,fn);
                 }
             }
@@ -84,30 +77,26 @@ EventDispatcher.prototype.on = function(target,eventName,callback,useCapture){
  * @param eventName
  * @param callback
  */
-EventDispatcher.prototype.off = function(target,eventName,callback){
+EventDispatcher.prototype.off = function(eventName,callback){
     var self = this,
         handlers,callbacks,fnStr,fnItem;
-
-    if(!target){
-        return;
-    }
 
     if(eventName || callback){
         if(Util.isType(eventName,"Array")){
             Util.each(eventName,function(item){
-                self.off(target,item,callback);
+                self.off(self,item,callback);
             });
         }else if(!callback){
-            handlers = target.handlers;
+            handlers = self.handlers;
 
             if(handlers){
                 callbacks = handlers[eventName] ? handlers[eventName] : [];
                 Util.each(callbacks,function(item){
-                    self.off(target,eventName,item);
+                    self.off(self,eventName,item);
                 });
             }
         }else{
-            handlers = target.handlers;
+            handlers = self.handlers;
 
             if(handlers){
                 callbacks = handlers[eventName] ? handlers[eventName] : [];
@@ -136,37 +125,33 @@ EventDispatcher.prototype.off = function(target,eventName,callback){
  * @param eventName
  * @param callback
  */
-EventDispatcher.prototype.once = function(target,eventName,callback){
+EventDispatcher.prototype.once = function(eventName,callback){
     var self = this,
         fn;
 
-    if(!target){
-        return;
-    }
-
     fn = function(event){
         callback.call(self,event);
-        self.off(target,eventName,fn);
+        self.off(self,eventName,fn);
     };
 
     fn.fnStr = callback.toString().replace(fnRegExp,'');
 
-    return self.on(target,eventName,fn);
+    return self.on(self,eventName,fn);
 };
 
 /**
  * 事件触发
  * @param eventName
  */
-EventDispatcher.prototype.trigger = function(target,eventName){
+EventDispatcher.prototype.trigger = function(eventName){
     var self = this,
         handlers,callbacks,event,item;
 
-    if(!target || !eventName){
+    if(!eventName){
         return;
     }
 
-    handlers = target.handlers;
+    handlers = self.handlers;
 
     if(handlers){
         callbacks = handlers[eventName] ? handlers[eventName] : [];

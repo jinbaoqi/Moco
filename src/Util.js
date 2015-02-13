@@ -6,6 +6,9 @@
 var arrProto = Array.prototype,
     objProto = Object.prototype;
 
+var fnRegExp = /\s+/g,
+    guid = 0;
+
 var Util = {
     isType: function(target,type){
         return objProto.toString.call(target) == "[object "+type+"]";
@@ -37,14 +40,22 @@ var Util = {
             return tmp;
         }
     },
-    inArray: function(item,arr){
-        var self = this;
+    inArray: function(item,arr,fn){
+        var self = this,
+            flag;
 
         if(arrProto.inArray){
             return arrProto.inArray.call(arr,item);
         }else{
             for(var i = 0,len = arr.length; i < len; i++){
-                if(arr[i] == item){
+                if(typeof fn == "function"){
+                    flag = fn.call(item,item,arr[i],i,arr);
+
+                    if(flag == true){
+                        return i;
+                    }
+
+                }else if(arr[i] == item){
                     return i;
                 }
             }
