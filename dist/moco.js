@@ -5,10 +5,6 @@
 
 var arrProto = Array.prototype,
     objProto = Object.prototype;
-
-var fnRegExp = /\s+/g,
-    guid = 0;
-
 var Util = {
     isType: function(target,type){
         return objProto.toString.call(target) == "[object "+type+"]";
@@ -36,9 +32,23 @@ var Util = {
                     tmp.push(item);
                 }
             });
-
-            return tmp;
         }
+
+        return tmp;
+    },
+    reverse: function(arr){
+        var self = this,
+            tmp = [];
+
+        if(arrProto.reverse){
+            return arrProto.reverse.call(arr);
+        }else{
+            self.each(arr,function(item){
+                tmp.push(item);
+            });
+        }
+
+        return tmp;
     },
     inArray: function(item,arr,fn){
         var self = this,
@@ -79,13 +89,30 @@ var Util = {
                 }
             }
         }
+
         return obj;
+    },
+    keys: function(obj){
+        var self = this,
+            tmp = [];
+
+        if(Object.keys){
+            return Object.keys(obj);
+        }else{
+            for(var key in obj){
+                if(obj.hasOwnProperty(key)){
+                    tmp.push(key);
+                }
+            }
+        }
+
+        return tmp;
     }
 };
 
 var EventCore = {
     _list: [],
-    _getObjsFromCord: function(cord){
+    getObjsFromCord: function(cord){
         var self = this,
             objs = [],
             tmp = [],
@@ -138,10 +165,12 @@ Util.extends(Event,EventCore);
 
 var MouseEvent = {
     CLICK: "click",
-    MOUSE_MOVE: "mousemove",
-    MOUSE_OVER: "mouseover",
-    MOUSE_LEAVE: "mouseleave"
+    MOUSE_DOWN: "mousedown",
+    MOUSE_UP: "mouseup",
+    MOUSE_MOVE: "mousemove"
 };
+
+MouseEvent.nameList = Util.keys(MouseEvent);
 
 Util.extends(MouseEvent,EventCore);
 
@@ -151,12 +180,22 @@ var KeyBoardEvent = {
     KEY_PRESS: "keypress"
 };
 
+KeyBoardEvent.nameList = Util.keys(KeyBoardEvent);
+
+KeyBoardEvent.getObjs = function(){
+    return this._list;
+}
+
 Util.extends(KeyBoardEvent,EventCore);
 
 /**
  * 事件部分
  * @type {RegExp}
  */
+
+var fnRegExp = /\s+/g,
+    guid = 0;
+
 
 function EventDispatcher(){};
 
@@ -166,9 +205,16 @@ function EventDispatcher(){};
  * @param callback
  * @param useCapture
  */
-EventDispatcher.prototype.on = function(eventName,callback,useCapture){
+EventDispatcher.prototype.on = function(target,eventName,callback,useCapture){
     var self = this,
         handlers,fn;
+
+    if(typeof target == "string"){
+        useCapture = callback;
+        callback = eventName;
+        eventName = target;
+        target = self;
+    }
 
     if(eventName && callback){
         useCapture = useCapture ? useCapture : false;
@@ -179,13 +225,14 @@ EventDispatcher.prototype.on = function(eventName,callback,useCapture){
             });
         }else{
 
-            handlers = self.handlers;
+            handlers = target.handlers;
 
             fn = function(event){
                 var callbacks = handlers[eventName],
                     item;
 
                 event = self._fixEvent(event);
+                event.useCapture = useCapture;
 
                 for(var i = 0,len = callbacks.length; i < len; i++){
                     item = callbacks[i];
@@ -204,7 +251,7 @@ EventDispatcher.prototype.on = function(eventName,callback,useCapture){
             fn.guid = guid++;
 
             if(!handlers){
-                handlers = self.handlers = {};
+                handlers = target.handlers = {};
             }
 
             if(!handlers[eventName]){
@@ -214,9 +261,9 @@ EventDispatcher.prototype.on = function(eventName,callback,useCapture){
             handlers[eventName].push(fn);
 
             if(handlers[eventName].length == 1){
-                if(self.addEventListener){
-                    self.addEventListener(eventName,fn,useCapture);
-                }else if(self.attachEvent){
+                if(target.addEventListener){
+                    target.addEventListener(eventName,fn,useCapture);
+                }else if(target.attachEvent){
                     self.attachEvent(eventName,fn);
                 }
             }
@@ -231,26 +278,32 @@ EventDispatcher.prototype.on = function(eventName,callback,useCapture){
  * @param eventName
  * @param callback
  */
-EventDispatcher.prototype.off = function(eventName,callback){
+EventDispatcher.prototype.off = function(target,eventName,callback){
     var self = this,
         handlers,callbacks,fnStr,fnItem;
+
+    if(typeof target == "string"){
+        callback = eventName;
+        eventName = target;
+        target = self;
+    }
 
     if(eventName || callback){
         if(Util.isType(eventName,"Array")){
             Util.each(eventName,function(item){
-                self.off(self,item,callback);
+                self.off(target,item,callback);
             });
         }else if(!callback){
-            handlers = self.handlers;
+            handlers = target.handlers;
 
             if(handlers){
                 callbacks = handlers[eventName] ? handlers[eventName] : [];
                 Util.each(callbacks,function(item){
-                    self.off(self,eventName,item);
+                    self.off(target,eventName,item);
                 });
             }
         }else{
-            handlers = self.handlers;
+            handlers = target.handlers;
 
             if(handlers){
                 callbacks = handlers[eventName] ? handlers[eventName] : [];
@@ -279,40 +332,56 @@ EventDispatcher.prototype.off = function(eventName,callback){
  * @param eventName
  * @param callback
  */
-EventDispatcher.prototype.once = function(eventName,callback){
+EventDispatcher.prototype.once = function(target,eventName,callback,useCapture){
     var self = this,
         fn;
 
+    if(typeof target == "string"){
+        useCapture = callback;
+        callback = eventName;
+        eventName = target;
+        target = self;
+    }
+
     fn = function(event){
         callback.call(self,event);
-        self.off(self,eventName,fn);
+        self.off(target,eventName,fn);
     };
 
     fn.fnStr = callback.toString().replace(fnRegExp,'');
 
-    return self.on(self,eventName,fn);
+    return self.on(target,eventName,fn,useCapture);
 };
 
 /**
  * 事件触发
  * @param eventName
  */
-EventDispatcher.prototype.trigger = function(eventName){
+EventDispatcher.prototype.trigger = function(target,eventName,event){
     var self = this,
-        handlers,callbacks,event,item;
+        handlers,callbacks,item;
 
-    if(!eventName){
+    if(!target && !eventName){
         return;
+    }else if(typeof target == "string"){
+        event = eventName;
+        eventName = target;
+        target = self;
     }
 
-    handlers = self.handlers;
+    handlers = target.handlers;
 
-    if(handlers){
-        callbacks = handlers[eventName] ? handlers[eventName] : [];
+    if(!handlers){
+        return self;
     }
+
+    callbacks = handlers[eventName] ? handlers[eventName] : [];
 
     event = self._fixEvent(event);
-    event.target = event.currentTarget = self;
+
+    if(event.target == null){
+        event.target = event.currentTarget = self;
+    }
 
     for(var i = 0,len = callbacks.length; i < len; i++){
         item = callbacks[i];
@@ -322,6 +391,8 @@ EventDispatcher.prototype.trigger = function(eventName){
             item.callback.call(self,event);
         }
     }
+
+    //TODO: 向上冒泡
 
     return self;
 };
@@ -336,16 +407,9 @@ EventDispatcher.prototype._fixEvent = function(event){
     function returnFalse() { return false; }
 
     if (!event || !event.isPropagationStopped) {
-        var old = event || window.event;
-
-        event = {};
-        for (var key in old) {
-            if (key !== 'layerX' && key !== 'layerY' && key !== 'keyLocation') {
-                if (!(key == 'returnValue' && old.preventDefault)) {
-                    event[key] = old[key];
-                }
-            }
-        }
+        var preventDefault = event.preventDefault,
+            stopPropagation = event.stopPropagation,
+            stopImmediatePropagation = event.stopImmediatePropagation;
 
         if (!event.target) {
             event.target = event.srcElement || document;
@@ -360,8 +424,8 @@ EventDispatcher.prototype._fixEvent = function(event){
             event.fromElement;
 
         event.preventDefault = function () {
-            if (old && old.preventDefault) {
-                old.preventDefault();
+            if (preventDefault) {
+                preventDefault.call(event);
             }
             event.returnValue = false;
             event.isDefaultPrevented = returnTrue;
@@ -372,8 +436,8 @@ EventDispatcher.prototype._fixEvent = function(event){
         event.defaultPrevented = false;
 
         event.stopPropagation = function () {
-            if (old && old.stopPropagation) {
-                old.stopPropagation();
+            if (stopPropagation) {
+                stopPropagation.call(event);
             }
             event.cancelBubble = true;
             event.isPropagationStopped = returnTrue;
@@ -382,8 +446,8 @@ EventDispatcher.prototype._fixEvent = function(event){
         event.isPropagationStopped = returnFalse;
 
         event.stopImmediatePropagation = function () {
-            if (old && old.stopImmediatePropagation) {
-                old.stopImmediatePropagation();
+            if (stopImmediatePropagation) {
+                stopImmediatePropagation.call(event);
             }
             event.isImmediatePropagationStopped = returnTrue;
             event.stopPropagation();
@@ -446,6 +510,8 @@ function DisplayObject(){
     this.parent = null;
     this.x = 0;
     this.y = 0;
+    this.mouseX = 0;
+    this.mouseY = 0;
     this.visible = true;
     this.aIndex = this.objectIndex = guid++;
 }
@@ -540,10 +606,40 @@ DisplayObjectContainer.prototype = {
 Base.inherit(DisplayObjectContainer,DisplayObject);
 
 /**
+ * requestAnimationFrame兼容写法
+ * https://github.com/ngryman/raf.js
+ */
+var lastTime = 0,
+    vendors = ['webkit', 'moz'],
+    requestAnimationFrame = window.requestAnimationFrame,
+    cancelAnimationFrame = window.cancelAnimationFrame,
+    i = vendors.length,
+    raf,craf;
+
+while (--i >= 0 && !requestAnimationFrame) {
+    requestAnimationFrame = window[vendors[i] + 'RequestAnimationFrame'];
+    cancelAnimationFrame = window[vendors[i] + 'CancelAnimationFrame'];
+}
+
+if (!requestAnimationFrame || !cancelAnimationFrame) {
+    requestAnimationFrame = function(callback) {
+        var now = +new Date(), nextTime = Math.max(lastTime + 16, now);
+        return setTimeout(function() {
+            callback(lastTime = nextTime);
+        }, nextTime - now);
+    };
+
+    cancelAnimationFrame = clearTimeout;
+}
+
+raf = requestAnimationFrame;
+craf = cancelAnimationFrame;
+
+/**
  * Stage全局画布类
  */
 
-function Stage(canvasId){
+function Stage(canvasId,fn){
     DisplayObjectContainer.call(this);
 
     this.name = "Stage";
@@ -554,19 +650,103 @@ function Stage(canvasId){
     this.x = this.offset.left;
     this.y = this.offset.top;
 
+    if(typeof fn == "function"){
+        fn.call(self);
+    }
+
     this.initialize();
 }
 
 Stage.prototype.initialize = function(){
     var self = this;
+
+    //鼠标事件的注册
+    Util.each(MouseEvent.nameList,function(eventName){
+        eventName = eventName.toLowerCase().replace("_","");
+        self.on(document,eventName,function(event){
+            var cord = {
+                x: 0,
+                y: 0
+            };
+
+            if(event.clientX != null){
+                cord.x = event.pageX - self.x;
+                cord.y = event.pageY - self.y;
+                self.mouseX = cord.x;
+                self.mouseY = cord.y;
+            }
+
+            event.cord = cord;
+
+            self.trigger(event.type,event);
+            self.mouseEvent(cord,event);
+        });
+    });
+
+    //键盘事件的注册
+    Util.each(KeyBoardEvent.nameList,function(eventName){
+        eventName = eventName.toLowerCase().replace("_","");
+        self.on(document,eventName.toLowerCase(),function(event){
+            self.trigger(event.type,event);
+            self.mouseEvent(null,event);
+        });
+    })
+
+    self.show();
 };
 
-Stage.prototype.isMouseOn = function(){
+Stage.prototype.show = function(){
+    var self = this,
+        item;
 
-};
+    for(var i = 0,len = self._childList.length; i < len; i++){
+        item = self._childList[i];
 
-Stage.prototype.mouseEvent = function(){
+        if(item.show){
+            item.show();
+        }
+    }
 
+    raf(function(){
+        self.show();
+    });
+}
+
+Stage.prototype.mouseEvent = function(cord,event){
+    var objs = [],
+        reverseObjs = [],
+        item;
+
+    function returnFalse(){return false};
+
+    if(cord != null){
+        objs = MouseEvent.getObjsFromCord(cord);
+
+        //模拟捕获阶段
+        if(event.useCapture){
+            reverseObjs = Util.reverse(objs);
+            for(var i = reverseObjs.length - 1; i >= 0; i--){
+                item = reverseObjs[i];
+                item.trigger(event.type,event);
+            }
+        }
+
+    }else{
+        objs = KeyBoardEvent.getObjs();
+    }
+
+    event.isImmediatePropagationStopped = returnFalse;
+    event.isPropagationStopped = returnFalse;
+
+    //模拟目标阶段和冒泡阶段
+    for(var i = 0,len = objs.length; i < len; i++){
+        if(event.isPropagationStopped()){
+            break;
+        }else{
+            item = objs[i];
+            item.trigger(event.type,event);
+        }
+    }
 };
 
 Stage.prototype._getOffset = function(domElem){
@@ -574,7 +754,7 @@ Stage.prototype._getOffset = function(domElem){
         docElem = document.documentElement,
         scrollTop = docElem.scrollTop,
         scrollLeft = docElem.scrollLeft,
-        actualLeft,actualTop;
+        actualLeft,actualTop,rect,offset;
 
     if(domElem.getBoundingClientRect){
         if(typeof arguments.callee.offset != "number"){
@@ -586,8 +766,8 @@ Stage.prototype._getOffset = function(domElem){
             tmp = null;
         }
 
-        var rect = domElem.getBoundingClientRect();
-        var offset = arguments.callee.offset;
+        rect = domElem.getBoundingClientRect();
+        offset = arguments.callee.offset;
 
         return{
             left: rect.left + offset,

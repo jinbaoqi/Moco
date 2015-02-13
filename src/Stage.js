@@ -3,7 +3,7 @@
  * Stage全局画布类
  */
 
-function Stage(canvasId){
+function Stage(canvasId,fn){
     DisplayObjectContainer.call(this);
 
     this.name = "Stage";
@@ -14,19 +14,103 @@ function Stage(canvasId){
     this.x = this.offset.left;
     this.y = this.offset.top;
 
+    if(typeof fn == "function"){
+        fn.call(self);
+    }
+
     this.initialize();
 }
 
 Stage.prototype.initialize = function(){
     var self = this;
+
+    //鼠标事件的注册
+    Util.each(MouseEvent.nameList,function(eventName){
+        eventName = eventName.toLowerCase().replace("_","");
+        self.on(document,eventName,function(event){
+            var cord = {
+                x: 0,
+                y: 0
+            };
+
+            if(event.clientX != null){
+                cord.x = event.pageX - self.x;
+                cord.y = event.pageY - self.y;
+                self.mouseX = cord.x;
+                self.mouseY = cord.y;
+            }
+
+            event.cord = cord;
+
+            self.trigger(event.type,event);
+            self.mouseEvent(cord,event);
+        });
+    });
+
+    //键盘事件的注册
+    Util.each(KeyBoardEvent.nameList,function(eventName){
+        eventName = eventName.toLowerCase().replace("_","");
+        self.on(document,eventName.toLowerCase(),function(event){
+            self.trigger(event.type,event);
+            self.mouseEvent(null,event);
+        });
+    })
+
+    self.show();
 };
 
-Stage.prototype.isMouseOn = function(){
+Stage.prototype.show = function(){
+    var self = this,
+        item;
 
-};
+    for(var i = 0,len = self._childList.length; i < len; i++){
+        item = self._childList[i];
 
-Stage.prototype.mouseEvent = function(){
+        if(item.show){
+            item.show();
+        }
+    }
 
+    raf(function(){
+        self.show();
+    });
+}
+
+Stage.prototype.mouseEvent = function(cord,event){
+    var objs = [],
+        reverseObjs = [],
+        item;
+
+    function returnFalse(){return false};
+
+    if(cord != null){
+        objs = MouseEvent.getObjsFromCord(cord);
+
+        //模拟捕获阶段
+        if(event.useCapture){
+            reverseObjs = Util.reverse(objs);
+            for(var i = reverseObjs.length - 1; i >= 0; i--){
+                item = reverseObjs[i];
+                item.trigger(event.type,event);
+            }
+        }
+
+    }else{
+        objs = KeyBoardEvent.getObjs();
+    }
+
+    event.isImmediatePropagationStopped = returnFalse;
+    event.isPropagationStopped = returnFalse;
+
+    //模拟目标阶段和冒泡阶段
+    for(var i = 0,len = objs.length; i < len; i++){
+        if(event.isPropagationStopped()){
+            break;
+        }else{
+            item = objs[i];
+            item.trigger(event.type,event);
+        }
+    }
 };
 
 Stage.prototype._getOffset = function(domElem){
@@ -34,7 +118,7 @@ Stage.prototype._getOffset = function(domElem){
         docElem = document.documentElement,
         scrollTop = docElem.scrollTop,
         scrollLeft = docElem.scrollLeft,
-        actualLeft,actualTop;
+        actualLeft,actualTop,rect,offset;
 
     if(domElem.getBoundingClientRect){
         if(typeof arguments.callee.offset != "number"){
@@ -46,8 +130,8 @@ Stage.prototype._getOffset = function(domElem){
             tmp = null;
         }
 
-        var rect = domElem.getBoundingClientRect();
-        var offset = arguments.callee.offset;
+        rect = domElem.getBoundingClientRect();
+        offset = arguments.callee.offset;
 
         return{
             left: rect.left + offset,

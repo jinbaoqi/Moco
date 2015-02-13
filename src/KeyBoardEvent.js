@@ -5,4 +5,10 @@ var KeyBoardEvent = {
     KEY_PRESS: "keypress"
 };
 
+KeyBoardEvent.nameList = Util.keys(KeyBoardEvent);
+
+KeyBoardEvent.getObjs = function(){
+    return this._list;
+}
+
 Util.extends(KeyBoardEvent,EventCore);

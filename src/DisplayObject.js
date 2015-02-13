@@ -17,6 +17,8 @@ function DisplayObject(){
     this.parent = null;
     this.x = 0;
     this.y = 0;
+    this.mouseX = 0;
+    this.mouseY = 0;
     this.visible = true;
     this.aIndex = this.objectIndex = guid++;
 }

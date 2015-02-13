@@ -5,10 +5,6 @@
 
 var arrProto = Array.prototype,
     objProto = Object.prototype;
-
-var fnRegExp = /\s+/g,
-    guid = 0;
-
 var Util = {
     isType: function(target,type){
         return objProto.toString.call(target) == "[object "+type+"]";
@@ -36,9 +32,23 @@ var Util = {
                     tmp.push(item);
                 }
             });
-
-            return tmp;
         }
+
+        return tmp;
+    },
+    reverse: function(arr){
+        var self = this,
+            tmp = [];
+
+        if(arrProto.reverse){
+            return arrProto.reverse.call(arr);
+        }else{
+            self.each(arr,function(item){
+                tmp.push(item);
+            });
+        }
+
+        return tmp;
     },
     inArray: function(item,arr,fn){
         var self = this,
@@ -79,6 +89,23 @@ var Util = {
                 }
             }
         }
+
         return obj;
+    },
+    keys: function(obj){
+        var self = this,
+            tmp = [];
+
+        if(Object.keys){
+            return Object.keys(obj);
+        }else{
+            for(var key in obj){
+                if(obj.hasOwnProperty(key)){
+                    tmp.push(key);
+                }
+            }
+        }
+
+        return tmp;
     }
 };
