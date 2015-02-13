@@ -20,5 +20,20 @@ var Util = {
                 callback(arr[i],i,arr);
             }
         }
+    },
+    inArray: function(item,arr){
+        var self = this;
+
+        if(arrProto.inArray){
+            return arrProto.inArray.call(arr,item);
+        }else{
+            for(var i = 0,len = arr.length; i < len; i++){
+                if(arr[i] == item){
+                    return i;
+                }
+            }
+
+            return -1;
+        }
     }
 };

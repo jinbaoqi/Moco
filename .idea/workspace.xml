@@ -23,29 +23,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="moco.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dist/moco.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="247" max-vertical-offset="6384">
-              <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-              <folding>
-                <marker date="1423806440000" expanded="true" signature="1061:4638" placeholder="{...}" />
-                <marker date="1423806440000" expanded="true" signature="1033:1175" placeholder="{...}" />
-                <marker date="1423806440000" expanded="true" signature="1301:4639" placeholder="{...}" />
-                <marker date="1423806440000" expanded="true" signature="3982:4218" placeholder="{...}" />
-                <marker date="1423806440000" expanded="true" signature="4420:4424" placeholder="{...}" />
-                <marker date="1423806440000" expanded="true" signature="4618:4621" placeholder="{...}" />
-                <marker date="1423806440000" expanded="true" signature="4720:5860" placeholder="{...}" />
-                <marker date="1423806440000" expanded="true" signature="5406:5449" placeholder="{...}" />
-                <marker date="1423806440000" expanded="true" signature="5753:5818" placeholder="{...}" />
-                <marker date="1423806440000" expanded="true" signature="5987:6105" placeholder="/** 事件解除 ...*/" />
-                <marker date="1423806440000" expanded="true" signature="6367:6441" placeholder="/** 事件触发 ...*/" />
-                <marker date="1423806440000" expanded="true" signature="6438:6737" placeholder="/** 一次事件注册 ...*/" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="example.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/example.html">
           <provider selected="true" editor-type-id="text-editor">
@@ -59,8 +36,8 @@
       <file leaf-file-name="Util.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Util.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="551">
-              <caret line="6" column="32" selection-start-line="6" selection-start-column="32" selection-end-line="6" selection-end-column="32" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="836">
+              <caret line="23" column="32" selection-start-line="23" selection-start-column="32" selection-end-line="23" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -69,8 +46,8 @@
       <file leaf-file-name="EventDispatcher.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/EventDispatcher.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-1.8074745" vertical-offset="2774" max-vertical-offset="4959">
-              <caret line="62" column="13" selection-start-line="62" selection-start-column="13" selection-end-line="62" selection-end-column="13" />
+            <state vertical-scroll-proportion="0.806342" vertical-offset="371" max-vertical-offset="4959">
+              <caret line="57" column="48" selection-start-line="57" selection-start-column="48" selection-end-line="57" selection-end-column="48" />
               <folding />
             </state>
           </provider>
@@ -317,20 +294,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="418" max-vertical-offset="1102">
           <caret line="24" column="0" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
-          <folding>
-            <marker date="1423806440000" expanded="true" signature="1061:4638" placeholder="{...}" />
-            <marker date="1423806440000" expanded="true" signature="1033:1175" placeholder="{...}" />
-            <marker date="1423806440000" expanded="true" signature="1301:4639" placeholder="{...}" />
-            <marker date="1423806440000" expanded="true" signature="3982:4218" placeholder="{...}" />
-            <marker date="1423806440000" expanded="true" signature="4420:4424" placeholder="{...}" />
-            <marker date="1423806440000" expanded="true" signature="4618:4621" placeholder="{...}" />
-            <marker date="1423806440000" expanded="true" signature="4720:5860" placeholder="{...}" />
-            <marker date="1423806440000" expanded="true" signature="5406:5449" placeholder="{...}" />
-            <marker date="1423806440000" expanded="true" signature="5753:5818" placeholder="{...}" />
-            <marker date="1423806440000" expanded="true" signature="5987:6105" placeholder="/** 事件解除 ...*/" />
-            <marker date="1423806440000" expanded="true" signature="6367:6441" placeholder="/** 事件触发 ...*/" />
-            <marker date="1423806440000" expanded="true" signature="6438:6737" placeholder="/** 一次事件注册 ...*/" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -354,20 +318,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="437" max-vertical-offset="1140">
           <caret line="23" column="3" selection-start-line="23" selection-start-column="3" selection-end-line="23" selection-end-column="3" />
-          <folding>
-            <marker date="1423806440000" expanded="true" signature="1061:4638" placeholder="{...}" />
-            <marker date="1423806440000" expanded="true" signature="1033:1175" placeholder="{...}" />
-            <marker date="1423806440000" expanded="true" signature="1301:4639" placeholder="{...}" />
-            <marker date="1423806440000" expanded="true" signature="3982:4218" placeholder="{...}" />
-            <marker date="1423806440000" expanded="true" signature="4420:4424" placeholder="{...}" />
-            <marker date="1423806440000" expanded="true" signature="4618:4621" placeholder="{...}" />
-            <marker date="1423806440000" expanded="true" signature="4720:5860" placeholder="{...}" />
-            <marker date="1423806440000" expanded="true" signature="5406:5449" placeholder="{...}" />
-            <marker date="1423806440000" expanded="true" signature="5753:5818" placeholder="{...}" />
-            <marker date="1423806440000" expanded="true" signature="5987:6105" placeholder="/** 事件解除 ...*/" />
-            <marker date="1423806440000" expanded="true" signature="6367:6441" placeholder="/** 事件触发 ...*/" />
-            <marker date="1423806440000" expanded="true" signature="6438:6737" placeholder="/** 一次事件注册 ...*/" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -488,29 +439,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/dist/moco.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="247" max-vertical-offset="6384">
-          <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-          <folding>
-            <marker date="1423806440000" expanded="true" signature="1061:4638" placeholder="{...}" />
-            <marker date="1423806440000" expanded="true" signature="1033:1175" placeholder="{...}" />
-            <marker date="1423806440000" expanded="true" signature="1301:4639" placeholder="{...}" />
-            <marker date="1423806440000" expanded="true" signature="3982:4218" placeholder="{...}" />
-            <marker date="1423806440000" expanded="true" signature="4420:4424" placeholder="{...}" />
-            <marker date="1423806440000" expanded="true" signature="4618:4621" placeholder="{...}" />
-            <marker date="1423806440000" expanded="true" signature="4720:5860" placeholder="{...}" />
-            <marker date="1423806440000" expanded="true" signature="5406:5449" placeholder="{...}" />
-            <marker date="1423806440000" expanded="true" signature="5753:5818" placeholder="{...}" />
-            <marker date="1423806440000" expanded="true" signature="5987:6105" placeholder="/** 事件解除 ...*/" />
-            <marker date="1423806440000" expanded="true" signature="6367:6441" placeholder="/** 事件触发 ...*/" />
-            <marker date="1423806440000" expanded="true" signature="6438:6737" placeholder="/** 一次事件注册 ...*/" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Util.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="551">
-          <caret line="6" column="32" selection-start-line="6" selection-start-column="32" selection-end-line="6" selection-end-column="32" />
+        <state vertical-scroll-proportion="0.45186862" vertical-offset="4921" max-vertical-offset="6384">
+          <caret line="280" column="3" selection-start-line="280" selection-start-column="3" selection-end-line="280" selection-end-column="3" />
           <folding />
         </state>
       </provider>
@@ -523,10 +453,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/Util.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="836">
+          <caret line="23" column="32" selection-start-line="23" selection-start-column="32" selection-end-line="23" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/EventDispatcher.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.8074745" vertical-offset="2774" max-vertical-offset="4959">
-          <caret line="62" column="13" selection-start-line="62" selection-start-column="13" selection-end-line="62" selection-end-column="13" />
+        <state vertical-scroll-proportion="0.806342" vertical-offset="371" max-vertical-offset="4959">
+          <caret line="57" column="48" selection-start-line="57" selection-start-column="48" selection-end-line="57" selection-end-column="48" />
           <folding />
         </state>
       </provider>

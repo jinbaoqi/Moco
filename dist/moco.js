@@ -20,6 +20,21 @@ var Util = {
                 callback(arr[i],i,arr);
             }
         }
+    },
+    inArray: function(item,arr){
+        var self = this;
+
+        if(arrProto.inArray){
+            return arrProto.inArray.call(arr,item);
+        }else{
+            for(var i = 0,len = arr.length; i < len; i++){
+                if(arr[i] == item){
+                    return i;
+                }
+            }
+
+            return -1;
+        }
     }
 };
 
@@ -67,7 +82,7 @@ EventDispatcher.prototype.on = function(target,eventName,callback,useCapture){
                 for(var i = 0,len = callbacks.length; i < len; i++){
                     if(event.isImmediatePropagationStopped()){
                         break;
-                    }else{
+                    }else if(callbacks[i].guid == fn.guid){
                         callbacks[i].callback.call(self,event);
                     }
                 }

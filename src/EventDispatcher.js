@@ -43,7 +43,7 @@ EventDispatcher.prototype.on = function(target,eventName,callback,useCapture){
                 for(var i = 0,len = callbacks.length; i < len; i++){
                     if(event.isImmediatePropagationStopped()){
                         break;
-                    }else{
+                    }else if(callbacks[i].guid == fn.guid){
                         callbacks[i].callback.call(self,event);
                     }
                 }
