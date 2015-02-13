@@ -160,7 +160,7 @@ EventDispatcher.prototype.once = function(target,eventName,callback){
  */
 EventDispatcher.prototype.trigger = function(target,eventName){
     var self = this,
-        handlers,callbacks;
+        handlers,callbacks,event,item;
 
     if(!target || !eventName){
         return;
@@ -172,9 +172,16 @@ EventDispatcher.prototype.trigger = function(target,eventName){
         callbacks = handlers[eventName] ? handlers[eventName] : [];
     }
 
-    Util.each(callbacks,function(item){
-        item.call(self);
-    });
+    event = self._fixEvent(event);
+
+    for(var i = 0,len = callbacks.length; i < len; i++){
+        item = callbacks[i];
+        if(event.isImmediatePropagationStopped()){
+            break;
+        }else{
+            item.callback.call(self,event);
+        }
+    }
 
     return self;
 };
@@ -209,7 +216,7 @@ EventDispatcher.prototype._fixEvent = function(event){
             event.fromElement;
 
         event.preventDefault = function () {
-            if (old.preventDefault) {
+            if (old && old.preventDefault) {
                 old.preventDefault();
             }
             event.returnValue = false;
@@ -221,7 +228,7 @@ EventDispatcher.prototype._fixEvent = function(event){
         event.defaultPrevented = false;
 
         event.stopPropagation = function () {
-            if (old.stopPropagation) {
+            if (old && old.stopPropagation) {
                 old.stopPropagation();
             }
             event.cancelBubble = true;
@@ -231,7 +238,7 @@ EventDispatcher.prototype._fixEvent = function(event){
         event.isPropagationStopped = returnFalse;
 
         event.stopImmediatePropagation = function () {
-            if (old.stopImmediatePropagation) {
+            if (old && old.stopImmediatePropagation) {
                 old.stopImmediatePropagation();
             }
             event.isImmediatePropagationStopped = returnTrue;
