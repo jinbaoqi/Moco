@@ -74,16 +74,18 @@ EventDispatcher.prototype.on = function(target,eventName,callback,useCapture){
             handlers = target.handlers;
 
             fn = function(event){
+                var callbacks = handlers[eventName],
+                    item;
 
                 event = self._fixEvent(event);
 
-                var callbacks = handlers[eventName];
-
                 for(var i = 0,len = callbacks.length; i < len; i++){
+                    item = callbacks[i];
+
                     if(event.isImmediatePropagationStopped()){
                         break;
-                    }else if(callbacks[i].guid == fn.guid){
-                        callbacks[i].callback.call(self,event);
+                    }else if(item.guid == fn.guid){
+                        item.callback.call(self,event);
                     }
                 }
             };
