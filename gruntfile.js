@@ -4,6 +4,10 @@ module.exports = function(grunt) {
             dist: {
                 src: [
                     "src/Util.js",
+                    "src/EventCore.js",
+                    "src/Event.js",
+                    "src/MouseEvent.js",
+                    "src/KeyBoardEvent.js",
                     "src/EventDispatcher.js",
                     "src/Base.js",
                     "src/Stage.js",

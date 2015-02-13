@@ -173,6 +173,7 @@ EventDispatcher.prototype.trigger = function(target,eventName){
     }
 
     event = self._fixEvent(event);
+    event.target = event.currentTarget = self;
 
     for(var i = 0,len = callbacks.length; i < len; i++){
         item = callbacks[i];
@@ -187,7 +188,7 @@ EventDispatcher.prototype.trigger = function(target,eventName){
 };
 
 /**
- * 修复event的部分方法和属性
+ * 统一event的部分方法和属性
  * @param event
  * @returns {*}
  */
@@ -209,6 +210,10 @@ EventDispatcher.prototype._fixEvent = function(event){
 
         if (!event.target) {
             event.target = event.srcElement || document;
+        }
+
+        if(!event.currentTarget){
+            event.currentTarget = self;
         }
 
         event.relatedTarget = event.fromElement === event.target ?

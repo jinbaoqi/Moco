@@ -21,6 +21,22 @@ var Util = {
             }
         }
     },
+    filter: function(arr,callback){
+        var self = this,
+            tmp = [];
+
+        if(arr && arrProto.filter){
+            return arrProto.filter.call(arr,callback);
+        }else{
+            self.each(arr,function(item,index,arr){
+                if(callback.call(arr,item,index,arr) == true){
+                    tmp.push(item);
+                }
+            });
+
+            return tmp;
+        }
+    },
     inArray: function(item,arr){
         var self = this;
 
@@ -35,5 +51,23 @@ var Util = {
 
             return -1;
         }
+    },
+    extends: function(obj) {
+        var self = this,
+            source, prop;
+
+        if (!self.isType(obj,"Object")) {
+            return obj;
+        }
+
+        for (var i = 1, length = arguments.length; i < length; i++) {
+            source = arguments[i];
+            for (prop in source) {
+                if (hasOwnProperty.call(source, prop)) {
+                    obj[prop] = source[prop];
+                }
+            }
+        }
+        return obj;
     }
 };

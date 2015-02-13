@@ -21,6 +21,22 @@ var Util = {
             }
         }
     },
+    filter: function(arr,callback){
+        var self = this,
+            tmp = [];
+
+        if(arr && arrProto.filter){
+            return arrProto.filter.call(arr,callback);
+        }else{
+            self.each(arr,function(item,index,arr){
+                if(callback.call(arr,item,index,arr) == true){
+                    tmp.push(item);
+                }
+            });
+
+            return tmp;
+        }
+    },
     inArray: function(item,arr){
         var self = this;
 
@@ -35,8 +51,102 @@ var Util = {
 
             return -1;
         }
+    },
+    extends: function(obj) {
+        var self = this,
+            source, prop;
+
+        if (!self.isType(obj,"Object")) {
+            return obj;
+        }
+
+        for (var i = 1, length = arguments.length; i < length; i++) {
+            source = arguments[i];
+            for (prop in source) {
+                if (hasOwnProperty.call(source, prop)) {
+                    obj[prop] = source[prop];
+                }
+            }
+        }
+        return obj;
     }
 };
+
+var EventCore = {
+    _list: [],
+    _getObjsFromCord: function(cord){
+        var self = this,
+            objs = [],
+            tmp = [],
+            k = 0,
+            item;
+
+        objs = Util.filter(self._list,function(item){
+            if(
+                cord.x >= item.x &&
+                cord.x <= item.x + item.width &&
+                cord.y >= item.y &&
+                cord.y <= item.y + item.height
+                ){
+                return true;
+            }
+        });
+
+        objs = arrProto.sort.call(objs,function(i,j){
+            var a1 = i.split("."),
+                a2 = j.split("."),
+                len = Math.max(a1.length,a2.length);
+
+            for(var i = 0; i < len; i++){
+                if(!a1[i] || !a2[i]){
+                    return a1[i] ? 1 : -1;
+                }else if(a1[i] != a2[i]){
+                    return a1[i] - a2[i];
+                }
+            }
+        });
+
+        k = objs[0] && objs[0].aIndex;
+
+        for(var i = 0,len = objs.length; i < len; i++){
+            item = objs[i];
+            if(k != item.aIndex){
+                break;
+            }else{
+                tmp.push(item);
+            }
+        }
+
+        return tmp;
+    }
+};
+
+
+var Event = {
+    RENDER: "render",
+    COMPLETE: "complete",
+    ADD_TO_STAGE: "add_to_stage"
+};
+
+Util.extends(Event,EventCore);
+
+var MouseEvent = {
+    CLICK: "click",
+    MOUSE_MOVE: "mousemove",
+    MOUSE_OVER: "mouseover",
+    MOUSE_LEAVE: "mouseleave",
+    _list: []
+};
+
+Util.extends(MouseEvent,EventCore);
+
+var KeyBoardEvent = {
+    KEY_DOWN: "keydown",
+    KEY_UP: "keyup",
+    KEY_PRESS: "keypress"
+};
+
+Util.extends(KeyBoardEvent,EventCore);
 
 /**
  * 事件部分
@@ -212,6 +322,7 @@ EventDispatcher.prototype.trigger = function(target,eventName){
     }
 
     event = self._fixEvent(event);
+    event.target = event.currentTarget = self;
 
     for(var i = 0,len = callbacks.length; i < len; i++){
         item = callbacks[i];
@@ -226,7 +337,7 @@ EventDispatcher.prototype.trigger = function(target,eventName){
 };
 
 /**
- * 修复event的部分方法和属性
+ * 统一event的部分方法和属性
  * @param event
  * @returns {*}
  */
@@ -248,6 +359,10 @@ EventDispatcher.prototype._fixEvent = function(event){
 
         if (!event.target) {
             event.target = event.srcElement || document;
+        }
+
+        if(!event.currentTarget){
+            event.currentTarget = self;
         }
 
         event.relatedTarget = event.fromElement === event.target ?
@@ -306,11 +421,121 @@ EventDispatcher.prototype._fixEvent = function(event){
  * Base继承类
  */
 
+var Base = {
+    _inherit: function(Child,Parent){
+        var F = function(){},
+            old = Child.prototype;
+
+        F.prototype = Parent.prototype;
+        Child.prototype = new F();
+        Child.prototype.constructor = Child;
+
+        for(var key in old){
+            if(old.hasOwnProperty(key)){
+                Child.prototype[key] = old[key];
+            }
+        }
+    },
+    create: function(Child,Parent){
+        var self = this;
+
+        if(objProto.create){
+            objProto.create.call(Object,Child,Parent);
+        }else{
+            self._inherit(Child,Parent);
+        }
+    }
+};
+
 /**
  * Stage全局画布类
  */
 
+function Stage(canvasId){
+    this.domElem = document.getElementById(canvasId);
+    this.width = parseFloat(this.domElem.getAttribute("width"),10);
+    this.height = parseFloat(this.domElem.getAttribute("height"),10);
+    this.offset = this._getOffset(this.domElem);
+    this.stageX = this.offset.left;
+    this.stageY = this.offset.top;
+    this.childList = [];
 
+    this.initialize();
+}
+
+Stage.prototype.initialize = function(){
+    var self = this;
+};
+
+Stage.prototype.isMouseOn = function(){
+
+};
+
+Stage.prototype.mouseEvent = function(){
+
+};
+
+Stage.prototype._getOffset = function(domElem){
+    var self = this,
+        docElem = document.documentElement,
+        scrollTop = docElem.scrollTop,
+        scrollLeft = docElem.scrollLeft,
+        actualLeft,actualTop;
+
+    if(domElem.getBoundingClientRect){
+        if(typeof arguments.callee.offset != "number"){
+            var tmp = document.createElement("div");
+            tmp.style.cssText = "position:absolute;left:0;top:0";
+            document.body.appendChild(tmp);
+            arguments.callee.offset = -tmp.getBoundingClientRect().top - scrollTop;
+            document.body.removeChild(tmp);
+            tmp = null;
+        }
+
+        var rect = domElem.getBoundingClientRect();
+        var offset = arguments.callee.offset;
+
+        return{
+            left: rect.left + offset,
+            top: rect.top + offset
+        }
+
+    }else{
+        actualLeft = self._getElementLeft(domElem);
+        actualTop = self._getElementTop(domElem);
+
+        return {
+            left: actualLeft - scrollLeft,
+            top: actualTop - scrollTop
+        }
+    }
+};
+
+Stage.prototype._getElementLeft = function(elem){
+    var actualLeft = elem.offsetLeft;
+    var current = elem.offsetParent;
+
+    while(current != null){
+        actualLeft += current.offsetLeft;
+        current = current.offsetParent;
+    }
+
+    return actualLeft;
+};
+
+Stage.prototype._getElementTop = function(elem){
+    var actualTop = elem.offsetTop;
+    var current = elem.offsetParent;
+
+    while(current != null){
+        actualTop += current.offsetTop;
+        current = current.offsetParent;
+    }
+
+    return actualTop;
+};
+
+Base.create(EventDispatcher.prototype,Stage);
 /**
  * Display显示对象抽象类
  */
@@ -320,7 +545,7 @@ EventDispatcher.prototype._fixEvent = function(event){
  */
 
 /**
- * Graphics绘图类
+ * Shape绘图类
  */
 
 /**

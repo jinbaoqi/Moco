@@ -1,3 +1,3 @@
 /**
- * Graphics绘图类
+ * Shape绘图类
  */
