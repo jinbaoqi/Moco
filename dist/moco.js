@@ -5,6 +5,7 @@
 
 var arrProto = Array.prototype,
     objProto = Object.prototype;
+
 var Util = {
     isType: function(target,type){
         return objProto.toString.call(target) == "[object "+type+"]";
