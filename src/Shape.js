@@ -25,14 +25,12 @@ Shape.prototype.show = function(){
 Shape.prototype.lineWidth = function(thickness){
     var self = this;
     self._showList.push (function(){
-        LGlobal.canvas.lineWidth = thickness;
     });
 };
 
 Shape.prototype.strokeStyle = function(color){
     var self = this;
     self._showList.push (function(){
-        LGlobal.canvas.strokeStyle = color;
     });
 };
 
