@@ -7,8 +7,4 @@ var KeyBoardEvent = {
 
 KeyBoardEvent.nameList = Util.keys(KeyBoardEvent);
 
-KeyBoardEvent.getObjs = function(){
-    return this._list;
-}
-
 Util.extends(KeyBoardEvent,EventCore);

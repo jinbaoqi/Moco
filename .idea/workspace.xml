@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="79764b15-e9e8-49e5-8ecc-61323c39cc01" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/EventDispatcher.js" afterPath="$PROJECT_DIR$/src/EventDispatcher.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Shape.js" afterPath="$PROJECT_DIR$/src/Shape.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Stage.js" afterPath="$PROJECT_DIR$/src/Stage.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/example.html" afterPath="$PROJECT_DIR$/example.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/moco.js" afterPath="$PROJECT_DIR$/dist/moco.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/EventCore.js" afterPath="$PROJECT_DIR$/src/EventCore.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/KeyBoardEvent.js" afterPath="$PROJECT_DIR$/src/KeyBoardEvent.js" />
     </list>
     <ignored path="Moco.js.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,10 +26,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Stage.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Stage.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Stage.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="116" column="36" selection-start="2782" selection-end="2782" vertical-scroll-proportion="0.80104715" vertical-offset="1513" max-vertical-offset="3162">
+            <state line="116" column="36" selection-start="2782" selection-end="2782" vertical-scroll-proportion="0.0" vertical-offset="1428" max-vertical-offset="3162">
               <folding />
             </state>
           </provider>
@@ -48,19 +44,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="EventDispatcher.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/EventDispatcher.js">
+      <file leaf-file-name="KeyBoardEvent.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/KeyBoardEvent.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="208" column="22" selection-start="5060" selection-end="5060" vertical-scroll-proportion="0.0" vertical-offset="2890" max-vertical-offset="5083">
+            <state line="7" column="50" selection-start="149" selection-end="149" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="255">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DisplayObjectContainer.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/DisplayObjectContainer.js">
+      <file leaf-file-name="EventCore.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/EventCore.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="13" column="26" selection-start="274" selection-end="277" vertical-scroll-proportion="0.0" vertical-offset="73" max-vertical-offset="1156">
+            <state line="5" column="6" selection-start="92" selection-end="92" vertical-scroll-proportion="0.14834206" vertical-offset="0" max-vertical-offset="901">
               <folding />
             </state>
           </provider>
@@ -129,15 +125,15 @@
         <option value="$PROJECT_DIR$/gruntfile.js" />
         <option value="$PROJECT_DIR$/src/raf.js" />
         <option value="$PROJECT_DIR$/dist/moco.js" />
-        <option value="$PROJECT_DIR$/src/EventCore.js" />
         <option value="$PROJECT_DIR$/src/DisplayObject.js" />
-        <option value="$PROJECT_DIR$/src/KeyBoardEvent.js" />
         <option value="$PROJECT_DIR$/src/MouseEvent.js" />
         <option value="$PROJECT_DIR$/src/Util.js" />
         <option value="$PROJECT_DIR$/example.html" />
         <option value="$PROJECT_DIR$/src/EventDispatcher.js" />
         <option value="$PROJECT_DIR$/src/Stage.js" />
         <option value="$PROJECT_DIR$/src/Shape.js" />
+        <option value="$PROJECT_DIR$/src/EventCore.js" />
+        <option value="$PROJECT_DIR$/src/KeyBoardEvent.js" />
       </list>
     </option>
   </component>
@@ -536,16 +532,6 @@
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/EventCore.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/KeyBoardEvent.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/gruntfile.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
@@ -570,13 +556,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/EventDispatcher.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="208" column="22" selection-start="5060" selection-end="5060" vertical-scroll-proportion="0.0" vertical-offset="2890" max-vertical-offset="5083">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/DisplayObject.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="362" max-vertical-offset="935">
@@ -584,9 +563,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/Stage.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="116" column="36" selection-start="2782" selection-end="2782" vertical-scroll-proportion="0.0" vertical-offset="1428" max-vertical-offset="3162">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/EventDispatcher.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="208" column="22" selection-start="5060" selection-end="5060" vertical-scroll-proportion="0.35602096" vertical-offset="3332" max-vertical-offset="5083">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/DisplayObjectContainer.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="26" selection-start="274" selection-end="277" vertical-scroll-proportion="0.0" vertical-offset="73" max-vertical-offset="1156">
+        <state line="13" column="26" selection-start="274" selection-end="277" vertical-scroll-proportion="0.2582897" vertical-offset="73" max-vertical-offset="1156">
           <folding />
         </state>
       </provider>
@@ -598,9 +591,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Stage.js">
+    <entry file="file://$PROJECT_DIR$/src/KeyBoardEvent.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="116" column="36" selection-start="2782" selection-end="2782" vertical-scroll-proportion="0.80104715" vertical-offset="1513" max-vertical-offset="3162">
+        <state line="7" column="50" selection-start="149" selection-end="149" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="255">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/EventCore.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="6" selection-start="92" selection-end="92" vertical-scroll-proportion="0.14834206" vertical-offset="0" max-vertical-offset="901">
           <folding />
         </state>
       </provider>

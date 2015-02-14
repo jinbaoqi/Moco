@@ -1,6 +1,9 @@
 
 var EventCore = {
     _list: [],
+    getObjs: function(){
+        return this._list;
+    },
     getObjsFromCord: function(cord){
         var self = this,
             objs = [],

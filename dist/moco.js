@@ -113,6 +113,9 @@ var Util = {
 
 var EventCore = {
     _list: [],
+    getObjs: function(){
+        return this._list;
+    },
     getObjsFromCord: function(cord){
         var self = this,
             objs = [],
@@ -182,10 +185,6 @@ var KeyBoardEvent = {
 };
 
 KeyBoardEvent.nameList = Util.keys(KeyBoardEvent);
-
-KeyBoardEvent.getObjs = function(){
-    return this._list;
-}
 
 Util.extends(KeyBoardEvent,EventCore);
 
