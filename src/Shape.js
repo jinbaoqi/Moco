@@ -5,6 +5,7 @@
 function Shape(){
     DisplayObject.call(this);
 
+    this.name = "Shape";
     this._showList = [];
 }
 

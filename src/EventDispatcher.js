@@ -168,9 +168,9 @@ EventDispatcher.prototype.once = function(target,eventName,callback,useCapture){
  * 事件触发
  * @param eventName
  */
-EventDispatcher.prototype.trigger = function(target,eventName,event){
+EventDispatcher.prototype.trigger = function(target,eventName,event,isDeep){
     var self = this,
-        handlers,callbacks,item;
+        handlers,callbacks,item,parent;
 
     if(!target && !eventName){
         return;
@@ -180,7 +180,7 @@ EventDispatcher.prototype.trigger = function(target,eventName,event){
         target = self;
     }
 
-    handlers = target.handlers;
+    handlers = target && target.handlers;
 
     if(!handlers){
         return self;
@@ -203,7 +203,14 @@ EventDispatcher.prototype.trigger = function(target,eventName,event){
         }
     }
 
-    //TODO: 向上冒泡
+    parent = target.parentNode || target.parent;
+
+    if(!isDeep){
+        while(parent){
+            self.trigger(parent,eventName,event,true);
+            parent = parent.parentNode || parent.parent;
+        }
+    }
 
     return self;
 };
@@ -218,6 +225,9 @@ EventDispatcher.prototype._fixEvent = function(event){
     function returnFalse() { return false; }
 
     if (!event || !event.isPropagationStopped) {
+
+        event = event ? event : {};
+
         var preventDefault = event.preventDefault,
             stopPropagation = event.stopPropagation,
             stopImmediatePropagation = event.stopImmediatePropagation;

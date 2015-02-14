@@ -113,6 +113,11 @@ Stage.prototype.mouseEvent = function(cord,event){
     }
 };
 
+Stage.prototype.addChild = function(obj){
+    DisplayObjectContainer.prototype.addChild.call(this,obj);
+    obj.stage = this;
+};
+
 Stage.prototype._getOffset = function(domElem){
     var self = this,
         docElem = document.documentElement,
