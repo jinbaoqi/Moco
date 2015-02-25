@@ -1,4 +1,3 @@
-
 var KeyBoardEvent = {
     KEY_DOWN: "keydown",
     KEY_UP: "keyup",
@@ -7,4 +6,4 @@ var KeyBoardEvent = {
 
 KeyBoardEvent.nameList = Util.keys(KeyBoardEvent);
 
-Util.extends(KeyBoardEvent,EventCore);
+Util.extends(KeyBoardEvent, EventCore);

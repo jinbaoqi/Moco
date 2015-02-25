@@ -1,4 +1,3 @@
-
 var MouseEvent = {
     CLICK: "click",
     MOUSE_DOWN: "mousedown",
@@ -8,4 +7,4 @@ var MouseEvent = {
 
 MouseEvent.nameList = Util.keys(MouseEvent);
 
-Util.extends(MouseEvent,EventCore);
+Util.extends(MouseEvent, EventCore);

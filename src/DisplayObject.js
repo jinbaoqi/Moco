@@ -2,7 +2,7 @@
  * Display显示对象抽象类
  */
 
-function DisplayObject(){
+function DisplayObject() {
     EventDispatcher.call(this);
 
     this.name = "DisplayObject";
@@ -29,7 +29,7 @@ function DisplayObject(){
 
 DisplayObject.prototype = {
     constructor: DisplayObject,
-    show: function(){
+    show: function () {
         var self = this,
             rotateFlag = Math.PI / 180,
             canvas = self.stage.ctx;
@@ -39,7 +39,7 @@ DisplayObject.prototype = {
         }
 
         if (
-                (self.mask != null && self.mask.show) ||
+            (self.mask != null && self.mask.show) ||
                 self.alpha < 1 ||
                 self.rotate != 0 ||
                 self.scaleX != 1 ||
@@ -47,43 +47,43 @@ DisplayObject.prototype = {
                 self.translateX != 0 ||
                 self.translateY != 0 ||
                 self.globalCompositeOperation != ""
-            ){
+            ) {
             self._saveFlag = true;
             canvas.save();
         }
 
-        if (self.mask != null && self.mask.show){
-            self.mask.show ();
-            canvas.clip ();
+        if (self.mask != null && self.mask.show) {
+            self.mask.show();
+            canvas.clip();
         }
 
-        if (self.alpha <= 1){
+        if (self.alpha <= 1) {
             canvas.globalAlpha = self.alpha > 1 ? 1 : self.alpha;
         }
 
-        if(self.globalCompositeOperation != ""){
+        if (self.globalCompositeOperation != "") {
             canvas.globalCompositeOperation = self.globalCompositeOperation;
         }
 
-        if (self.rotate != 0){
+        if (self.rotate != 0) {
             if (self.center == null) {
-                self.getRotateXY ();
+                self.getRotateXY();
             }
             canvas.translate(self.x + self.center.x, self.y + self.center.y);
             canvas.rotate(self.rotate * rotateFlag);
             canvas.translate(-(self.x + self.center.x), -(self.y + self.center.y));
         }
 
-        if (self.scaleX != 1 || self.scaleY != 1){
+        if (self.scaleX != 1 || self.scaleY != 1) {
             canvas.scale(self.scaleX, self.scaleY);
         }
 
-        if(self.translateX != 0 || self.translateY != 0){
-            canvas.translate(self.translateX,self.translateY);
+        if (self.translateX != 0 || self.translateY != 0) {
+            canvas.translate(self.translateX, self.translateY);
         }
     },
 
-    getRotateXY: function(){
+    getRotateXY: function () {
         var self = this;
         self.center = {
             x: 0,
@@ -91,19 +91,19 @@ DisplayObject.prototype = {
         };
     },
 
-    isMouseon: function(cord){
+    isMouseon: function (cord) {
         var self = this;
 
-        if(self.visible == false || self.alpha <= 0.01){
+        if (self.visible == false || self.alpha <= 0.01) {
             return false;
         }
 
-        if(
+        if (
             cord.x >= self.x &&
-            cord.x <= self.x + self.width &&
-            cord.y >= self.y &&
-            cord.y <= self.y + self.height
-          ){
+                cord.x <= self.x + self.width &&
+                cord.y >= self.y &&
+                cord.y <= self.y + self.height
+            ) {
             return true;
         }
 
@@ -111,4 +111,4 @@ DisplayObject.prototype = {
     }
 };
 
-Base.inherit(DisplayObject,EventDispatcher);
+Base.inherit(DisplayObject, EventDispatcher);

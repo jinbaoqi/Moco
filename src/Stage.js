@@ -1,40 +1,39 @@
-
 /**
  * Stage全局画布类
  */
 
-function Stage(canvasId,fn){
+function Stage(canvasId, fn) {
     DisplayObjectContainer.call(this);
 
     this.name = "Stage";
     this.domElem = document.getElementById(canvasId);
     this.ctx = this.domElem.getContext("2d");
-    this.width = parseFloat(this.domElem.getAttribute("width"),10);
-    this.height = parseFloat(this.domElem.getAttribute("height"),10);
+    this.width = parseFloat(this.domElem.getAttribute("width"), 10);
+    this.height = parseFloat(this.domElem.getAttribute("height"), 10);
     this.offset = this._getOffset(this.domElem);
     this.x = this.offset.left;
     this.y = this.offset.top;
 
-    if(typeof fn == "function"){
+    if (typeof fn == "function") {
         fn(this);
     }
 
     this.initialize();
 }
 
-Stage.prototype.initialize = function(){
+Stage.prototype.initialize = function () {
     var self = this;
 
     //鼠标事件的注册
-    Util.each(MouseEvent.nameList,function(eventName){
-        eventName = eventName.toLowerCase().replace("_","");
-        self.on(document,eventName,function(event){
+    Util.each(MouseEvent.nameList, function (eventName) {
+        eventName = eventName.toLowerCase().replace("_", "");
+        self.on(document, eventName, function (event) {
             var cord = {
                 x: 0,
                 y: 0
             };
 
-            if(event.clientX != null){
+            if (event.clientX != null) {
                 cord.x = event.pageX - self.x;
                 cord.y = event.pageY - self.y;
                 self.mouseX = cord.x;
@@ -43,62 +42,64 @@ Stage.prototype.initialize = function(){
 
             event.cord = cord;
 
-            self.trigger(event.type,event);
-            self.mouseEvent(cord,event);
+            self.trigger(event.type, event);
+            self.mouseEvent(cord, event);
         });
     });
 
     //键盘事件的注册
-    Util.each(KeyBoardEvent.nameList,function(eventName){
-        eventName = eventName.toLowerCase().replace("_","");
-        self.on(document,eventName.toLowerCase(),function(event){
-            self.trigger(event.type,event);
-            self.mouseEvent(null,event);
+    Util.each(KeyBoardEvent.nameList, function (eventName) {
+        eventName = eventName.toLowerCase().replace("_", "");
+        self.on(document, eventName.toLowerCase(), function (event) {
+            self.trigger(event.type, event);
+            self.mouseEvent(null, event);
         });
     });
 
     self.show();
 };
 
-Stage.prototype.show = function(){
+Stage.prototype.show = function () {
     var self = this,
         item;
 
-    self.ctx.clearRect(0,0,self.width,self.height);
+    self.ctx.clearRect(0, 0, self.width, self.height);
 
-    for(var i = 0,len = self._childList.length; i < len; i++){
+    for (var i = 0, len = self._childList.length; i < len; i++) {
         item = self._childList[i];
 
-        if(item.show){
+        if (item.show) {
             item.show();
         }
     }
 
-    raf(function(){
+    raf(function () {
         self.show();
     });
 };
 
-Stage.prototype.mouseEvent = function(cord,event){
+Stage.prototype.mouseEvent = function (cord, event) {
     var objs = [],
         reverseObjs = [],
         item;
 
-    function returnFalse(){return false};
+    function returnFalse() {
+        return false
+    };
 
-    if(cord != null){
+    if (cord != null) {
         objs = MouseEvent.getObjsFromCord(cord);
 
         //模拟捕获阶段
-        if(event.useCapture){
+        if (event.useCapture) {
             reverseObjs = Util.reverse(objs);
-            for(var i = reverseObjs.length - 1; i >= 0; i--){
+            for (var i = reverseObjs.length - 1; i >= 0; i--) {
                 item = reverseObjs[i];
-                item.trigger(event.type,event);
+                item.trigger(event.type, event);
             }
         }
 
-    }else{
+    } else {
         objs = KeyBoardEvent.getObjs();
     }
 
@@ -106,30 +107,30 @@ Stage.prototype.mouseEvent = function(cord,event){
     event.isPropagationStopped = returnFalse;
 
     //模拟目标阶段和冒泡阶段
-    for(var i = 0,len = objs.length; i < len; i++){
-        if(event.isPropagationStopped()){
+    for (var i = 0, len = objs.length; i < len; i++) {
+        if (event.isPropagationStopped()) {
             break;
-        }else{
+        } else {
             item = objs[i];
-            item.trigger(event.type,event);
+            item.trigger(event.type, event);
         }
     }
 };
 
-Stage.prototype.addChild = function(obj){
-    DisplayObjectContainer.prototype.addChild.call(this,obj);
+Stage.prototype.addChild = function (obj) {
+    DisplayObjectContainer.prototype.addChild.call(this, obj);
     obj.stage = this;
 };
 
-Stage.prototype._getOffset = function(domElem){
+Stage.prototype._getOffset = function (domElem) {
     var self = this,
         docElem = document.documentElement,
         scrollTop = docElem.scrollTop,
         scrollLeft = docElem.scrollLeft,
-        actualLeft,actualTop,rect,offset;
+        actualLeft, actualTop, rect, offset;
 
-    if(domElem.getBoundingClientRect){
-        if(typeof arguments.callee.offset != "number"){
+    if (domElem.getBoundingClientRect) {
+        if (typeof arguments.callee.offset != "number") {
             var tmp = document.createElement("div");
             tmp.style.cssText = "position:absolute;left:0;top:0";
             document.body.appendChild(tmp);
@@ -146,7 +147,7 @@ Stage.prototype._getOffset = function(domElem){
             top: rect.top + offset
         };
 
-    }else{
+    } else {
         actualLeft = self._getElementLeft(domElem);
         actualTop = self._getElementTop(domElem);
 
@@ -157,11 +158,11 @@ Stage.prototype._getOffset = function(domElem){
     }
 };
 
-Stage.prototype._getElementLeft = function(elem){
+Stage.prototype._getElementLeft = function (elem) {
     var actualLeft = elem.offsetLeft;
     var current = elem.offsetParent;
 
-    while(current != null){
+    while (current != null) {
         actualLeft += current.offsetLeft;
         current = current.offsetParent;
     }
@@ -169,11 +170,11 @@ Stage.prototype._getElementLeft = function(elem){
     return actualLeft;
 };
 
-Stage.prototype._getElementTop = function(elem){
+Stage.prototype._getElementTop = function (elem) {
     var actualTop = elem.offsetTop;
     var current = elem.offsetParent;
 
-    while(current != null){
+    while (current != null) {
         actualTop += current.offsetTop;
         current = current.offsetParent;
     }
@@ -181,4 +182,4 @@ Stage.prototype._getElementTop = function(elem){
     return actualTop;
 };
 
-Base.inherit(Stage,DisplayObjectContainer);
+Base.inherit(Stage, DisplayObjectContainer);

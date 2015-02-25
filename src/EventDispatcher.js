@@ -1,4 +1,3 @@
-
 /**
  * 事件部分
  * @type {RegExp}
@@ -8,7 +7,8 @@ var fnRegExp = /\s+/g,
     guid = 0;
 
 
-function EventDispatcher(){};
+function EventDispatcher() {
+};
 
 /**
  * 事件注册
@@ -16,66 +16,66 @@ function EventDispatcher(){};
  * @param callback
  * @param useCapture
  */
-EventDispatcher.prototype.on = function(target,eventName,callback,useCapture){
+EventDispatcher.prototype.on = function (target, eventName, callback, useCapture) {
     var self = this,
-        handlers,fn;
+        handlers, fn;
 
-    if(typeof target == "string"){
+    if (typeof target == "string") {
         useCapture = callback;
         callback = eventName;
         eventName = target;
         target = self;
     }
 
-    if(eventName && callback){
+    if (eventName && callback) {
         useCapture = useCapture ? useCapture : false;
 
-        if(Util.isType(eventName,"Array")){
-            Util.each(eventName,function(item){
-                self.on(item,callback,useCapture);
+        if (Util.isType(eventName, "Array")) {
+            Util.each(eventName, function (item) {
+                self.on(item, callback, useCapture);
             });
-        }else{
+        } else {
 
             handlers = target.handlers;
 
-            fn = function(event){
+            fn = function (event) {
                 var callbacks = handlers[eventName],
                     item;
 
                 event = self._fixEvent(event);
                 event.useCapture = useCapture;
 
-                for(var i = 0,len = callbacks.length; i < len; i++){
+                for (var i = 0, len = callbacks.length; i < len; i++) {
                     item = callbacks[i];
 
-                    if(event.isImmediatePropagationStopped()){
+                    if (event.isImmediatePropagationStopped()) {
                         break;
-                    }else if(item.guid == fn.guid){
-                        item.callback.call(self,event);
+                    } else if (item.guid == fn.guid) {
+                        item.callback.call(self, event);
                     }
                 }
             };
 
 
-            fn.fnStr = callback.fnStr ? callback.fnStr : callback.toString().replace(fnRegExp,'');
+            fn.fnStr = callback.fnStr ? callback.fnStr : callback.toString().replace(fnRegExp, '');
             fn.callback = callback;
             fn.guid = guid++;
 
-            if(!handlers){
+            if (!handlers) {
                 handlers = target.handlers = {};
             }
 
-            if(!handlers[eventName]){
+            if (!handlers[eventName]) {
                 handlers[eventName] = [];
             }
 
             handlers[eventName].push(fn);
 
-            if(handlers[eventName].length == 1){
-                if(target.addEventListener){
-                    target.addEventListener(eventName,fn,useCapture);
-                }else if(target.attachEvent){
-                    self.attachEvent(eventName,fn);
+            if (handlers[eventName].length == 1) {
+                if (target.addEventListener) {
+                    target.addEventListener(eventName, fn, useCapture);
+                } else if (target.attachEvent) {
+                    self.attachEvent(eventName, fn);
                 }
             }
         }
@@ -89,45 +89,45 @@ EventDispatcher.prototype.on = function(target,eventName,callback,useCapture){
  * @param eventName
  * @param callback
  */
-EventDispatcher.prototype.off = function(target,eventName,callback){
+EventDispatcher.prototype.off = function (target, eventName, callback) {
     var self = this,
-        handlers,callbacks,fnStr,fnItem;
+        handlers, callbacks, fnStr, fnItem;
 
-    if(typeof target == "string"){
+    if (typeof target == "string") {
         callback = eventName;
         eventName = target;
         target = self;
     }
 
-    if(eventName || callback){
-        if(Util.isType(eventName,"Array")){
-            Util.each(eventName,function(item){
-                self.off(target,item,callback);
+    if (eventName || callback) {
+        if (Util.isType(eventName, "Array")) {
+            Util.each(eventName, function (item) {
+                self.off(target, item, callback);
             });
-        }else if(!callback){
+        } else if (!callback) {
             handlers = target.handlers;
 
-            if(handlers){
+            if (handlers) {
                 callbacks = handlers[eventName] ? handlers[eventName] : [];
-                Util.each(callbacks,function(item){
-                    self.off(target,eventName,item);
+                Util.each(callbacks, function (item) {
+                    self.off(target, eventName, item);
                 });
             }
-        }else{
+        } else {
             handlers = target.handlers;
 
-            if(handlers){
+            if (handlers) {
                 callbacks = handlers[eventName] ? handlers[eventName] : [];
-                fnStr = callback.fnStr ? callback.fnStr : callback.toString().replace(fnRegExp,'');
+                fnStr = callback.fnStr ? callback.fnStr : callback.toString().replace(fnRegExp, '');
 
-                for(var i = callbacks.length - 1; i >= 0 ; i--){
+                for (var i = callbacks.length - 1; i >= 0; i--) {
                     fnItem = callbacks[i];
-                    if(fnItem.fnStr == fnStr){
-                        arrProto.splice.call(callbacks,i,1);
+                    if (fnItem.fnStr == fnStr) {
+                        arrProto.splice.call(callbacks, i, 1);
                     }
                 }
 
-                if(!callbacks.length){
+                if (!callbacks.length) {
                     delete handlers[eventName];
                 }
             }
@@ -143,38 +143,38 @@ EventDispatcher.prototype.off = function(target,eventName,callback){
  * @param eventName
  * @param callback
  */
-EventDispatcher.prototype.once = function(target,eventName,callback,useCapture){
+EventDispatcher.prototype.once = function (target, eventName, callback, useCapture) {
     var self = this,
         fn;
 
-    if(typeof target == "string"){
+    if (typeof target == "string") {
         useCapture = callback;
         callback = eventName;
         eventName = target;
         target = self;
     }
 
-    fn = function(event){
-        callback.call(self,event);
-        self.off(target,eventName,fn);
+    fn = function (event) {
+        callback.call(self, event);
+        self.off(target, eventName, fn);
     };
 
-    fn.fnStr = callback.toString().replace(fnRegExp,'');
+    fn.fnStr = callback.toString().replace(fnRegExp, '');
 
-    return self.on(target,eventName,fn,useCapture);
+    return self.on(target, eventName, fn, useCapture);
 };
 
 /**
  * 事件触发
  * @param eventName
  */
-EventDispatcher.prototype.trigger = function(target,eventName,event,isDeep){
+EventDispatcher.prototype.trigger = function (target, eventName, event, isDeep) {
     var self = this,
-        handlers,callbacks,item,parent;
+        handlers, callbacks, item, parent;
 
-    if(!target && !eventName){
+    if (!target && !eventName) {
         return;
-    }else if(typeof target == "string"){
+    } else if (typeof target == "string") {
         event = eventName;
         eventName = target;
         target = self;
@@ -182,7 +182,7 @@ EventDispatcher.prototype.trigger = function(target,eventName,event,isDeep){
 
     handlers = target && target.handlers;
 
-    if(!handlers){
+    if (!handlers) {
         return self;
     }
 
@@ -190,24 +190,24 @@ EventDispatcher.prototype.trigger = function(target,eventName,event,isDeep){
 
     event = self._fixEvent(event);
 
-    if(event.target == null){
+    if (event.target == null) {
         event.target = event.currentTarget = self;
     }
 
-    for(var i = 0,len = callbacks.length; i < len; i++){
+    for (var i = 0, len = callbacks.length; i < len; i++) {
         item = callbacks[i];
-        if(event.isImmediatePropagationStopped()){
+        if (event.isImmediatePropagationStopped()) {
             break;
-        }else{
-            item.callback.call(self,event);
+        } else {
+            item.callback.call(self, event);
         }
     }
 
     parent = target.parentNode || target.parent;
 
-    if(!isDeep){
-        while(parent){
-            self.trigger(parent,eventName,event,true);
+    if (!isDeep) {
+        while (parent) {
+            self.trigger(parent, eventName, event, true);
             parent = parent.parentNode || parent.parent;
         }
     }
@@ -220,9 +220,14 @@ EventDispatcher.prototype.trigger = function(target,eventName,event,isDeep){
  * @param event
  * @returns {*}
  */
-EventDispatcher.prototype._fixEvent = function(event){
-    function returnTrue() { return true; }
-    function returnFalse() { return false; }
+EventDispatcher.prototype._fixEvent = function (event) {
+    function returnTrue() {
+        return true;
+    }
+
+    function returnFalse() {
+        return false;
+    }
 
     if (!event || !event.isPropagationStopped) {
 
@@ -236,7 +241,7 @@ EventDispatcher.prototype._fixEvent = function(event){
             event.target = event.srcElement || document;
         }
 
-        if(!event.currentTarget){
+        if (!event.currentTarget) {
             event.currentTarget = self;
         }
 
