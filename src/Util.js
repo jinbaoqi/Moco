@@ -44,28 +44,24 @@ var Util = {
         if(arrProto.reverse){
             return arrProto.reverse.call(arr);
         }else{
-            self.each(arr,function(item){
-                tmp.push(item);
-            });
+            for(var i = arr.length - 1; i >= 0; i--){
+                tmp.push(arr[i]);
+            }
         }
 
         return tmp;
     },
     inArray: function(item,arr,fn){
-        var self = this,
-            flag;
+        var self = this;
 
         if(arrProto.inArray){
             return arrProto.inArray.call(arr,item);
         }else{
             for(var i = 0,len = arr.length; i < len; i++){
                 if(typeof fn == "function"){
-                    flag = fn.call(item,item,arr[i],i,arr);
-
-                    if(flag == true){
+                    if(fn.call(item,item,arr[i],i,arr)){
                         return i;
                     }
-
                 }else if(arr[i] == item){
                     return i;
                 }

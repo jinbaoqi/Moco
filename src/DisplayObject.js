@@ -10,22 +10,87 @@ function DisplayObject(){
     this.height = 0;
     this.width = 0;
     this.mask = null;
-    this.rotation = 0;
+    this.rotate = 0;
     this.translateX = 0;
     this.translateY = 0;
-    this.scale = 1;
+    this.scaleX = 1;
+    this.scaleY = 1;
+    this.center = null;
     this.parent = null;
+    this.globalCompositeOperation = "";
     this.x = 0;
     this.y = 0;
     this.mouseX = 0;
     this.mouseY = 0;
     this.visible = true;
     this.aIndex = this.objectIndex = guid++;
+    this._saveFlag = false;
 }
 
 DisplayObject.prototype = {
     constructor: DisplayObject,
-    show: function(){},
+    show: function(){
+        var self = this,
+            rotateFlag = Math.PI / 180,
+            canvas = self.stage.ctx;
+
+        if (!self.visible) {
+            return;
+        }
+
+        if (
+                (self.mask != null && self.mask.show) ||
+                self.alpha < 1 ||
+                self.rotate != 0 ||
+                self.scaleX != 1 ||
+                self.scaleY != 1 ||
+                self.translateX != 0 ||
+                self.translateY != 0 ||
+                self.globalCompositeOperation != ""
+            ){
+            self._saveFlag = true;
+            canvas.save();
+        }
+
+        if (self.mask != null && self.mask.show){
+            self.mask.show ();
+            canvas.clip ();
+        }
+
+        if (self.alpha <= 1){
+            canvas.globalAlpha = self.alpha > 1 ? 1 : self.alpha;
+        }
+
+        if(self.globalCompositeOperation != ""){
+            canvas.globalCompositeOperation = self.globalCompositeOperation;
+        }
+
+        if (self.rotate != 0){
+            if (self.center == null) {
+                self.getRotateXY ();
+            }
+            canvas.translate(self.x + self.center.x, self.y + self.center.y);
+            canvas.rotate(self.rotate * rotateFlag);
+            canvas.translate(-(self.x + self.center.x), -(self.y + self.center.y));
+        }
+
+        if (self.scaleX != 1 || self.scaleY != 1){
+            canvas.scale(self.scaleX, self.scaleY);
+        }
+
+        if(self.translateX != 0 || self.translateY != 0){
+            canvas.translate(self.translateX,self.translateY);
+        }
+    },
+
+    getRotateXY: function(){
+        var self = this;
+        self.center = {
+            x: 0,
+            y: 0
+        };
+    },
+
     isMouseon: function(cord){
         var self = this;
 

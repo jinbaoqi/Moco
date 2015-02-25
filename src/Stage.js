@@ -8,6 +8,7 @@ function Stage(canvasId,fn){
 
     this.name = "Stage";
     this.domElem = document.getElementById(canvasId);
+    this.ctx = this.domElem.getContext("2d");
     this.width = parseFloat(this.domElem.getAttribute("width"),10);
     this.height = parseFloat(this.domElem.getAttribute("height"),10);
     this.offset = this._getOffset(this.domElem);
@@ -15,7 +16,7 @@ function Stage(canvasId,fn){
     this.y = this.offset.top;
 
     if(typeof fn == "function"){
-        fn.call(self);
+        fn(this);
     }
 
     this.initialize();
@@ -54,7 +55,7 @@ Stage.prototype.initialize = function(){
             self.trigger(event.type,event);
             self.mouseEvent(null,event);
         });
-    })
+    });
 
     self.show();
 };
@@ -62,6 +63,8 @@ Stage.prototype.initialize = function(){
 Stage.prototype.show = function(){
     var self = this,
         item;
+
+    self.ctx.clearRect(0,0,self.width,self.height);
 
     for(var i = 0,len = self._childList.length; i < len; i++){
         item = self._childList[i];
@@ -74,7 +77,7 @@ Stage.prototype.show = function(){
     raf(function(){
         self.show();
     });
-}
+};
 
 Stage.prototype.mouseEvent = function(cord,event){
     var objs = [],
@@ -138,10 +141,10 @@ Stage.prototype._getOffset = function(domElem){
         rect = domElem.getBoundingClientRect();
         offset = arguments.callee.offset;
 
-        return{
+        return {
             left: rect.left + offset,
             top: rect.top + offset
-        }
+        };
 
     }else{
         actualLeft = self._getElementLeft(domElem);
@@ -150,7 +153,7 @@ Stage.prototype._getOffset = function(domElem){
         return {
             left: actualLeft - scrollLeft,
             top: actualTop - scrollTop
-        }
+        };
     }
 };
 

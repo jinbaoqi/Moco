@@ -44,28 +44,24 @@ var Util = {
         if(arrProto.reverse){
             return arrProto.reverse.call(arr);
         }else{
-            self.each(arr,function(item){
-                tmp.push(item);
-            });
+            for(var i = arr.length - 1; i >= 0; i--){
+                tmp.push(arr[i]);
+            }
         }
 
         return tmp;
     },
     inArray: function(item,arr,fn){
-        var self = this,
-            flag;
+        var self = this;
 
         if(arrProto.inArray){
             return arrProto.inArray.call(arr,item);
         }else{
             for(var i = 0,len = arr.length; i < len; i++){
                 if(typeof fn == "function"){
-                    flag = fn.call(item,item,arr[i],i,arr);
-
-                    if(flag == true){
+                    if(fn.call(item,item,arr[i],i,arr)){
                         return i;
                     }
-
                 }else if(arr[i] == item){
                     return i;
                 }
@@ -513,22 +509,87 @@ function DisplayObject(){
     this.height = 0;
     this.width = 0;
     this.mask = null;
-    this.rotation = 0;
+    this.rotate = 0;
     this.translateX = 0;
     this.translateY = 0;
-    this.scale = 1;
+    this.scaleX = 1;
+    this.scaleY = 1;
+    this.center = null;
     this.parent = null;
+    this.globalCompositeOperation = "";
     this.x = 0;
     this.y = 0;
     this.mouseX = 0;
     this.mouseY = 0;
     this.visible = true;
     this.aIndex = this.objectIndex = guid++;
+    this._saveFlag = false;
 }
 
 DisplayObject.prototype = {
     constructor: DisplayObject,
-    show: function(){},
+    show: function(){
+        var self = this,
+            rotateFlag = Math.PI / 180,
+            canvas = self.stage.ctx;
+
+        if (!self.visible) {
+            return;
+        }
+
+        if (
+                (self.mask != null && self.mask.show) ||
+                self.alpha < 1 ||
+                self.rotate != 0 ||
+                self.scaleX != 1 ||
+                self.scaleY != 1 ||
+                self.translateX != 0 ||
+                self.translateY != 0 ||
+                self.globalCompositeOperation != ""
+            ){
+            self._saveFlag = true;
+            canvas.save();
+        }
+
+        if (self.mask != null && self.mask.show){
+            self.mask.show ();
+            canvas.clip ();
+        }
+
+        if (self.alpha <= 1){
+            canvas.globalAlpha = self.alpha > 1 ? 1 : self.alpha;
+        }
+
+        if(self.globalCompositeOperation != ""){
+            canvas.globalCompositeOperation = self.globalCompositeOperation;
+        }
+
+        if (self.rotate != 0){
+            if (self.center == null) {
+                self.getRotateXY ();
+            }
+            canvas.translate(self.x + self.center.x, self.y + self.center.y);
+            canvas.rotate(self.rotate * rotateFlag);
+            canvas.translate(-(self.x + self.center.x), -(self.y + self.center.y));
+        }
+
+        if (self.scaleX != 1 || self.scaleY != 1){
+            canvas.scale(self.scaleX, self.scaleY);
+        }
+
+        if(self.translateX != 0 || self.translateY != 0){
+            canvas.translate(self.translateX,self.translateY);
+        }
+    },
+
+    getRotateXY: function(){
+        var self = this;
+        self.center = {
+            x: 0,
+            y: 0
+        };
+    },
+
     isMouseon: function(cord){
         var self = this;
 
@@ -654,6 +715,7 @@ function Stage(canvasId,fn){
 
     this.name = "Stage";
     this.domElem = document.getElementById(canvasId);
+    this.ctx = this.domElem.getContext("2d");
     this.width = parseFloat(this.domElem.getAttribute("width"),10);
     this.height = parseFloat(this.domElem.getAttribute("height"),10);
     this.offset = this._getOffset(this.domElem);
@@ -661,7 +723,7 @@ function Stage(canvasId,fn){
     this.y = this.offset.top;
 
     if(typeof fn == "function"){
-        fn.call(self);
+        fn(this);
     }
 
     this.initialize();
@@ -700,7 +762,7 @@ Stage.prototype.initialize = function(){
             self.trigger(event.type,event);
             self.mouseEvent(null,event);
         });
-    })
+    });
 
     self.show();
 };
@@ -708,6 +770,8 @@ Stage.prototype.initialize = function(){
 Stage.prototype.show = function(){
     var self = this,
         item;
+
+    self.ctx.clearRect(0,0,self.width,self.height);
 
     for(var i = 0,len = self._childList.length; i < len; i++){
         item = self._childList[i];
@@ -720,7 +784,7 @@ Stage.prototype.show = function(){
     raf(function(){
         self.show();
     });
-}
+};
 
 Stage.prototype.mouseEvent = function(cord,event){
     var objs = [],
@@ -784,10 +848,10 @@ Stage.prototype._getOffset = function(domElem){
         rect = domElem.getBoundingClientRect();
         offset = arguments.callee.offset;
 
-        return{
+        return {
             left: rect.left + offset,
             top: rect.top + offset
-        }
+        };
 
     }else{
         actualLeft = self._getElementLeft(domElem);
@@ -796,7 +860,7 @@ Stage.prototype._getOffset = function(domElem){
         return {
             left: actualLeft - scrollLeft,
             top: actualTop - scrollTop
-        }
+        };
     }
 };
 
@@ -837,62 +901,226 @@ function Shape(){
 }
 
 Shape.prototype.show = function(){
+    DisplayObject.prototype.show.call(this);
+
     var self = this,
         showList = self._showList,
         len = showList.length;
 
-    if(len == 0){
-        return;
+    if(len > 0){
+        for(var i = 0; i < len; i++){
+            showList[i]();
+        }
     }
 
-    for(var i = 0; i < len; i++){
-        showList[i]();
+    if(self._saveFlag){
+        self.stage.ctx.restore();
     }
 };
 
 Shape.prototype.lineWidth = function(thickness){
     var self = this;
     self._showList.push (function(){
+        self.stage.ctx.lineWidth = thickness;
     });
 };
 
 Shape.prototype.strokeStyle = function(color){
     var self = this;
     self._showList.push (function(){
+        self.stage.ctx.strokeStyle = color;
     });
 };
 
 Shape.prototype.stroke = function(){
     var self = this;
     self._showList.push (function () {
-
+        self.stage.ctx.stroke();
     });
 };
 
 Shape.prototype.beginPath = function(){
     var self = this;
     self._showList.push (function () {
+        self.stage.ctx.beginPath();
     });
 };
 
 Shape.prototype.closePath = function(){
     var self = this;
     self._showList.push (function () {
+        self.stage.ctx.closePath();
     });
 };
 
 Shape.prototype.moveTo = function(x, y){
     var self = this;
     self._showList.push (function () {
+        self.stage.ctx.moveTo(x,y);
     });
 };
 
 Shape.prototype.lineTo = function(x, y){
     var self = this;
     self._showList.push (function(){
+        self.stage.ctx.lineTo(x,y);
     });
 };
 
+Shape.prototype.clear = function(){
+    var self = this;
+    self._showList = [];
+};
+
+Shape.prototype.rect = function(x,y,width,height){
+    var self = this;
+    self._showList.push(function(){
+        self.stage.ctx.rect(x,y,width,height);
+    });
+};
+
+Shape.prototype.fillStyle = function(color){
+    var self = this;
+    self._showList.push(function(){
+        self.stage.ctx.fillStyle = color;
+    });
+};
+
+Shape.prototype.fill = function(){
+    var self = this;
+    self._showList.push(function(){
+        self.stage.ctx.fill();
+    });
+};
+
+Shape.prototype.arc = function(x,y,r,sAngle,eAngle,direct){
+    var self = this;
+    self._showList.push(function(){
+        self.stage.ctx.arc(x,y,sAngle,eAngle,direct);
+    });
+};
+
+Shape.prototype.drawArc = function(thickness,lineColor,pointArr,isFill,color){
+    var self = this,
+        canvas;
+
+    self._showList.push (function(){
+        canvas = self.stage.ctx;
+
+        canvas.beginPath ();
+        canvas.arc(pointArr[0], pointArr[1], pointArr[2], pointArr[3], pointArr[4], pointArr[5]);
+
+        if (isFill) {
+            canvas.fillStyle = color;
+            canvas.fill ();
+        }
+        canvas.lineWidth = thickness;
+        canvas.strokeStyle = lineColor;
+        canvas.stroke ();
+    });
+};
+
+Shape.prototype.drawRect = function(thickness,lineColor,pointArr,isFill,color){
+    var self = this,
+        canvas;
+
+    self._showList.push (function(){
+        canvas = self.stage.ctx;
+
+        canvas.beginPath();
+        canvas.rect (pointArr[0], pointArr[1], pointArr[2], pointArr[3]);
+
+        if (isFill) {
+            canvas.fillStyle = color;
+            canvas.fill ();
+        }
+        canvas.lineWidth = thickness;
+        canvas.strokeStyle = lineColor;
+        canvas.stroke ();
+    });
+};
+
+Shape.prototype.drawVertices = function(thickness,lineColor,vertices,isFill,color){
+    var self = this,
+        length = vertices.length,
+        canvas,i;
+
+    if (length < 3) {
+        return;
+    }
+
+    self._showList.push (function(){
+        canvas = self.stage.ctx;
+
+        canvas.beginPath ();
+        canvas.moveTo (vertices[0][0], vertices[0][1]);
+
+        for (i = 1; i < length; i ++) {
+            var pointArr = vertices[i];
+            canvas.lineTo (pointArr[0], pointArr[1]);
+        }
+
+        canvas.lineTo (vertices[0][0], vertices[0][1]);
+
+        if (isFill) {
+            canvas.fillStyle = color;
+            canvas.fill ();
+        }
+
+        canvas.lineWidth = thickness;
+        canvas.strokeStyle = lineColor;
+        canvas.closePath();
+        canvas.stroke();
+    });
+};
+
+Shape.prototype.drawLine = function(thickness,lineColor,pointArr){
+    var self = this,
+        canvas;
+
+    self._showList.push (function(){
+        canvas = self.stage.ctx;
+
+        canvas.beginPath ();
+        canvas.moveTo (pointArr[0], pointArr[1]);
+        canvas.lineTo (pointArr[2], pointArr[3]);
+        canvas.lineWidth = thickness;
+        canvas.strokeStyle = lineColor;
+        canvas.closePath ();
+        canvas.stroke ();
+    });
+};
+
+Shape.prototype.lineStyle = function(thickness,color,alpha){
+    var self = this,
+        canvas;
+
+    if (!color) {
+        color = self.color;
+    }
+
+    if (!alpha) {
+        alpha = self.alpha;
+    }
+
+    self.color = color;
+    self.alpha = alpha;
+
+    self._showList.push (function(){
+        canvas = self.stage.ctx;
+
+        canvas.lineWidth = thickness;
+        canvas.strokeStyle = color;
+    });
+};
+
+Shape.prototype.add = function(fn){
+    var self = this;
+
+    self._showList.push(function(){
+        fn.call(self.stage);
+    });
+};
 
 Base.inherit(Shape,DisplayObject);
 /**
