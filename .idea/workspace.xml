@@ -4,7 +4,6 @@
     <list default="true" id="79764b15-e9e8-49e5-8ecc-61323c39cc01" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DisplayObjectContainer.js" afterPath="$PROJECT_DIR$/src/DisplayObjectContainer.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/moco.js" afterPath="$PROJECT_DIR$/dist/moco.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Moco.js.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -54,19 +53,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DisplayObject.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="DisplayObject.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/DisplayObject.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="89" column="16" selection-start="2331" selection-end="2331" vertical-scroll-proportion="0.0" vertical-offset="243" max-vertical-offset="2040">
+            <state line="89" column="16" selection-start="2331" selection-end="2331" vertical-scroll-proportion="2.5514834" vertical-offset="51" max-vertical-offset="2040">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DisplayObjectContainer.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="DisplayObjectContainer.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DisplayObjectContainer.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="22" column="0" selection-start="452" selection-end="452" vertical-scroll-proportion="0.6527051" vertical-offset="0" max-vertical-offset="1156">
+            <state line="18" column="5" selection-start="430" selection-end="430" vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="1088">
               <folding />
             </state>
           </provider>
@@ -599,16 +598,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/DisplayObject.js">
+    <entry file="file://$PROJECT_DIR$/src/DisplayObjectContainer.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="89" column="16" selection-start="2331" selection-end="2331" vertical-scroll-proportion="0.0" vertical-offset="1513" max-vertical-offset="2040">
+        <state line="18" column="5" selection-start="430" selection-end="430" vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="1088">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/DisplayObjectContainer.js">
+    <entry file="file://$PROJECT_DIR$/src/DisplayObject.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="0" selection-start="452" selection-end="452" vertical-scroll-proportion="0.6527051" vertical-offset="0" max-vertical-offset="1156">
+        <state line="89" column="16" selection-start="2331" selection-end="2331" vertical-scroll-proportion="2.5514834" vertical-offset="51" max-vertical-offset="2040">
           <folding />
         </state>
       </provider>

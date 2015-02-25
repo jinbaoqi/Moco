@@ -631,8 +631,6 @@ DisplayObjectContainer.prototype.addChild = function(obj){
         obj.parent = self;
         obj.objectIndex = self.objectIndex+"."+self._childList.length;
     }
-
-    return self;
 };
 
 DisplayObjectContainer.prototype.removeChild = function(obj){
@@ -647,21 +645,19 @@ DisplayObjectContainer.prototype.removeChild = function(obj){
             }
         }
     }
-
-    return self;
 };
 
 DisplayObjectContainer.prototype.getChildAt = function(index){
-        var self = this,
-            len = self._childList.length;
+    var self = this,
+        len = self._childList.length;
 
-        if(Math.abs(index) > len){
-            return;
-        }else if(index < 0){
-            index = len + index;
-        }
+    if(Math.abs(index) > len){
+        return;
+    }else if(index < 0){
+        index = len + index;
+    }
 
-        return self._childList[index];
+    return self._childList[index];
 };
 
 DisplayObjectContainer.prototype.contains = function(obj){
