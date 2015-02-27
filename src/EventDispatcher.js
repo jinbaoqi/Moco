@@ -16,7 +16,7 @@ function EventDispatcher() {
  * @param callback
  * @param useCapture
  */
-EventDispatcher.prototype.on = function (target, eventName, callback, useCapture) {
+EventDispatcher.prototype.on = function(target, eventName, callback, useCapture) {
     var self = this,
         handlers, fn;
 
@@ -36,6 +36,8 @@ EventDispatcher.prototype.on = function (target, eventName, callback, useCapture
             });
         } else {
 
+            //用于捕获阶段触发的判断，如果注册过一个捕获函数，那么说明此对象是可以被捕获触发的
+            target.useCapture = target.useCapture | useCapture;
             handlers = target.handlers;
 
             fn = function (event) {
@@ -43,7 +45,6 @@ EventDispatcher.prototype.on = function (target, eventName, callback, useCapture
                     item;
 
                 event = self._fixEvent(event);
-                event.useCapture = useCapture;
 
                 for (var i = 0, len = callbacks.length; i < len; i++) {
                     item = callbacks[i];
@@ -59,6 +60,7 @@ EventDispatcher.prototype.on = function (target, eventName, callback, useCapture
 
             fn.fnStr = callback.fnStr ? callback.fnStr : callback.toString().replace(fnRegExp, '');
             fn.callback = callback;
+            fn.useCapture = useCapture;
             fn.guid = guid++;
 
             if (!handlers) {
@@ -168,19 +170,22 @@ EventDispatcher.prototype.once = function (target, eventName, callback, useCaptu
  * 事件触发
  * @param eventName
  */
-EventDispatcher.prototype.trigger = function (target, eventName, event, isDeep) {
+EventDispatcher.prototype.trigger = function (target, eventName, event, isDeep, isCapture) {
     var self = this,
         handlers, callbacks, item, parent;
 
     if (!target && !eventName) {
         return;
     } else if (typeof target == "string") {
+        isCapture = isDeep;
+        isDeep = event;
         event = eventName;
         eventName = target;
         target = self;
     }
 
     handlers = target && target.handlers;
+    event = event || {};
 
     if (!handlers) {
         return self;
@@ -188,27 +193,28 @@ EventDispatcher.prototype.trigger = function (target, eventName, event, isDeep) 
 
     callbacks = handlers[eventName] ? handlers[eventName] : [];
 
-    event = self._fixEvent(event);
-
+    //自定义事件trigger的时候需要修正target和currentTarget
     if (event.target == null) {
-        event.target = event.currentTarget = self;
+        event.target = event.currentTarget = target;
     }
+
+    event = self._fixEvent(event);
 
     for (var i = 0, len = callbacks.length; i < len; i++) {
         item = callbacks[i];
         if (event.isImmediatePropagationStopped()) {
             break;
-        } else {
+        } else if(!isCapture || (isCapture && item.useCapture)){ //捕获阶段的修正
             item.callback.call(self, event);
         }
     }
 
-    parent = target.parentNode || target.parent;
-
-    if (!isDeep) {
+    //只有Dom节点才会有下面的冒泡执行
+    if(isDeep) {
+        parent = target.parentNode;
         while (parent) {
             self.trigger(parent, eventName, event, true);
-            parent = parent.parentNode || parent.parent;
+            parent = parent.parentNode;
         }
     }
 
@@ -221,6 +227,8 @@ EventDispatcher.prototype.trigger = function (target, eventName, event, isDeep) 
  * @returns {*}
  */
 EventDispatcher.prototype._fixEvent = function (event) {
+    var self = this;
+
     function returnTrue() {
         return true;
     }

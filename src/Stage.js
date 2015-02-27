@@ -27,11 +27,13 @@ Stage.prototype.initialize = function () {
     //鼠标事件的注册
     Util.each(MouseEvent.nameList, function (eventName) {
         eventName = eventName.toLowerCase().replace("_", "");
-        self.on(document, eventName, function (event) {
+        self.on(self.domElem, eventName, function (event) {
             var cord = {
                 x: 0,
                 y: 0
             };
+
+            event = Util.clone(event);
 
             if (event.clientX != null) {
                 cord.x = event.pageX - self.x;
@@ -41,6 +43,7 @@ Stage.prototype.initialize = function () {
             }
 
             event.cord = cord;
+            event.target = event.currentTarget = self;
 
             self.trigger(event.type, event);
             self.mouseEvent(cord, event);
@@ -90,12 +93,12 @@ Stage.prototype.mouseEvent = function (cord, event) {
     if (cord != null) {
         objs = MouseEvent.getObjsFromCord(cord);
 
-        //模拟捕获阶段
-        if (event.useCapture) {
+        //捕获阶段的模拟
+        if(objs.length && objs[0].useCapture) {
             reverseObjs = Util.reverse(objs);
             for (var i = reverseObjs.length - 1; i >= 0; i--) {
                 item = reverseObjs[i];
-                item.trigger(event.type, event);
+                item.trigger(event.type, event, false, true);
             }
         }
 

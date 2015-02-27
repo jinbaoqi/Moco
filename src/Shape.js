@@ -231,4 +231,9 @@ Shape.prototype.add = function (fn) {
     });
 };
 
+Shape.prototype.on = function(eventName, callback, useCapture){
+    var self = this;
+    EventDispatcher.prototype.on.apply(self,[self,eventName,callback,useCapture]);
+};
+
 Base.inherit(Shape, DisplayObject);
