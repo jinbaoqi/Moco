@@ -114,6 +114,11 @@ var Util = {
 };
 var EventCore = {
     _list: [],
+    add: function(obj){
+        if(obj instanceof EventDispatcher){
+            this._list.push(obj);
+        }
+    },
     getObjs: function () {
         return this._list;
     },
@@ -389,9 +394,9 @@ EventDispatcher.prototype.trigger = function (target, eventName, event, isDeep, 
 
     for (var i = 0, len = callbacks.length; i < len; i++) {
         item = callbacks[i];
-        if (event.isImmediatePropagationStopped()) {
+        if (!isCapture && event.isImmediatePropagationStopped()) {
             break;
-        } else if(!isCapture || (isCapture && item.useCapture)){ //捕获阶段的修正
+        } else{ //捕获阶段的修正
             item.callback.call(self, event);
         }
     }
@@ -597,7 +602,6 @@ DisplayObject.prototype = {
             canvas.translate(self.translateX, self.translateY);
         }
     },
-
     getRotateXY: function () {
         var self = this;
         self.center = {
@@ -605,7 +609,6 @@ DisplayObject.prototype = {
             y: 0
         };
     },
-
     isMouseon: function (cord) {
         var self = this;
 
@@ -628,6 +631,39 @@ DisplayObject.prototype = {
 
 Base.inherit(DisplayObject, EventDispatcher);
 
+/**
+ * InteractiveObject可交互类
+ * @constructor
+ */
+function InteractiveObject(){
+    DisplayObject.call(this);
+
+    this._inMouseList = false;
+    this._inKeyBordList = false;
+}
+
+InteractiveObject.prototype.on = function(eventName, callback, useCapture){
+    var self = this,
+        isMouseEvent = Util.inArray(eventName, MouseEvent.nameList) == -1,
+        isKeyBoardEvent = Util.inArray(eventName, KeyBoardEvent.nameList) == -1;
+
+    EventDispatcher.prototype.on.apply(self,[self,eventName,callback,useCapture]);
+
+    if(
+        (isMouseEvent && self._inMouseList) ||
+        (isKeyBoardEvent && self._inKeyBordList)
+    ){
+        return;
+    }else if(isMouseEvent){
+        MouseEvent.add(self);
+        self._inMouseList = true;
+    }else if(isKeyBoardEvent){
+        KeyBoardEvent.add(self);
+        self._inKeyBordList = true;
+    }
+};
+
+Base.inherit(InteractiveObject,DisplayObject);
 /**
  * DisplayContainer显示容器抽象类
  */
@@ -686,7 +722,7 @@ DisplayObjectContainer.prototype.contains = function (obj) {
     }
 };
 
-Base.inherit(DisplayObjectContainer, DisplayObject);
+Base.inherit(DisplayObjectContainer, InteractiveObject);
 /**
  * requestAnimationFrame兼容写法
  * https://github.com/ngryman/raf.js
@@ -739,6 +775,14 @@ function Stage(canvasId, fn) {
     this.initialize();
 }
 
+Stage.prototype.on = function(){
+    EventDispatcher.prototype.on.apply(this,arguments);
+};
+
+Stage.prototype.off = function(){
+    EventDispatcher.prototype.off.apply(this,arguments);
+}
+
 Stage.prototype.initialize = function () {
     var self = this;
 
@@ -761,10 +805,17 @@ Stage.prototype.initialize = function () {
             }
 
             event.cord = cord;
-            event.target = event.currentTarget = self;
+
+            self.mouseEvent(cord, event);
+
+            //Stage类本身只允许冒泡触发
+            event.target = self;
+
+            if(event.currentTarget == null){
+                event.currentTarget = self;
+            }
 
             self.trigger(event.type, event);
-            self.mouseEvent(cord, event);
         });
     });
 
@@ -810,12 +861,15 @@ Stage.prototype.mouseEvent = function (cord, event) {
 
     if (cord != null) {
         objs = MouseEvent.getObjsFromCord(cord);
+        event.currentTarget = objs[0];
 
         //捕获阶段的模拟
         if(objs.length && objs[0].useCapture) {
             reverseObjs = Util.reverse(objs);
+            reverseObjs = reverseObjs.splice(0,reverseObjs.length - 1);
             for (var i = reverseObjs.length - 1; i >= 0; i--) {
                 item = reverseObjs[i];
+                event.target = item;
                 item.trigger(event.type, event, false, true);
             }
         }
@@ -833,6 +887,7 @@ Stage.prototype.mouseEvent = function (cord, event) {
             break;
         } else {
             item = objs[i];
+            event.target = item;
             item.trigger(event.type, event);
         }
     }
@@ -1137,10 +1192,30 @@ Shape.prototype.add = function (fn) {
     });
 };
 
-Shape.prototype.on = function(eventName, callback, useCapture){
-    var self = this;
+Shape.prototype.on = function(eventName,callback,useCapture){
+    var self = this,
+        isMouseEvent = Util.inArray(eventName, MouseEvent.nameList) == -1,
+        isKeyBoardEvent = Util.inArray(eventName, KeyBoardEvent.nameList) == -1;
+
     EventDispatcher.prototype.on.apply(self,[self,eventName,callback,useCapture]);
-};
+
+    if(
+        (isMouseEvent && self._inMouseList) ||
+        (isKeyBoardEvent && self._inKeyBordList)
+    ){
+        return;
+    }else if(isMouseEvent){
+        MouseEvent.add(self);
+        self._inMouseList = true;
+    }else if(isKeyBoardEvent){
+        KeyBoardEvent.add(self);
+        self._inKeyBordList = true;
+    }
+}
+
+Shape.prototype.isMouseon = function(){
+    return true;
+}
 
 Base.inherit(Shape, DisplayObject);
 

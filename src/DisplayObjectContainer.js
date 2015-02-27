@@ -56,4 +56,4 @@ DisplayObjectContainer.prototype.contains = function (obj) {
     }
 };
 
-Base.inherit(DisplayObjectContainer, DisplayObject);
+Base.inherit(DisplayObjectContainer, InteractiveObject);

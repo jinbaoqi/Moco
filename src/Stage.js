@@ -21,6 +21,14 @@ function Stage(canvasId, fn) {
     this.initialize();
 }
 
+Stage.prototype.on = function(){
+    EventDispatcher.prototype.on.apply(this,arguments);
+};
+
+Stage.prototype.off = function(){
+    EventDispatcher.prototype.off.apply(this,arguments);
+}
+
 Stage.prototype.initialize = function () {
     var self = this;
 
@@ -43,10 +51,17 @@ Stage.prototype.initialize = function () {
             }
 
             event.cord = cord;
-            event.target = event.currentTarget = self;
+
+            self.mouseEvent(cord, event);
+
+            //Stage类本身只允许冒泡触发
+            event.target = self;
+
+            if(event.currentTarget == null){
+                event.currentTarget = self;
+            }
 
             self.trigger(event.type, event);
-            self.mouseEvent(cord, event);
         });
     });
 
@@ -92,12 +107,15 @@ Stage.prototype.mouseEvent = function (cord, event) {
 
     if (cord != null) {
         objs = MouseEvent.getObjsFromCord(cord);
+        event.currentTarget = objs[0];
 
         //捕获阶段的模拟
         if(objs.length && objs[0].useCapture) {
             reverseObjs = Util.reverse(objs);
+            reverseObjs = reverseObjs.splice(0,reverseObjs.length - 1);
             for (var i = reverseObjs.length - 1; i >= 0; i--) {
                 item = reverseObjs[i];
+                event.target = item;
                 item.trigger(event.type, event, false, true);
             }
         }
@@ -115,6 +133,7 @@ Stage.prototype.mouseEvent = function (cord, event) {
             break;
         } else {
             item = objs[i];
+            event.target = item;
             item.trigger(event.type, event);
         }
     }

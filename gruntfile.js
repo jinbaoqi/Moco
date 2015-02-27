@@ -11,6 +11,7 @@ module.exports = function(grunt) {
                     "src/EventDispatcher.js",
                     "src/Base.js",
                     "src/DisplayObject.js",
+                    "src/InteractiveObject.js",
                     "src/DisplayObjectContainer.js",
                     "src/raf.js",
                     "src/Stage.js",

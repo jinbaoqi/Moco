@@ -202,9 +202,9 @@ EventDispatcher.prototype.trigger = function (target, eventName, event, isDeep, 
 
     for (var i = 0, len = callbacks.length; i < len; i++) {
         item = callbacks[i];
-        if (event.isImmediatePropagationStopped()) {
+        if (!isCapture && event.isImmediatePropagationStopped()) {
             break;
-        } else if(!isCapture || (isCapture && item.useCapture)){ //捕获阶段的修正
+        } else{ //捕获阶段的修正
             item.callback.call(self, event);
         }
     }

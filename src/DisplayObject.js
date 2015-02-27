@@ -82,7 +82,6 @@ DisplayObject.prototype = {
             canvas.translate(self.translateX, self.translateY);
         }
     },
-
     getRotateXY: function () {
         var self = this;
         self.center = {
@@ -90,7 +89,6 @@ DisplayObject.prototype = {
             y: 0
         };
     },
-
     isMouseon: function (cord) {
         var self = this;
 

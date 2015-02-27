@@ -13,21 +13,24 @@
 </head>
 <body>
     <div id="wrap1" style="width:1000px;height:1000px;overflow: hidden;">
-        <div id="wrap2" style="background:red;margin-left:100px;margin-top:100px;width:400px;height:300px;overflow:hidden;">
+        <div id="wrap2" style="margin-left:100px;margin-top:100px;width:400px;height:300px;overflow:hidden;">
             <canvas id="canvas" width="400" height="300"></canvas>
         </div>
     </div>
     <script>
         var s = new Stage("canvas",function(stage){
             var shape = new Shape();
-            shape.alpha = 0.5;
-            shape.drawLine(1,"yellow",[0,0,100,100]);
+            shape.alpha = 1;
+            shape.drawLine(10,"blue",[0,0,100,100]);
+            shape.on("click",function(ev){
+                console.log(shape.mouseX,shape.mouseY,ev.target,ev.currentTarget);
+            });
             stage.addChild(shape);
+            window.shape = shape;
         });
 
-        s.on("click",function(ev){
-             console.log(s.mouseX, s.mouseY,ev.target);
-            ev.stopPropagation();
+        s.on(MouseEvent.CLICK,function(ev){
+            console.log(s.mouseX, s.mouseY, ev.target,ev.currentTarget);
         });
     </script>
 </body>

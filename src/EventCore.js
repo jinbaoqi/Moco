@@ -1,5 +1,10 @@
 var EventCore = {
     _list: [],
+    add: function(obj){
+        if(obj instanceof EventDispatcher){
+            this._list.push(obj);
+        }
+    },
     getObjs: function () {
         return this._list;
     },
