@@ -547,69 +547,69 @@ function DisplayObject() {
     this._saveFlag = false;
 }
 
-DisplayObject.prototype = {
-    constructor: DisplayObject,
-    show: function () {
-        var self = this,
-            rotateFlag = Math.PI / 180,
-            canvas = self.stage.ctx;
+DisplayObject.prototype.show = function () {
+    var self = this,
+        rotateFlag = Math.PI / 180,
+        canvas = self.stage.ctx;
 
-        if (!self.visible) {
-            return;
-        }
+    if (!self.visible) {
+        return;
+    }
 
-        if (
-            (self.mask != null && self.mask.show) ||
-                self.alpha < 1 ||
-                self.rotate != 0 ||
-                self.scaleX != 1 ||
-                self.scaleY != 1 ||
-                self.translateX != 0 ||
-                self.translateY != 0 ||
-                self.globalCompositeOperation != ""
-            ) {
-            self._saveFlag = true;
-            canvas.save();
-        }
+    if (
+        (self.mask != null && self.mask.show) ||
+        self.alpha < 1 ||
+        self.rotate != 0 ||
+        self.scaleX != 1 ||
+        self.scaleY != 1 ||
+        self.translateX != 0 ||
+        self.translateY != 0 ||
+        self.globalCompositeOperation != ""
+    ) {
+        self._saveFlag = true;
+        canvas.save();
+    }
 
-        if (self.mask != null && self.mask.show) {
-            self.mask.show();
-            canvas.clip();
-        }
+    if (self.mask != null && self.mask.show) {
+        self.mask.show();
+        canvas.clip();
+    }
 
-        if (self.alpha <= 1) {
-            canvas.globalAlpha = self.alpha > 1 ? 1 : self.alpha;
-        }
+    if (self.alpha <= 1) {
+        canvas.globalAlpha = self.alpha > 1 ? 1 : self.alpha;
+    }
 
-        if (self.globalCompositeOperation != "") {
-            canvas.globalCompositeOperation = self.globalCompositeOperation;
-        }
+    if (self.globalCompositeOperation != "") {
+        canvas.globalCompositeOperation = self.globalCompositeOperation;
+    }
 
-        if (self.rotate != 0) {
-            if (self.center == null) {
-                self.getRotateXY();
-            }
-            canvas.translate(self.x + self.center.x, self.y + self.center.y);
-            canvas.rotate(self.rotate * rotateFlag);
-            canvas.translate(-(self.x + self.center.x), -(self.y + self.center.y));
+    if (self.rotate != 0) {
+        if (self.center == null) {
+            self.getRotateXY();
         }
+        canvas.translate(self.x + self.center.x, self.y + self.center.y);
+        canvas.rotate(self.rotate * rotateFlag);
+        canvas.translate(-(self.x + self.center.x), -(self.y + self.center.y));
+    }
 
-        if (self.scaleX != 1 || self.scaleY != 1) {
-            canvas.scale(self.scaleX, self.scaleY);
-        }
+    if (self.scaleX != 1 || self.scaleY != 1) {
+        canvas.scale(self.scaleX, self.scaleY);
+    }
 
-        if (self.translateX != 0 || self.translateY != 0) {
-            canvas.translate(self.translateX, self.translateY);
-        }
-    },
-    getRotateXY: function () {
-        var self = this;
-        self.center = {
-            x: 0,
-            y: 0
-        };
-    },
-    isMouseon: function (cord) {
+    if (self.translateX != 0 || self.translateY != 0) {
+        canvas.translate(self.translateX, self.translateY);
+    }
+};
+
+DisplayObject.prototype.getRotateXY = function () {
+    var self = this;
+    self.center = {
+        x: 0,
+        y: 0
+    };
+};
+
+DisplayObject.prototype.isMouseon = function (cord) {
         var self = this;
 
         if (self.visible == false || self.alpha <= 0.01) {
@@ -626,7 +626,6 @@ DisplayObject.prototype = {
         }
 
         return false;
-    }
 };
 
 Base.inherit(DisplayObject, EventDispatcher);

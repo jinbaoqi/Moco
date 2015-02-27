@@ -23,7 +23,7 @@
             shape.alpha = 1;
             shape.drawLine(10,"blue",[0,0,100,100]);
             shape.on("click",function(ev){
-                console.log(shape.mouseX,shape.mouseY,ev.target,ev.currentTarget);
+                console.log(stage.mouseX,stage.mouseY,ev.target,ev.currentTarget);
             });
             stage.addChild(shape);
             window.shape = shape;
