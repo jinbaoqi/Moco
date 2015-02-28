@@ -27,12 +27,12 @@
 
             var sprite = new Sprite();
             sprite.graphics = shape;
-            sprite.alpha = 0.5;
-            sprite.on("click",function(){
-                sprite.x += 10;
-            });
+            sprite.x = 100;
 
-            stage.addChild(sprite);
+            var sprite2 = new Sprite();
+            sprite2.addChild(sprite);
+
+            stage.addChild(sprite2);
         });
     </script>
 </body>

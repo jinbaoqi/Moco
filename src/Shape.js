@@ -271,15 +271,13 @@ Shape.prototype.isMouseon = function (cord, pos) {
     }
 
     if (pos == null) {
-        pos = {
-            x: 0,
-            y: 0
-        }
+        pos = self._getOffset();
     }
 
     for (i = 0, len = self._setList.length; i < len; i++) {
         item = self._setList[i];
 
+        debugger;
         if (
                 item.type == "rect" &&
                 cord.x >= item.pos[0] + pos.x &&

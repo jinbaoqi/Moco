@@ -648,15 +648,12 @@ DisplayObject.prototype.isMouseon = function (cord, pos) {
         return false;
     }
 
-    if (pos) {
-        pos = {
-            x: 0,
-            y: 0
-        };
+    if (pos == null) {
+        pos = self._getOffset();
     }
 
     if (
-            cord.x >= self.x + pos.x &&
+        cord.x >= self.x + pos.x &&
             cord.x <= self.x + pos.x + self.width &&
             cord.y >= self.y + pos.y &&
             cord.y <= self.y + pos.y + self.height
@@ -677,6 +674,23 @@ DisplayObject.prototype.dispose = function () {
     if (parent && parent.removeChild) {
         parent.removeChild(self);
     }
+};
+
+DisplayObject.prototype._getOffset = function () {
+    var self = this,
+        parent = self.parent,
+        tmp = {
+            x: 0,
+            y: 0
+        };
+
+    while(parent && !(parent instanceof Stage)){
+        tmp.x += parent.x;
+        tmp.y += parent.y;
+        parent = parent.parent;
+    }
+
+    return tmp;
 };
 
 Base.inherit(DisplayObject, EventDispatcher);
@@ -815,7 +829,7 @@ DisplayObjectContainer.prototype.show = function (cord) {
         item = self._childList[i];
 
         if (item.show) {
-            item.show();
+            item.show(cord);
         }
     }
 };
@@ -863,6 +877,7 @@ function Stage(canvasId, fn) {
     this.width = parseFloat(this.domElem.getAttribute("width"), 10);
     this.height = parseFloat(this.domElem.getAttribute("height"), 10);
     this.offset = this._getOffset(this.domElem);
+    console.log(this.offset);
     this.x = this.offset.left;
     this.y = this.offset.top;
 
@@ -992,6 +1007,7 @@ Stage.prototype.addChild = function (obj) {
     var self = this;
 
     DisplayObjectContainer.prototype.addChild.call(self, obj);
+    self._addStage(obj);
 
     obj.stage = self;
 
@@ -999,6 +1015,23 @@ Stage.prototype.addChild = function (obj) {
         obj.graphics.stage = self;
         obj.graphics.objectIndex = obj.objectIndex + ".0";
     }
+
+};
+
+Stage.prototype._addStage = function(obj){
+    var self = this;
+
+    obj.stage = self;
+
+    if (obj.graphics) {
+        obj.graphics.stage = self;
+        obj.graphics.parent = obj;
+        obj.graphics.objectIndex = obj.objectIndex + ".0";
+    }
+
+    Util.each(obj._childList,function(item){
+        self._addStage(item);
+    });
 };
 
 Stage.prototype._getOffset = function (domElem) {
@@ -1008,7 +1041,8 @@ Stage.prototype._getOffset = function (domElem) {
         scrollLeft = docElem.scrollLeft,
         actualLeft, actualTop, rect, offset;
 
-    if (domElem.getBoundingClientRect) {
+    //TODO:此处取值有问题
+    if (!domElem.getBoundingClientRect) {
         if (typeof arguments.callee.offset != "number") {
             var tmp = document.createElement("div");
             tmp.style.cssText = "position:absolute;left:0;top:0";
@@ -1335,15 +1369,13 @@ Shape.prototype.isMouseon = function (cord, pos) {
     }
 
     if (pos == null) {
-        pos = {
-            x: 0,
-            y: 0
-        }
+        pos = self._getOffset();
     }
 
     for (i = 0, len = self._setList.length; i < len; i++) {
         item = self._setList[i];
 
+        debugger;
         if (
                 item.type == "rect" &&
                 cord.x >= item.pos[0] + pos.x &&
@@ -1382,9 +1414,16 @@ function Sprite() {
 Sprite.prototype.show = function (cord) {
     var self = this;
 
+    if (cord == null) {
+        cord = {
+            x: 0,
+            y: 0
+        };
+    }
+
     cord = {
-        x: self.x,
-        y: self.y
+        x: self.x + cord.x,
+        y: self.y + cord.y
     };
 
     DisplayObjectContainer.prototype.show.call(self, cord);
@@ -1483,10 +1522,7 @@ Sprite.prototype.isMouseon = function (cord, pos) {
     }
 
     if (pos == null) {
-        pos = {
-            x: 0,
-            y: 0
-        };
+        pos = self._getOffset();
     }
 
     pos = {

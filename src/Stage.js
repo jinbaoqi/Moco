@@ -11,6 +11,7 @@ function Stage(canvasId, fn) {
     this.width = parseFloat(this.domElem.getAttribute("width"), 10);
     this.height = parseFloat(this.domElem.getAttribute("height"), 10);
     this.offset = this._getOffset(this.domElem);
+    console.log(this.offset);
     this.x = this.offset.left;
     this.y = this.offset.top;
 
@@ -140,6 +141,7 @@ Stage.prototype.addChild = function (obj) {
     var self = this;
 
     DisplayObjectContainer.prototype.addChild.call(self, obj);
+    self._addStage(obj);
 
     obj.stage = self;
 
@@ -147,6 +149,23 @@ Stage.prototype.addChild = function (obj) {
         obj.graphics.stage = self;
         obj.graphics.objectIndex = obj.objectIndex + ".0";
     }
+
+};
+
+Stage.prototype._addStage = function(obj){
+    var self = this;
+
+    obj.stage = self;
+
+    if (obj.graphics) {
+        obj.graphics.stage = self;
+        obj.graphics.parent = obj;
+        obj.graphics.objectIndex = obj.objectIndex + ".0";
+    }
+
+    Util.each(obj._childList,function(item){
+        self._addStage(item);
+    });
 };
 
 Stage.prototype._getOffset = function (domElem) {
@@ -156,7 +175,8 @@ Stage.prototype._getOffset = function (domElem) {
         scrollLeft = docElem.scrollLeft,
         actualLeft, actualTop, rect, offset;
 
-    if (domElem.getBoundingClientRect) {
+    //TODO:此处取值有问题
+    if (!domElem.getBoundingClientRect) {
         if (typeof arguments.callee.offset != "number") {
             var tmp = document.createElement("div");
             tmp.style.cssText = "position:absolute;left:0;top:0";

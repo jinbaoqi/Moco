@@ -73,7 +73,7 @@ DisplayObjectContainer.prototype.show = function (cord) {
         item = self._childList[i];
 
         if (item.show) {
-            item.show();
+            item.show(cord);
         }
     }
 };

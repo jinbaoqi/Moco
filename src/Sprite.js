@@ -12,9 +12,16 @@ function Sprite() {
 Sprite.prototype.show = function (cord) {
     var self = this;
 
+    if (cord == null) {
+        cord = {
+            x: 0,
+            y: 0
+        };
+    }
+
     cord = {
-        x: self.x,
-        y: self.y
+        x: self.x + cord.x,
+        y: self.y + cord.y
     };
 
     DisplayObjectContainer.prototype.show.call(self, cord);
@@ -113,10 +120,7 @@ Sprite.prototype.isMouseon = function (cord, pos) {
     }
 
     if (pos == null) {
-        pos = {
-            x: 0,
-            y: 0
-        };
+        pos = self._getOffset();
     }
 
     pos = {

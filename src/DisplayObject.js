@@ -109,15 +109,12 @@ DisplayObject.prototype.isMouseon = function (cord, pos) {
         return false;
     }
 
-    if (pos) {
-        pos = {
-            x: 0,
-            y: 0
-        };
+    if (pos == null) {
+        pos = self._getOffset();
     }
 
     if (
-            cord.x >= self.x + pos.x &&
+        cord.x >= self.x + pos.x &&
             cord.x <= self.x + pos.x + self.width &&
             cord.y >= self.y + pos.y &&
             cord.y <= self.y + pos.y + self.height
@@ -138,6 +135,23 @@ DisplayObject.prototype.dispose = function () {
     if (parent && parent.removeChild) {
         parent.removeChild(self);
     }
+};
+
+DisplayObject.prototype._getOffset = function () {
+    var self = this,
+        parent = self.parent,
+        tmp = {
+            x: 0,
+            y: 0
+        };
+
+    while(parent && !(parent instanceof Stage)){
+        tmp.x += parent.x;
+        tmp.y += parent.y;
+        parent = parent.parent;
+    }
+
+    return tmp;
 };
 
 Base.inherit(DisplayObject, EventDispatcher);
