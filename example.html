@@ -21,16 +21,13 @@
         var s = new Stage("canvas",function(stage){
             var shape = new Shape();
             shape.alpha = 1;
-            shape.drawLine(10,"blue",[0,0,100,100]);
+            //shape.drawRect(1,"red",[50,50,200,200],true,"blue");
+            shape.drawArc(1,"red",[50,50,50,0,Math.PI*2],true,"blue");
             shape.on("click",function(ev){
-                console.log(stage.mouseX,stage.mouseY,ev.target,ev.currentTarget);
+                shape.drawArc(1,"blue",[50,50,50,0,Math.PI*2],true,"red");
             });
             stage.addChild(shape);
             window.shape = shape;
-        });
-
-        s.on(MouseEvent.CLICK,function(ev){
-            console.log(s.mouseX, s.mouseY, ev.target,ev.currentTarget);
         });
     </script>
 </body>

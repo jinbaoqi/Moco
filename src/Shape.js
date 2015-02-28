@@ -7,6 +7,9 @@ function Shape() {
 
     this.name = "Shape";
     this._showList = [];
+
+    //setList主要是用于事件检测，检测范围是规则图形
+    this._setList = [];
 }
 
 Shape.prototype.show = function () {
@@ -83,8 +86,14 @@ Shape.prototype.clear = function () {
 
 Shape.prototype.rect = function (x, y, width, height) {
     var self = this;
+
     self._showList.push(function () {
         self.stage.ctx.rect(x, y, width, height);
+    });
+
+    self._setList.push({
+        type: "rect",
+        pos: [x,y,width,height]
     });
 };
 
@@ -104,8 +113,14 @@ Shape.prototype.fill = function () {
 
 Shape.prototype.arc = function (x, y, r, sAngle, eAngle, direct) {
     var self = this;
+
     self._showList.push(function () {
-        self.stage.ctx.arc(x, y, sAngle, eAngle, direct);
+        self.stage.ctx.arc(x, y, r, sAngle, eAngle, direct);
+    });
+
+    self._setList.push({
+        type: "arc",
+        pos: pointArr
     });
 };
 
@@ -127,6 +142,11 @@ Shape.prototype.drawArc = function (thickness, lineColor, pointArr, isFill, colo
         canvas.strokeStyle = lineColor;
         canvas.stroke();
     });
+
+    self._setList.push({
+        type: "arc",
+        pos: pointArr
+    });
 };
 
 Shape.prototype.drawRect = function (thickness, lineColor, pointArr, isFill, color) {
@@ -146,6 +166,11 @@ Shape.prototype.drawRect = function (thickness, lineColor, pointArr, isFill, col
         canvas.lineWidth = thickness;
         canvas.strokeStyle = lineColor;
         canvas.stroke();
+    });
+
+    self._setList.push({
+        type: "rect",
+        pos: pointArr
     });
 };
 
@@ -252,8 +277,37 @@ Shape.prototype.on = function(eventName,callback,useCapture){
     }
 }
 
-Shape.prototype.isMouseon = function(){
-    return true;
+Shape.prototype.isMouseon = function(cord){
+    var self = this,
+        i,len,item,dist,ax,ay,ar;
+
+    if(!self.visible || self.alpha < 0.01){
+        return false;
+    }
+
+    for(i = 0,len = self._setList.length; i < len; i++){
+        item = self._setList[i];
+
+        if(
+            item.type == "rect" &&
+            cord.x >= item.pos[0] &&
+            cord.x <= item.pos[2] + item.pos[0] &&
+            cord.y >= item.pos[1] &&
+            cord.y <= item.pos[3] + item.pos[1]
+        ){
+            return true;
+        }else if(item.type == "arc"){
+            ax = Math.pow(cord.x - item.pos[0],2);
+            ay = Math.pow(cord.y - item.pos[1],2);
+            ar = Math.pow(item.pos[2],2);
+
+            if(ax + ay <= ar){
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 Base.inherit(Shape, DisplayObject);

@@ -97,7 +97,7 @@ DisplayObject.prototype.isMouseon = function (cord) {
         }
 
         if (
-            cord.x >= self.x &&
+                cord.x >= self.x &&
                 cord.x <= self.x + self.width &&
                 cord.y >= self.y &&
                 cord.y <= self.y + self.height
