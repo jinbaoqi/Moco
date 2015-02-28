@@ -7,19 +7,18 @@ function Shape() {
 
     this.name = "Shape";
     this._showList = [];
-
-    //setList主要是用于事件检测，检测范围是规则图形
     this._setList = [];
 }
 
 Shape.prototype.show = function () {
-    DisplayObject.prototype.show.call(this);
 
     var self = this,
         showList = self._showList,
         len = showList.length;
 
-    if (len > 0) {
+    DisplayObject.prototype.show.call(this);
+
+    if (len) {
         for (var i = 0; i < len; i++) {
             showList[i]();
         }

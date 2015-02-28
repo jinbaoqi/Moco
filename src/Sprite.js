@@ -11,21 +11,22 @@ function Sprite(){
 
 //TODO:父级的定位应该是会影响到子级的定位的
 Sprite.prototype.show = function(){
-    DisplayObjectContainer.prototype.show.call(this);
+    var self = this;
 
-    if(this.graphics && this.graphics.show){
-        this.graphics.show();
+    DisplayObjectContainer.prototype.show.call(self);
+
+    if(self.graphics && self.graphics.show){
+        self.graphics.show();
+    }
+
+    if (self._saveFlag) {
+        self.stage.ctx.restore();
     }
 };
 
 Sprite.prototype.addChild = function(obj){
     var self = this;
     DisplayObjectContainer.prototype.addChild.call(self,obj);
-
-    if(obj.graphics instanceof Shape){
-        obj.graphics.objectIndex = obj.objectIndex + ".0";
-    }
-
     self._resize();
 };
 

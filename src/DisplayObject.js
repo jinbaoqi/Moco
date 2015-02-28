@@ -30,7 +30,7 @@ function DisplayObject() {
 DisplayObject.prototype.show = function () {
     var self = this,
         rotateFlag = Math.PI / 180,
-        canvas = self.stage.ctx;
+        canvas = self.ctx || self.stage.ctx;
 
     if (!self.visible) {
         return;
@@ -56,7 +56,7 @@ DisplayObject.prototype.show = function () {
         canvas.clip();
     }
 
-    if (self.alpha <= 1) {
+    if (self.alpha < 1) {
         canvas.globalAlpha = self.alpha > 1 ? 1 : self.alpha;
     }
 

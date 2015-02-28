@@ -569,7 +569,7 @@ function DisplayObject() {
 DisplayObject.prototype.show = function () {
     var self = this,
         rotateFlag = Math.PI / 180,
-        canvas = self.stage.ctx;
+        canvas = self.ctx || self.stage.ctx;
 
     if (!self.visible) {
         return;
@@ -595,7 +595,7 @@ DisplayObject.prototype.show = function () {
         canvas.clip();
     }
 
-    if (self.alpha <= 1) {
+    if (self.alpha < 1) {
         canvas.globalAlpha = self.alpha > 1 ? 1 : self.alpha;
     }
 
@@ -779,9 +779,18 @@ DisplayObjectContainer.prototype.contains = function (obj) {
     }
 };
 
-DisplayObjectContainer.prototype.show = function(){
+DisplayObjectContainer.prototype.show = function(cord){
     var self = this,
         item;
+
+    if(cord == null){
+        cord = {
+            x: 0,
+            y: 0
+        };
+    }
+
+    DisplayObject.prototype.show.call(self);
 
     for (var i = 0, len = self._childList.length; i < len; i++) {
         item = self._childList[i];
@@ -902,12 +911,15 @@ Stage.prototype.initialize = function () {
 };
 
 Stage.prototype.show = function () {
-    var self = this,
-        item;
+    var self = this;
 
     self.ctx.clearRect(0, 0, self.width, self.height);
 
     DisplayObjectContainer.prototype.show.call(self);
+
+    if (self._saveFlag) {
+        self.ctx.restore();
+    }
 
     raf(function () {
         self.show();
@@ -958,8 +970,16 @@ Stage.prototype.mouseEvent = function (cord, event) {
 };
 
 Stage.prototype.addChild = function (obj) {
-    DisplayObjectContainer.prototype.addChild.call(this, obj);
-    obj.stage = this;
+    var self = this;
+
+    DisplayObjectContainer.prototype.addChild.call(self, obj);
+
+    obj.stage = self;
+
+    if(obj.graphics){
+        obj.graphics.stage = self;
+        obj.graphics.objectIndex = obj.objectIndex + ".0";
+    }
 };
 
 Stage.prototype._getOffset = function (domElem) {
@@ -1032,19 +1052,18 @@ function Shape() {
 
     this.name = "Shape";
     this._showList = [];
-
-    //setList主要是用于事件检测，检测范围是规则图形
     this._setList = [];
 }
 
 Shape.prototype.show = function () {
-    DisplayObject.prototype.show.call(this);
 
     var self = this,
         showList = self._showList,
         len = showList.length;
 
-    if (len > 0) {
+    DisplayObject.prototype.show.call(this);
+
+    if (len) {
         for (var i = 0; i < len; i++) {
             showList[i]();
         }
@@ -1329,21 +1348,22 @@ function Sprite(){
 
 //TODO:父级的定位应该是会影响到子级的定位的
 Sprite.prototype.show = function(){
-    DisplayObjectContainer.prototype.show.call(this);
+    var self = this;
 
-    if(this.graphics && this.graphics.show){
-        this.graphics.show();
+    DisplayObjectContainer.prototype.show.call(self);
+
+    if(self.graphics && self.graphics.show){
+        self.graphics.show();
+    }
+
+    if (self._saveFlag) {
+        self.stage.ctx.restore();
     }
 };
 
 Sprite.prototype.addChild = function(obj){
     var self = this;
     DisplayObjectContainer.prototype.addChild.call(self,obj);
-
-    if(obj.graphics instanceof Shape){
-        obj.graphics.objectIndex = obj.objectIndex + ".0";
-    }
-
     self._resize();
 };
 

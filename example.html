@@ -18,38 +18,21 @@
         </div>
     </div>
     <script>
-        var s = new Stage("canvas",function(stage){
+        new Stage("canvas",function(stage){
             var shape = new Shape();
-            shape.alpha = 1;
-            shape.drawArc(1,"red",[50,50,50,0,Math.PI*2],true,"blue");
-            shape.on("click",function(ev){
+            shape.drawRect(1,"red",[0,0,100,100],true,"blue");
+            shape.on("click",function(){
                 console.log("shape");
             });
-            shape.stage = stage;
 
             var sprite = new Sprite();
+            sprite.graphics = shape;
+            sprite.alpha = 0.5;
             sprite.on("click",function(){
                 console.log("sprite");
             });
 
-            var sprite2 = new Sprite();
-            sprite2.graphics = shape;
-            sprite2.on("click",function(){
-                console.log("sprite2");
-            });
-            sprite.addChild(sprite2);
-
-            var shape1 = new Shape();
-            shape1.drawArc(1,"red",[0,0,50,0,Math.PI*2],true,"yellow");
-            shape1.on("click",function(ev){
-                console.log("shape1");
-            });
-            shape1.stage = stage;
-
-            sprite.x = 100;
-
             stage.addChild(sprite);
-            window.shape = shape1;
         });
     </script>
 </body>

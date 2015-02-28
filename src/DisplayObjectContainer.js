@@ -56,9 +56,18 @@ DisplayObjectContainer.prototype.contains = function (obj) {
     }
 };
 
-DisplayObjectContainer.prototype.show = function(){
+DisplayObjectContainer.prototype.show = function(cord){
     var self = this,
         item;
+
+    if(cord == null){
+        cord = {
+            x: 0,
+            y: 0
+        };
+    }
+
+    DisplayObject.prototype.show.call(self);
 
     for (var i = 0, len = self._childList.length; i < len; i++) {
         item = self._childList[i];

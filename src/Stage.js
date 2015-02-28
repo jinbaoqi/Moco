@@ -78,12 +78,15 @@ Stage.prototype.initialize = function () {
 };
 
 Stage.prototype.show = function () {
-    var self = this,
-        item;
+    var self = this;
 
     self.ctx.clearRect(0, 0, self.width, self.height);
 
     DisplayObjectContainer.prototype.show.call(self);
+
+    if (self._saveFlag) {
+        self.ctx.restore();
+    }
 
     raf(function () {
         self.show();
@@ -134,8 +137,16 @@ Stage.prototype.mouseEvent = function (cord, event) {
 };
 
 Stage.prototype.addChild = function (obj) {
-    DisplayObjectContainer.prototype.addChild.call(this, obj);
-    obj.stage = this;
+    var self = this;
+
+    DisplayObjectContainer.prototype.addChild.call(self, obj);
+
+    obj.stage = self;
+
+    if(obj.graphics){
+        obj.graphics.stage = self;
+        obj.graphics.objectIndex = obj.objectIndex + ".0";
+    }
 };
 
 Stage.prototype._getOffset = function (domElem) {
