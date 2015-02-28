@@ -10,17 +10,23 @@ function Shape() {
     this._setList = [];
 }
 
-Shape.prototype.show = function () {
-
+Shape.prototype.show = function (cord) {
     var self = this,
         showList = self._showList,
         len = showList.length;
 
-    DisplayObject.prototype.show.call(this);
+    if (cord == null) {
+        cord = {
+            x: 0,
+            y: 0
+        };
+    }
+
+    DisplayObject.prototype.show.call(this, cord);
 
     if (len) {
         for (var i = 0; i < len; i++) {
-            showList[i]();
+            showList[i](cord);
         }
     }
 
@@ -66,33 +72,34 @@ Shape.prototype.closePath = function () {
 
 Shape.prototype.moveTo = function (x, y) {
     var self = this;
-    self._showList.push(function () {
-        self.stage.ctx.moveTo(x, y);
+    self._showList.push(function (cord) {
+        self.stage.ctx.moveTo(x + cord.x, y + cord.y);
     });
 };
 
 Shape.prototype.lineTo = function (x, y) {
     var self = this;
-    self._showList.push(function () {
-        self.stage.ctx.lineTo(x, y);
+    self._showList.push(function (cord) {
+        self.stage.ctx.lineTo(x + cord.x, y + cord.y);
     });
 };
 
 Shape.prototype.clear = function () {
     var self = this;
     self._showList = [];
+    self._setList = [];
 };
 
 Shape.prototype.rect = function (x, y, width, height) {
     var self = this;
 
-    self._showList.push(function () {
-        self.stage.ctx.rect(x, y, width, height);
+    self._showList.push(function (cord) {
+        self.stage.ctx.rect(x + cord.x, y + cord.y, width, height);
     });
 
     self._setList.push({
         type: "rect",
-        pos: [x,y,width,height]
+        pos: [x, y, width, height]
     });
 };
 
@@ -113,8 +120,8 @@ Shape.prototype.fill = function () {
 Shape.prototype.arc = function (x, y, r, sAngle, eAngle, direct) {
     var self = this;
 
-    self._showList.push(function () {
-        self.stage.ctx.arc(x, y, r, sAngle, eAngle, direct);
+    self._showList.push(function (cord) {
+        self.stage.ctx.arc(x + cord.x, y + cord.y, r, sAngle, eAngle, direct);
     });
 
     self._setList.push({
@@ -127,11 +134,11 @@ Shape.prototype.drawArc = function (thickness, lineColor, pointArr, isFill, colo
     var self = this,
         canvas;
 
-    self._showList.push(function () {
+    self._showList.push(function (cord) {
         canvas = self.stage.ctx;
 
         canvas.beginPath();
-        canvas.arc(pointArr[0], pointArr[1], pointArr[2], pointArr[3], pointArr[4], pointArr[5]);
+        canvas.arc(pointArr[0] + cord.x, pointArr[1] + cord.y, pointArr[2], pointArr[3], pointArr[4], pointArr[5]);
 
         if (isFill) {
             canvas.fillStyle = color;
@@ -152,11 +159,11 @@ Shape.prototype.drawRect = function (thickness, lineColor, pointArr, isFill, col
     var self = this,
         canvas;
 
-    self._showList.push(function () {
+    self._showList.push(function (cord) {
         canvas = self.stage.ctx;
 
         canvas.beginPath();
-        canvas.rect(pointArr[0], pointArr[1], pointArr[2], pointArr[3]);
+        canvas.rect(pointArr[0] + cord.x, pointArr[1] + cord.y, pointArr[2], pointArr[3]);
 
         if (isFill) {
             canvas.fillStyle = color;
@@ -182,18 +189,18 @@ Shape.prototype.drawVertices = function (thickness, lineColor, vertices, isFill,
         return;
     }
 
-    self._showList.push(function () {
+    self._showList.push(function (cord) {
         canvas = self.stage.ctx;
 
         canvas.beginPath();
-        canvas.moveTo(vertices[0][0], vertices[0][1]);
+        canvas.moveTo(vertices[0][0] + cord.x, vertices[0][1] + cord.y);
 
         for (i = 1; i < length; i++) {
             var pointArr = vertices[i];
-            canvas.lineTo(pointArr[0], pointArr[1]);
+            canvas.lineTo(pointArr[0] + cord.x, pointArr[1] + cord.y);
         }
 
-        canvas.lineTo(vertices[0][0], vertices[0][1]);
+        canvas.lineTo(vertices[0][0] + cord.x, vertices[0][1] + cord.y);
 
         if (isFill) {
             canvas.fillStyle = color;
@@ -211,12 +218,12 @@ Shape.prototype.drawLine = function (thickness, lineColor, pointArr) {
     var self = this,
         canvas;
 
-    self._showList.push(function () {
+    self._showList.push(function (cord) {
         canvas = self.stage.ctx;
 
         canvas.beginPath();
-        canvas.moveTo(pointArr[0], pointArr[1]);
-        canvas.lineTo(pointArr[2], pointArr[3]);
+        canvas.moveTo(pointArr[0] + cord.x, pointArr[1] + cord.y);
+        canvas.lineTo(pointArr[2] + cord.x, pointArr[3] + cord.y);
         canvas.lineWidth = thickness;
         canvas.strokeStyle = lineColor;
         canvas.closePath();
@@ -250,36 +257,43 @@ Shape.prototype.lineStyle = function (thickness, color, alpha) {
 Shape.prototype.add = function (fn) {
     var self = this;
 
-    self._showList.push(function () {
+    self._showList.push(function (cord) {
         fn.call(self.stage);
     });
 };
 
-Shape.prototype.isMouseon = function(cord){
+Shape.prototype.isMouseon = function (cord, pos) {
     var self = this,
-        i,len,item,dist,ax,ay,ar;
+        i, len, item, dist, ax, ay, ar;
 
-    if(!self.visible || self.alpha < 0.01){
+    if (!self.visible || self.alpha < 0.01) {
         return false;
     }
 
-    for(i = 0,len = self._setList.length; i < len; i++){
+    if (pos == null) {
+        pos = {
+            x: 0,
+            y: 0
+        }
+    }
+
+    for (i = 0, len = self._setList.length; i < len; i++) {
         item = self._setList[i];
 
-        if(
-            item.type == "rect" &&
-            cord.x >= item.pos[0] &&
-            cord.x <= item.pos[2] + item.pos[0] &&
-            cord.y >= item.pos[1] &&
-            cord.y <= item.pos[3] + item.pos[1]
-        ){
+        if (
+                item.type == "rect" &&
+                cord.x >= item.pos[0] + pos.x &&
+                cord.x <= item.pos[2] + pos.x + item.pos[0] &&
+                cord.y >= item.pos[1] + pos.y &&
+                cord.y <= item.pos[3] + pos.y + item.pos[1]
+            ) {
             return true;
-        }else if(item.type == "arc"){
-            ax = Math.pow(cord.x - item.pos[0],2);
-            ay = Math.pow(cord.y - item.pos[1],2);
-            ar = Math.pow(item.pos[2],2);
+        } else if (item.type == "arc") {
+            ax = Math.pow(cord.x - (item.pos[0] + pos.x), 2);
+            ay = Math.pow(cord.y - (item.pos[1] + pos.y), 2);
+            ar = Math.pow(item.pos[2], 2);
 
-            if(ax + ay <= ar){
+            if (ax + ay <= ar) {
                 return true;
             }
         }

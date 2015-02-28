@@ -21,12 +21,12 @@ function Stage(canvasId, fn) {
     this.initialize();
 }
 
-Stage.prototype.on = function(){
-    EventDispatcher.prototype.on.apply(this,arguments);
+Stage.prototype.on = function () {
+    EventDispatcher.prototype.on.apply(this, arguments);
 };
 
-Stage.prototype.off = function(){
-    EventDispatcher.prototype.off.apply(this,arguments);
+Stage.prototype.off = function () {
+    EventDispatcher.prototype.off.apply(this, arguments);
 }
 
 Stage.prototype.initialize = function () {
@@ -57,7 +57,7 @@ Stage.prototype.initialize = function () {
             //Stage类本身只允许冒泡触发
             event.target = self;
 
-            if(event.currentTarget == null){
+            if (event.currentTarget == null) {
                 event.currentTarget = self;
             }
 
@@ -96,7 +96,7 @@ Stage.prototype.show = function () {
 Stage.prototype.mouseEvent = function (cord, event) {
     var objs = [],
         reverseObjs = [],
-        i,len,item;
+        i, len, item;
 
     function returnFalse() {
         return false
@@ -107,9 +107,9 @@ Stage.prototype.mouseEvent = function (cord, event) {
         event.currentTarget = objs[0];
 
         //捕获阶段的模拟
-        if(objs.length && objs[0].useCapture) {
+        if (objs.length && objs[0].useCapture) {
             reverseObjs = Util.reverse(objs);
-            reverseObjs = reverseObjs.splice(0,reverseObjs.length - 1);
+            reverseObjs = reverseObjs.splice(0, reverseObjs.length - 1);
             for (i = 0, len = reverseObjs.length; i < len; i++) {
                 item = reverseObjs[i];
                 event.target = item;
@@ -143,7 +143,7 @@ Stage.prototype.addChild = function (obj) {
 
     obj.stage = self;
 
-    if(obj.graphics){
+    if (obj.graphics) {
         obj.graphics.stage = self;
         obj.graphics.objectIndex = obj.objectIndex + ".0";
     }

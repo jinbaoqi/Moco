@@ -562,29 +562,37 @@ function DisplayObject() {
     this.mouseX = 0;
     this.mouseY = 0;
     this.visible = true;
-    this.aIndex = this.objectIndex = ""+(guid++);
+    this.aIndex = this.objectIndex = "" + (guid++);
     this._saveFlag = false;
 }
 
-DisplayObject.prototype.show = function () {
+DisplayObject.prototype.show = function (cord) {
     var self = this,
         rotateFlag = Math.PI / 180,
-        canvas = self.ctx || self.stage.ctx;
+        canvas = self.ctx || self.stage.ctx,
+        tx, ty;
 
     if (!self.visible) {
         return;
     }
 
+    if (cord == null) {
+        cord = {
+            x: 0,
+            y: 0
+        };
+    }
+
     if (
         (self.mask != null && self.mask.show) ||
-        self.alpha < 1 ||
-        self.rotate != 0 ||
-        self.scaleX != 1 ||
-        self.scaleY != 1 ||
-        self.translateX != 0 ||
-        self.translateY != 0 ||
-        self.globalCompositeOperation != ""
-    ) {
+            self.alpha < 1 ||
+            self.rotate != 0 ||
+            self.scaleX != 1 ||
+            self.scaleY != 1 ||
+            self.translateX != 0 ||
+            self.translateY != 0 ||
+            self.globalCompositeOperation != ""
+        ) {
         self._saveFlag = true;
         canvas.save();
     }
@@ -607,9 +615,13 @@ DisplayObject.prototype.show = function () {
         if (self.center == null) {
             self.getRotateXY();
         }
-        canvas.translate(self.x + self.center.x, self.y + self.center.y);
+
+        tx = self.x + cord.x + self.center.x;
+        ty = self.y + cord.y + self.center.y;
+
+        canvas.translate(tx, ty);
         canvas.rotate(self.rotate * rotateFlag);
-        canvas.translate(-(self.x + self.center.x), -(self.y + self.center.y));
+        canvas.translate(-tx, -ty);
     }
 
     if (self.scaleX != 1 || self.scaleY != 1) {
@@ -629,33 +641,40 @@ DisplayObject.prototype.getRotateXY = function () {
     };
 };
 
-DisplayObject.prototype.isMouseon = function (cord) {
-        var self = this;
+DisplayObject.prototype.isMouseon = function (cord, pos) {
+    var self = this;
 
-        if (self.visible == false || self.alpha <= 0.01) {
-            return false;
-        }
-
-        if (
-                cord.x >= self.x &&
-                cord.x <= self.x + self.width &&
-                cord.y >= self.y &&
-                cord.y <= self.y + self.height
-            ) {
-            return true;
-        }
-
+    if (self.visible == false || self.alpha <= 0.01) {
         return false;
+    }
+
+    if (pos) {
+        pos = {
+            x: 0,
+            y: 0
+        };
+    }
+
+    if (
+            cord.x >= self.x + pos.x &&
+            cord.x <= self.x + pos.x + self.width &&
+            cord.y >= self.y + pos.y &&
+            cord.y <= self.y + pos.y + self.height
+        ) {
+        return true;
+    }
+
+    return false;
 };
 
-DisplayObject.prototype.dispose = function(){
+DisplayObject.prototype.dispose = function () {
     var self = this,
         eventName = Util.keys(self.handlers),
         parent = self.parent;
 
     self.off(eventName);
 
-    if(parent && parent.removeChild){
+    if (parent && parent.removeChild) {
         parent.removeChild(self);
     }
 };
@@ -779,18 +798,18 @@ DisplayObjectContainer.prototype.contains = function (obj) {
     }
 };
 
-DisplayObjectContainer.prototype.show = function(cord){
+DisplayObjectContainer.prototype.show = function (cord) {
     var self = this,
         item;
 
-    if(cord == null){
+    if (cord == null) {
         cord = {
             x: 0,
             y: 0
         };
     }
 
-    DisplayObject.prototype.show.call(self);
+    DisplayObject.prototype.show.call(self, cord);
 
     for (var i = 0, len = self._childList.length; i < len; i++) {
         item = self._childList[i];
@@ -854,12 +873,12 @@ function Stage(canvasId, fn) {
     this.initialize();
 }
 
-Stage.prototype.on = function(){
-    EventDispatcher.prototype.on.apply(this,arguments);
+Stage.prototype.on = function () {
+    EventDispatcher.prototype.on.apply(this, arguments);
 };
 
-Stage.prototype.off = function(){
-    EventDispatcher.prototype.off.apply(this,arguments);
+Stage.prototype.off = function () {
+    EventDispatcher.prototype.off.apply(this, arguments);
 }
 
 Stage.prototype.initialize = function () {
@@ -890,7 +909,7 @@ Stage.prototype.initialize = function () {
             //Stage类本身只允许冒泡触发
             event.target = self;
 
-            if(event.currentTarget == null){
+            if (event.currentTarget == null) {
                 event.currentTarget = self;
             }
 
@@ -929,7 +948,7 @@ Stage.prototype.show = function () {
 Stage.prototype.mouseEvent = function (cord, event) {
     var objs = [],
         reverseObjs = [],
-        i,len,item;
+        i, len, item;
 
     function returnFalse() {
         return false
@@ -940,9 +959,9 @@ Stage.prototype.mouseEvent = function (cord, event) {
         event.currentTarget = objs[0];
 
         //捕获阶段的模拟
-        if(objs.length && objs[0].useCapture) {
+        if (objs.length && objs[0].useCapture) {
             reverseObjs = Util.reverse(objs);
-            reverseObjs = reverseObjs.splice(0,reverseObjs.length - 1);
+            reverseObjs = reverseObjs.splice(0, reverseObjs.length - 1);
             for (i = 0, len = reverseObjs.length; i < len; i++) {
                 item = reverseObjs[i];
                 event.target = item;
@@ -976,7 +995,7 @@ Stage.prototype.addChild = function (obj) {
 
     obj.stage = self;
 
-    if(obj.graphics){
+    if (obj.graphics) {
         obj.graphics.stage = self;
         obj.graphics.objectIndex = obj.objectIndex + ".0";
     }
@@ -1055,17 +1074,23 @@ function Shape() {
     this._setList = [];
 }
 
-Shape.prototype.show = function () {
-
+Shape.prototype.show = function (cord) {
     var self = this,
         showList = self._showList,
         len = showList.length;
 
-    DisplayObject.prototype.show.call(this);
+    if (cord == null) {
+        cord = {
+            x: 0,
+            y: 0
+        };
+    }
+
+    DisplayObject.prototype.show.call(this, cord);
 
     if (len) {
         for (var i = 0; i < len; i++) {
-            showList[i]();
+            showList[i](cord);
         }
     }
 
@@ -1111,33 +1136,34 @@ Shape.prototype.closePath = function () {
 
 Shape.prototype.moveTo = function (x, y) {
     var self = this;
-    self._showList.push(function () {
-        self.stage.ctx.moveTo(x, y);
+    self._showList.push(function (cord) {
+        self.stage.ctx.moveTo(x + cord.x, y + cord.y);
     });
 };
 
 Shape.prototype.lineTo = function (x, y) {
     var self = this;
-    self._showList.push(function () {
-        self.stage.ctx.lineTo(x, y);
+    self._showList.push(function (cord) {
+        self.stage.ctx.lineTo(x + cord.x, y + cord.y);
     });
 };
 
 Shape.prototype.clear = function () {
     var self = this;
     self._showList = [];
+    self._setList = [];
 };
 
 Shape.prototype.rect = function (x, y, width, height) {
     var self = this;
 
-    self._showList.push(function () {
-        self.stage.ctx.rect(x, y, width, height);
+    self._showList.push(function (cord) {
+        self.stage.ctx.rect(x + cord.x, y + cord.y, width, height);
     });
 
     self._setList.push({
         type: "rect",
-        pos: [x,y,width,height]
+        pos: [x, y, width, height]
     });
 };
 
@@ -1158,8 +1184,8 @@ Shape.prototype.fill = function () {
 Shape.prototype.arc = function (x, y, r, sAngle, eAngle, direct) {
     var self = this;
 
-    self._showList.push(function () {
-        self.stage.ctx.arc(x, y, r, sAngle, eAngle, direct);
+    self._showList.push(function (cord) {
+        self.stage.ctx.arc(x + cord.x, y + cord.y, r, sAngle, eAngle, direct);
     });
 
     self._setList.push({
@@ -1172,11 +1198,11 @@ Shape.prototype.drawArc = function (thickness, lineColor, pointArr, isFill, colo
     var self = this,
         canvas;
 
-    self._showList.push(function () {
+    self._showList.push(function (cord) {
         canvas = self.stage.ctx;
 
         canvas.beginPath();
-        canvas.arc(pointArr[0], pointArr[1], pointArr[2], pointArr[3], pointArr[4], pointArr[5]);
+        canvas.arc(pointArr[0] + cord.x, pointArr[1] + cord.y, pointArr[2], pointArr[3], pointArr[4], pointArr[5]);
 
         if (isFill) {
             canvas.fillStyle = color;
@@ -1197,11 +1223,11 @@ Shape.prototype.drawRect = function (thickness, lineColor, pointArr, isFill, col
     var self = this,
         canvas;
 
-    self._showList.push(function () {
+    self._showList.push(function (cord) {
         canvas = self.stage.ctx;
 
         canvas.beginPath();
-        canvas.rect(pointArr[0], pointArr[1], pointArr[2], pointArr[3]);
+        canvas.rect(pointArr[0] + cord.x, pointArr[1] + cord.y, pointArr[2], pointArr[3]);
 
         if (isFill) {
             canvas.fillStyle = color;
@@ -1227,18 +1253,18 @@ Shape.prototype.drawVertices = function (thickness, lineColor, vertices, isFill,
         return;
     }
 
-    self._showList.push(function () {
+    self._showList.push(function (cord) {
         canvas = self.stage.ctx;
 
         canvas.beginPath();
-        canvas.moveTo(vertices[0][0], vertices[0][1]);
+        canvas.moveTo(vertices[0][0] + cord.x, vertices[0][1] + cord.y);
 
         for (i = 1; i < length; i++) {
             var pointArr = vertices[i];
-            canvas.lineTo(pointArr[0], pointArr[1]);
+            canvas.lineTo(pointArr[0] + cord.x, pointArr[1] + cord.y);
         }
 
-        canvas.lineTo(vertices[0][0], vertices[0][1]);
+        canvas.lineTo(vertices[0][0] + cord.x, vertices[0][1] + cord.y);
 
         if (isFill) {
             canvas.fillStyle = color;
@@ -1256,12 +1282,12 @@ Shape.prototype.drawLine = function (thickness, lineColor, pointArr) {
     var self = this,
         canvas;
 
-    self._showList.push(function () {
+    self._showList.push(function (cord) {
         canvas = self.stage.ctx;
 
         canvas.beginPath();
-        canvas.moveTo(pointArr[0], pointArr[1]);
-        canvas.lineTo(pointArr[2], pointArr[3]);
+        canvas.moveTo(pointArr[0] + cord.x, pointArr[1] + cord.y);
+        canvas.lineTo(pointArr[2] + cord.x, pointArr[3] + cord.y);
         canvas.lineWidth = thickness;
         canvas.strokeStyle = lineColor;
         canvas.closePath();
@@ -1295,36 +1321,43 @@ Shape.prototype.lineStyle = function (thickness, color, alpha) {
 Shape.prototype.add = function (fn) {
     var self = this;
 
-    self._showList.push(function () {
+    self._showList.push(function (cord) {
         fn.call(self.stage);
     });
 };
 
-Shape.prototype.isMouseon = function(cord){
+Shape.prototype.isMouseon = function (cord, pos) {
     var self = this,
-        i,len,item,dist,ax,ay,ar;
+        i, len, item, dist, ax, ay, ar;
 
-    if(!self.visible || self.alpha < 0.01){
+    if (!self.visible || self.alpha < 0.01) {
         return false;
     }
 
-    for(i = 0,len = self._setList.length; i < len; i++){
+    if (pos == null) {
+        pos = {
+            x: 0,
+            y: 0
+        }
+    }
+
+    for (i = 0, len = self._setList.length; i < len; i++) {
         item = self._setList[i];
 
-        if(
-            item.type == "rect" &&
-            cord.x >= item.pos[0] &&
-            cord.x <= item.pos[2] + item.pos[0] &&
-            cord.y >= item.pos[1] &&
-            cord.y <= item.pos[3] + item.pos[1]
-        ){
+        if (
+                item.type == "rect" &&
+                cord.x >= item.pos[0] + pos.x &&
+                cord.x <= item.pos[2] + pos.x + item.pos[0] &&
+                cord.y >= item.pos[1] + pos.y &&
+                cord.y <= item.pos[3] + pos.y + item.pos[1]
+            ) {
             return true;
-        }else if(item.type == "arc"){
-            ax = Math.pow(cord.x - item.pos[0],2);
-            ay = Math.pow(cord.y - item.pos[1],2);
-            ar = Math.pow(item.pos[2],2);
+        } else if (item.type == "arc") {
+            ax = Math.pow(cord.x - (item.pos[0] + pos.x), 2);
+            ay = Math.pow(cord.y - (item.pos[1] + pos.y), 2);
+            ar = Math.pow(item.pos[2], 2);
 
-            if(ax + ay <= ar){
+            if (ax + ay <= ar) {
                 return true;
             }
         }
@@ -1339,21 +1372,25 @@ Base.inherit(Shape, InteractiveObject);
  * Sprite精灵类，继承自DisplayContaianer
  */
 
-function Sprite(){
+function Sprite() {
     DisplayObjectContainer.call(this);
 
     this.name = "Sprite";
     this.graphics = null;
 }
 
-//TODO:父级的定位应该是会影响到子级的定位的
-Sprite.prototype.show = function(){
+Sprite.prototype.show = function (cord) {
     var self = this;
 
-    DisplayObjectContainer.prototype.show.call(self);
+    cord = {
+        x: self.x,
+        y: self.y
+    };
 
-    if(self.graphics && self.graphics.show){
-        self.graphics.show();
+    DisplayObjectContainer.prototype.show.call(self, cord);
+
+    if (self.graphics && self.graphics.show) {
+        self.graphics.show(cord);
     }
 
     if (self._saveFlag) {
@@ -1361,29 +1398,29 @@ Sprite.prototype.show = function(){
     }
 };
 
-Sprite.prototype.addChild = function(obj){
+Sprite.prototype.addChild = function (obj) {
     var self = this;
-    DisplayObjectContainer.prototype.addChild.call(self,obj);
+    DisplayObjectContainer.prototype.addChild.call(self, obj);
     self._resize();
 };
 
-Sprite.prototype.removeChild = function(obj){
+Sprite.prototype.removeChild = function (obj) {
     var self = this;
-    DisplayObjectContainer.prototype.removeChild.call(self,obj);
+    DisplayObjectContainer.prototype.removeChild.call(self, obj);
     self._resize();
 };
 
-Sprite.prototype.getRotateXY = function(){
+Sprite.prototype.getRotateXY = function () {
 
 };
 
-Sprite.prototype.getWidth = function(){
+Sprite.prototype.getWidth = function () {
     var self = this,
         w = 0,
         w1 = 0;
 
-    Util.each(self._childList,function(item){
-        if(item.getWidth){
+    Util.each(self._childList, function (item) {
+        if (item.getWidth) {
             w1 = item.getWidth();
             w = w < w1 ? w1 : w;
         }
@@ -1392,13 +1429,13 @@ Sprite.prototype.getWidth = function(){
     return w;
 };
 
-Sprite.prototype.getHeight = function(){
+Sprite.prototype.getHeight = function () {
     var self = this,
         w = 0,
         w1 = 0;
 
-    Util.each(self._childList,function(item){
-        if(item.getWidth){
+    Util.each(self._childList, function (item) {
+        if (item.getWidth) {
             w1 = item.getHeight();
             w = w < w1 ? w1 : w;
         }
@@ -1407,7 +1444,7 @@ Sprite.prototype.getHeight = function(){
     return w;
 };
 
-Sprite.prototype._resize = function(){
+Sprite.prototype._resize = function () {
     var self = this,
         sx = 0,
         sy = 0,
@@ -1415,8 +1452,8 @@ Sprite.prototype._resize = function(){
         ey = 0,
         item;
 
-    for (var i = 0; i < self._childList.length; i ++) {
-        item =  self._childList[i];
+    for (var i = 0; i < self._childList.length; i++) {
+        item = self._childList[i];
 
         if (sx > item.x) {
             sx = item.x;
@@ -1436,35 +1473,47 @@ Sprite.prototype._resize = function(){
     self.height = ey - sy;
 };
 
-Sprite.prototype.isMouseon = function(cord){
+Sprite.prototype.isMouseon = function (cord, pos) {
     var self = this,
         isOn = false,
-        i,len,item;
+        i, len, item;
 
-    if(!self.visible || self.alpha < 0.01){
+    if (!self.visible || self.alpha < 0.01) {
         return false;
     }
 
-    for(i = 0,len = self._childList.length; i < len; i++){
+    if (pos == null) {
+        pos = {
+            x: 0,
+            y: 0
+        };
+    }
+
+    pos = {
+        x: self.x + pos.x,
+        y: self.y + pos.y
+    };
+
+    for (i = 0, len = self._childList.length; i < len; i++) {
         item = self._childList[i];
 
-        if(item.isMouseon){
-            isOn = item.isMouseon(cord);
+        if (item.isMouseon) {
+            isOn = item.isMouseon(cord, pos);
         }
 
-        if(isOn){
+        if (isOn) {
             return true;
         }
     }
 
-    if(!isOn && self.graphics && self.graphics.isMouseon){
-        isOn = self.graphics.isMouseon(cord);
+    if (!isOn && self.graphics && self.graphics.isMouseon) {
+        isOn = self.graphics.isMouseon(cord, pos);
     }
 
     return isOn;
 };
 
-Base.inherit(Sprite,DisplayObjectContainer);
+Base.inherit(Sprite, DisplayObjectContainer);
 /**
  * Bitmap位图容器类
  */
