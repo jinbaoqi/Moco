@@ -108,4 +108,16 @@ DisplayObject.prototype.isMouseon = function (cord) {
         return false;
 };
 
+DisplayObject.prototype.dispose = function(){
+    var self = this,
+        eventName = Util.keys(self.handlers),
+        parent = self.parent;
+
+    self.off(eventName);
+
+    if(parent && parent.removeChild){
+        parent.removeChild(self);
+    }
+};
+
 Base.inherit(DisplayObject, EventDispatcher);

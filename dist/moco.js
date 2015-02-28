@@ -119,6 +119,19 @@ var EventCore = {
             this._list.push(obj);
         }
     },
+    remove: function(obj){
+        var i,len,item;
+
+        if(obj instanceof  EventDispatcher){
+            for(i = 0, len = this._list.length; i < len; i++){
+                item = this._list[i];
+                if(item.aIndex == obj.aIndex){
+                    this._list.splice(i,1);
+                    break;
+                }
+            }
+        }
+    },
     getObjs: function () {
         return this._list;
     },
@@ -628,12 +641,27 @@ DisplayObject.prototype.isMouseon = function (cord) {
         return false;
 };
 
+DisplayObject.prototype.dispose = function(){
+    var self = this,
+        eventName = Util.keys(self.handlers),
+        parent = self.parent;
+
+    self.off(eventName);
+
+    if(parent && parent.removeChild){
+        parent.removeChild(self);
+    }
+};
+
 Base.inherit(DisplayObject, EventDispatcher);
 
 /**
  * InteractiveObject可交互类
  * @constructor
  */
+
+var EventDispatcherProto = EventDispatcher.prototype;
+
 function InteractiveObject(){
     DisplayObject.call(this);
 
@@ -646,9 +674,8 @@ InteractiveObject.prototype.on = function(eventName, callback, useCapture){
         isMouseEvent = Util.inArray(eventName, MouseEvent.nameList) == -1,
         isKeyBoardEvent = Util.inArray(eventName, KeyBoardEvent.nameList) == -1;
 
-    EventDispatcher.prototype.on.apply(self,[self,eventName,callback,useCapture]);
-
     if(
+        (!isMouseEvent && !isKeyBoardEvent) ||
         (isMouseEvent && self._inMouseList) ||
         (isKeyBoardEvent && self._inKeyBordList)
     ){
@@ -660,7 +687,31 @@ InteractiveObject.prototype.on = function(eventName, callback, useCapture){
         KeyBoardEvent.add(self);
         self._inKeyBordList = true;
     }
+
+    EventDispatcherProto.on.apply(EventDispatcherProto,[self,eventName,callback,useCapture]);
 };
+
+InteractiveObject.prototype.off = function(eventName, callback){
+    var self = this,
+        isMouseEvent = Util.inArray(eventName, MouseEvent.nameList) == -1,
+        isKeyBoardEvent = Util.inArray(eventName, KeyBoardEvent.nameList) == -1;
+
+    if(!isMouseEvent && !isKeyBoardEvent){
+        return;
+    }
+
+    EventDispatcherProto.off.apply(EventDispatcherProto,[self,eventName,callback]);
+
+    if(!Util.keys(self.handlers).length) {
+        if(isMouseEvent){
+            MouseEvent.remove(self);
+            self._inMouseList = true;
+        }else if(isKeyBoardEvent){
+            KeyBoardEvent.remove(self);
+            self._inKeyBordList = true;
+        }
+    }
+}
 
 Base.inherit(InteractiveObject,DisplayObject);
 /**
@@ -1216,27 +1267,6 @@ Shape.prototype.add = function (fn) {
     });
 };
 
-Shape.prototype.on = function(eventName,callback,useCapture){
-    var self = this,
-        isMouseEvent = Util.inArray(eventName, MouseEvent.nameList) == -1,
-        isKeyBoardEvent = Util.inArray(eventName, KeyBoardEvent.nameList) == -1;
-
-    EventDispatcher.prototype.on.apply(self,[self,eventName,callback,useCapture]);
-
-    if(
-        (isMouseEvent && self._inMouseList) ||
-        (isKeyBoardEvent && self._inKeyBordList)
-    ){
-        return;
-    }else if(isMouseEvent){
-        MouseEvent.add(self);
-        self._inMouseList = true;
-    }else if(isKeyBoardEvent){
-        KeyBoardEvent.add(self);
-        self._inKeyBordList = true;
-    }
-}
-
 Shape.prototype.isMouseon = function(cord){
     var self = this,
         i,len,item,dist,ax,ay,ar;
@@ -1270,12 +1300,15 @@ Shape.prototype.isMouseon = function(cord){
     return false;
 }
 
-Base.inherit(Shape, DisplayObject);
+Base.inherit(Shape, InteractiveObject);
 
 /**
  * Sprite精灵类，继承自DisplayContaianer
  */
 
+function Sprite(){}
+
+Base.inherit(Sprite,InteractiveObject);
 /**
  * Bitmap位图容器类
  */
