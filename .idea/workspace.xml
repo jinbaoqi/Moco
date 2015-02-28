@@ -2,14 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3894964d-577d-42c6-b64b-b6cf49c67cd1" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DisplayObject.js" afterPath="$PROJECT_DIR$/src/DisplayObject.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DisplayObjectContainer.js" afterPath="$PROJECT_DIR$/src/DisplayObjectContainer.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Shape.js" afterPath="$PROJECT_DIR$/src/Shape.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Sprite.js" afterPath="$PROJECT_DIR$/src/Sprite.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Stage.js" afterPath="$PROJECT_DIR$/src/Stage.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/example.html" afterPath="$PROJECT_DIR$/example.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/moco.js" afterPath="$PROJECT_DIR$/dist/moco.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Moco.js.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -32,50 +29,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="example.html" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="example.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/example.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="29" column="27" selection-start="872" selection-end="872" vertical-scroll-proportion="-13.846154" vertical-offset="133" max-vertical-offset="748">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DisplayObject.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/DisplayObject.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="147" column="45" selection-start="3282" selection-end="3282" vertical-scroll-proportion="0.0" vertical-offset="2198" max-vertical-offset="2771">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="moco.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dist/moco.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="0" selection-start="309" selection-end="309" vertical-scroll-proportion="0.0" vertical-offset="238" max-vertical-offset="26894">
-              <folding>
-                <marker date="1425140832000" expanded="true" signature="14680:14726" placeholder="{...}" />
-                <marker date="1425140832000" expanded="true" signature="14811:14944" placeholder="{...}" />
-                <marker date="1425140832000" expanded="true" signature="14840:14925" placeholder="{&quot;x&quot;: 0...}" />
-                <marker date="1425140832000" expanded="true" signature="15207:15323" placeholder="{...}" />
-                <marker date="1425140832000" expanded="true" signature="15398:15435" placeholder="{...}" />
-                <marker date="1425140832000" expanded="true" signature="15501:15529" placeholder="{...}" />
-                <marker date="1425140832000" expanded="true" signature="15652:15654" placeholder="{...}" />
-                <marker date="1425140832000" expanded="true" signature="15724:15977" placeholder="{...}" />
-                <marker date="1425140832000" expanded="true" signature="16216:16243" placeholder="{&quot;x&quot;: 0...}" />
-                <marker date="1425140832000" expanded="true" signature="16502:16567" placeholder="{&quot;x&quot;: 0...}" />
-                <marker date="1425140832000" expanded="true" signature="36491:36555" placeholder="{&quot;x&quot;: 0...}" />
-                <marker date="1425140832000" expanded="true" signature="36618:36621" placeholder="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DisplayObjectContainer.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/DisplayObjectContainer.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="68" column="0" selection-start="1576" selection-end="1576" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1462">
+            <state line="29" column="27" selection-start="872" selection-end="872" vertical-scroll-proportion="0.47166362" vertical-offset="235" max-vertical-offset="782">
               <folding />
             </state>
           </provider>
@@ -84,16 +41,7 @@
       <file leaf-file-name="Sprite.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Sprite.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="128" column="6" selection-start="2454" selection-end="2454" vertical-scroll-proportion="0.0" vertical-offset="1892" max-vertical-offset="2635">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EventCore.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/EventCore.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="34" column="11" selection-start="876" selection-end="876" vertical-scroll-proportion="0.0" vertical-offset="238" max-vertical-offset="1258">
+            <state line="49" column="20" selection-start="943" selection-end="943" vertical-scroll-proportion="0.0" vertical-offset="600" max-vertical-offset="2635">
               <folding />
             </state>
           </provider>
@@ -102,16 +50,16 @@
       <file leaf-file-name="Shape.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Shape.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="279" column="17" selection-start="6234" selection-end="6234" vertical-scroll-proportion="0.0" vertical-offset="4544" max-vertical-offset="5253">
+            <state line="278" column="0" selection-start="6216" selection-end="6216" vertical-scroll-proportion="0.0" vertical-offset="4544" max-vertical-offset="5236">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Stage.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Stage.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Stage.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="177" column="18" selection-start="4367" selection-end="4367" vertical-scroll-proportion="-0.21206582" vertical-offset="3125" max-vertical-offset="4029">
+            <state line="12" column="48" selection-start="407" selection-end="407" vertical-scroll-proportion="-7.8461537" vertical-offset="0" max-vertical-offset="4012">
               <folding />
             </state>
           </provider>
@@ -132,11 +80,11 @@
       <list>
         <option value="$PROJECT_DIR$/src/EventCore.js" />
         <option value="$PROJECT_DIR$/src/DisplayObjectContainer.js" />
-        <option value="$PROJECT_DIR$/src/Sprite.js" />
         <option value="$PROJECT_DIR$/src/DisplayObject.js" />
+        <option value="$PROJECT_DIR$/src/Sprite.js" />
         <option value="$PROJECT_DIR$/src/Shape.js" />
-        <option value="$PROJECT_DIR$/example.html" />
         <option value="$PROJECT_DIR$/src/Stage.js" />
+        <option value="$PROJECT_DIR$/example.html" />
       </list>
     </option>
   </component>
@@ -349,20 +297,7 @@
     <entry file="file://$PROJECT_DIR$/dist/moco.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="26299">
-          <folding>
-            <marker date="1425140832000" expanded="true" signature="14680:14726" placeholder="{...}" />
-            <marker date="1425140832000" expanded="true" signature="14811:14944" placeholder="{...}" />
-            <marker date="1425140832000" expanded="true" signature="14840:14925" placeholder="{&quot;x&quot;: 0...}" />
-            <marker date="1425140832000" expanded="true" signature="15207:15323" placeholder="{...}" />
-            <marker date="1425140832000" expanded="true" signature="15398:15435" placeholder="{...}" />
-            <marker date="1425140832000" expanded="true" signature="15501:15529" placeholder="{...}" />
-            <marker date="1425140832000" expanded="true" signature="15652:15654" placeholder="{...}" />
-            <marker date="1425140832000" expanded="true" signature="15724:15977" placeholder="{...}" />
-            <marker date="1425140832000" expanded="true" signature="16216:16243" placeholder="{&quot;x&quot;: 0...}" />
-            <marker date="1425140832000" expanded="true" signature="16502:16567" placeholder="{&quot;x&quot;: 0...}" />
-            <marker date="1425140832000" expanded="true" signature="36491:36555" placeholder="{&quot;x&quot;: 0...}" />
-            <marker date="1425140832000" expanded="true" signature="36618:36621" placeholder="{...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -401,47 +336,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dist/moco.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="0" selection-start="309" selection-end="309" vertical-scroll-proportion="0.0" vertical-offset="238" max-vertical-offset="26894">
-          <folding>
-            <marker date="1425140832000" expanded="true" signature="14680:14726" placeholder="{...}" />
-            <marker date="1425140832000" expanded="true" signature="14811:14944" placeholder="{...}" />
-            <marker date="1425140832000" expanded="true" signature="14840:14925" placeholder="{&quot;x&quot;: 0...}" />
-            <marker date="1425140832000" expanded="true" signature="15207:15323" placeholder="{...}" />
-            <marker date="1425140832000" expanded="true" signature="15398:15435" placeholder="{...}" />
-            <marker date="1425140832000" expanded="true" signature="15501:15529" placeholder="{...}" />
-            <marker date="1425140832000" expanded="true" signature="15652:15654" placeholder="{...}" />
-            <marker date="1425140832000" expanded="true" signature="15724:15977" placeholder="{...}" />
-            <marker date="1425140832000" expanded="true" signature="16216:16243" placeholder="{&quot;x&quot;: 0...}" />
-            <marker date="1425140832000" expanded="true" signature="16502:16567" placeholder="{&quot;x&quot;: 0...}" />
-            <marker date="1425140832000" expanded="true" signature="36491:36555" placeholder="{&quot;x&quot;: 0...}" />
-            <marker date="1425140832000" expanded="true" signature="36618:36621" placeholder="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/EventCore.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="11" selection-start="876" selection-end="876" vertical-scroll-proportion="0.0" vertical-offset="238" max-vertical-offset="1258">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/DisplayObjectContainer.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="68" column="0" selection-start="1576" selection-end="1576" vertical-scroll-proportion="0.0" vertical-offset="736" max-vertical-offset="1462">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Sprite.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="128" column="6" selection-start="2454" selection-end="2454" vertical-scroll-proportion="0.0" vertical-offset="1892" max-vertical-offset="2635">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/DisplayObject.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="147" column="45" selection-start="3282" selection-end="3282" vertical-scroll-proportion="0.0" vertical-offset="2198" max-vertical-offset="2771">
@@ -449,23 +343,51 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Shape.js">
+    <entry file="file://$PROJECT_DIR$/src/EventCore.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="279" column="17" selection-start="6234" selection-end="6234" vertical-scroll-proportion="0.0" vertical-offset="4544" max-vertical-offset="5253">
+        <state line="34" column="11" selection-start="876" selection-end="876" vertical-scroll-proportion="0.59336823" vertical-offset="238" max-vertical-offset="1258">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/example.html">
+    <entry file="file://$PROJECT_DIR$/src/DisplayObjectContainer.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="27" selection-start="872" selection-end="872" vertical-scroll-proportion="-13.846154" vertical-offset="133" max-vertical-offset="748">
+        <state line="68" column="0" selection-start="1576" selection-end="1576" vertical-scroll-proportion="2.017452" vertical-offset="0" max-vertical-offset="1462">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dist/moco.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="0" selection-start="349" selection-end="349" vertical-scroll-proportion="0.029668411" vertical-offset="255" max-vertical-offset="26928">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Stage.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="177" column="18" selection-start="4367" selection-end="4367" vertical-scroll-proportion="-0.21206582" vertical-offset="3125" max-vertical-offset="4029">
+        <state line="12" column="48" selection-start="407" selection-end="407" vertical-scroll-proportion="-7.8461537" vertical-offset="0" max-vertical-offset="4012">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Shape.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="278" column="0" selection-start="6216" selection-end="6216" vertical-scroll-proportion="0.0" vertical-offset="4544" max-vertical-offset="5236">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Sprite.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="49" column="20" selection-start="943" selection-end="943" vertical-scroll-proportion="0.0" vertical-offset="600" max-vertical-offset="2635">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/example.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="27" selection-start="872" selection-end="872" vertical-scroll-proportion="0.47166362" vertical-offset="235" max-vertical-offset="782">
           <folding />
         </state>
       </provider>

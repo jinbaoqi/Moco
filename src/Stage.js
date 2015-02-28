@@ -11,7 +11,6 @@ function Stage(canvasId, fn) {
     this.width = parseFloat(this.domElem.getAttribute("width"), 10);
     this.height = parseFloat(this.domElem.getAttribute("height"), 10);
     this.offset = this._getOffset(this.domElem);
-    console.log(this.offset);
     this.x = this.offset.left;
     this.y = this.offset.top;
 

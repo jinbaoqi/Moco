@@ -47,9 +47,9 @@ Sprite.prototype.removeChild = function (obj) {
     self._resize();
 };
 
-Sprite.prototype.getRotateXY = function () {
-
-};
+//Sprite.prototype.getRotateXY = function () {
+//
+//};
 
 Sprite.prototype.getWidth = function () {
     var self = this,

@@ -877,7 +877,6 @@ function Stage(canvasId, fn) {
     this.width = parseFloat(this.domElem.getAttribute("width"), 10);
     this.height = parseFloat(this.domElem.getAttribute("height"), 10);
     this.offset = this._getOffset(this.domElem);
-    console.log(this.offset);
     this.x = this.offset.left;
     this.y = this.offset.top;
 
@@ -1375,7 +1374,6 @@ Shape.prototype.isMouseon = function (cord, pos) {
     for (i = 0, len = self._setList.length; i < len; i++) {
         item = self._setList[i];
 
-        debugger;
         if (
                 item.type == "rect" &&
                 cord.x >= item.pos[0] + pos.x &&
@@ -1449,9 +1447,9 @@ Sprite.prototype.removeChild = function (obj) {
     self._resize();
 };
 
-Sprite.prototype.getRotateXY = function () {
-
-};
+//Sprite.prototype.getRotateXY = function () {
+//
+//};
 
 Sprite.prototype.getWidth = function () {
     var self = this,
