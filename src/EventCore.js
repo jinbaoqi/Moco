@@ -40,22 +40,26 @@ var EventCore = {
                 len = Math.max(a1.length, a2.length);
 
             for (var i = 0; i < len; i++) {
-                if (!a1[i] || !a2[i]) {
-                    return a1[i] ? 1 : -1;
-                } else if (a1[i] != a2[i]) {
-                    return a1[i] - a2[i];
+                if (!a2[i] || !a1[i]) {
+                    return a2[i] ? 1 : -1;
+                } else if (a2[i] != a1[i]) {
+                    return a2[i] - a1[i];
                 }
             }
         });
 
-        k = objs[0] && objs[0].aIndex;
+        if(objs.length){
+            k = objs[0].objectIndex;
+            tmp.push(objs[0]);
 
-        for (var i = 0, len = objs.length; i < len; i++) {
-            item = objs[i];
-            if (k != item.aIndex) {
-                break;
-            } else {
-                tmp.push(item);
+            for (var i = 1, len = objs.length; i < len; i++) {
+                item = objs[i];
+                if (
+                    k.indexOf(item.objectIndex) != -1 ||
+                    k.indexOf(item.aIndex) != -1
+                ){
+                    tmp.push(item);
+                }
             }
         }
 

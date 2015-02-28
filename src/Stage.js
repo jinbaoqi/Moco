@@ -83,13 +83,7 @@ Stage.prototype.show = function () {
 
     self.ctx.clearRect(0, 0, self.width, self.height);
 
-    for (var i = 0, len = self._childList.length; i < len; i++) {
-        item = self._childList[i];
-
-        if (item.show) {
-            item.show();
-        }
-    }
+    DisplayObjectContainer.prototype.show.call(self);
 
     raf(function () {
         self.show();
@@ -99,7 +93,7 @@ Stage.prototype.show = function () {
 Stage.prototype.mouseEvent = function (cord, event) {
     var objs = [],
         reverseObjs = [],
-        item;
+        i,len,item;
 
     function returnFalse() {
         return false
@@ -113,7 +107,7 @@ Stage.prototype.mouseEvent = function (cord, event) {
         if(objs.length && objs[0].useCapture) {
             reverseObjs = Util.reverse(objs);
             reverseObjs = reverseObjs.splice(0,reverseObjs.length - 1);
-            for (var i = reverseObjs.length - 1; i >= 0; i--) {
+            for (i = 0, len = reverseObjs.length; i < len; i++) {
                 item = reverseObjs[i];
                 event.target = item;
                 item.trigger(event.type, event, false, true);
@@ -128,7 +122,7 @@ Stage.prototype.mouseEvent = function (cord, event) {
     event.isPropagationStopped = returnFalse;
 
     //模拟目标阶段和冒泡阶段
-    for (var i = 0, len = objs.length; i < len; i++) {
+    for (i = 0, len = objs.length; i < len; i++) {
         if (event.isPropagationStopped()) {
             break;
         } else {

@@ -23,7 +23,7 @@ function DisplayObject() {
     this.mouseX = 0;
     this.mouseY = 0;
     this.visible = true;
-    this.aIndex = this.objectIndex = guid++;
+    this.aIndex = this.objectIndex = ""+(guid++);
     this._saveFlag = false;
 }
 
@@ -50,6 +50,7 @@ DisplayObject.prototype.show = function () {
         canvas.save();
     }
 
+    //TODO:mask在graphics下由于不resize，因此不起作用，暂时没想到好的解决办法
     if (self.mask != null && self.mask.show) {
         self.mask.show();
         canvas.clip();

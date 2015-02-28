@@ -56,4 +56,17 @@ DisplayObjectContainer.prototype.contains = function (obj) {
     }
 };
 
+DisplayObjectContainer.prototype.show = function(){
+    var self = this,
+        item;
+
+    for (var i = 0, len = self._childList.length; i < len; i++) {
+        item = self._childList[i];
+
+        if (item.show) {
+            item.show();
+        }
+    }
+};
+
 Base.inherit(DisplayObjectContainer, InteractiveObject);

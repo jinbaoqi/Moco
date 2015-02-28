@@ -41,6 +41,8 @@ var Util = {
         var self = this,
             tmp = [];
 
+        arr = self.clone(arr);
+
         if (arrProto.reverse) {
             return arrProto.reverse.call(arr);
         } else {
@@ -154,22 +156,26 @@ var EventCore = {
                 len = Math.max(a1.length, a2.length);
 
             for (var i = 0; i < len; i++) {
-                if (!a1[i] || !a2[i]) {
-                    return a1[i] ? 1 : -1;
-                } else if (a1[i] != a2[i]) {
-                    return a1[i] - a2[i];
+                if (!a2[i] || !a1[i]) {
+                    return a2[i] ? 1 : -1;
+                } else if (a2[i] != a1[i]) {
+                    return a2[i] - a1[i];
                 }
             }
         });
 
-        k = objs[0] && objs[0].aIndex;
+        if(objs.length){
+            k = objs[0].objectIndex;
+            tmp.push(objs[0]);
 
-        for (var i = 0, len = objs.length; i < len; i++) {
-            item = objs[i];
-            if (k != item.aIndex) {
-                break;
-            } else {
-                tmp.push(item);
+            for (var i = 1, len = objs.length; i < len; i++) {
+                item = objs[i];
+                if (
+                    k.indexOf(item.objectIndex) != -1 ||
+                    k.indexOf(item.aIndex) != -1
+                ){
+                    tmp.push(item);
+                }
             }
         }
 
@@ -556,7 +562,7 @@ function DisplayObject() {
     this.mouseX = 0;
     this.mouseY = 0;
     this.visible = true;
-    this.aIndex = this.objectIndex = guid++;
+    this.aIndex = this.objectIndex = ""+(guid++);
     this._saveFlag = false;
 }
 
@@ -583,6 +589,7 @@ DisplayObject.prototype.show = function () {
         canvas.save();
     }
 
+    //TODO:mask在graphics下由于不resize，因此不起作用，暂时没想到好的解决办法
     if (self.mask != null && self.mask.show) {
         self.mask.show();
         canvas.clip();
@@ -772,6 +779,19 @@ DisplayObjectContainer.prototype.contains = function (obj) {
     }
 };
 
+DisplayObjectContainer.prototype.show = function(){
+    var self = this,
+        item;
+
+    for (var i = 0, len = self._childList.length; i < len; i++) {
+        item = self._childList[i];
+
+        if (item.show) {
+            item.show();
+        }
+    }
+};
+
 Base.inherit(DisplayObjectContainer, InteractiveObject);
 /**
  * requestAnimationFrame兼容写法
@@ -887,13 +907,7 @@ Stage.prototype.show = function () {
 
     self.ctx.clearRect(0, 0, self.width, self.height);
 
-    for (var i = 0, len = self._childList.length; i < len; i++) {
-        item = self._childList[i];
-
-        if (item.show) {
-            item.show();
-        }
-    }
+    DisplayObjectContainer.prototype.show.call(self);
 
     raf(function () {
         self.show();
@@ -903,7 +917,7 @@ Stage.prototype.show = function () {
 Stage.prototype.mouseEvent = function (cord, event) {
     var objs = [],
         reverseObjs = [],
-        item;
+        i,len,item;
 
     function returnFalse() {
         return false
@@ -917,7 +931,7 @@ Stage.prototype.mouseEvent = function (cord, event) {
         if(objs.length && objs[0].useCapture) {
             reverseObjs = Util.reverse(objs);
             reverseObjs = reverseObjs.splice(0,reverseObjs.length - 1);
-            for (var i = reverseObjs.length - 1; i >= 0; i--) {
+            for (i = 0, len = reverseObjs.length; i < len; i++) {
                 item = reverseObjs[i];
                 event.target = item;
                 item.trigger(event.type, event, false, true);
@@ -932,7 +946,7 @@ Stage.prototype.mouseEvent = function (cord, event) {
     event.isPropagationStopped = returnFalse;
 
     //模拟目标阶段和冒泡阶段
-    for (var i = 0, len = objs.length; i < len; i++) {
+    for (i = 0, len = objs.length; i < len; i++) {
         if (event.isPropagationStopped()) {
             break;
         } else {
@@ -1306,9 +1320,131 @@ Base.inherit(Shape, InteractiveObject);
  * Sprite精灵类，继承自DisplayContaianer
  */
 
-function Sprite(){}
+function Sprite(){
+    DisplayObjectContainer.call(this);
 
-Base.inherit(Sprite,InteractiveObject);
+    this.name = "Sprite";
+    this.graphics = null;
+}
+
+//TODO:父级的定位应该是会影响到子级的定位的
+Sprite.prototype.show = function(){
+    DisplayObjectContainer.prototype.show.call(this);
+
+    if(this.graphics && this.graphics.show){
+        this.graphics.show();
+    }
+};
+
+Sprite.prototype.addChild = function(obj){
+    var self = this;
+    DisplayObjectContainer.prototype.addChild.call(self,obj);
+
+    if(obj.graphics instanceof Shape){
+        obj.graphics.objectIndex = obj.objectIndex + ".0";
+    }
+
+    self._resize();
+};
+
+Sprite.prototype.removeChild = function(obj){
+    var self = this;
+    DisplayObjectContainer.prototype.removeChild.call(self,obj);
+    self._resize();
+};
+
+Sprite.prototype.getRotateXY = function(){
+
+};
+
+Sprite.prototype.getWidth = function(){
+    var self = this,
+        w = 0,
+        w1 = 0;
+
+    Util.each(self._childList,function(item){
+        if(item.getWidth){
+            w1 = item.getWidth();
+            w = w < w1 ? w1 : w;
+        }
+    });
+
+    return w;
+};
+
+Sprite.prototype.getHeight = function(){
+    var self = this,
+        w = 0,
+        w1 = 0;
+
+    Util.each(self._childList,function(item){
+        if(item.getWidth){
+            w1 = item.getHeight();
+            w = w < w1 ? w1 : w;
+        }
+    });
+
+    return w;
+};
+
+Sprite.prototype._resize = function(){
+    var self = this,
+        sx = 0,
+        sy = 0,
+        ex = 0,
+        ey = 0,
+        item;
+
+    for (var i = 0; i < self._childList.length; i ++) {
+        item =  self._childList[i];
+
+        if (sx > item.x) {
+            sx = item.x;
+        }
+        if (ex < item.width + item.x) {
+            ex = item.width + item.x;
+        }
+        if (sy > item.y) {
+            sy = item.y;
+        }
+        if (ey < item.height + item.y) {
+            ey = item.height + item.y;
+        }
+    }
+
+    self.width = ex - sx;
+    self.height = ey - sy;
+};
+
+Sprite.prototype.isMouseon = function(cord){
+    var self = this,
+        isOn = false,
+        i,len,item;
+
+    if(!self.visible || self.alpha < 0.01){
+        return false;
+    }
+
+    for(i = 0,len = self._childList.length; i < len; i++){
+        item = self._childList[i];
+
+        if(item.isMouseon){
+            isOn = item.isMouseon(cord);
+        }
+
+        if(isOn){
+            return true;
+        }
+    }
+
+    if(!isOn && self.graphics && self.graphics.isMouseon){
+        isOn = self.graphics.isMouseon(cord);
+    }
+
+    return isOn;
+};
+
+Base.inherit(Sprite,DisplayObjectContainer);
 /**
  * Bitmap位图容器类
  */

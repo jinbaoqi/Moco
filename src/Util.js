@@ -41,6 +41,8 @@ var Util = {
         var self = this,
             tmp = [];
 
+        arr = self.clone(arr);
+
         if (arrProto.reverse) {
             return arrProto.reverse.call(arr);
         } else {
