@@ -180,6 +180,7 @@ Shape.prototype.drawRect = function (thickness, lineColor, pointArr, isFill, col
     });
 };
 
+//TODO:多边形不具有事件检测的功能
 Shape.prototype.drawVertices = function (thickness, lineColor, vertices, isFill, color) {
     var self = this,
         length = vertices.length,
