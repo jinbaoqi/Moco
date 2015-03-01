@@ -107,28 +107,28 @@ var Util = {
 
         return tmp;
     },
-    clone: function(obj){
+    clone: function (obj) {
         var self = this;
 
         if (typeof obj != "object") return obj;
-        return self.isType(obj,"Array") ? obj.slice() : self.extends({}, obj);
+        return self.isType(obj, "Array") ? obj.slice() : self.extends({}, obj);
     }
 };
 var EventCore = {
     _list: [],
-    add: function(obj){
-        if(obj instanceof EventDispatcher){
+    add: function (obj) {
+        if (obj instanceof EventDispatcher) {
             this._list.push(obj);
         }
     },
-    remove: function(obj){
-        var i,len,item;
+    remove: function (obj) {
+        var i, len, item;
 
-        if(obj instanceof  EventDispatcher){
-            for(i = 0, len = this._list.length; i < len; i++){
+        if (obj instanceof  EventDispatcher) {
+            for (i = 0, len = this._list.length; i < len; i++) {
                 item = this._list[i];
-                if(item.aIndex == obj.aIndex){
-                    this._list.splice(i,1);
+                if (item.aIndex == obj.aIndex) {
+                    this._list.splice(i, 1);
                     break;
                 }
             }
@@ -164,7 +164,7 @@ var EventCore = {
             }
         });
 
-        if(objs.length){
+        if (objs.length) {
             k = objs[0].objectIndex;
             tmp.push(objs[0]);
 
@@ -173,7 +173,7 @@ var EventCore = {
                 if (
                     k.indexOf(item.objectIndex) != -1 ||
                     k.indexOf(item.aIndex) != -1
-                ){
+                    ) {
                     tmp.push(item);
                 }
             }
@@ -227,7 +227,7 @@ function EventDispatcher() {
  * @param callback
  * @param useCapture
  */
-EventDispatcher.prototype.on = function(target, eventName, callback, useCapture) {
+EventDispatcher.prototype.on = function (target, eventName, callback, useCapture) {
     var self = this,
         handlers, fn;
 
@@ -415,13 +415,13 @@ EventDispatcher.prototype.trigger = function (target, eventName, event, isDeep, 
         item = callbacks[i];
         if (!isCapture && event.isImmediatePropagationStopped()) {
             break;
-        } else{ //捕获阶段的修正
+        } else { //捕获阶段的修正
             item.callback.call(self, event);
         }
     }
 
     //只有Dom节点才会有下面的冒泡执行
-    if(isDeep) {
+    if (isDeep) {
         parent = target.parentNode;
         while (parent) {
             self.trigger(parent, eventName, event, true);
@@ -585,13 +585,13 @@ DisplayObject.prototype.show = function (cord) {
 
     if (
         (self.mask != null && self.mask.show) ||
-            self.alpha < 1 ||
-            self.rotate != 0 ||
-            self.scaleX != 1 ||
-            self.scaleY != 1 ||
-            self.translateX != 0 ||
-            self.translateY != 0 ||
-            self.globalCompositeOperation != ""
+        self.alpha < 1 ||
+        self.rotate != 0 ||
+        self.scaleX != 1 ||
+        self.scaleY != 1 ||
+        self.translateX != 0 ||
+        self.translateY != 0 ||
+        self.globalCompositeOperation != ""
         ) {
         self._saveFlag = true;
         canvas.save();
@@ -611,6 +611,10 @@ DisplayObject.prototype.show = function (cord) {
         canvas.globalCompositeOperation = self.globalCompositeOperation;
     }
 
+    if (self.translateX != 0 || self.translateY != 0) {
+        canvas.translate(self.translateX, self.translateY);
+    }
+
     if (self.rotate != 0) {
         if (self.center == null) {
             self.getRotateXY();
@@ -627,10 +631,6 @@ DisplayObject.prototype.show = function (cord) {
     if (self.scaleX != 1 || self.scaleY != 1) {
         canvas.scale(self.scaleX, self.scaleY);
     }
-
-    if (self.translateX != 0 || self.translateY != 0) {
-        canvas.translate(self.translateX, self.translateY);
-    }
 };
 
 DisplayObject.prototype.getRotateXY = function () {
@@ -642,7 +642,8 @@ DisplayObject.prototype.getRotateXY = function () {
 };
 
 DisplayObject.prototype.isMouseon = function (cord, pos) {
-    var self = this;
+    var self = this,
+        ox, oy;
 
     if (self.visible == false || self.alpha <= 0.01) {
         return false;
@@ -652,11 +653,14 @@ DisplayObject.prototype.isMouseon = function (cord, pos) {
         pos = self._getOffset();
     }
 
+    ox = pos.x + self.translateX;
+    oy = pos.y + self.translateY;
+
     if (
-        cord.x >= self.x + pos.x &&
-            cord.x <= self.x + pos.x + self.width &&
-            cord.y >= self.y + pos.y &&
-            cord.y <= self.y + pos.y + self.height
+        cord.x >= self.x + ox &&
+        cord.x <= self.x + ox + self.width &&
+        cord.y >= self.y + oy &&
+        cord.y <= self.y + oy + self.height
         ) {
         return true;
     }
@@ -681,15 +685,20 @@ DisplayObject.prototype._getOffset = function () {
         parent = self.parent,
         tmp = {
             x: 0,
-            y: 0
+            y: 0,
+            scaleX: 1,
+            scaleY: 1
         };
 
-    while(parent && !(parent instanceof Stage)){
-        tmp.x += parent.x;
-        tmp.y += parent.y;
+    while (parent && !(parent instanceof Stage)) {
+        tmp.scaleX *= parent.scaleX;
+        tmp.scaleY *= parent.scaleY;
+
+        tmp.x += parent.x + parent.translateX;
+        tmp.y += parent.y + parent.translateY;
+
         parent = parent.parent;
     }
-
     return tmp;
 };
 
@@ -702,58 +711,58 @@ Base.inherit(DisplayObject, EventDispatcher);
 
 var EventDispatcherProto = EventDispatcher.prototype;
 
-function InteractiveObject(){
+function InteractiveObject() {
     DisplayObject.call(this);
 
     this._inMouseList = false;
     this._inKeyBordList = false;
 }
 
-InteractiveObject.prototype.on = function(eventName, callback, useCapture){
+InteractiveObject.prototype.on = function (eventName, callback, useCapture) {
     var self = this,
         isMouseEvent = Util.inArray(eventName, MouseEvent.nameList) == -1,
         isKeyBoardEvent = Util.inArray(eventName, KeyBoardEvent.nameList) == -1;
 
-    if(
+    if (
         (!isMouseEvent && !isKeyBoardEvent) ||
         (isMouseEvent && self._inMouseList) ||
         (isKeyBoardEvent && self._inKeyBordList)
-    ){
+        ) {
         return;
-    }else if(isMouseEvent){
+    } else if (isMouseEvent) {
         MouseEvent.add(self);
         self._inMouseList = true;
-    }else if(isKeyBoardEvent){
+    } else if (isKeyBoardEvent) {
         KeyBoardEvent.add(self);
         self._inKeyBordList = true;
     }
 
-    EventDispatcherProto.on.apply(EventDispatcherProto,[self,eventName,callback,useCapture]);
+    EventDispatcherProto.on.apply(EventDispatcherProto, [self, eventName, callback, useCapture]);
 };
 
-InteractiveObject.prototype.off = function(eventName, callback){
+InteractiveObject.prototype.off = function (eventName, callback) {
     var self = this,
         isMouseEvent = Util.inArray(eventName, MouseEvent.nameList) == -1,
         isKeyBoardEvent = Util.inArray(eventName, KeyBoardEvent.nameList) == -1;
 
-    if(!isMouseEvent && !isKeyBoardEvent){
+    if (!isMouseEvent && !isKeyBoardEvent) {
         return;
     }
 
-    EventDispatcherProto.off.apply(EventDispatcherProto,[self,eventName,callback]);
+    EventDispatcherProto.off.apply(EventDispatcherProto, [self, eventName, callback]);
 
-    if(!Util.keys(self.handlers).length) {
-        if(isMouseEvent){
+    if (!Util.keys(self.handlers).length) {
+        if (isMouseEvent) {
             MouseEvent.remove(self);
             self._inMouseList = true;
-        }else if(isKeyBoardEvent){
+        } else if (isKeyBoardEvent) {
             KeyBoardEvent.remove(self);
             self._inKeyBordList = true;
         }
     }
 }
 
-Base.inherit(InteractiveObject,DisplayObject);
+Base.inherit(InteractiveObject, DisplayObject);
 /**
  * DisplayContainer显示容器抽象类
  */
@@ -1017,7 +1026,7 @@ Stage.prototype.addChild = function (obj) {
 
 };
 
-Stage.prototype._addStage = function(obj){
+Stage.prototype._addStage = function (obj) {
     var self = this;
 
     obj.stage = self;
@@ -1028,7 +1037,7 @@ Stage.prototype._addStage = function(obj){
         obj.graphics.objectIndex = obj.objectIndex + ".0";
     }
 
-    Util.each(obj._childList,function(item){
+    Util.each(obj._childList, function (item) {
         self._addStage(item);
     });
 };
@@ -1041,7 +1050,7 @@ Stage.prototype._getOffset = function (domElem) {
         actualLeft, actualTop, rect, offset;
 
     //TODO:此处取值有问题
-    if (!domElem.getBoundingClientRect) {
+    if (domElem.getBoundingClientRect) {
         if (typeof arguments.callee.offset != "number") {
             var tmp = document.createElement("div");
             tmp.style.cssText = "position:absolute;left:0;top:0";
@@ -1170,14 +1179,14 @@ Shape.prototype.closePath = function () {
 Shape.prototype.moveTo = function (x, y) {
     var self = this;
     self._showList.push(function (cord) {
-        self.stage.ctx.moveTo(x + cord.x, y + cord.y);
+        self.stage.ctx.moveTo(x + cord.x + self.x, y + cord.y + self.y);
     });
 };
 
 Shape.prototype.lineTo = function (x, y) {
     var self = this;
     self._showList.push(function (cord) {
-        self.stage.ctx.lineTo(x + cord.x, y + cord.y);
+        self.stage.ctx.lineTo(x + cord.x + self.x, y + cord.y + self.y);
     });
 };
 
@@ -1191,7 +1200,7 @@ Shape.prototype.rect = function (x, y, width, height) {
     var self = this;
 
     self._showList.push(function (cord) {
-        self.stage.ctx.rect(x + cord.x, y + cord.y, width, height);
+        self.stage.ctx.rect(x + cord.x + self.x, y + cord.y + self.y, width, height);
     });
 
     self._setList.push({
@@ -1218,7 +1227,7 @@ Shape.prototype.arc = function (x, y, r, sAngle, eAngle, direct) {
     var self = this;
 
     self._showList.push(function (cord) {
-        self.stage.ctx.arc(x + cord.x, y + cord.y, r, sAngle, eAngle, direct);
+        self.stage.ctx.arc(x + cord.x + self.x, y + cord.y + self.y, r, sAngle, eAngle, direct);
     });
 
     self._setList.push({
@@ -1235,7 +1244,7 @@ Shape.prototype.drawArc = function (thickness, lineColor, pointArr, isFill, colo
         canvas = self.stage.ctx;
 
         canvas.beginPath();
-        canvas.arc(pointArr[0] + cord.x, pointArr[1] + cord.y, pointArr[2], pointArr[3], pointArr[4], pointArr[5]);
+        canvas.arc(pointArr[0] + cord.x + self.x, pointArr[1] + cord.y + self.y, pointArr[2], pointArr[3], pointArr[4], pointArr[5]);
 
         if (isFill) {
             canvas.fillStyle = color;
@@ -1260,7 +1269,7 @@ Shape.prototype.drawRect = function (thickness, lineColor, pointArr, isFill, col
         canvas = self.stage.ctx;
 
         canvas.beginPath();
-        canvas.rect(pointArr[0] + cord.x, pointArr[1] + cord.y, pointArr[2], pointArr[3]);
+        canvas.rect(pointArr[0] + cord.x + self.x, pointArr[1] + cord.y + self.y, pointArr[2], pointArr[3]);
 
         if (isFill) {
             canvas.fillStyle = color;
@@ -1290,14 +1299,14 @@ Shape.prototype.drawVertices = function (thickness, lineColor, vertices, isFill,
         canvas = self.stage.ctx;
 
         canvas.beginPath();
-        canvas.moveTo(vertices[0][0] + cord.x, vertices[0][1] + cord.y);
+        canvas.moveTo(vertices[0][0] + cord.x + self.x, vertices[0][1] + cord.y + self.y);
 
         for (i = 1; i < length; i++) {
             var pointArr = vertices[i];
-            canvas.lineTo(pointArr[0] + cord.x, pointArr[1] + cord.y);
+            canvas.lineTo(pointArr[0] + cord.x + self.x, pointArr[1] + cord.y + self.y);
         }
 
-        canvas.lineTo(vertices[0][0] + cord.x, vertices[0][1] + cord.y);
+        canvas.lineTo(vertices[0][0] + cord.x + self.x, vertices[0][1] + cord.y + self.y);
 
         if (isFill) {
             canvas.fillStyle = color;
@@ -1319,8 +1328,8 @@ Shape.prototype.drawLine = function (thickness, lineColor, pointArr) {
         canvas = self.stage.ctx;
 
         canvas.beginPath();
-        canvas.moveTo(pointArr[0] + cord.x, pointArr[1] + cord.y);
-        canvas.lineTo(pointArr[2] + cord.x, pointArr[3] + cord.y);
+        canvas.moveTo(pointArr[0] + cord.x + self.x, pointArr[1] + cord.y + self.y);
+        canvas.lineTo(pointArr[2] + cord.x + self.x, pointArr[3] + cord.y + self.y);
         canvas.lineWidth = thickness;
         canvas.strokeStyle = lineColor;
         canvas.closePath();
@@ -1361,7 +1370,7 @@ Shape.prototype.add = function (fn) {
 
 Shape.prototype.isMouseon = function (cord, pos) {
     var self = this,
-        i, len, item, dist, ax, ay, ar;
+        i, len, item, ax, ay, ar, ar2, ox, oy, osx, osy;
 
     if (!self.visible || self.alpha < 0.01) {
         return false;
@@ -1374,20 +1383,28 @@ Shape.prototype.isMouseon = function (cord, pos) {
     for (i = 0, len = self._setList.length; i < len; i++) {
         item = self._setList[i];
 
+        ox = pos.x + self.translateX;
+        oy = pos.y + self.translateY;
+        osx = pos.scaleX * self.scaleX;
+        osy = pos.scaleY * self.scaleY;
+
         if (
-                item.type == "rect" &&
-                cord.x >= item.pos[0] + pos.x &&
-                cord.x <= item.pos[2] + pos.x + item.pos[0] &&
-                cord.y >= item.pos[1] + pos.y &&
-                cord.y <= item.pos[3] + pos.y + item.pos[1]
+            item.type == "rect" &&
+            cord.x >= (item.pos[0] + ox) * osx &&
+            cord.x <= (item.pos[2] + ox + item.pos[0]) * osx &&
+            cord.y >= (item.pos[1] + oy) * osy &&
+            cord.y <= (item.pos[3] + oy + item.pos[1]) * osy
             ) {
             return true;
         } else if (item.type == "arc") {
-            ax = Math.pow(cord.x - (item.pos[0] + pos.x), 2);
-            ay = Math.pow(cord.y - (item.pos[1] + pos.y), 2);
-            ar = Math.pow(item.pos[2], 2);
+            ax = Math.pow(cord.x - (item.pos[0] + ox) * osx, 2);
+            ay = Math.pow(cord.y - (item.pos[1] + oy) * osy, 2);
+            ar = Math.pow(item.pos[2] * osx, 2);
+            ar2 = Math.pow(item.pos[2] * osy, 2);
 
-            if (ax + ay <= ar) {
+            if (osx == osy && ax + ay <= ar) {
+                return true;
+            } else if (osx != osy && ax / ar + ay / ar2 <= 1) {
                 return true;
             }
         }
@@ -1524,8 +1541,10 @@ Sprite.prototype.isMouseon = function (cord, pos) {
     }
 
     pos = {
-        x: self.x + pos.x,
-        y: self.y + pos.y
+        x: self.x + pos.x + self.translateX,
+        y: self.y + pos.y + self.translateY,
+        scaleX: self.scaleX * pos.scaleX,
+        scaleY: self.scaleY * pos.scaleY
     };
 
     for (i = 0, len = self._childList.length; i < len; i++) {

@@ -1,18 +1,18 @@
 var EventCore = {
     _list: [],
-    add: function(obj){
-        if(obj instanceof EventDispatcher){
+    add: function (obj) {
+        if (obj instanceof EventDispatcher) {
             this._list.push(obj);
         }
     },
-    remove: function(obj){
-        var i,len,item;
+    remove: function (obj) {
+        var i, len, item;
 
-        if(obj instanceof  EventDispatcher){
-            for(i = 0, len = this._list.length; i < len; i++){
+        if (obj instanceof  EventDispatcher) {
+            for (i = 0, len = this._list.length; i < len; i++) {
                 item = this._list[i];
-                if(item.aIndex == obj.aIndex){
-                    this._list.splice(i,1);
+                if (item.aIndex == obj.aIndex) {
+                    this._list.splice(i, 1);
                     break;
                 }
             }
@@ -48,7 +48,7 @@ var EventCore = {
             }
         });
 
-        if(objs.length){
+        if (objs.length) {
             k = objs[0].objectIndex;
             tmp.push(objs[0]);
 
@@ -57,7 +57,7 @@ var EventCore = {
                 if (
                     k.indexOf(item.objectIndex) != -1 ||
                     k.indexOf(item.aIndex) != -1
-                ){
+                    ) {
                     tmp.push(item);
                 }
             }

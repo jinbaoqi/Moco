@@ -107,10 +107,10 @@ var Util = {
 
         return tmp;
     },
-    clone: function(obj){
+    clone: function (obj) {
         var self = this;
 
         if (typeof obj != "object") return obj;
-        return self.isType(obj,"Array") ? obj.slice() : self.extends({}, obj);
+        return self.isType(obj, "Array") ? obj.slice() : self.extends({}, obj);
     }
 };

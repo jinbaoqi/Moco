@@ -124,8 +124,10 @@ Sprite.prototype.isMouseon = function (cord, pos) {
     }
 
     pos = {
-        x: self.x + pos.x,
-        y: self.y + pos.y
+        x: self.x + pos.x + self.translateX,
+        y: self.y + pos.y + self.translateY,
+        scaleX: self.scaleX * pos.scaleX,
+        scaleY: self.scaleY * pos.scaleY
     };
 
     for (i = 0, len = self._childList.length; i < len; i++) {

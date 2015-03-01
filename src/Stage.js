@@ -151,7 +151,7 @@ Stage.prototype.addChild = function (obj) {
 
 };
 
-Stage.prototype._addStage = function(obj){
+Stage.prototype._addStage = function (obj) {
     var self = this;
 
     obj.stage = self;
@@ -162,7 +162,7 @@ Stage.prototype._addStage = function(obj){
         obj.graphics.objectIndex = obj.objectIndex + ".0";
     }
 
-    Util.each(obj._childList,function(item){
+    Util.each(obj._childList, function (item) {
         self._addStage(item);
     });
 };
@@ -175,7 +175,7 @@ Stage.prototype._getOffset = function (domElem) {
         actualLeft, actualTop, rect, offset;
 
     //TODO:此处取值有问题
-    if (!domElem.getBoundingClientRect) {
+    if (domElem.getBoundingClientRect) {
         if (typeof arguments.callee.offset != "number") {
             var tmp = document.createElement("div");
             tmp.style.cssText = "position:absolute;left:0;top:0";

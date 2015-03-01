@@ -16,7 +16,7 @@ function EventDispatcher() {
  * @param callback
  * @param useCapture
  */
-EventDispatcher.prototype.on = function(target, eventName, callback, useCapture) {
+EventDispatcher.prototype.on = function (target, eventName, callback, useCapture) {
     var self = this,
         handlers, fn;
 
@@ -204,13 +204,13 @@ EventDispatcher.prototype.trigger = function (target, eventName, event, isDeep, 
         item = callbacks[i];
         if (!isCapture && event.isImmediatePropagationStopped()) {
             break;
-        } else{ //捕获阶段的修正
+        } else { //捕获阶段的修正
             item.callback.call(self, event);
         }
     }
 
     //只有Dom节点才会有下面的冒泡执行
-    if(isDeep) {
+    if (isDeep) {
         parent = target.parentNode;
         while (parent) {
             self.trigger(parent, eventName, event, true);

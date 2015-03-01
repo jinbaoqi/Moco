@@ -46,13 +46,13 @@ DisplayObject.prototype.show = function (cord) {
 
     if (
         (self.mask != null && self.mask.show) ||
-            self.alpha < 1 ||
-            self.rotate != 0 ||
-            self.scaleX != 1 ||
-            self.scaleY != 1 ||
-            self.translateX != 0 ||
-            self.translateY != 0 ||
-            self.globalCompositeOperation != ""
+        self.alpha < 1 ||
+        self.rotate != 0 ||
+        self.scaleX != 1 ||
+        self.scaleY != 1 ||
+        self.translateX != 0 ||
+        self.translateY != 0 ||
+        self.globalCompositeOperation != ""
         ) {
         self._saveFlag = true;
         canvas.save();
@@ -72,6 +72,10 @@ DisplayObject.prototype.show = function (cord) {
         canvas.globalCompositeOperation = self.globalCompositeOperation;
     }
 
+    if (self.translateX != 0 || self.translateY != 0) {
+        canvas.translate(self.translateX, self.translateY);
+    }
+
     if (self.rotate != 0) {
         if (self.center == null) {
             self.getRotateXY();
@@ -88,10 +92,6 @@ DisplayObject.prototype.show = function (cord) {
     if (self.scaleX != 1 || self.scaleY != 1) {
         canvas.scale(self.scaleX, self.scaleY);
     }
-
-    if (self.translateX != 0 || self.translateY != 0) {
-        canvas.translate(self.translateX, self.translateY);
-    }
 };
 
 DisplayObject.prototype.getRotateXY = function () {
@@ -103,7 +103,8 @@ DisplayObject.prototype.getRotateXY = function () {
 };
 
 DisplayObject.prototype.isMouseon = function (cord, pos) {
-    var self = this;
+    var self = this,
+        ox, oy;
 
     if (self.visible == false || self.alpha <= 0.01) {
         return false;
@@ -113,11 +114,14 @@ DisplayObject.prototype.isMouseon = function (cord, pos) {
         pos = self._getOffset();
     }
 
+    ox = pos.x + self.translateX;
+    oy = pos.y + self.translateY;
+
     if (
-        cord.x >= self.x + pos.x &&
-            cord.x <= self.x + pos.x + self.width &&
-            cord.y >= self.y + pos.y &&
-            cord.y <= self.y + pos.y + self.height
+        cord.x >= self.x + ox &&
+        cord.x <= self.x + ox + self.width &&
+        cord.y >= self.y + oy &&
+        cord.y <= self.y + oy + self.height
         ) {
         return true;
     }
@@ -142,15 +146,20 @@ DisplayObject.prototype._getOffset = function () {
         parent = self.parent,
         tmp = {
             x: 0,
-            y: 0
+            y: 0,
+            scaleX: 1,
+            scaleY: 1
         };
 
-    while(parent && !(parent instanceof Stage)){
-        tmp.x += parent.x;
-        tmp.y += parent.y;
+    while (parent && !(parent instanceof Stage)) {
+        tmp.scaleX *= parent.scaleX;
+        tmp.scaleY *= parent.scaleY;
+
+        tmp.x += parent.x + parent.translateX;
+        tmp.y += parent.y + parent.translateY;
+
         parent = parent.parent;
     }
-
     return tmp;
 };
 

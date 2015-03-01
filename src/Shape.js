@@ -73,14 +73,14 @@ Shape.prototype.closePath = function () {
 Shape.prototype.moveTo = function (x, y) {
     var self = this;
     self._showList.push(function (cord) {
-        self.stage.ctx.moveTo(x + cord.x, y + cord.y);
+        self.stage.ctx.moveTo(x + cord.x + self.x, y + cord.y + self.y);
     });
 };
 
 Shape.prototype.lineTo = function (x, y) {
     var self = this;
     self._showList.push(function (cord) {
-        self.stage.ctx.lineTo(x + cord.x, y + cord.y);
+        self.stage.ctx.lineTo(x + cord.x + self.x, y + cord.y + self.y);
     });
 };
 
@@ -94,7 +94,7 @@ Shape.prototype.rect = function (x, y, width, height) {
     var self = this;
 
     self._showList.push(function (cord) {
-        self.stage.ctx.rect(x + cord.x, y + cord.y, width, height);
+        self.stage.ctx.rect(x + cord.x + self.x, y + cord.y + self.y, width, height);
     });
 
     self._setList.push({
@@ -121,7 +121,7 @@ Shape.prototype.arc = function (x, y, r, sAngle, eAngle, direct) {
     var self = this;
 
     self._showList.push(function (cord) {
-        self.stage.ctx.arc(x + cord.x, y + cord.y, r, sAngle, eAngle, direct);
+        self.stage.ctx.arc(x + cord.x + self.x, y + cord.y + self.y, r, sAngle, eAngle, direct);
     });
 
     self._setList.push({
@@ -138,7 +138,7 @@ Shape.prototype.drawArc = function (thickness, lineColor, pointArr, isFill, colo
         canvas = self.stage.ctx;
 
         canvas.beginPath();
-        canvas.arc(pointArr[0] + cord.x, pointArr[1] + cord.y, pointArr[2], pointArr[3], pointArr[4], pointArr[5]);
+        canvas.arc(pointArr[0] + cord.x + self.x, pointArr[1] + cord.y + self.y, pointArr[2], pointArr[3], pointArr[4], pointArr[5]);
 
         if (isFill) {
             canvas.fillStyle = color;
@@ -163,7 +163,7 @@ Shape.prototype.drawRect = function (thickness, lineColor, pointArr, isFill, col
         canvas = self.stage.ctx;
 
         canvas.beginPath();
-        canvas.rect(pointArr[0] + cord.x, pointArr[1] + cord.y, pointArr[2], pointArr[3]);
+        canvas.rect(pointArr[0] + cord.x + self.x, pointArr[1] + cord.y + self.y, pointArr[2], pointArr[3]);
 
         if (isFill) {
             canvas.fillStyle = color;
@@ -193,14 +193,14 @@ Shape.prototype.drawVertices = function (thickness, lineColor, vertices, isFill,
         canvas = self.stage.ctx;
 
         canvas.beginPath();
-        canvas.moveTo(vertices[0][0] + cord.x, vertices[0][1] + cord.y);
+        canvas.moveTo(vertices[0][0] + cord.x + self.x, vertices[0][1] + cord.y + self.y);
 
         for (i = 1; i < length; i++) {
             var pointArr = vertices[i];
-            canvas.lineTo(pointArr[0] + cord.x, pointArr[1] + cord.y);
+            canvas.lineTo(pointArr[0] + cord.x + self.x, pointArr[1] + cord.y + self.y);
         }
 
-        canvas.lineTo(vertices[0][0] + cord.x, vertices[0][1] + cord.y);
+        canvas.lineTo(vertices[0][0] + cord.x + self.x, vertices[0][1] + cord.y + self.y);
 
         if (isFill) {
             canvas.fillStyle = color;
@@ -222,8 +222,8 @@ Shape.prototype.drawLine = function (thickness, lineColor, pointArr) {
         canvas = self.stage.ctx;
 
         canvas.beginPath();
-        canvas.moveTo(pointArr[0] + cord.x, pointArr[1] + cord.y);
-        canvas.lineTo(pointArr[2] + cord.x, pointArr[3] + cord.y);
+        canvas.moveTo(pointArr[0] + cord.x + self.x, pointArr[1] + cord.y + self.y);
+        canvas.lineTo(pointArr[2] + cord.x + self.x, pointArr[3] + cord.y + self.y);
         canvas.lineWidth = thickness;
         canvas.strokeStyle = lineColor;
         canvas.closePath();
@@ -264,7 +264,7 @@ Shape.prototype.add = function (fn) {
 
 Shape.prototype.isMouseon = function (cord, pos) {
     var self = this,
-        i, len, item, dist, ax, ay, ar;
+        i, len, item, ax, ay, ar, ar2, ox, oy, osx, osy;
 
     if (!self.visible || self.alpha < 0.01) {
         return false;
@@ -277,20 +277,28 @@ Shape.prototype.isMouseon = function (cord, pos) {
     for (i = 0, len = self._setList.length; i < len; i++) {
         item = self._setList[i];
 
+        ox = pos.x + self.translateX;
+        oy = pos.y + self.translateY;
+        osx = pos.scaleX * self.scaleX;
+        osy = pos.scaleY * self.scaleY;
+
         if (
-                item.type == "rect" &&
-                cord.x >= item.pos[0] + pos.x &&
-                cord.x <= item.pos[2] + pos.x + item.pos[0] &&
-                cord.y >= item.pos[1] + pos.y &&
-                cord.y <= item.pos[3] + pos.y + item.pos[1]
+            item.type == "rect" &&
+            cord.x >= (item.pos[0] + ox) * osx &&
+            cord.x <= (item.pos[2] + ox + item.pos[0]) * osx &&
+            cord.y >= (item.pos[1] + oy) * osy &&
+            cord.y <= (item.pos[3] + oy + item.pos[1]) * osy
             ) {
             return true;
         } else if (item.type == "arc") {
-            ax = Math.pow(cord.x - (item.pos[0] + pos.x), 2);
-            ay = Math.pow(cord.y - (item.pos[1] + pos.y), 2);
-            ar = Math.pow(item.pos[2], 2);
+            ax = Math.pow(cord.x - (item.pos[0] + ox) * osx, 2);
+            ay = Math.pow(cord.y - (item.pos[1] + oy) * osy, 2);
+            ar = Math.pow(item.pos[2] * osx, 2);
+            ar2 = Math.pow(item.pos[2] * osy, 2);
 
-            if (ax + ay <= ar) {
+            if (osx == osy && ax + ay <= ar) {
+                return true;
+            } else if (osx != osy && ax / ar + ay / ar2 <= 1) {
                 return true;
             }
         }

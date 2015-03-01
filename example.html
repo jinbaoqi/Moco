@@ -12,29 +12,31 @@
     <script src="./dist/moco.js"></script>
 </head>
 <body>
-    <div id="wrap1" style="width:1000px;height:1000px;overflow: hidden;">
-        <div id="wrap2" style="margin-left:100px;margin-top:100px;width:400px;height:300px;overflow:hidden;">
+    <div id="wrap1" style="position:absolute;top:0;left:0;background:red;width:1000px;height:1000px;overflow: hidden;">
+        <div id="wrap2" style="position:absolute;top:0;left:0;background:red;width:400px;height:300px;overflow:hidden;">
             <canvas id="canvas" width="400" height="300"></canvas>
         </div>
     </div>
     <script>
         new Stage("canvas",function(stage){
             var shape = new Shape();
-            shape.drawRect(1,"red",[0,0,100,100],true,"blue");
+            shape.drawArc(1,"red",[50,50,50,0,Math.PI*2],true,"blue");
             shape.on("click",function(){
                 console.log("shape");
             });
 
             var sprite = new Sprite();
             sprite.graphics = shape;
-            sprite.x = 100;
 
             var sprite2 = new Sprite();
-            sprite2.translateY = 50;
-            sprite2.translateX = 50;
+            sprite2.scaleX = 2;
+            sprite2.scaleY = 2;
             sprite2.addChild(sprite);
 
             stage.addChild(sprite2);
+
+            window.sprite = sprite;
+            window.shape = shape;
         });
     </script>
 </body>
