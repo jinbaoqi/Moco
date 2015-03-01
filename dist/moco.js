@@ -673,7 +673,7 @@ DisplayObject.prototype._getOffset = function () {
     return tmp;
 };
 
-DisplayObject.prototype._getRotatePos = function (cord, pos, angle) {
+DisplayObject.prototype._getRotateCord = function (cord, pos, angle) {
     var ox = cord.x - pos.x,
         oy = cord.y - pos.y;
 
@@ -1356,10 +1356,8 @@ Shape.prototype.isMouseon = function (cord, pos) {
     var self = this,
         i, len, item, ax, ay, ar, ar2, ox, oy, osx, osy;
 
-    debugger;
-
     pos = DisplayObject.prototype.isMouseon.call(self, cord, pos);
-    cord = self._getRotatePos(cord, pos, self.rotate);
+    cord = self._getRotateCord(cord, pos, self.rotate);
 
     ox = self.x + pos.x + self.translateX;
     oy = self.y + pos.y + self.translateY;
@@ -1369,7 +1367,6 @@ Shape.prototype.isMouseon = function (cord, pos) {
     for (i = 0, len = self._setList.length; i < len; i++) {
         item = self._setList[i];
 
-        debugger;
         if (
             item.type == "rect" &&
             cord.x >= item.pos[0] + ox &&
@@ -1511,7 +1508,7 @@ Sprite.prototype.isMouseon = function (cord, pos) {
         i, len, item;
 
     pos = DisplayObject.prototype.isMouseon.call(self, cord, pos);
-    cord = self._getRotatePos(cord, pos, self.rotate);
+    cord = self._getRotateCord(cord, pos, self.rotate);
 
     pos = {
         x: self.x + pos.x + self.translateX,

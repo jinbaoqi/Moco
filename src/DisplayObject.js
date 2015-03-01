@@ -134,7 +134,7 @@ DisplayObject.prototype._getOffset = function () {
     return tmp;
 };
 
-DisplayObject.prototype._getRotatePos = function (cord, pos, angle) {
+DisplayObject.prototype._getRotateCord = function (cord, pos, angle) {
     var ox = cord.x - pos.x,
         oy = cord.y - pos.y;
 

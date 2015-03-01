@@ -268,7 +268,7 @@ Shape.prototype.isMouseon = function (cord, pos) {
         i, len, item, ax, ay, ar, ar2, ox, oy, osx, osy;
 
     pos = DisplayObject.prototype.isMouseon.call(self, cord, pos);
-    cord = self._getRotatePos(cord, pos, self.rotate);
+    cord = self._getRotateCord(cord, pos, self.rotate);
 
     ox = self.x + pos.x + self.translateX;
     oy = self.y + pos.y + self.translateY;

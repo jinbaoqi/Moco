@@ -112,7 +112,7 @@ Sprite.prototype.isMouseon = function (cord, pos) {
         i, len, item;
 
     pos = DisplayObject.prototype.isMouseon.call(self, cord, pos);
-    cord = self._getRotatePos(cord, pos, self.rotate);
+    cord = self._getRotateCord(cord, pos, self.rotate);
 
     pos = {
         x: self.x + pos.x + self.translateX,
