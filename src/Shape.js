@@ -277,8 +277,8 @@ Shape.prototype.isMouseon = function (cord, pos) {
     for (i = 0, len = self._setList.length; i < len; i++) {
         item = self._setList[i];
 
-        ox = pos.x + self.translateX;
-        oy = pos.y + self.translateY;
+        ox = self.x + pos.x + self.translateX;
+        oy = self.y + pos.y + self.translateY;
         osx = pos.scaleX * self.scaleX;
         osy = pos.scaleY * self.scaleY;
 

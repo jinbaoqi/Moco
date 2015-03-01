@@ -30,8 +30,7 @@ function DisplayObject() {
 DisplayObject.prototype.show = function (cord) {
     var self = this,
         rotateFlag = Math.PI / 180,
-        canvas = self.ctx || self.stage.ctx,
-        tx, ty;
+        canvas = self.ctx || self.stage.ctx;
 
     if (!self.visible) {
         return;
@@ -72,34 +71,19 @@ DisplayObject.prototype.show = function (cord) {
         canvas.globalCompositeOperation = self.globalCompositeOperation;
     }
 
-    if (self.translateX != 0 || self.translateY != 0) {
-        canvas.translate(self.translateX, self.translateY);
+    if (self.rotate != 0) {
+        canvas.translate(cord.x, cord.y);
+        canvas.rotate(self.rotate * rotateFlag);
+        canvas.translate(-cord.x, -cord.y);
     }
 
-    if (self.rotate != 0) {
-        if (self.center == null) {
-            self.getRotateXY();
-        }
-
-        tx = self.x + cord.x + self.center.x;
-        ty = self.y + cord.y + self.center.y;
-
-        canvas.translate(tx, ty);
-        canvas.rotate(self.rotate * rotateFlag);
-        canvas.translate(-tx, -ty);
+    if (self.translateX != 0 || self.translateY != 0) {
+        canvas.translate(self.translateX, self.translateY);
     }
 
     if (self.scaleX != 1 || self.scaleY != 1) {
         canvas.scale(self.scaleX, self.scaleY);
     }
-};
-
-DisplayObject.prototype.getRotateXY = function () {
-    var self = this;
-    self.center = {
-        x: 0,
-        y: 0
-    };
 };
 
 DisplayObject.prototype.isMouseon = function (cord, pos) {
