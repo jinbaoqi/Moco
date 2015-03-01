@@ -24,14 +24,14 @@
             shape.drawRect(1,"red",[0,0,50,50],true,"blue");
             shape.x = shape.y = -25;
             shape.on("click",function(){
-                shape.x += (Math.ceil(Math.random()*2) % 2 ? 10 : -10);
+                console.log("shpae");
             });
 
             var sprite = new Sprite();
             sprite.graphics = shape;
 
             var sprite2 = new Sprite();
-            sprite2.x = sprite2.y = 100;
+            sprite2.translateX = sprite2.translateY = 100;
             sprite2.addChild(sprite);
 
             stage.addChild(sprite2);

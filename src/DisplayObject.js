@@ -87,10 +87,9 @@ DisplayObject.prototype.show = function (cord) {
 };
 
 DisplayObject.prototype.isMouseon = function (cord, pos) {
-    var self = this,
-        ox, oy;
+    var self = this;
 
-    if (self.visible == false || self.alpha <= 0.01) {
+    if (!self.visible || self.alpha < 0.01) {
         return false;
     }
 
@@ -98,19 +97,7 @@ DisplayObject.prototype.isMouseon = function (cord, pos) {
         pos = self._getOffset();
     }
 
-    ox = pos.x + self.translateX;
-    oy = pos.y + self.translateY;
-
-    if (
-        cord.x >= self.x + ox &&
-        cord.x <= self.x + ox + self.width &&
-        cord.y >= self.y + oy &&
-        cord.y <= self.y + oy + self.height
-        ) {
-        return true;
-    }
-
-    return false;
+    return pos;
 };
 
 DisplayObject.prototype.dispose = function () {
@@ -145,6 +132,18 @@ DisplayObject.prototype._getOffset = function () {
         parent = parent.parent;
     }
     return tmp;
+};
+
+DisplayObject.prototype._getRotatePos = function (cord, pos, angle) {
+    var ox = cord.x - pos.x,
+        oy = cord.y - pos.y;
+
+    angle = angle * Math.PI / 180;
+
+    return {
+        x: Math.cos(angle) * ox + Math.sin(angle) * oy + pos.x,
+        y: Math.cos(angle) * oy - Math.sin(angle) * ox + pos.y
+    }
 };
 
 Base.inherit(DisplayObject, EventDispatcher);

@@ -266,21 +266,16 @@ Shape.prototype.isMouseon = function (cord, pos) {
     var self = this,
         i, len, item, ax, ay, ar, ar2, ox, oy, osx, osy;
 
-    if (!self.visible || self.alpha < 0.01) {
-        return false;
-    }
+    pos = DisplayObject.prototype.isMouseon.call(self, cord, pos);
+    cord = self._getRotatePos(cord,pos,self.rotate);
 
-    if (pos == null) {
-        pos = self._getOffset();
-    }
+    ox = self.x + pos.x + self.translateX;
+    oy = self.y + pos.y + self.translateY;
+    osx = pos.scaleX * self.scaleX;
+    osy = pos.scaleY * self.scaleY;
 
     for (i = 0, len = self._setList.length; i < len; i++) {
         item = self._setList[i];
-
-        ox = self.x + pos.x + self.translateX;
-        oy = self.y + pos.y + self.translateY;
-        osx = pos.scaleX * self.scaleX;
-        osy = pos.scaleY * self.scaleY;
 
         if (
             item.type == "rect" &&
