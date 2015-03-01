@@ -267,8 +267,6 @@ Shape.prototype.isMouseon = function (cord, pos) {
     var self = this,
         i, len, item, ax, ay, ar, ar2, ox, oy, osx, osy;
 
-    debugger;
-
     pos = DisplayObject.prototype.isMouseon.call(self, cord, pos);
     cord = self._getRotatePos(cord, pos, self.rotate);
 
@@ -280,7 +278,6 @@ Shape.prototype.isMouseon = function (cord, pos) {
     for (i = 0, len = self._setList.length; i < len; i++) {
         item = self._setList[i];
 
-        debugger;
         if (
             item.type == "rect" &&
             cord.x >= item.pos[0] + ox &&
