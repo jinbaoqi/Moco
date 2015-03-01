@@ -57,7 +57,7 @@ DisplayObject.prototype.show = function (cord) {
         canvas.save();
     }
 
-    //TODO:mask在graphics下由于不resize，因此不起作用，暂时没想到好的解决办法
+    //TODO:mask在graphics下由于不resize(涉及到复杂图形面积)，因此不起作用，暂时没想到好的解决办法
     if (self.mask != null && self.mask.show) {
         self.mask.show();
         canvas.clip();

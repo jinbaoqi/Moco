@@ -266,8 +266,10 @@ Shape.prototype.isMouseon = function (cord, pos) {
     var self = this,
         i, len, item, ax, ay, ar, ar2, ox, oy, osx, osy;
 
+    debugger;
+
     pos = DisplayObject.prototype.isMouseon.call(self, cord, pos);
-    cord = self._getRotatePos(cord,pos,self.rotate);
+    cord = self._getRotatePos(cord, pos, self.rotate);
 
     ox = self.x + pos.x + self.translateX;
     oy = self.y + pos.y + self.translateY;
@@ -277,17 +279,18 @@ Shape.prototype.isMouseon = function (cord, pos) {
     for (i = 0, len = self._setList.length; i < len; i++) {
         item = self._setList[i];
 
+        debugger;
         if (
             item.type == "rect" &&
-            cord.x >= (item.pos[0] + ox) * osx &&
-            cord.x <= (item.pos[2] + ox + item.pos[0]) * osx &&
-            cord.y >= (item.pos[1] + oy) * osy &&
-            cord.y <= (item.pos[3] + oy + item.pos[1]) * osy
+            cord.x >= item.pos[0] + ox &&
+            cord.x <= item.pos[2] * osx + ox + item.pos[0] &&
+            cord.y >= item.pos[1] + oy &&
+            cord.y <= item.pos[3] * osy + oy + item.pos[1]
             ) {
             return true;
         } else if (item.type == "arc") {
-            ax = Math.pow(cord.x - (item.pos[0] + ox) * osx, 2);
-            ay = Math.pow(cord.y - (item.pos[1] + oy) * osy, 2);
+            ax = Math.pow(cord.x - (item.pos[0] * osx + ox), 2);
+            ay = Math.pow(cord.y - (item.pos[1] * osy + oy), 2);
             ar = Math.pow(item.pos[2] * osx, 2);
             ar2 = Math.pow(item.pos[2] * osy, 2);
 
