@@ -108,10 +108,10 @@ Sprite.prototype.isMouseon = function (cord, pos) {
         isOn = false,
         i, len, item;
 
-    if(pos == null){
+    if (pos == null) {
         pos = {
-            x:0,
-            y:0,
+            x: 0,
+            y: 0,
             scaleX: 1,
             scaleY: 1
         };

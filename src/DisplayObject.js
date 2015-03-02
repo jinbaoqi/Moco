@@ -15,7 +15,6 @@ function DisplayObject() {
     this.translateY = 0;
     this.scaleX = 1;
     this.scaleY = 1;
-    this.center = null;
     this.parent = null;
     this.globalCompositeOperation = "";
     this.x = 0;
@@ -36,21 +35,27 @@ DisplayObject.prototype.show = function (cord) {
         return;
     }
 
+    if (self.parent && self.parent instanceof Stage) {
+        cord.ox = self.x;
+        cord.oy = self.y;
+    } else {
+        cord.x += self.x;
+        cord.y += self.y;
+    }
+
     cord.scaleX *= self.scaleX;
     cord.scaleY *= self.scaleY;
-    cord.x += self.x / cord.scaleX;
-    cord.y += self.y / cord.scaleY;
 
     if (
         (self.mask != null && self.mask.show) ||
-            self.alpha < 1 ||
-            self.rotate != 0 ||
-            self.scaleX != 1 ||
-            self.scaleY != 1 ||
-            self.translateX != 0 ||
-            self.translateY != 0 ||
-            self.globalCompositeOperation != ""
-        ) {
+        self.alpha < 1 ||
+        self.rotate != 0 ||
+        self.scaleX != 1 ||
+        self.scaleY != 1 ||
+        self.translateX != 0 ||
+        self.translateY != 0 ||
+        self.globalCompositeOperation != ""
+    ) {
         self._saveFlag = true;
         canvas.save();
     }
@@ -75,12 +80,12 @@ DisplayObject.prototype.show = function (cord) {
 //        canvas.translate(-cord.x, -cord.y);
 //    }
 
-    if (self.scaleX != 1 || self.scaleY != 1) {
-        canvas.scale(self.scaleX, self.scaleY);
-    }
-
     if (self.translateX != 0 || self.translateY != 0) {
         canvas.translate(self.translateX, self.translateY);
+    }
+
+    if (self.scaleX != 1 || self.scaleY != 1) {
+        canvas.scale(self.scaleX, self.scaleY);
     }
 };
 
@@ -99,7 +104,18 @@ DisplayObject.prototype.isMouseon = function (cord, pos) {
 DisplayObject.prototype.dispose = function () {
     var self = this,
         eventName = Util.keys(self.handlers),
-        parent = self.parent;
+        parent = self.parent,
+        childList = self._childList;
+
+    if(childList && childList.length){
+        Util.each(childList,function(item){
+            if(item.graphics){
+                item.graphics.dispose();
+                item.graphics = null;
+            }
+           item.dispose();
+        });
+    }
 
     self.off(eventName);
 
@@ -126,11 +142,16 @@ DisplayObject.prototype._getOffset = function () {
     for (i = parents.length - 1; i >= 0; i--) {
         parent = parents[i];
 
+        if(parent.parent instanceof Stage){
+            tmp.x += parent.x + parent.translateX;
+            tmp.y += parent.y + parent.translateY;
+        }else {
+            tmp.x += (parent.x + parent.translateX) * tmp.scaleX;
+            tmp.y += (parent.y + parent.translateY) * tmp.scaleY;
+        }
+
         tmp.scaleX *= parent.scaleX;
         tmp.scaleY *= parent.scaleY;
-
-        tmp.x += (parent.x + parent.translateX) * tmp.scaleX;
-        tmp.y += (parent.y + parent.translateY) * tmp.scaleY;
     }
 
     return tmp;

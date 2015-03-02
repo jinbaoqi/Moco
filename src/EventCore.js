@@ -57,7 +57,7 @@ var EventCore = {
                 if (
                     k.indexOf(item.objectIndex) != -1 ||
                     k.indexOf(item.aIndex) != -1
-                    ) {
+                ) {
                     tmp.push(item);
                 }
             }

@@ -24,7 +24,6 @@ Shape.prototype.show = function (cord) {
         };
     }
 
-    debugger;
     DisplayObject.prototype.show.call(this, cord);
 
     if (len) {
@@ -160,13 +159,15 @@ Shape.prototype.drawArc = function (thickness, lineColor, pointArr, isFill, colo
 
 Shape.prototype.drawRect = function (thickness, lineColor, pointArr, isFill, color) {
     var self = this,
-        canvas;
+        canvas, x, y;
 
     self._showList.push(function (cord) {
         canvas = self.stage.ctx;
+        x = cord.x + cord.ox / cord.scaleX;
+        y = cord.y + cord.oy / cord.scaleY;
 
         canvas.beginPath();
-        canvas.rect(pointArr[0] + cord.x, pointArr[1] + cord.y, pointArr[2], pointArr[3]);
+        canvas.rect(pointArr[0] + x, pointArr[1] + y, pointArr[2], pointArr[3]);
 
         if (isFill) {
             canvas.fillStyle = color;
@@ -187,7 +188,7 @@ Shape.prototype.drawRect = function (thickness, lineColor, pointArr, isFill, col
 Shape.prototype.drawVertices = function (thickness, lineColor, vertices, isFill, color) {
     var self = this,
         length = vertices.length,
-        canvas, i;
+        canvas, i, x, y;
 
     if (length < 3) {
         return;
@@ -195,16 +196,18 @@ Shape.prototype.drawVertices = function (thickness, lineColor, vertices, isFill,
 
     self._showList.push(function (cord) {
         canvas = self.stage.ctx;
+        x = cord.x + cord.ox / cord.scaleX;
+        y = cord.y + cord.oy / cord.scaleY;
 
         canvas.beginPath();
-        canvas.moveTo(vertices[0][0] + cord.x, vertices[0][1] + cord.y);
+        canvas.moveTo(vertices[0][0] + x, vertices[0][1] + y);
 
         for (i = 1; i < length; i++) {
             var pointArr = vertices[i];
-            canvas.lineTo(pointArr[0] + cord.x, pointArr[1] + cord.y);
+            canvas.lineTo(pointArr[0] + x, pointArr[1] + y);
         }
 
-        canvas.lineTo(vertices[0][0] + cord.x, vertices[0][1] + cord.y);
+        canvas.lineTo(vertices[0][0] + x, vertices[0][1] + y);
 
         if (isFill) {
             canvas.fillStyle = color;
@@ -220,14 +223,16 @@ Shape.prototype.drawVertices = function (thickness, lineColor, vertices, isFill,
 
 Shape.prototype.drawLine = function (thickness, lineColor, pointArr) {
     var self = this,
-        canvas;
+        canvas, x, y;
 
     self._showList.push(function (cord) {
         canvas = self.stage.ctx;
+        x = cord.x + cord.ox / cord.scaleX;
+        y = cord.y + cord.oy / cord.scaleY;
 
         canvas.beginPath();
-        canvas.moveTo(pointArr[0] + cord.x, pointArr[1] + cord.y);
-        canvas.lineTo(pointArr[2] + cord.x, pointArr[3] + cord.y);
+        canvas.moveTo(pointArr[0] + x, pointArr[1] + y);
+        canvas.lineTo(pointArr[2] + x, pointArr[3] + y);
         canvas.lineWidth = thickness;
         canvas.strokeStyle = lineColor;
         canvas.closePath();
@@ -279,7 +284,6 @@ Shape.prototype.isMouseon = function (cord, pos) {
         };
     }
 
-    debugger;
     pos = DisplayObject.prototype.isMouseon.call(self, cord, pos);
     cord = self._getRotateCord(cord, pos, self.rotate);
 
@@ -294,12 +298,12 @@ Shape.prototype.isMouseon = function (cord, pos) {
         item = self._setList[i];
 
         if (
-                item.type == "rect" &&
-                cord.x >= item.pos[0] * osx + ox &&
-                cord.x <= (item.pos[2] + item.pos[0]) * osx + ox &&
-                cord.y >= item.pos[1]* osy + oy &&
-                cord.y <= (item.pos[3] + item.pos[1]) * osy + oy
-            ) {
+            item.type == "rect" &&
+            cord.x >= item.pos[0] * osx + ox &&
+            cord.x <= (item.pos[2] + item.pos[0]) * osx + ox &&
+            cord.y >= item.pos[1] * osy + oy &&
+            cord.y <= (item.pos[3] + item.pos[1]) * osy + oy
+        ) {
             return true;
         }
         else if (item.type == "arc") {

@@ -92,15 +92,16 @@ var Util = {
         return obj;
     },
     keys: function (obj) {
-        var self = this,
-            tmp = [];
+        var tmp = [];
 
-        if (Object.keys) {
-            return Object.keys(obj);
-        } else {
-            for (var key in obj) {
-                if (obj.hasOwnProperty(key)) {
-                    tmp.push(key);
+        if(obj){
+            if (Object.keys) {
+                return Object.keys(obj);
+            } else {
+                for (var key in obj) {
+                    if (obj.hasOwnProperty(key)) {
+                        tmp.push(key);
+                    }
                 }
             }
         }

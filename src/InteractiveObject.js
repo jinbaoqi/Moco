@@ -21,7 +21,7 @@ InteractiveObject.prototype.on = function (eventName, callback, useCapture) {
         (!isMouseEvent && !isKeyBoardEvent) ||
         (isMouseEvent && self._inMouseList) ||
         (isKeyBoardEvent && self._inKeyBordList)
-        ) {
+    ) {
         return;
     } else if (isMouseEvent) {
         MouseEvent.add(self);
