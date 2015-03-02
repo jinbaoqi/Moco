@@ -193,7 +193,7 @@ Shape.prototype.drawRect = function (thickness, lineColor, pointArr, isFill, col
     });
 };
 
-//TODO:多边形不具有事件检测的功能
+//TODO:多边形检测需要使用到奇偶规则
 Shape.prototype.drawVertices = function (thickness, lineColor, vertices, isFill, color) {
     var self = this,
         length = vertices.length,
@@ -295,10 +295,13 @@ Shape.prototype.isMouseon = function (cord, pos) {
 
     cord = self._getRotateCord(cord);
 
-    debugger;
     for (i = 0, len = self._setList.length; i < len; i++) {
         item = self._setList[i];
 
+        /*
+         * 如果针对rect的ar!=ar2，那么则是被拉伸为了不规则图形，需要使用奇偶规则来检测
+         * 但是对于圆来说是判断了ar!=ar2，椭圆和正圆的判断，所以不存在这个问题
+         */
         if (
             item.type == "rect" &&
             cord.x >= item.pos[0] * pos.scaleX + pos.x &&

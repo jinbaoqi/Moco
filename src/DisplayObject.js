@@ -87,7 +87,7 @@ DisplayObject.prototype.show = function (cord) {
     if (self.rotate != 0) {
         ox = cord.x + cord.ox / cord.scaleX;
         oy = cord.y + cord.oy / cord.scaleY;
-        
+
         canvas.translate(ox, oy);
         canvas.rotate(self.rotate * rotateFlag);
         canvas.translate(-ox, -oy);
