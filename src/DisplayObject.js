@@ -29,7 +29,8 @@ function DisplayObject() {
 DisplayObject.prototype.show = function (cord) {
     var self = this,
         rotateFlag = Math.PI / 180,
-        canvas = self.ctx || self.stage.ctx;
+        canvas = self.ctx || self.stage.ctx,
+        ox,oy;
 
     if (!self.visible) {
         return;
@@ -74,11 +75,14 @@ DisplayObject.prototype.show = function (cord) {
         canvas.globalCompositeOperation = self.globalCompositeOperation;
     }
 
-//    if (self.rotate != 0) {
-//        canvas.translate(cord.x, cord.y);
-//        canvas.rotate(self.rotate * rotateFlag);
-//        canvas.translate(-cord.x, -cord.y);
-//    }
+    if (self.rotate != 0) {
+        ox = cord.x+cord.ox/cord.scaleX;
+        oy = cord.y+cord.oy/cord.scaleY;
+
+        canvas.translate(ox, oy);
+        canvas.rotate(self.rotate * rotateFlag);
+        canvas.translate(-ox, -oy);
+    }
 
     if (self.translateX != 0 || self.translateY != 0) {
         canvas.translate(self.translateX, self.translateY);
