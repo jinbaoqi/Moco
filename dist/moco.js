@@ -561,6 +561,7 @@ function DisplayObject() {
     this.y = 0;
     this.mouseX = 0;
     this.mouseY = 0;
+    this.parent = null;
     this.visible = true;
     this.aIndex = this.objectIndex = "" + (guid++);
     this._saveFlag = false;
@@ -615,21 +616,21 @@ DisplayObject.prototype.show = function (cord) {
         canvas.globalCompositeOperation = self.globalCompositeOperation;
     }
 
-    if (self.rotate != 0) {
-        ox = cord.x + cord.ox / cord.scaleX;
-        oy = cord.y + cord.oy / cord.scaleY;
-
-        canvas.translate(ox, oy);
-        canvas.rotate(self.rotate * rotateFlag);
-        canvas.translate(-ox, -oy);
-    }
-
     if (self.translateX != 0 || self.translateY != 0) {
         canvas.translate(self.translateX, self.translateY);
     }
 
     if (self.scaleX != 1 || self.scaleY != 1) {
         canvas.scale(self.scaleX, self.scaleY);
+    }
+
+    if (self.rotate != 0) {
+        ox = cord.x + cord.ox / cord.scaleX;
+        oy = cord.y + cord.oy / cord.scaleY;
+        
+        canvas.translate(ox, oy);
+        canvas.rotate(self.rotate * rotateFlag);
+        canvas.translate(-ox, -oy);
     }
 };
 
@@ -640,7 +641,11 @@ DisplayObject.prototype.isMouseon = function (cord, pos) {
         return false;
     }
 
-    pos = self._getOffset();
+    if (pos == null) {
+        pos = self._getOffset();
+    } else {
+        pos = DisplayObject.prototype._getActualOffset(pos, self);
+    }
 
     return pos;
 };
@@ -679,39 +684,69 @@ DisplayObject.prototype._getOffset = function () {
             scaleY: 1
         }, i;
 
-    while (parent = parent.parent) {
+    while (parent) {
         parents.push(parent);
+        parent = parent.parent;
     }
 
     for (i = parents.length - 1; i >= 0; i--) {
         parent = parents[i];
-
-        if (parent.parent instanceof Stage) {
-            tmp.x += parent.x + parent.translateX;
-            tmp.y += parent.y + parent.translateY;
-        } else {
-            tmp.x += (parent.x + parent.translateX) * tmp.scaleX;
-            tmp.y += (parent.y + parent.translateY) * tmp.scaleY;
-        }
-
-        tmp.scaleX *= parent.scaleX;
-        tmp.scaleY *= parent.scaleY;
+        tmp = self._getActualOffset(tmp, parent);
     }
 
     return tmp;
 };
 
-DisplayObject.prototype._getRotateCord = function (cord, pos, angle) {
-    var ox = cord.x - pos.x,
-        oy = cord.y - pos.y;
+DisplayObject.prototype._getRotateCord = function (cord) {
+    var self = this,
+        parents = [],
+        parent = self,
+        tmp = {
+            x: 0,
+            y: 0,
+            scaleX: 1,
+            scaleY: 1
+        }, i, ox, oy, rad;
 
-    angle = angle * Math.PI / 180;
-
-    return {
-        x: Math.cos(angle) * ox + Math.sin(angle) * oy + pos.x,
-        y: Math.cos(angle) * oy - Math.sin(angle) * ox + pos.y
+    while (parent) {
+        parents.push(parent);
+        parent = parent.parent;
     }
+
+    for (i = parents.length - 1; i >= 0; i--) {
+        parent = parents[i];
+
+        tmp = self._getActualOffset(tmp, parent);
+
+        ox = cord.x - tmp.x;
+        oy = cord.y - tmp.y;
+        rad = parent.rotate * Math.PI / 180;
+
+        cord = {
+            x: Math.cos(rad) * ox + Math.sin(rad) * oy + tmp.x,
+            y: Math.cos(rad) * oy - Math.sin(rad) * ox + tmp.y
+        };
+    }
+
+    return cord;
 };
+
+DisplayObject.prototype._getActualOffset = function (offset, parent) {
+
+    offset.scaleX *= parent.scaleX;
+    offset.scaleY *= parent.scaleY;
+
+    if (parent.parent instanceof Stage) {
+        offset.x += parent.x + parent.translateX;
+        offset.y += parent.y + parent.translateY;
+    } else {
+        offset.x += (parent.x + parent.translateX) * offset.scaleX;
+        offset.y += (parent.y + parent.translateY) * offset.scaleY;
+    }
+
+    return offset;
+};
+
 
 Base.inherit(DisplayObject, EventDispatcher);
 
@@ -1408,48 +1443,34 @@ Shape.prototype.add = function (fn) {
 
 Shape.prototype.isMouseon = function (cord, pos) {
     var self = this,
-        i, len, item, ax, ay, ar, ar2, ox, oy, osx, osy;
-
-    if (pos == null) {
-        pos = {
-            x: 0,
-            y: 0,
-            scaleX: 1,
-            scaleY: 1
-        };
-    }
+        i, len, item, ax, ay, ar, ar2;
 
     pos = DisplayObject.prototype.isMouseon.call(self, cord, pos);
-    cord = self._getRotateCord(cord, pos, self.rotate);
 
+    cord = self._getRotateCord(cord);
 
-    osx = pos.scaleX * self.scaleX;
-    osy = pos.scaleY * self.scaleY;
-
-    ox = (self.x + self.translateX) * osx + pos.x;
-    oy = (self.y + self.translateY) * osy + pos.y;
-
+    debugger;
     for (i = 0, len = self._setList.length; i < len; i++) {
         item = self._setList[i];
 
         if (
             item.type == "rect" &&
-            cord.x >= item.pos[0] * osx + ox &&
-            cord.x <= (item.pos[2] + item.pos[0]) * osx + ox &&
-            cord.y >= item.pos[1] * osy + oy &&
-            cord.y <= (item.pos[3] + item.pos[1]) * osy + oy
+            cord.x >= item.pos[0] * pos.scaleX + pos.x &&
+            cord.x <= (item.pos[2] + item.pos[0]) * pos.scaleX + pos.x &&
+            cord.y >= item.pos[1] * pos.scaleY + pos.y &&
+            cord.y <= (item.pos[3] + item.pos[1]) * pos.scaleY + pos.y
         ) {
             return true;
         }
         else if (item.type == "arc") {
-            ax = Math.pow(cord.x - (item.pos[0] * osx + ox), 2);
-            ay = Math.pow(cord.y - (item.pos[1] * osy + oy), 2);
-            ar = Math.pow(item.pos[2] * osx, 2);
-            ar2 = Math.pow(item.pos[2] * osy, 2);
+            ax = Math.pow(cord.x - (item.pos[0] * pos.scaleX + pos.x), 2);
+            ay = Math.pow(cord.y - (item.pos[1] * pos.scaleY + pos.y), 2);
+            ar = Math.pow(item.pos[2] * pos.scaleX, 2);
+            ar2 = Math.pow(item.pos[2] * pos.scaleY, 2);
 
-            if (osx == osy && ax + ay <= ar) {
+            if (pos.scaleX == pos.scaleY && ax + ay <= ar) {
                 return true;
-            } else if (osx != osy && ax / ar + ay / ar2 <= 1) {
+            } else if (pos.scaleX != pos.scaleY && ax / ar + ay / ar2 <= 1) {
                 return true;
             }
         }
@@ -1570,24 +1591,7 @@ Sprite.prototype.isMouseon = function (cord, pos) {
         isOn = false,
         i, len, item;
 
-    if (pos == null) {
-        pos = {
-            x: 0,
-            y: 0,
-            scaleX: 1,
-            scaleY: 1
-        };
-    }
-
     pos = DisplayObject.prototype.isMouseon.call(self, cord, pos);
-    cord = self._getRotateCord(cord, pos, self.rotate);
-
-    pos = {
-        x: self.x + pos.x + self.translateX,
-        y: self.y + pos.y + self.translateY,
-        scaleX: self.scaleX * pos.scaleX,
-        scaleY: self.scaleY * pos.scaleY
-    };
 
     for (i = 0, len = self._childList.length; i < len; i++) {
         item = self._childList[i];

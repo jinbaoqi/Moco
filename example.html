@@ -28,8 +28,14 @@
 
             var sprite = new Sprite();
             sprite.graphics = shape;
+            sprite.on("click",function(){
+               console.log("s");
+            });
 
             var sprite2 = new Sprite();
+            sprite2.on("click",function(){
+               console.log("sprite");
+            });
             sprite2.addChild(sprite);
 
             stage.addChild(sprite2);

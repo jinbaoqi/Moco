@@ -21,6 +21,7 @@ function DisplayObject() {
     this.y = 0;
     this.mouseX = 0;
     this.mouseY = 0;
+    this.parent = null;
     this.visible = true;
     this.aIndex = this.objectIndex = "" + (guid++);
     this._saveFlag = false;
@@ -75,21 +76,21 @@ DisplayObject.prototype.show = function (cord) {
         canvas.globalCompositeOperation = self.globalCompositeOperation;
     }
 
-    if (self.rotate != 0) {
-        ox = cord.x + cord.ox / cord.scaleX;
-        oy = cord.y + cord.oy / cord.scaleY;
-
-        canvas.translate(ox, oy);
-        canvas.rotate(self.rotate * rotateFlag);
-        canvas.translate(-ox, -oy);
-    }
-
     if (self.translateX != 0 || self.translateY != 0) {
         canvas.translate(self.translateX, self.translateY);
     }
 
     if (self.scaleX != 1 || self.scaleY != 1) {
         canvas.scale(self.scaleX, self.scaleY);
+    }
+
+    if (self.rotate != 0) {
+        ox = cord.x + cord.ox / cord.scaleX;
+        oy = cord.y + cord.oy / cord.scaleY;
+        
+        canvas.translate(ox, oy);
+        canvas.rotate(self.rotate * rotateFlag);
+        canvas.translate(-ox, -oy);
     }
 };
 
@@ -100,7 +101,11 @@ DisplayObject.prototype.isMouseon = function (cord, pos) {
         return false;
     }
 
-    pos = self._getOffset();
+    if (pos == null) {
+        pos = self._getOffset();
+    } else {
+        pos = DisplayObject.prototype._getActualOffset(pos, self);
+    }
 
     return pos;
 };
@@ -139,38 +144,68 @@ DisplayObject.prototype._getOffset = function () {
             scaleY: 1
         }, i;
 
-    while (parent = parent.parent) {
+    while (parent) {
         parents.push(parent);
+        parent = parent.parent;
     }
 
     for (i = parents.length - 1; i >= 0; i--) {
         parent = parents[i];
-
-        if (parent.parent instanceof Stage) {
-            tmp.x += parent.x + parent.translateX;
-            tmp.y += parent.y + parent.translateY;
-        } else {
-            tmp.x += (parent.x + parent.translateX) * tmp.scaleX;
-            tmp.y += (parent.y + parent.translateY) * tmp.scaleY;
-        }
-
-        tmp.scaleX *= parent.scaleX;
-        tmp.scaleY *= parent.scaleY;
+        tmp = self._getActualOffset(tmp, parent);
     }
 
     return tmp;
 };
 
-DisplayObject.prototype._getRotateCord = function (cord, pos, angle) {
-    var ox = cord.x - pos.x,
-        oy = cord.y - pos.y;
+DisplayObject.prototype._getRotateCord = function (cord) {
+    var self = this,
+        parents = [],
+        parent = self,
+        tmp = {
+            x: 0,
+            y: 0,
+            scaleX: 1,
+            scaleY: 1
+        }, i, ox, oy, rad;
 
-    angle = angle * Math.PI / 180;
-
-    return {
-        x: Math.cos(angle) * ox + Math.sin(angle) * oy + pos.x,
-        y: Math.cos(angle) * oy - Math.sin(angle) * ox + pos.y
+    while (parent) {
+        parents.push(parent);
+        parent = parent.parent;
     }
+
+    for (i = parents.length - 1; i >= 0; i--) {
+        parent = parents[i];
+
+        tmp = self._getActualOffset(tmp, parent);
+
+        ox = cord.x - tmp.x;
+        oy = cord.y - tmp.y;
+        rad = parent.rotate * Math.PI / 180;
+
+        cord = {
+            x: Math.cos(rad) * ox + Math.sin(rad) * oy + tmp.x,
+            y: Math.cos(rad) * oy - Math.sin(rad) * ox + tmp.y
+        };
+    }
+
+    return cord;
 };
+
+DisplayObject.prototype._getActualOffset = function (offset, parent) {
+
+    offset.scaleX *= parent.scaleX;
+    offset.scaleY *= parent.scaleY;
+
+    if (parent.parent instanceof Stage) {
+        offset.x += parent.x + parent.translateX;
+        offset.y += parent.y + parent.translateY;
+    } else {
+        offset.x += (parent.x + parent.translateX) * offset.scaleX;
+        offset.y += (parent.y + parent.translateY) * offset.scaleY;
+    }
+
+    return offset;
+};
+
 
 Base.inherit(DisplayObject, EventDispatcher);

@@ -289,48 +289,34 @@ Shape.prototype.add = function (fn) {
 
 Shape.prototype.isMouseon = function (cord, pos) {
     var self = this,
-        i, len, item, ax, ay, ar, ar2, ox, oy, osx, osy;
-
-    if (pos == null) {
-        pos = {
-            x: 0,
-            y: 0,
-            scaleX: 1,
-            scaleY: 1
-        };
-    }
+        i, len, item, ax, ay, ar, ar2;
 
     pos = DisplayObject.prototype.isMouseon.call(self, cord, pos);
-    cord = self._getRotateCord(cord, pos, self.rotate);
 
+    cord = self._getRotateCord(cord);
 
-    osx = pos.scaleX * self.scaleX;
-    osy = pos.scaleY * self.scaleY;
-
-    ox = (self.x + self.translateX) * osx + pos.x;
-    oy = (self.y + self.translateY) * osy + pos.y;
-
+    debugger;
     for (i = 0, len = self._setList.length; i < len; i++) {
         item = self._setList[i];
 
         if (
             item.type == "rect" &&
-            cord.x >= item.pos[0] * osx + ox &&
-            cord.x <= (item.pos[2] + item.pos[0]) * osx + ox &&
-            cord.y >= item.pos[1] * osy + oy &&
-            cord.y <= (item.pos[3] + item.pos[1]) * osy + oy
+            cord.x >= item.pos[0] * pos.scaleX + pos.x &&
+            cord.x <= (item.pos[2] + item.pos[0]) * pos.scaleX + pos.x &&
+            cord.y >= item.pos[1] * pos.scaleY + pos.y &&
+            cord.y <= (item.pos[3] + item.pos[1]) * pos.scaleY + pos.y
         ) {
             return true;
         }
         else if (item.type == "arc") {
-            ax = Math.pow(cord.x - (item.pos[0] * osx + ox), 2);
-            ay = Math.pow(cord.y - (item.pos[1] * osy + oy), 2);
-            ar = Math.pow(item.pos[2] * osx, 2);
-            ar2 = Math.pow(item.pos[2] * osy, 2);
+            ax = Math.pow(cord.x - (item.pos[0] * pos.scaleX + pos.x), 2);
+            ay = Math.pow(cord.y - (item.pos[1] * pos.scaleY + pos.y), 2);
+            ar = Math.pow(item.pos[2] * pos.scaleX, 2);
+            ar2 = Math.pow(item.pos[2] * pos.scaleY, 2);
 
-            if (osx == osy && ax + ay <= ar) {
+            if (pos.scaleX == pos.scaleY && ax + ay <= ar) {
                 return true;
-            } else if (osx != osy && ax / ar + ay / ar2 <= 1) {
+            } else if (pos.scaleX != pos.scaleY && ax / ar + ay / ar2 <= 1) {
                 return true;
             }
         }
