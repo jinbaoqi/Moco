@@ -36,22 +36,20 @@ DisplayObject.prototype.show = function (cord) {
         return;
     }
 
-    if (cord == null) {
-        cord = {
-            x: 0,
-            y: 0
-        };
-    }
+    cord.scaleX *= self.scaleX;
+    cord.scaleY *= self.scaleY;
+    cord.x += self.x / cord.scaleX;
+    cord.y += self.y / cord.scaleY;
 
     if (
         (self.mask != null && self.mask.show) ||
-        self.alpha < 1 ||
-        self.rotate != 0 ||
-        self.scaleX != 1 ||
-        self.scaleY != 1 ||
-        self.translateX != 0 ||
-        self.translateY != 0 ||
-        self.globalCompositeOperation != ""
+            self.alpha < 1 ||
+            self.rotate != 0 ||
+            self.scaleX != 1 ||
+            self.scaleY != 1 ||
+            self.translateX != 0 ||
+            self.translateY != 0 ||
+            self.globalCompositeOperation != ""
         ) {
         self._saveFlag = true;
         canvas.save();
@@ -71,18 +69,18 @@ DisplayObject.prototype.show = function (cord) {
         canvas.globalCompositeOperation = self.globalCompositeOperation;
     }
 
-    if (self.rotate != 0) {
-        canvas.translate(cord.x, cord.y);
-        canvas.rotate(self.rotate * rotateFlag);
-        canvas.translate(-cord.x, -cord.y);
+//    if (self.rotate != 0) {
+//        canvas.translate(cord.x, cord.y);
+//        canvas.rotate(self.rotate * rotateFlag);
+//        canvas.translate(-cord.x, -cord.y);
+//    }
+
+    if (self.scaleX != 1 || self.scaleY != 1) {
+        canvas.scale(self.scaleX, self.scaleY);
     }
 
     if (self.translateX != 0 || self.translateY != 0) {
         canvas.translate(self.translateX, self.translateY);
-    }
-
-    if (self.scaleX != 1 || self.scaleY != 1) {
-        canvas.scale(self.scaleX, self.scaleY);
     }
 };
 
@@ -93,9 +91,7 @@ DisplayObject.prototype.isMouseon = function (cord, pos) {
         return false;
     }
 
-    if (pos == null) {
-        pos = self._getOffset();
-    }
+    pos = self._getOffset();
 
     return pos;
 };
@@ -114,23 +110,29 @@ DisplayObject.prototype.dispose = function () {
 
 DisplayObject.prototype._getOffset = function () {
     var self = this,
-        parent = self.parent,
+        parents = [],
+        parent = self,
         tmp = {
             x: 0,
             y: 0,
             scaleX: 1,
             scaleY: 1
-        };
+        }, i;
 
-    while (parent && !(parent instanceof Stage)) {
+    while (parent = parent.parent) {
+        parents.push(parent);
+    }
+
+    for (i = parents.length - 1; i >= 0; i--) {
+        parent = parents[i];
+
         tmp.scaleX *= parent.scaleX;
         tmp.scaleY *= parent.scaleY;
 
-        tmp.x += parent.x + parent.translateX;
-        tmp.y += parent.y + parent.translateY;
-
-        parent = parent.parent;
+        tmp.x += (parent.x + parent.translateX) * tmp.scaleX;
+        tmp.y += (parent.y + parent.translateY) * tmp.scaleY;
     }
+
     return tmp;
 };
 

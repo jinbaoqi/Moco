@@ -575,22 +575,20 @@ DisplayObject.prototype.show = function (cord) {
         return;
     }
 
-    if (cord == null) {
-        cord = {
-            x: 0,
-            y: 0
-        };
-    }
+    cord.scaleX *= self.scaleX;
+    cord.scaleY *= self.scaleY;
+    cord.x += self.x / cord.scaleX;
+    cord.y += self.y / cord.scaleY;
 
     if (
         (self.mask != null && self.mask.show) ||
-        self.alpha < 1 ||
-        self.rotate != 0 ||
-        self.scaleX != 1 ||
-        self.scaleY != 1 ||
-        self.translateX != 0 ||
-        self.translateY != 0 ||
-        self.globalCompositeOperation != ""
+            self.alpha < 1 ||
+            self.rotate != 0 ||
+            self.scaleX != 1 ||
+            self.scaleY != 1 ||
+            self.translateX != 0 ||
+            self.translateY != 0 ||
+            self.globalCompositeOperation != ""
         ) {
         self._saveFlag = true;
         canvas.save();
@@ -610,18 +608,18 @@ DisplayObject.prototype.show = function (cord) {
         canvas.globalCompositeOperation = self.globalCompositeOperation;
     }
 
-    if (self.rotate != 0) {
-        canvas.translate(cord.x, cord.y);
-        canvas.rotate(self.rotate * rotateFlag);
-        canvas.translate(-cord.x, -cord.y);
+//    if (self.rotate != 0) {
+//        canvas.translate(cord.x, cord.y);
+//        canvas.rotate(self.rotate * rotateFlag);
+//        canvas.translate(-cord.x, -cord.y);
+//    }
+
+    if (self.scaleX != 1 || self.scaleY != 1) {
+        canvas.scale(self.scaleX, self.scaleY);
     }
 
     if (self.translateX != 0 || self.translateY != 0) {
         canvas.translate(self.translateX, self.translateY);
-    }
-
-    if (self.scaleX != 1 || self.scaleY != 1) {
-        canvas.scale(self.scaleX, self.scaleY);
     }
 };
 
@@ -632,9 +630,7 @@ DisplayObject.prototype.isMouseon = function (cord, pos) {
         return false;
     }
 
-    if (pos == null) {
-        pos = self._getOffset();
-    }
+    pos = self._getOffset();
 
     return pos;
 };
@@ -653,23 +649,29 @@ DisplayObject.prototype.dispose = function () {
 
 DisplayObject.prototype._getOffset = function () {
     var self = this,
-        parent = self.parent,
+        parents = [],
+        parent = self,
         tmp = {
             x: 0,
             y: 0,
             scaleX: 1,
             scaleY: 1
-        };
+        }, i;
 
-    while (parent && !(parent instanceof Stage)) {
+    while (parent = parent.parent) {
+        parents.push(parent);
+    }
+
+    for (i = parents.length - 1; i >= 0; i--) {
+        parent = parents[i];
+
         tmp.scaleX *= parent.scaleX;
         tmp.scaleY *= parent.scaleY;
 
-        tmp.x += parent.x + parent.translateX;
-        tmp.y += parent.y + parent.translateY;
-
-        parent = parent.parent;
+        tmp.x += (parent.x + parent.translateX) * tmp.scaleX;
+        tmp.y += (parent.y + parent.translateY) * tmp.scaleY;
     }
+
     return tmp;
 };
 
@@ -811,7 +813,9 @@ DisplayObjectContainer.prototype.show = function (cord) {
     if (cord == null) {
         cord = {
             x: 0,
-            y: 0
+            y: 0,
+            scaleX: 1,
+            scaleY: 1
         };
     }
 
@@ -1107,10 +1111,13 @@ Shape.prototype.show = function (cord) {
     if (cord == null) {
         cord = {
             x: 0,
-            y: 0
+            y: 0,
+            scaleX: 1,
+            scaleY: 1
         };
     }
 
+    debugger;
     DisplayObject.prototype.show.call(this, cord);
 
     if (len) {
@@ -1162,14 +1169,14 @@ Shape.prototype.closePath = function () {
 Shape.prototype.moveTo = function (x, y) {
     var self = this;
     self._showList.push(function (cord) {
-        self.stage.ctx.moveTo(x + cord.x + self.x, y + cord.y + self.y);
+        self.stage.ctx.moveTo(x + cord.x, y + cord.y);
     });
 };
 
 Shape.prototype.lineTo = function (x, y) {
     var self = this;
     self._showList.push(function (cord) {
-        self.stage.ctx.lineTo(x + cord.x + self.x, y + cord.y + self.y);
+        self.stage.ctx.lineTo(x + cord.x, y + cord.y);
     });
 };
 
@@ -1183,7 +1190,7 @@ Shape.prototype.rect = function (x, y, width, height) {
     var self = this;
 
     self._showList.push(function (cord) {
-        self.stage.ctx.rect(x + cord.x + self.x, y + cord.y + self.y, width, height);
+        self.stage.ctx.rect(x + cord.x, y + cord.y, width, height);
     });
 
     self._setList.push({
@@ -1210,7 +1217,7 @@ Shape.prototype.arc = function (x, y, r, sAngle, eAngle, direct) {
     var self = this;
 
     self._showList.push(function (cord) {
-        self.stage.ctx.arc(x + cord.x + self.x, y + cord.y + self.y, r, sAngle, eAngle, direct);
+        self.stage.ctx.arc(x + cord.x, y + cord.y, r, sAngle, eAngle, direct);
     });
 
     self._setList.push({
@@ -1227,7 +1234,7 @@ Shape.prototype.drawArc = function (thickness, lineColor, pointArr, isFill, colo
         canvas = self.stage.ctx;
 
         canvas.beginPath();
-        canvas.arc(pointArr[0] + cord.x + self.x, pointArr[1] + cord.y + self.y, pointArr[2], pointArr[3], pointArr[4], pointArr[5]);
+        canvas.arc(pointArr[0] + cord.x, pointArr[1] + cord.y, pointArr[2], pointArr[3], pointArr[4], pointArr[5]);
 
         if (isFill) {
             canvas.fillStyle = color;
@@ -1252,7 +1259,7 @@ Shape.prototype.drawRect = function (thickness, lineColor, pointArr, isFill, col
         canvas = self.stage.ctx;
 
         canvas.beginPath();
-        canvas.rect(pointArr[0] + cord.x + self.x, pointArr[1] + cord.y + self.y, pointArr[2], pointArr[3]);
+        canvas.rect(pointArr[0] + cord.x, pointArr[1] + cord.y, pointArr[2], pointArr[3]);
 
         if (isFill) {
             canvas.fillStyle = color;
@@ -1283,14 +1290,14 @@ Shape.prototype.drawVertices = function (thickness, lineColor, vertices, isFill,
         canvas = self.stage.ctx;
 
         canvas.beginPath();
-        canvas.moveTo(vertices[0][0] + cord.x + self.x, vertices[0][1] + cord.y + self.y);
+        canvas.moveTo(vertices[0][0] + cord.x, vertices[0][1] + cord.y);
 
         for (i = 1; i < length; i++) {
             var pointArr = vertices[i];
-            canvas.lineTo(pointArr[0] + cord.x + self.x, pointArr[1] + cord.y + self.y);
+            canvas.lineTo(pointArr[0] + cord.x, pointArr[1] + cord.y);
         }
 
-        canvas.lineTo(vertices[0][0] + cord.x + self.x, vertices[0][1] + cord.y + self.y);
+        canvas.lineTo(vertices[0][0] + cord.x, vertices[0][1] + cord.y);
 
         if (isFill) {
             canvas.fillStyle = color;
@@ -1312,8 +1319,8 @@ Shape.prototype.drawLine = function (thickness, lineColor, pointArr) {
         canvas = self.stage.ctx;
 
         canvas.beginPath();
-        canvas.moveTo(pointArr[0] + cord.x + self.x, pointArr[1] + cord.y + self.y);
-        canvas.lineTo(pointArr[2] + cord.x + self.x, pointArr[3] + cord.y + self.y);
+        canvas.moveTo(pointArr[0] + cord.x, pointArr[1] + cord.y);
+        canvas.lineTo(pointArr[2] + cord.x, pointArr[3] + cord.y);
         canvas.lineWidth = thickness;
         canvas.strokeStyle = lineColor;
         canvas.closePath();
@@ -1356,26 +1363,39 @@ Shape.prototype.isMouseon = function (cord, pos) {
     var self = this,
         i, len, item, ax, ay, ar, ar2, ox, oy, osx, osy;
 
+    if (pos == null) {
+        pos = {
+            x: 0,
+            y: 0,
+            scaleX: 1,
+            scaleY: 1
+        };
+    }
+
+    debugger;
     pos = DisplayObject.prototype.isMouseon.call(self, cord, pos);
     cord = self._getRotateCord(cord, pos, self.rotate);
 
-    ox = self.x + pos.x + self.translateX;
-    oy = self.y + pos.y + self.translateY;
+
     osx = pos.scaleX * self.scaleX;
     osy = pos.scaleY * self.scaleY;
+
+    ox = (self.x + self.translateX) * osx + pos.x;
+    oy = (self.y + self.translateY) * osy + pos.y;
 
     for (i = 0, len = self._setList.length; i < len; i++) {
         item = self._setList[i];
 
         if (
-            item.type == "rect" &&
-            cord.x >= item.pos[0] + ox &&
-            cord.x <= item.pos[2] * osx + ox + item.pos[0] &&
-            cord.y >= item.pos[1] + oy &&
-            cord.y <= item.pos[3] * osy + oy + item.pos[1]
+                item.type == "rect" &&
+                cord.x >= item.pos[0] * osx + ox &&
+                cord.x <= (item.pos[2] + item.pos[0]) * osx + ox &&
+                cord.y >= item.pos[1]* osy + oy &&
+                cord.y <= (item.pos[3] + item.pos[1]) * osy + oy
             ) {
             return true;
-        } else if (item.type == "arc") {
+        }
+        else if (item.type == "arc") {
             ax = Math.pow(cord.x - (item.pos[0] * osx + ox), 2);
             ay = Math.pow(cord.y - (item.pos[1] * osy + oy), 2);
             ar = Math.pow(item.pos[2] * osx, 2);
@@ -1411,14 +1431,11 @@ Sprite.prototype.show = function (cord) {
     if (cord == null) {
         cord = {
             x: 0,
-            y: 0
+            y: 0,
+            scaleX: 1,
+            scaleY: 1
         };
     }
-
-    cord = {
-        x: self.x + cord.x,
-        y: self.y + cord.y
-    };
 
     DisplayObjectContainer.prototype.show.call(self, cord);
 
@@ -1506,6 +1523,15 @@ Sprite.prototype.isMouseon = function (cord, pos) {
     var self = this,
         isOn = false,
         i, len, item;
+
+    if(pos == null){
+        pos = {
+            x:0,
+            y:0,
+            scaleX: 1,
+            scaleY: 1
+        };
+    }
 
     pos = DisplayObject.prototype.isMouseon.call(self, cord, pos);
     cord = self._getRotateCord(cord, pos, self.rotate);

@@ -63,7 +63,9 @@ DisplayObjectContainer.prototype.show = function (cord) {
     if (cord == null) {
         cord = {
             x: 0,
-            y: 0
+            y: 0,
+            scaleX: 1,
+            scaleY: 1
         };
     }
 

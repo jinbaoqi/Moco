@@ -15,14 +15,11 @@ Sprite.prototype.show = function (cord) {
     if (cord == null) {
         cord = {
             x: 0,
-            y: 0
+            y: 0,
+            scaleX: 1,
+            scaleY: 1
         };
     }
-
-    cord = {
-        x: self.x + cord.x,
-        y: self.y + cord.y
-    };
 
     DisplayObjectContainer.prototype.show.call(self, cord);
 
@@ -110,6 +107,15 @@ Sprite.prototype.isMouseon = function (cord, pos) {
     var self = this,
         isOn = false,
         i, len, item;
+
+    if(pos == null){
+        pos = {
+            x:0,
+            y:0,
+            scaleX: 1,
+            scaleY: 1
+        };
+    }
 
     pos = DisplayObject.prototype.isMouseon.call(self, cord, pos);
     cord = self._getRotateCord(cord, pos, self.rotate);

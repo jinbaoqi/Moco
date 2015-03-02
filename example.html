@@ -18,10 +18,10 @@
         </div>
     </div>
     <script>
-        new Stage("canvas",function(stage){
+        s = new Stage("canvas",function(stage){
             var shape = new Shape();
-            shape.drawArc(1,"red",[50,50,50,0,Math.PI*2],true,"blue");
-            //shape.drawRect(1,"red",[0,0,50,50],true,"blue");
+            //shape.drawArc(1,"red",[50,50,50,0,Math.PI*2],true,"blue");
+            shape.drawRect(1,"red",[0,0,50,50],true,"blue");
             shape.on("click",function(){
                 console.log("shpae");
             });
@@ -30,8 +30,6 @@
             sprite.graphics = shape;
 
             var sprite2 = new Sprite();
-            sprite2.translateX = sprite2.translateY = 100;
-            sprite2.scaleX = sprite2.scaleY = 2;
             sprite2.addChild(sprite);
 
             stage.addChild(sprite2);
@@ -39,6 +37,13 @@
             window.sprite = sprite2;
             window.shape = shape;
         });
+
+//        var canvas = document.getElementById("canvas");
+//        var ctx = canvas.getContext("2d");
+//
+//        ctx.scale(2,2);
+//        ctx.translate(50,0);
+//        ctx.fillRect(0,0,50,50);
     </script>
 </body>
 </html>
