@@ -94,7 +94,7 @@ var Util = {
     keys: function (obj) {
         var tmp = [];
 
-        if(obj){
+        if (obj) {
             if (Object.keys) {
                 return Object.keys(obj);
             } else {
@@ -647,13 +647,13 @@ DisplayObject.prototype.dispose = function () {
         parent = self.parent,
         childList = self._childList;
 
-    if(childList && childList.length){
-        Util.each(childList,function(item){
-            if(item.graphics){
+    if (childList && childList.length) {
+        Util.each(childList, function (item) {
+            if (item.graphics) {
                 item.graphics.dispose();
                 item.graphics = null;
             }
-           item.dispose();
+            item.dispose();
         });
     }
 
@@ -682,10 +682,10 @@ DisplayObject.prototype._getOffset = function () {
     for (i = parents.length - 1; i >= 0; i--) {
         parent = parents[i];
 
-        if(parent.parent instanceof Stage){
+        if (parent.parent instanceof Stage) {
             tmp.x += parent.x + parent.translateX;
             tmp.y += parent.y + parent.translateY;
-        }else {
+        } else {
             tmp.x += (parent.x + parent.translateX) * tmp.scaleX;
             tmp.y += (parent.y + parent.translateY) * tmp.scaleY;
         }
@@ -1208,10 +1208,14 @@ Shape.prototype.clear = function () {
 };
 
 Shape.prototype.rect = function (x, y, width, height) {
-    var self = this;
+    var self = this,
+        ox, oy;
 
     self._showList.push(function (cord) {
-        self.stage.ctx.rect(x + cord.x, y + cord.y, width, height);
+        ox = cord.x + cord.ox / cord.scaleX;
+        oy = cord.y + cord.oy / cord.scaleY;
+
+        self.stage.ctx.rect(x + ox, y + oy, width, height);
     });
 
     self._setList.push({
@@ -1235,10 +1239,13 @@ Shape.prototype.fill = function () {
 };
 
 Shape.prototype.arc = function (x, y, r, sAngle, eAngle, direct) {
-    var self = this;
+    var self = this,
+        ox, oy;
 
     self._showList.push(function (cord) {
-        self.stage.ctx.arc(x + cord.x, y + cord.y, r, sAngle, eAngle, direct);
+        ox = cord.x + cord.ox / cord.scaleX;
+        oy = cord.y + cord.oy / cord.scaleY;
+        self.stage.ctx.arc(x + ox, y + oy, r, sAngle, eAngle, direct);
     });
 
     self._setList.push({
@@ -1249,13 +1256,15 @@ Shape.prototype.arc = function (x, y, r, sAngle, eAngle, direct) {
 
 Shape.prototype.drawArc = function (thickness, lineColor, pointArr, isFill, color) {
     var self = this,
-        canvas;
+        canvas, ox, oy;
 
     self._showList.push(function (cord) {
         canvas = self.stage.ctx;
+        ox = cord.x + cord.ox / cord.scaleX;
+        oy = cord.y + cord.oy / cord.scaleY;
 
         canvas.beginPath();
-        canvas.arc(pointArr[0] + cord.x, pointArr[1] + cord.y, pointArr[2], pointArr[3], pointArr[4], pointArr[5]);
+        canvas.arc(pointArr[0] + ox, pointArr[1] + oy, pointArr[2], pointArr[3], pointArr[4], pointArr[5]);
 
         if (isFill) {
             canvas.fillStyle = color;
@@ -1274,15 +1283,15 @@ Shape.prototype.drawArc = function (thickness, lineColor, pointArr, isFill, colo
 
 Shape.prototype.drawRect = function (thickness, lineColor, pointArr, isFill, color) {
     var self = this,
-        canvas, x, y;
+        canvas, ox, oy;
 
     self._showList.push(function (cord) {
         canvas = self.stage.ctx;
-        x = cord.x + cord.ox / cord.scaleX;
-        y = cord.y + cord.oy / cord.scaleY;
+        ox = cord.x + cord.ox / cord.scaleX;
+        oy = cord.y + cord.oy / cord.scaleY;
 
         canvas.beginPath();
-        canvas.rect(pointArr[0] + x, pointArr[1] + y, pointArr[2], pointArr[3]);
+        canvas.rect(pointArr[0] + ox, pointArr[1] + oy, pointArr[2], pointArr[3]);
 
         if (isFill) {
             canvas.fillStyle = color;
@@ -1303,7 +1312,7 @@ Shape.prototype.drawRect = function (thickness, lineColor, pointArr, isFill, col
 Shape.prototype.drawVertices = function (thickness, lineColor, vertices, isFill, color) {
     var self = this,
         length = vertices.length,
-        canvas, i, x, y;
+        canvas, i, ox, oy;
 
     if (length < 3) {
         return;
@@ -1311,18 +1320,18 @@ Shape.prototype.drawVertices = function (thickness, lineColor, vertices, isFill,
 
     self._showList.push(function (cord) {
         canvas = self.stage.ctx;
-        x = cord.x + cord.ox / cord.scaleX;
-        y = cord.y + cord.oy / cord.scaleY;
+        ox = cord.x + cord.ox / cord.scaleX;
+        oy = cord.y + cord.oy / cord.scaleY;
 
         canvas.beginPath();
-        canvas.moveTo(vertices[0][0] + x, vertices[0][1] + y);
+        canvas.moveTo(vertices[0][0] + ox, vertices[0][1] + oy);
 
         for (i = 1; i < length; i++) {
             var pointArr = vertices[i];
-            canvas.lineTo(pointArr[0] + x, pointArr[1] + y);
+            canvas.lineTo(pointArr[0] + ox, pointArr[1] + oy);
         }
 
-        canvas.lineTo(vertices[0][0] + x, vertices[0][1] + y);
+        canvas.lineTo(vertices[0][0] + ox, vertices[0][1] + oy);
 
         if (isFill) {
             canvas.fillStyle = color;
@@ -1338,16 +1347,16 @@ Shape.prototype.drawVertices = function (thickness, lineColor, vertices, isFill,
 
 Shape.prototype.drawLine = function (thickness, lineColor, pointArr) {
     var self = this,
-        canvas, x, y;
+        canvas, ox, oy;
 
     self._showList.push(function (cord) {
         canvas = self.stage.ctx;
-        x = cord.x + cord.ox / cord.scaleX;
-        y = cord.y + cord.oy / cord.scaleY;
+        ox = cord.x + cord.ox / cord.scaleX;
+        oy = cord.y + cord.oy / cord.scaleY;
 
         canvas.beginPath();
-        canvas.moveTo(pointArr[0] + x, pointArr[1] + y);
-        canvas.lineTo(pointArr[2] + x, pointArr[3] + y);
+        canvas.moveTo(pointArr[0] + ox, pointArr[1] + oy);
+        canvas.lineTo(pointArr[2] + ox, pointArr[3] + oy);
         canvas.lineWidth = thickness;
         canvas.strokeStyle = lineColor;
         canvas.closePath();
@@ -1382,7 +1391,14 @@ Shape.prototype.add = function (fn) {
     var self = this;
 
     self._showList.push(function (cord) {
-        fn.call(self.stage);
+        var params = {
+            x: cord.x + cord.ox / cord.scaleX,
+            y: cord.y + cord.oy / cord.scaleY,
+            scaleX: cord.scaleX,
+            scaleY: cord.scaleY
+        };
+
+        fn.call(self.stage, params);
     });
 };
 

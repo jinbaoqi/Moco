@@ -107,13 +107,13 @@ DisplayObject.prototype.dispose = function () {
         parent = self.parent,
         childList = self._childList;
 
-    if(childList && childList.length){
-        Util.each(childList,function(item){
-            if(item.graphics){
+    if (childList && childList.length) {
+        Util.each(childList, function (item) {
+            if (item.graphics) {
                 item.graphics.dispose();
                 item.graphics = null;
             }
-           item.dispose();
+            item.dispose();
         });
     }
 
@@ -142,10 +142,10 @@ DisplayObject.prototype._getOffset = function () {
     for (i = parents.length - 1; i >= 0; i--) {
         parent = parents[i];
 
-        if(parent.parent instanceof Stage){
+        if (parent.parent instanceof Stage) {
             tmp.x += parent.x + parent.translateX;
             tmp.y += parent.y + parent.translateY;
-        }else {
+        } else {
             tmp.x += (parent.x + parent.translateX) * tmp.scaleX;
             tmp.y += (parent.y + parent.translateY) * tmp.scaleY;
         }

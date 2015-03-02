@@ -94,7 +94,7 @@ var Util = {
     keys: function (obj) {
         var tmp = [];
 
-        if(obj){
+        if (obj) {
             if (Object.keys) {
                 return Object.keys(obj);
             } else {
