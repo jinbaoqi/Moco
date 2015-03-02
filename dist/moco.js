@@ -570,7 +570,7 @@ DisplayObject.prototype.show = function (cord) {
     var self = this,
         rotateFlag = Math.PI / 180,
         canvas = self.ctx || self.stage.ctx,
-        ox,oy;
+        ox, oy;
 
     if (!self.visible) {
         return;
@@ -616,8 +616,8 @@ DisplayObject.prototype.show = function (cord) {
     }
 
     if (self.rotate != 0) {
-        ox = cord.x+cord.ox/cord.scaleX;
-        oy = cord.y+cord.oy/cord.scaleY;
+        ox = cord.x + cord.ox / cord.scaleX;
+        oy = cord.y + cord.oy / cord.scaleY;
 
         canvas.translate(ox, oy);
         canvas.rotate(self.rotate * rotateFlag);
