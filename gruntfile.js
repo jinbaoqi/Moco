@@ -1,40 +1,35 @@
 module.exports = function(grunt) {
     grunt.initConfig({
+        babel: {
+            options: {
+                sourceMap: false,
+                presets: ['es2015']
+            },
+            dist: {
+                files: {
+                    "dist/es6/Util.js": "es6/Util.es",
+                    "dist/es6/EventDispatcher.js": "es6/EventDispatcher.es"
+                }
+            }
+        },
         concat: {
             dist: {
                 src: [
-                    "src/Util.js",
-                    "src/EventCore.js",
-                    "src/Event.js",
-                    "src/MouseEvent.js",
-                    "src/KeyBoardEvent.js",
-                    "src/EventDispatcher.js",
-                    "src/Base.js",
-                    "src/DisplayObject.js",
-                    "src/InteractiveObject.js",
-                    "src/DisplayObjectContainer.js",
-                    "src/raf.js",
-                    "src/Stage.js",
-                    "src/Shape.js",
-                    "src/Sprite.js",
-                    "src/Bitmap.js",
-                    "src/BitmapData.js",
-                    "src/Animation.js",
-                    "src/URLLoader.js",
-                    "src/Loader.js",
-                    "src/Tween.js"
+                    "dist/es6/Util.js",
+                    "dist/es6/EventDispatcher.js"
                 ],
-                dest: 'dist/moco.js'
+                dest: 'dist/Moco.js'
             }
         },
         watch: {
-            files: ['src/**/*.js'],
-            tasks: ['concat']
+            files: ['es6/**/*.es'],
+            tasks: ['babel', 'concat']
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-babel');
 
     grunt.registerTask('default', ['watch']);
 };

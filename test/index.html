@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <script src="../dist/Moco.js"></script>
+</head>
+<body>
+<div id="wrap1" style="position:absolute;top:0;left:0;background:red;width:1000px;height:1000px;overflow: hidden;">
+    <div id="wrap2" style="position:absolute;top:0;left:0;background:red;width:400px;height:300px;overflow:hidden;">
+        <canvas id="canvas" width="400" height="300"></canvas>
+    </div>
+</div>
+<script>
+    var wrap1 = document.getElementById("wrap1");
+    var wrap2 = document.getElementById("wrap2");
+    var canvas = document.getElementById("canvas");
+
+   var dispatcher = new EventDispatcher();
+   dispatcher.on(wrap1,"click",function(){
+    console.log("wrap1");
+   },true);
+   dispatcher.on(wrap2,"click",function(){
+    console.log("wrap2");
+   },true);
+   dispatcher.once(wrap2,"click",function(){
+    console.log("wrap2");
+   },false);
+   dispatcher.on(canvas,"click",function(){
+    console.log("canvas");
+   },true); 
+
+   // dispatcher.off(wrap2,"click",function(){
+   //  console.log("wrap2");
+   // },false);
+
+   dispatcher.trigger(canvas,"click",{},true,true);
+
+   // var dispatcher = new EventDispatcher();
+   // var obj = {};
+   // dispatcher.on(obj,"someEvent",function(){
+   //      console.log("my event");
+   // },false);
+
+   // dispatcher.trigger(obj,"someEvent",{});
+
+   // var dispatcher = new EventDispatcher();
+   // var body = document.getElementsByTagName("body")[0];
+   // var wrap1 = document.getElementById("wrap1");
+   // dispatcher.on(body,"someEvent",function(){
+   //      console.log("body");
+   // },false);
+   //  dispatcher.on(wrap1,"someEvent",function(){
+   //      console.log("wrap1");
+   // },false);
+   // dispatcher.trigger(wrap1,"someEvent",{},true,true);
+</script>
+</body>
+</html>

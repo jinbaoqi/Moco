@@ -2,13 +2,146 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3894964d-577d-42c6-b64b-b6cf49c67cd1" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DisplayObject.js" afterPath="$PROJECT_DIR$/src/DisplayObject.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Shape.js" afterPath="$PROJECT_DIR$/src/Shape.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/example.html" afterPath="$PROJECT_DIR$/example.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/moco.js" afterPath="$PROJECT_DIR$/dist/moco.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/index.html" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/example.html" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/Moco.js.iml" afterPath="$PROJECT_DIR$/.idea/Moco.js.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/Moco_js_node_modules.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Moco_js_node_modules.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gruntfile.js" afterPath="$PROJECT_DIR$/gruntfile.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-concat/node_modules/chalk/node_modules/ansi-styles/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-concat/node_modules/chalk/node_modules/ansi-styles/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-concat/node_modules/chalk/node_modules/has-color/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-concat/node_modules/chalk/node_modules/has-color/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-concat/node_modules/chalk/node_modules/strip-ansi/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-concat/node_modules/chalk/node_modules/strip-ansi/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-concat/node_modules/chalk/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-concat/node_modules/chalk/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-concat/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-concat/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/async/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/async/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/README.md" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/lib/gaze.js" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/lib/gaze.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/glob/node_modules/graceful-fs/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/glob/node_modules/graceful-fs/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/glob/node_modules/inherits/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/glob/node_modules/inherits/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/glob/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/glob/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/lodash/README.md" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/lodash/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/lodash/dist/lodash.compat.js" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/lodash/dist/lodash.compat.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/lodash/dist/lodash.compat.min.js" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/lodash/dist/lodash.compat.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/lodash/dist/lodash.js" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/lodash/dist/lodash.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/lodash/dist/lodash.min.js" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/lodash/dist/lodash.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/lodash/dist/lodash.underscore.js" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/lodash/dist/lodash.underscore.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/lodash/dist/lodash.underscore.min.js" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/lodash/dist/lodash.underscore.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/lodash/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/lodash/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/minimatch/node_modules/lru-cache/LICENSE" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/minimatch/node_modules/lru-cache/LICENSE" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/minimatch/node_modules/lru-cache/README.md" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/minimatch/node_modules/lru-cache/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/minimatch/node_modules/lru-cache/lib/lru-cache.js" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/minimatch/node_modules/lru-cache/lib/lru-cache.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/minimatch/node_modules/lru-cache/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/minimatch/node_modules/lru-cache/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/minimatch/node_modules/lru-cache/test/basic.js" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/minimatch/node_modules/lru-cache/test/basic.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/minimatch/node_modules/lru-cache/test/foreach.js" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/minimatch/node_modules/lru-cache/test/foreach.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/minimatch/node_modules/lru-cache/test/memory-leak.js" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/minimatch/node_modules/lru-cache/test/memory-leak.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/minimatch/node_modules/sigmund/LICENSE" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/minimatch/node_modules/sigmund/LICENSE" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/minimatch/node_modules/sigmund/README.md" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/minimatch/node_modules/sigmund/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/minimatch/node_modules/sigmund/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/minimatch/node_modules/sigmund/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/minimatch/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/node_modules/minimatch/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/node_modules/globule/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/gaze/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/lodash/README.md" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/lodash/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/lodash/dist/lodash.compat.js" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/lodash/dist/lodash.compat.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/lodash/dist/lodash.compat.min.js" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/lodash/dist/lodash.compat.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/lodash/dist/lodash.js" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/lodash/dist/lodash.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/lodash/dist/lodash.min.js" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/lodash/dist/lodash.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/lodash/dist/lodash.underscore.js" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/lodash/dist/lodash.underscore.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/lodash/dist/lodash.underscore.min.js" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/lodash/dist/lodash.underscore.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/lodash/lodash.js" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/lodash/lodash.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/lodash/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/lodash/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/tiny-lr-fork/node_modules/debug/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/tiny-lr-fork/node_modules/debug/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/tiny-lr-fork/node_modules/faye-websocket/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/tiny-lr-fork/node_modules/faye-websocket/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/tiny-lr-fork/node_modules/noptify/node_modules/nopt/node_modules/abbrev/LICENSE" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/tiny-lr-fork/node_modules/noptify/node_modules/nopt/node_modules/abbrev/LICENSE" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/tiny-lr-fork/node_modules/noptify/node_modules/nopt/node_modules/abbrev/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/tiny-lr-fork/node_modules/noptify/node_modules/nopt/node_modules/abbrev/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/tiny-lr-fork/node_modules/noptify/node_modules/nopt/node_modules/abbrev/test.js" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/tiny-lr-fork/node_modules/noptify/node_modules/nopt/node_modules/abbrev/test.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/tiny-lr-fork/node_modules/noptify/node_modules/nopt/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/tiny-lr-fork/node_modules/noptify/node_modules/nopt/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/tiny-lr-fork/node_modules/noptify/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/tiny-lr-fork/node_modules/noptify/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/tiny-lr-fork/node_modules/qs/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/tiny-lr-fork/node_modules/qs/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/tiny-lr-fork/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/node_modules/tiny-lr-fork/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt-contrib-watch/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/async/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/async/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/coffee-script/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/coffee-script/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/colors/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/colors/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/dateformat/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/dateformat/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/eventemitter2/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/eventemitter2/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/exit/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/exit/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/glob/node_modules/inherits/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/glob/node_modules/inherits/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/lru-cache/LICENSE" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/lru-cache/LICENSE" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/lru-cache/README.md" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/lru-cache/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/lru-cache/lib/lru-cache.js" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/lru-cache/lib/lru-cache.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/lru-cache/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/lru-cache/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/lru-cache/test/basic.js" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/lru-cache/test/basic.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/lru-cache/test/foreach.js" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/lru-cache/test/foreach.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/lru-cache/test/memory-leak.js" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/lru-cache/test/memory-leak.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/sigmund/LICENSE" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/sigmund/LICENSE" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/sigmund/README.md" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/sigmund/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/sigmund/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/node_modules/sigmund/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/glob/node_modules/minimatch/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/glob/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/glob/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/lodash/README.md" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/lodash/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/lodash/dist/lodash.compat.js" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/lodash/dist/lodash.compat.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/lodash/dist/lodash.compat.min.js" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/lodash/dist/lodash.compat.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/lodash/dist/lodash.js" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/lodash/dist/lodash.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/lodash/dist/lodash.min.js" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/lodash/dist/lodash.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/lodash/dist/lodash.underscore.js" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/lodash/dist/lodash.underscore.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/lodash/dist/lodash.underscore.min.js" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/lodash/dist/lodash.underscore.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/lodash/lodash.js" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/lodash/lodash.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/lodash/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/node_modules/lodash/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/findup-sync/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/getobject/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/getobject/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/glob/node_modules/graceful-fs/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/glob/node_modules/graceful-fs/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/glob/node_modules/inherits/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/glob/node_modules/inherits/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/glob/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/glob/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-log/.travis.yml" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-log/.travis.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-log/index.js" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-log/index.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-log/node_modules/lodash/README.md" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-log/node_modules/lodash/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-log/node_modules/lodash/dist/lodash.compat.js" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-log/node_modules/lodash/dist/lodash.compat.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-log/node_modules/lodash/dist/lodash.compat.min.js" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-log/node_modules/lodash/dist/lodash.compat.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-log/node_modules/lodash/dist/lodash.js" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-log/node_modules/lodash/dist/lodash.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-log/node_modules/lodash/dist/lodash.min.js" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-log/node_modules/lodash/dist/lodash.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-log/node_modules/lodash/dist/lodash.underscore.js" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-log/node_modules/lodash/dist/lodash.underscore.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-log/node_modules/lodash/dist/lodash.underscore.min.js" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-log/node_modules/lodash/dist/lodash.underscore.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-log/node_modules/lodash/lodash.js" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-log/node_modules/lodash/lodash.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-log/node_modules/lodash/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-log/node_modules/lodash/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-log/node_modules/underscore.string/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-log/node_modules/underscore.string/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-log/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-log/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-log/test/index.js" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-log/test/index.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-util/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/grunt-legacy-util/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/hooker/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/hooker/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/iconv-lite/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/iconv-lite/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/js-yaml/node_modules/argparse/node_modules/underscore.string/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/js-yaml/node_modules/argparse/node_modules/underscore.string/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/js-yaml/node_modules/argparse/node_modules/underscore/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/js-yaml/node_modules/argparse/node_modules/underscore/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/js-yaml/node_modules/argparse/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/js-yaml/node_modules/argparse/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/js-yaml/node_modules/esprima/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/js-yaml/node_modules/esprima/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/js-yaml/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/js-yaml/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/lodash/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/lodash/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/minimatch/node_modules/lru-cache/LICENSE" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/minimatch/node_modules/lru-cache/LICENSE" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/minimatch/node_modules/lru-cache/README.md" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/minimatch/node_modules/lru-cache/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/minimatch/node_modules/lru-cache/lib/lru-cache.js" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/minimatch/node_modules/lru-cache/lib/lru-cache.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/minimatch/node_modules/lru-cache/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/minimatch/node_modules/lru-cache/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/minimatch/node_modules/lru-cache/test/basic.js" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/minimatch/node_modules/lru-cache/test/basic.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/minimatch/node_modules/lru-cache/test/foreach.js" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/minimatch/node_modules/lru-cache/test/foreach.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/minimatch/node_modules/lru-cache/test/memory-leak.js" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/minimatch/node_modules/lru-cache/test/memory-leak.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/minimatch/node_modules/sigmund/LICENSE" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/minimatch/node_modules/sigmund/LICENSE" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/minimatch/node_modules/sigmund/README.md" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/minimatch/node_modules/sigmund/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/minimatch/node_modules/sigmund/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/minimatch/node_modules/sigmund/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/minimatch/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/minimatch/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/nopt/node_modules/abbrev/LICENSE" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/nopt/node_modules/abbrev/LICENSE" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/nopt/node_modules/abbrev/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/nopt/node_modules/abbrev/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/nopt/node_modules/abbrev/test.js" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/nopt/node_modules/abbrev/test.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/nopt/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/nopt/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/rimraf/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/rimraf/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/underscore.string/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/underscore.string/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/node_modules/which/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/node_modules/which/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/grunt/package.json" afterPath="$PROJECT_DIR$/node_modules/grunt/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
     </list>
     <ignored path="Moco.js.iws" />
     <ignored path=".idea/workspace.xml" />
+    <ignored path=".idea/dataSources.local.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,20 +153,17 @@
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
   </component>
-  <component name="DaemonCodeAnalyzer">
-    <disable_hints />
-  </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
     <favorites_list name="Moco.js" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="example.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/example.html">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/test/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-14.384615" vertical-offset="0" max-vertical-offset="1020">
-              <caret line="22" column="12" selection-start-line="22" selection-start-column="12" selection-end-line="22" selection-end-column="12" />
+            <state relative-caret-position="795">
+              <caret line="53" column="19" selection-start-line="53" selection-start-column="19" selection-end-line="53" selection-end-column="19" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -42,57 +172,15 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Sprite.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Sprite.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2329">
-              <caret line="105" column="29" selection-start-line="105" selection-start-column="29" selection-end-line="105" selection-end-column="29" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="moco.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dist/moco.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="27422" max-vertical-offset="28033">
-              <caret line="21" column="9" selection-start-line="21" selection-start-column="9" selection-end-line="21" selection-end-column="9" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EventCore.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/EventCore.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1258">
-              <caret line="47" column="13" selection-start-line="47" selection-start-column="13" selection-end-line="47" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DisplayObject.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/DisplayObject.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3689">
-              <caret line="93" column="5" selection-start-line="93" selection-start-column="5" selection-end-line="93" selection-end-column="5" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Shape.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/Shape.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="6.0084176" vertical-offset="1616" max-vertical-offset="5729">
-              <caret line="305" column="34" selection-start-line="305" selection-start-column="34" selection-end-line="305" selection-end-column="34" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+        <option value="HTML File" />
+      </list>
+    </option>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -101,6 +189,11 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GradleLocalSettings">
+    <option name="externalProjectsViewState">
+      <projects_view />
+    </option>
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -111,9 +204,21 @@
         <option value="$PROJECT_DIR$/dist/moco.js" />
         <option value="$PROJECT_DIR$/example.html" />
         <option value="$PROJECT_DIR$/src/Shape.js" />
+        <option value="$PROJECT_DIR$/es2015-src/EventDispatcher.es.js" />
+        <option value="$PROJECT_DIR$/es2015-src/EventDispatcher.es" />
+        <option value="$PROJECT_DIR$/node_modules/grunt-babel/tasks/babel.js" />
+        <option value="$PROJECT_DIR$/gruntfile.js" />
+        <option value="$PROJECT_DIR$/dist/Moco.js" />
+        <option value="$PROJECT_DIR$/es6/EventDispatcher.js" />
+        <option value="$PROJECT_DIR$/es6/EventDispatcher.es" />
+        <option value="$PROJECT_DIR$/test/index.html" />
       </list>
     </option>
   </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true">
+    <gruntfile path="$PROJECT_DIR$/gruntfile.js" />
+  </component>
+  <component name="JsBuildToolPackageJson" detection-done="true" />
   <component name="JsGruntFileManager">
     <gruntfiles>
       <GruntfileState>
@@ -125,10 +230,15 @@
   <component name="JsGulpfileManager">
     <detection-done>true</detection-done>
   </component>
+  <component name="PhpServers">
+    <servers />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds">
+    <option name="x" value="48" />
     <option name="y" value="23" />
-    <option name="width" value="1280" />
-    <option name="height" value="691" />
+    <option name="width" value="1318" />
+    <option name="height" value="745" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -154,8 +264,12 @@
       <autoscrollToSource />
       <autoscrollFromSource />
       <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -170,7 +284,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Moco.js" />
+              <option name="myItemId" value="moco" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -180,39 +294,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Moco.js" />
+              <option name="myItemId" value="moco" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Moco.js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Moco.js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="node_modules" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Moco.js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Moco.js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dist" />
+              <option name="myItemId" value="es6" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -227,48 +313,493 @@
     <property name="HbShouldOpenHtmlAsHb" value="" />
     <property name="LayoutCode.rearrangeEntriesJavaScript 1.5" value="false" />
     <property name="FullScreen" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="js-jscs-nodeInterpreter" value="/usr/local/bin/node" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.splitter.proportion" value="0.2" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
   </component>
   <component name="RunManager">
-    <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
+    <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android Application">
+      <module name="" />
+      <option name="DEPLOY" value="true" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
+      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
+      <option name="FORCE_STOP_RUNNING_APP" value="true" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
       <method />
     </configuration>
-    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
+    <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
+      <module name="" />
+      <option name="TESTING_TYPE" value="0" />
+      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="EXTRA_OPTIONS" value="" />
+      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
+      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
+      <option name="FORCE_STOP_RUNNING_APP" value="true" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
       <method />
     </configuration>
-    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" config-file="">
+    <configuration default="true" type="Application" factoryName="Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
       <envs />
       <method />
     </configuration>
-    <configuration default="true" type="JSTestDriver:ConfigurationType" factoryName="JsTestDriver">
-      <setting name="configLocationType" value="CONFIG_FILE" />
-      <setting name="settingsFile" value="" />
-      <setting name="serverType" value="INTERNAL" />
-      <setting name="preferredDebugBrowser" value="Chrome" />
+    <configuration default="true" type="BashConfigurationType" factoryName="Bash">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="INTERPRETER_PATH" value="/bin/bash" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="ClojureREPL" factoryName="Local">
+      <setting name="replType" value="1" />
+      <module name="" />
+      <setting name="jvmArgs" value="" />
+      <setting name="parameters" value="" />
+      <setting name="workingDir" value="" />
+      <setting name="profiles" value="" />
+      <method />
+    </configuration>
+    <configuration default="true" type="DjangoTestsConfigurationType" factoryName="Django tests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Moco.js" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="TARGET" value="" />
+      <option name="SETTINGS_FILE" value="" />
+      <option name="CUSTOM_SETTINGS" value="false" />
+      <option name="USE_OPTIONS" value="false" />
+      <option name="OPTIONS" value="" />
+      <method />
+    </configuration>
+    <configuration default="true" type="FlashRunConfigurationType" factoryName="Flash App">
+      <option name="BCName" value="" />
+      <option name="IOSSimulatorSdkPath" value="" />
+      <option name="adlOptions" value="" />
+      <option name="airProgramParameters" value="" />
+      <option name="appDescriptorForEmulator" value="Android" />
+      <option name="debugTransport" value="USB" />
+      <option name="debuggerSdkRaw" value="BC SDK" />
+      <option name="emulator" value="NexusOne" />
+      <option name="emulatorAdlOptions" value="" />
+      <option name="fastPackaging" value="true" />
+      <option name="fullScreenHeight" value="0" />
+      <option name="fullScreenWidth" value="0" />
+      <option name="launchUrl" value="false" />
+      <option name="launcherParameters">
+        <LauncherParameters>
+          <option name="browser" value="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" />
+          <option name="launcherType" value="OSDefault" />
+          <option name="newPlayerInstance" value="false" />
+          <option name="playerPath" value="/Applications/Flash Player Debugger.app" />
+        </LauncherParameters>
+      </option>
+      <option name="mobileRunTarget" value="Emulator" />
+      <option name="moduleName" value="" />
+      <option name="overriddenMainClass" value="" />
+      <option name="overriddenOutputFileName" value="" />
+      <option name="overrideMainClass" value="false" />
+      <option name="runTrusted" value="true" />
+      <option name="screenDpi" value="0" />
+      <option name="screenHeight" value="0" />
+      <option name="screenWidth" value="0" />
+      <option name="url" value="http://" />
+      <option name="usbDebugPort" value="7936" />
+      <method />
+    </configuration>
+    <configuration default="true" type="FlexUnitRunConfigurationType" factoryName="FlexUnit" appDescriptorForEmulator="Android" class_name="" emulatorAdlOptions="" method_name="" package_name="" scope="Class">
+      <option name="BCName" value="" />
+      <option name="launcherParameters">
+        <LauncherParameters>
+          <option name="browser" value="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" />
+          <option name="launcherType" value="OSDefault" />
+          <option name="newPlayerInstance" value="false" />
+          <option name="playerPath" value="/Applications/Flash Player Debugger.app" />
+        </LauncherParameters>
+      </option>
+      <option name="moduleName" value="" />
+      <option name="trusted" value="true" />
+      <method />
+    </configuration>
+    <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
+      <module name="" />
+      <working_directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <kind value="FILE" />
+      <method />
+    </configuration>
+    <configuration default="true" type="GoRunFileConfiguration" factoryName="Go Single File">
+      <module name="" />
+      <working_directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <method />
+    </configuration>
+    <configuration default="true" type="GoTestRunConfiguration" factoryName="Go Test">
+      <module name="" />
+      <working_directory value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <kind value="DIRECTORY" />
+      <method />
+    </configuration>
+    <configuration default="true" type="GradleRunConfiguration" factoryName="Gradle">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list />
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <method />
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="true" type="JUnitTestDiscovery" factoryName="JUnit Test Discovery" changeList="All">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="true" type="JarApplication" factoryName="JAR Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="Java Scratch" factoryName="Java Scratch">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="SCRATCH_FILE_ID" value="0" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
       <method />
     </configuration>
     <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
       <method />
     </configuration>
-    <configuration default="true" type="NodeJSConfigurationType" factoryName="Node.js" working-dir="">
+    <configuration default="true" type="JetRunConfigurationType" factoryName="Kotlin">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="Moco.js" />
+      <envs />
       <method />
     </configuration>
-    <configuration default="true" type="cucumber.js" factoryName="Cucumber.js">
-      <option name="cucumberJsArguments" value="" />
-      <option name="executablePath" />
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType" factoryName="Kotlin script">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="filePath" />
+      <option name="vmParameters" />
+      <option name="alternativeJrePath" />
+      <option name="programParameters" />
+      <option name="passParentEnvs" value="true" />
+      <option name="workingDirectory" />
+      <option name="isAlternativeJrePathEnabled" value="false" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="project" working-dir="">
+      <method />
+    </configuration>
+    <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+      <TestRunner />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpLocalRunConfigurationType" factoryName="PHP Console">
+      <method />
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Moco.js" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="TestUnitRunConfigurationType" factoryName="Test::Unit/Shoulda/Minitest">
+      <predefined_log_file id="RUBY_TESTUNIT" enabled="true" />
+      <module name="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="RUBY_ARGS" VALUE="-e $stdout.sync=true;$stderr.sync=true;load($0=ARGV.shift)" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="WORK DIR" VALUE="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="SHOULD_USE_SDK" VALUE="false" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="ALTERN_SDK_NAME" VALUE="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="myPassParentEnvs" VALUE="true" />
+      <envs />
+      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
+      <EXTENSION ID="JRubyRunConfigurationExtension" NailgunExecEnabled="false" />
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov">
+        <COVERAGE_PATTERN ENABLED="true">
+          <PATTERN REGEXPS="/.rvm/" INCLUDED="false" />
+        </COVERAGE_PATTERN>
+      </EXTENSION>
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TESTS_FOLDER_PATH" VALUE="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_SCRIPT_PATH" VALUE="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_FILE_MASK" VALUE="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_METHOD_NAME" VALUE="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_TEST_TYPE" VALUE="TEST_SCRIPT" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="DRB" VALUE="false" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="ZEUS" VALUE="false" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="SPRING" VALUE="false" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="RUNNER_OPTIONS" VALUE="" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <module name="Moco.js" />
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-interpreter>project</node-interpreter>
       <node-options />
       <gulpfile />
       <tasks />
+      <arguments />
       <pass-parent-envs>true</pass-parent-envs>
       <envs />
       <method />
     </configuration>
-    <list size="0" />
+    <configuration default="true" type="js.build_tools.npm" factoryName="npm">
+      <command value="run-script" />
+      <scripts />
+      <node-interpreter value="project" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="mocha-javascript-test-runner" factoryName="Mocha">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <working-directory>$PROJECT_DIR$</working-directory>
+      <pass-parent-env>true</pass-parent-env>
+      <envs />
+      <ui>bdd</ui>
+      <extra-mocha-options />
+      <test-kind>DIRECTORY</test-kind>
+      <test-directory />
+      <recursive>false</recursive>
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Attests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Moco.js" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Doctests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Moco.js" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Nosetests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Moco.js" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Unittests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Moco.js" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PUREUNITTEST" value="true" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="py.test">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Moco.js" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="testToRun" value="" />
+      <option name="keywords" value="" />
+      <option name="params" value="" />
+      <option name="USE_PARAM" value="false" />
+      <option name="USE_KEYWORD" value="false" />
+      <method />
+    </configuration>
   </component>
-  <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -277,55 +808,49 @@
       <changelist id="3894964d-577d-42c6-b64b-b6cf49c67cd1" name="Default" comment="" />
       <created>1425136936673</created>
       <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
       <updated>1425136936673</updated>
+      <workItem from="1460814831670" duration="3849000" />
     </task>
     <servers />
   </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="3849000" />
+  </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="691" extended-state="0" />
+    <frame x="48" y="23" width="1318" height="745" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Grunt" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2078125" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="REPL" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Leiningen" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20454545" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Grunt " active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32924962" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Grunt" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="8" side_tool="false" content_ui="combo" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
-    <layout-to-restore>
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Grunt" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2078125" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-    </layout-to-restore>
   </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">
@@ -338,38 +863,16 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
-  <component name="VcsManagerConfiguration">
-    <option name="myTodoPanelSettings">
-      <TodoPanelSettings />
-    </option>
-  </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="1" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/example.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="238" max-vertical-offset="918">
-          <caret line="14" column="35" selection-start-line="14" selection-start-column="27" selection-end-line="14" selection-end-column="35" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Sprite.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1259" max-vertical-offset="2618">
-          <caret line="119" column="66" selection-start-line="119" selection-start-column="66" selection-end-line="119" selection-end-column="66" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Stage.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1462" max-vertical-offset="4012">
+        <state relative-caret-position="0">
           <caret line="86" column="0" selection-start-line="86" selection-start-column="0" selection-end-line="86" selection-end-column="0" />
           <folding />
         </state>
@@ -377,7 +880,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Shape.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="5322" max-vertical-offset="5916">
+        <state relative-caret-position="0">
           <caret line="327" column="34" selection-start-line="327" selection-start-column="34" selection-end-line="327" selection-end-column="34" />
           <folding />
         </state>
@@ -385,7 +888,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DisplayObject.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3094">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
@@ -393,7 +896,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/EventDispatcher.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2006" max-vertical-offset="5304">
+        <state relative-caret-position="0">
           <caret line="103" column="32" selection-start-line="103" selection-start-column="32" selection-end-line="103" selection-end-column="32" />
           <folding />
         </state>
@@ -401,34 +904,30 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DisplayObjectContainer.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="544" max-vertical-offset="1496">
+        <state relative-caret-position="0">
           <caret line="80" column="2" selection-start-line="80" selection-start-column="2" selection-end-line="80" selection-end-column="2" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/example.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="289" max-vertical-offset="1037">
+        <state relative-caret-position="0">
           <caret line="17" column="14" selection-start-line="17" selection-start-column="14" selection-end-line="17" selection-end-column="14" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Sprite.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2023" max-vertical-offset="2278">
+        <state relative-caret-position="0">
           <caret line="119" column="5" selection-start-line="119" selection-start-column="5" selection-end-line="119" selection-end-column="5" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dist/moco.js">
+    <entry file="file://$PROJECT_DIR$/dist/Moco.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="136" max-vertical-offset="25126">
+        <state relative-caret-position="0">
           <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
           <folding />
         </state>
@@ -436,7 +935,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Stage.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1411" max-vertical-offset="3502">
+        <state relative-caret-position="0">
           <caret line="83" column="0" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
           <folding />
         </state>
@@ -444,7 +943,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Shape.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="442" max-vertical-offset="5066">
+        <state relative-caret-position="0">
           <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
           <folding />
         </state>
@@ -452,7 +951,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DisplayObject.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2210">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
@@ -460,34 +959,30 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DisplayObjectContainer.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1173" max-vertical-offset="1309">
+        <state relative-caret-position="0">
           <caret line="69" column="2" selection-start-line="69" selection-start-column="2" selection-end-line="69" selection-end-column="2" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/example.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="833">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Sprite.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2516">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dist/moco.js">
+    <entry file="file://$PROJECT_DIR$/src/Sprite.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="26690">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dist/Moco.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
@@ -495,7 +990,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Stage.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4012">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
@@ -503,7 +998,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Shape.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5304">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
@@ -511,7 +1006,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DisplayObject.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2635">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
@@ -519,18 +1014,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/example.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Sprite.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
@@ -538,7 +1030,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Shape.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
@@ -546,7 +1038,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Stage.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
@@ -554,7 +1046,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DisplayObject.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
@@ -562,18 +1054,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/example.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dist/moco.js">
+    <entry file="file://$PROJECT_DIR$/dist/Moco.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
@@ -581,15 +1070,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DisplayObjectContainer.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Sprite.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
@@ -597,7 +1085,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/EventCore.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
@@ -605,7 +1093,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Shape.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
@@ -613,7 +1101,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Stage.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
@@ -621,31 +1109,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Util.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1310" max-vertical-offset="2074">
+        <state relative-caret-position="0">
           <caret line="97" column="12" selection-start-line="97" selection-start-column="12" selection-end-line="105" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/EventDispatcher.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.9814816" vertical-offset="4710" max-vertical-offset="5304">
-          <caret line="103" column="32" selection-start-line="103" selection-start-column="32" selection-end-line="103" selection-end-column="32" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DisplayObjectContainer.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.65656567" vertical-offset="851" max-vertical-offset="1496">
+        <state relative-caret-position="0">
           <caret line="73" column="28" selection-start-line="73" selection-start-column="28" selection-end-line="73" selection-end-column="28" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Stage.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.19865319" vertical-offset="1616" max-vertical-offset="4012">
+        <state relative-caret-position="0">
           <caret line="102" column="6" selection-start-line="102" selection-start-column="6" selection-end-line="102" selection-end-column="6" />
           <folding />
         </state>
@@ -653,42 +1131,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Sprite.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="850" max-vertical-offset="2329">
+        <state relative-caret-position="1575">
           <caret line="105" column="29" selection-start-line="105" selection-start-column="29" selection-end-line="105" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/example.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-14.384615" vertical-offset="0" max-vertical-offset="1020">
-          <caret line="22" column="12" selection-start-line="22" selection-start-column="12" selection-end-line="22" selection-end-column="12" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dist/moco.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="27422" max-vertical-offset="28033">
-          <caret line="21" column="9" selection-start-line="21" selection-start-column="9" selection-end-line="21" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/EventCore.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="664" max-vertical-offset="1258">
-          <caret line="47" column="13" selection-start-line="47" selection-start-column="13" selection-end-line="47" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DisplayObject.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1225" max-vertical-offset="3689">
+        <state relative-caret-position="1395">
           <caret line="93" column="5" selection-start-line="93" selection-start-column="5" selection-end-line="93" selection-end-column="5" />
           <folding />
         </state>
@@ -696,9 +1147,135 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Shape.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="6.0084176" vertical-offset="1616" max-vertical-offset="5729">
+        <state relative-caret-position="147">
           <caret line="305" column="34" selection-start-line="305" selection-start-column="34" selection-end-line="305" selection-end-column="34" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Event.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/EventCore.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="705">
+          <caret line="47" column="13" selection-start-line="47" selection-start-column="13" selection-end-line="47" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/EventDispatcher.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="24" selection-start-line="9" selection-start-column="9" selection-end-line="9" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/babel-preset-es2015/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/load-grunt-tasks/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-20">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/grunt-babel/tasks/babel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="42" selection-start-line="8" selection-start-column="42" selection-end-line="8" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gruntfile.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="18" selection-start-line="17" selection-start-column="18" selection-end-line="17" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/example.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="9" selection-start-line="0" selection-start-column="0" selection-end-line="54" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dist/es6/EventDispatcher.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dist/es6/EventDispatcher.js.map">
+      <provider editor-type-id="sourcemapFileViewerProvider">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dist/Moco.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/es6/EventDispatcher.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="1" selection-start-line="4" selection-start-column="1" selection-end-line="4" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/es6/EventDispatcher.es">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" column="36" selection-start-line="16" selection-start-column="36" selection-end-line="16" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="795">
+          <caret line="53" column="19" selection-start-line="53" selection-start-column="19" selection-end-line="53" selection-end-column="19" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
