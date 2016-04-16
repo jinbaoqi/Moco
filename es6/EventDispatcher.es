@@ -258,3 +258,5 @@ class EventDispatcher {
 		return event;
 	}
 }
+
+Moco.EventDispatcher = EventDispatcher;

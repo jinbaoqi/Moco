@@ -22,16 +22,16 @@
     var wrap2 = document.getElementById("wrap2");
     var canvas = document.getElementById("canvas");
 
-   var dispatcher = new EventDispatcher();
+   var dispatcher = new Moco.EventDispatcher();
    dispatcher.on(wrap1,"click",function(){
     console.log("wrap1");
    },true);
    dispatcher.on(wrap2,"click",function(){
     console.log("wrap2");
    },true);
-   dispatcher.once(wrap2,"click",function(){
-    console.log("wrap2");
-   },false);
+   // dispatcher.once(wrap2,"click",function(){
+   //  console.log("wrap2");
+   // },false);
    dispatcher.on(canvas,"click",function(){
     console.log("canvas");
    },true); 

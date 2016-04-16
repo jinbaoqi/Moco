@@ -1,4 +1,4 @@
-'use strict';
+
 
 var fnRegExp = /\s+/g;
 var guid = 0;

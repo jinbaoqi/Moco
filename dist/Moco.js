@@ -1,5 +1,7 @@
 ;(function(window, undefined) {
-'use strict';
+var Moco = {};
+
+
 
 var fnRegExp = /\s+/g;
 var guid = 0;
@@ -30,7 +32,7 @@ if (!requestAnimationFrame || !cancelAnimationFrame) {
 var raf = requestAnimationFrame;
 var craf = cancelAnimationFrame;
 
-"use strict";
+
 
 var Util = {
 	isType: function isType(target, type) {
@@ -47,7 +49,7 @@ var Util = {
 	}
 };
 
-"use strict";
+
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -342,5 +344,9 @@ var EventDispatcher = function () {
 
 	return EventDispatcher;
 }();
+
+Moco.EventDispatcher = EventDispatcher;
+
+window.Moco = Moco;
 
 }(window, undefined));

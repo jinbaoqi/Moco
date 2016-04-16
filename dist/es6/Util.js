@@ -1,4 +1,4 @@
-"use strict";
+
 
 var Util = {
 	isType: function isType(target, type) {
