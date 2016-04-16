@@ -109,7 +109,18 @@ class EventDispatcher {
 
 		let fn = function(event) {
 			callback.call(_me, event);
-			_me.off(target, eventName, fn);
+			
+			if (event.isImmediatePropagationStopped()) {
+				_me.off(target, eventName, fn);
+			}
+
+			if (useCapture) {
+				if (event.eventPhase == 0) {
+					_me.off(target, eventName, fn);
+				}
+			} else {
+				_me.off(target, eventName, fn);
+			}
 		};
 
 		fn._fnStr = callback.toString().replace(fnRegExp, '');
@@ -146,17 +157,23 @@ class EventDispatcher {
 
 		ev = _me._fixEvent(ev);
 
+		ev.eventPhase = ev.eventPhase == null ? 1 : ev.eventPhase;
 		for (let i = 0, len = callbacks.length; i < len; i++) {
 			let item = callbacks[i];
+
+			if (!isCapture && ~~ev.target._captureList.indexOf(target)) {
+				ev.target._captureList.push(target);
+			}
+
 			if (ev.isImmediatePropagationStopped()) {
 				break;
 			} else {
 				item.call(_me, ev);
-				!isCapture && ev.target._captureList.push(target);
 			}
 		}
 
 		// 冒泡的模拟
+		ev.eventPhase = 2;
 		if (isPropagation) {
 			let parent = target.parentNode;
 			if (parent) {
@@ -165,6 +182,7 @@ class EventDispatcher {
 		}
 
 		// 捕获阶段的模拟
+		ev.eventPhase = 0;
 		if (isCapture && target == ev.target) {
 			let captureList = ev.target._captureList;
 			for (let i = captureList.length - 1; i >= 0; i--) {
