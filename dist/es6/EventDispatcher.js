@@ -7,9 +7,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var EventDispatcher = function () {
 	function EventDispatcher() {
 		_classCallCheck(this, EventDispatcher);
-
-		this.fnRegExp = /\s+/g;
-		this.guid = 0;
 	}
 
 	_createClass(EventDispatcher, [{
@@ -51,10 +48,10 @@ var EventDispatcher = function () {
 							}
 						};
 
-						fn._fnStr = callback._fntStr ? callback._fnStr : callback.toString().replace(_me.fnRegExp, '');
+						fn._fnStr = callback._fntStr ? callback._fnStr : callback.toString().replace(fnRegExp, '');
 						fn._callback = callback;
 						fn._useCapture = useCapture;
-						fn._guid = _me.guid++;
+						fn._guid = guid++;
 
 						if (!handlers) {
 							handlers = target._handlers = {};
@@ -109,7 +106,7 @@ var EventDispatcher = function () {
 					var _handlers = target._handlers;
 
 					if (_handlers) {
-						var fnStr = callback.fnStr ? callback.fnStr : callback.toString().replace(_me.fnRegExp, '');
+						var fnStr = callback.fnStr ? callback.fnStr : callback.toString().replace(fnRegExp, '');
 						var _callbacks2 = _handlers[eventName] ? _handlers[eventName] : [];
 
 						for (var i = _callbacks2.length - 1; i >= 0; i--) {
@@ -142,7 +139,7 @@ var EventDispatcher = function () {
 				_me.off(target, eventName, fn);
 			};
 
-			fn._fnStr = callback.toString().replace(_me.fnRegExp, '');
+			fn._fnStr = callback.toString().replace(fnRegExp, '');
 
 			return _me.on(target, eventName, fn, useCapture);
 		}

@@ -1,3 +1,35 @@
+;(function(window, undefined) {
+'use strict';
+
+var fnRegExp = /\s+/g;
+var guid = 0;
+
+var lastTime = 0;
+var vendors = ['webkit', 'moz'];
+var requestAnimationFrame = window.requestAnimationFrame;
+var cancelAnimationFrame = window.cancelAnimationFrame;
+var i = vendors.length;
+
+while (--i >= 0 && !requestAnimationFrame) {
+    requestAnimationFrame = window[vendors[i] + 'RequestAnimationFrame'];
+    cancelAnimationFrame = window[vendors[i] + 'CancelAnimationFrame'];
+}
+
+if (!requestAnimationFrame || !cancelAnimationFrame) {
+    requestAnimationFrame = function requestAnimationFrame(callback) {
+        var now = +new Date(),
+            nextTime = Math.max(lastTime + 16, now);
+        return setTimeout(function () {
+            callback(lastTime = nextTime);
+        }, nextTime - now);
+    };
+
+    cancelAnimationFrame = clearTimeout;
+}
+
+var raf = requestAnimationFrame;
+var craf = cancelAnimationFrame;
+
 "use strict";
 
 var Util = {
@@ -24,9 +56,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var EventDispatcher = function () {
 	function EventDispatcher() {
 		_classCallCheck(this, EventDispatcher);
-
-		this.fnRegExp = /\s+/g;
-		this.guid = 0;
 	}
 
 	_createClass(EventDispatcher, [{
@@ -68,10 +97,10 @@ var EventDispatcher = function () {
 							}
 						};
 
-						fn._fnStr = callback._fntStr ? callback._fnStr : callback.toString().replace(_me.fnRegExp, '');
+						fn._fnStr = callback._fntStr ? callback._fnStr : callback.toString().replace(fnRegExp, '');
 						fn._callback = callback;
 						fn._useCapture = useCapture;
-						fn._guid = _me.guid++;
+						fn._guid = guid++;
 
 						if (!handlers) {
 							handlers = target._handlers = {};
@@ -126,7 +155,7 @@ var EventDispatcher = function () {
 					var _handlers = target._handlers;
 
 					if (_handlers) {
-						var fnStr = callback.fnStr ? callback.fnStr : callback.toString().replace(_me.fnRegExp, '');
+						var fnStr = callback.fnStr ? callback.fnStr : callback.toString().replace(fnRegExp, '');
 						var _callbacks2 = _handlers[eventName] ? _handlers[eventName] : [];
 
 						for (var i = _callbacks2.length - 1; i >= 0; i--) {
@@ -159,7 +188,7 @@ var EventDispatcher = function () {
 				_me.off(target, eventName, fn);
 			};
 
-			fn._fnStr = callback.toString().replace(_me.fnRegExp, '');
+			fn._fnStr = callback.toString().replace(fnRegExp, '');
 
 			return _me.on(target, eventName, fn, useCapture);
 		}
@@ -313,3 +342,5 @@ var EventDispatcher = function () {
 
 	return EventDispatcher;
 }();
+
+}(window, undefined));

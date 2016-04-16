@@ -1,9 +1,4 @@
 class EventDispatcher {
-	constructor() {
-		this.fnRegExp = /\s+/g;
-		this.guid = 0;
-	}
-
 	on(target, eventName, callback, useCapture) {
 		let _me = this;
 
@@ -36,10 +31,10 @@ class EventDispatcher {
 					}
 				};
 
-				fn._fnStr = callback._fntStr ? callback._fnStr : callback.toString().replace(_me.fnRegExp, '');
+				fn._fnStr = callback._fntStr ? callback._fnStr : callback.toString().replace(fnRegExp, '');
 				fn._callback = callback;
 				fn._useCapture = useCapture;
-				fn._guid = _me.guid++;
+				fn._guid = guid++;
 
 				if (!handlers) {
 					handlers = target._handlers = {};
@@ -89,7 +84,7 @@ class EventDispatcher {
 				let handlers = target._handlers;
 
 				if (handlers) {
-					let fnStr = callback.fnStr ? callback.fnStr : callback.toString().replace(_me.fnRegExp, '');
+					let fnStr = callback.fnStr ? callback.fnStr : callback.toString().replace(fnRegExp, '');
 					let callbacks = handlers[eventName] ? handlers[eventName] : [];
 
 					for (let i = callbacks.length - 1; i >= 0; i--) {
@@ -117,7 +112,7 @@ class EventDispatcher {
 			_me.off(target, eventName, fn);
 		};
 
-		fn._fnStr = callback.toString().replace(_me.fnRegExp, '');
+		fn._fnStr = callback.toString().replace(fnRegExp, '');
 
 		return _me.on(target, eventName, fn, useCapture);
 	}
@@ -138,7 +133,7 @@ class EventDispatcher {
 		}
 
 		let callbacks = handlers[eventName] ? handlers[eventName] : [];
-		
+
 		//自定义事件trigger的时候需要修正target和currentTarget
 		let ev = event || {};
 		if (ev.target == null) {

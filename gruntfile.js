@@ -7,16 +7,20 @@ module.exports = function(grunt) {
             },
             dist: {
                 files: {
+                    "dist/es6/global.js": "es6/global.es",
                     "dist/es6/Util.js": "es6/Util.es",
-                    "dist/es6/EventDispatcher.js": "es6/EventDispatcher.es"
+                    "dist/es6/EventDispatcher.js": "es6/EventDispatcher.es",
                 }
             }
         },
         concat: {
             dist: {
                 src: [
+                    "es6/intro.es",
+                    "dist/es6/global.js",
                     "dist/es6/Util.js",
-                    "dist/es6/EventDispatcher.js"
+                    "dist/es6/EventDispatcher.js",
+                    "es6/outro.es"
                 ],
                 dest: 'dist/Moco.js'
             }
