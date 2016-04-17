@@ -10,6 +10,9 @@ module.exports = function(grunt) {
                     "dist/es6/global.js": "es6/global.es",
                     "dist/es6/Util.js": "es6/Util.es",
                     "dist/es6/EventDispatcher.js": "es6/EventDispatcher.es",
+                    "dist/es6/DisplayObject.js": "es6/DisplayObject.es",
+                    "dist/es6/DisplayObjectContainer.js": "es6/DisplayObjectContainer.es",
+                    "dist/es6/Stage.js": "es6/Stage.es"
                 }
             }
         },
@@ -20,6 +23,9 @@ module.exports = function(grunt) {
                     "dist/es6/global.js",
                     "dist/es6/Util.js",
                     "dist/es6/EventDispatcher.js",
+                    "dist/es6/DisplayObject.js",
+                    "dist/es6/DisplayObjectContainer.js",
+                    "dist/es6/Stage.js",
                     "es6/outro.es"
                 ],
                 dest: 'dist/Moco.js'

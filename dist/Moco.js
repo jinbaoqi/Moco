@@ -46,6 +46,26 @@ var Util = {
 				callback(arr[i], i, arr);
 			}
 		}
+	},
+	deg2rad: function deg2rad(deg) {
+		return deg * Math.PI / 180;
+	},
+	keys: function keys(obj) {
+		var keys = [];
+
+		if (obj) {
+			if (Object.keys) {
+				return Object.keys(obj);
+			} else {
+				for (var key in obj) {
+					if (obj.hasOwnProperty(key)) {
+						keys.push(key);
+					}
+				}
+			}
+		}
+
+		return keys;
 	}
 };
 
@@ -413,6 +433,305 @@ var EventDispatcher = function () {
 }();
 
 Moco.EventDispatcher = EventDispatcher;
+
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var DisplayObject = function (_EventDispatcher) {
+	_inherits(DisplayObject, _EventDispatcher);
+
+	function DisplayObject() {
+		_classCallCheck(this, DisplayObject);
+
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(DisplayObject).call(this));
+
+		_this.name = "DisplayObject";
+		_this.alpha = 1;
+		_this.height = 0;
+		_this.width = 0;
+		_this.mask = null;
+		_this.rotate = 0;
+		_this.translateX = 0;
+		_this.translateY = 0;
+		_this.scaleX = 1;
+		_this.scaleY = 1;
+		_this.parent = null;
+		_this.globalCompositeOperation = "";
+		_this.x = 0;
+		_this.y = 0;
+		_this.mouseX = 0;
+		_this.mouseY = 0;
+		_this.parent = null;
+		_this.visible = true;
+		_this.aIndex = _this.objectIndex = "" + guid++;
+		_this._isSaved = false;
+		return _this;
+	}
+
+	_createClass(DisplayObject, [{
+		key: "show",
+		value: function show(cord) {
+			var _me = this;
+			var canvas = _me.ctx || _me.stage.ctx;
+
+			if (!_me.visible) {
+				return;
+			}
+
+			if (_me.parent && _me.parent instanceof Stage) {
+				cord.ox = _me.x;
+				cord.oy = _me.y;
+			} else {
+				cord.x += _me.x;
+				cord.y += _me.y;
+			}
+
+			cord.scaleX *= _me.scaleX;
+			cord.scaleY *= _me.scaleY;
+
+			if (_me.mask != null && _me.mask.show || _me.alpha < 1 || _me.rotate != 0 || _me.scaleX != 1 || _me.scaleY != 1 || _me.translateX != 0 || _me.translateY != 0 || _me.globalCompositeOperation != "") {
+				_me._isSaved = true;
+				canvas.save();
+			}
+
+			if (_me.mask != null && _me.mask.show) {
+				_me.mask.show();
+				canvas.clip();
+			}
+
+			if (_me.alpha < 1) {
+				canvas.globalAlpha = _me.alpha > 1 ? 1 : _me.alpha;
+			}
+
+			if (_me.translateX != 0 || _me.translateY != 0) {
+				canvas.translate(_me.translateX, _me.translateY);
+			}
+
+			if (_me.scaleX != 1 || _me.scaleY != 1) {
+				canvas.scale(_me.scaleX, _me.scaleY);
+			}
+
+			if (_me.rotate != 0) {
+				var ox = cord.x + cord.ox / cord.scaleX;
+				var oy = cord.y + cord.oy / cord.scaleY;
+
+				canvas.translate(ox, oy);
+				canvas.rotate(Util.deg2rad(_me.rotate));
+				canvas.translate(-ox, -oy);
+			}
+		}
+	}, {
+		key: "dispose",
+		value: function dispose() {
+			var _me = this;
+			var eventNames = Util.keys(_me._handlers);
+
+			_me.off(eventNames);
+		}
+	}, {
+		key: "_getOffset",
+		value: function _getOffset() {
+			var _me = this;
+			var parents = [];
+			var parent = _me;
+			var offset = {
+				x: 0,
+				y: 0,
+				scaleX: 1,
+				scaleY: 1
+			};
+
+			while (parent) {
+				parents.push(parent);
+				parent = parent.parent;
+			}
+
+			for (i = parents.length - 1; i >= 0; i--) {
+				parent = parents[i];
+				offset = self._getActualOffset(offset, parent);
+			}
+
+			return offset;
+		}
+	}, {
+		key: "_getActualOffset",
+		value: function _getActualOffset(offset, parent) {
+			offset.scaleX *= parent.scaleX;
+			offset.scaleY *= parent.scaleY;
+
+			if (parent.parent instanceof Stage) {
+				offset.x += parent.x + parent.translateX;
+				offset.y += parent.y + parent.translateY;
+			} else {
+				offset.x += (parent.x + parent.translateX) * offset.scaleX;
+				offset.y += (parent.y + parent.translateY) * offset.scaleY;
+			}
+
+			return offset;
+		}
+	}]);
+
+	return DisplayObject;
+}(EventDispatcher);
+
+Moco.DisplayObject = DisplayObject;
+
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var DisplayObjectContainer = function (_DisplayObject) {
+	_inherits(DisplayObjectContainer, _DisplayObject);
+
+	function DisplayObjectContainer() {
+		_classCallCheck(this, DisplayObjectContainer);
+
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(DisplayObjectContainer).call(this));
+
+		_this.name = "DisplayObjectContainer";
+		_this._childList = [];
+		return _this;
+	}
+
+	_createClass(DisplayObjectContainer, [{
+		key: "addChild",
+		value: function addChild(obj) {
+			var _me = this;
+			if (obj instanceof DisplayObject) {
+				_me._childList.push(obj);
+				obj.parent = _me;
+				obj.objectIndex = _me.objectIndex + "." + _me._childList.length;
+			}
+		}
+	}, {
+		key: "removeChild",
+		value: function removeChild(obj) {
+			var _me = this;
+			if (obj instanceof DisplayObject) {
+				for (var i = _me._childList.length - 1; i >= 0; i--) {
+					var item = _me._childList[i];
+					if (item.aIndex == obj.aIndex) {
+						Array.prototype.splice.call(_me._childList, i, 1);
+					}
+				}
+			}
+		}
+	}, {
+		key: "getChildAt",
+		value: function getChildAt(index) {
+			var _me = this;
+			var len = self._childList.length;
+
+			if (Math.abs(index) > len) {
+				return;
+			} else if (index < 0) {
+				index = len + index;
+			}
+
+			return _me._childList[index];
+		}
+	}, {
+		key: "contains",
+		value: function contains(obj) {
+			var _me = this;
+			if (obj instanceof DisplayObject) {
+				return Util.inArray(_me._childList, obj, function (obj, item) {
+					return obj.aIndex == item.aIndex;
+				}) == -1 ? false : true;
+			}
+		}
+	}, {
+		key: "show",
+		value: function show() {
+			var _me = this;
+
+			if (cord == null) {
+				cord = {
+					x: 0,
+					y: 0,
+					scaleX: 1,
+					scaleY: 1
+				};
+			}
+
+			_get(Object.getPrototypeOf(DisplayObjectContainer.prototype), "show", this).call(this, cord);
+
+			for (var i = 0, len = _me._childList.length; i < len; i++) {
+				var item = _me._childList[i];
+				if (item.show) {
+					item.show(cord);
+				}
+			}
+		}
+	}]);
+
+	return DisplayObjectContainer;
+}(DisplayObject);
+
+Moco.DisplayObjectContainer = DisplayObjectContainer;
+
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Stage = function (_DisplayObjectContain) {
+	_inherits(Stage, _DisplayObjectContain);
+
+	function Stage() {
+		_classCallCheck(this, Stage);
+
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Stage).call(this));
+
+		_this.name = "Stage";
+		_this.domElem = document.getElementById(canvasId);
+		_this.ctx = _this.domElem.getContext("2d");
+		_this.width = parseFloat(_this.domElem.getAttribute("width"), 10);
+		_this.height = parseFloat(_this.domElem.getAttribute("height"), 10);
+		_this.offset = _this._getOffset(_this.domElem);
+		_this.x = _this.offset.left;
+		_this.y = _this.offset.top;
+
+		if (typeof fn == "function") {
+			fn(_this);
+		}
+
+		_this.initialize();
+		return _this;
+	}
+
+	_createClass(Stage, [{
+		key: "initialize",
+		value: function initialize() {}
+	}, {
+		key: "_getOffset",
+		value: function _getOffset(domElem) {}
+	}]);
+
+	return Stage;
+}(DisplayObjectContainer);
+
+Moco.Stage = Stage;
 
 window.Moco = Moco;
 

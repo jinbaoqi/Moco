@@ -11,4 +11,24 @@ let Util = {
 			}
 		}
 	},
+	deg2rad: (deg) => {
+		return deg * Math.PI / 180;
+	},
+	keys: (obj) => {
+		var keys = [];
+
+		if (obj) {
+			if (Object.keys) {
+				return Object.keys(obj);
+			} else {
+				for (var key in obj) {
+					if (obj.hasOwnProperty(key)) {
+						keys.push(key);
+					}
+				}
+			}
+		}
+
+		return keys;
+	}
 }

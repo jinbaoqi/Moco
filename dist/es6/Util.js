@@ -12,5 +12,25 @@ var Util = {
 				callback(arr[i], i, arr);
 			}
 		}
+	},
+	deg2rad: function deg2rad(deg) {
+		return deg * Math.PI / 180;
+	},
+	keys: function keys(obj) {
+		var keys = [];
+
+		if (obj) {
+			if (Object.keys) {
+				return Object.keys(obj);
+			} else {
+				for (var key in obj) {
+					if (obj.hasOwnProperty(key)) {
+						keys.push(key);
+					}
+				}
+			}
+		}
+
+		return keys;
 	}
 };
