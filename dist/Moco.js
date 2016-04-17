@@ -153,9 +153,13 @@ var Vec3 = function () {
 		key: "multiMatrix3",
 		value: function multiMatrix3(m) {
 			var matrix = m.getMatrix();
-			this.x = this.x * matrix[0] + this.y * matrix[3] + this.z * matrix[6];
-			this.y = this.x * matrix[1] + this.y * matrix[4] + this.z * matrix[7];
-			this.z = this.x * matrix[2] + this.y * matrix[5] + this.z * matrix[8];
+			var x = this.x;
+			var y = this.y;
+			var z = this.z;
+
+			this.x = x * matrix[0] + y * matrix[3] + z * matrix[6];
+			this.y = x * matrix[1] + y * matrix[4] + z * matrix[7];
+			this.z = x * matrix[2] + y * matrix[5] + z * matrix[8];
 			return this;
 		}
 	}]);

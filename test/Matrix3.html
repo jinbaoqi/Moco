@@ -48,37 +48,38 @@
           body.appendChild(obj);
           tmp.push({
             domElem: obj,
-            vec: new Moco.Vec3(t,l,1)
+            vec: new Moco.Vec3(l,t,1)
           });
       }
     }
 
-    // var translation = Moco.Matrix3.translation(100,50);
-    // for(var i = 0,len = tmp.length; i < len; i++){
-    //     var obj = tmp[i].domElem;
-    //     var vec = tmp[i].vec;
-    //     vec.multiMatrix3(translation);
-    //     obj.style.top = vec.y+"px";
-    //     obj.style.left = vec.x+"px";
-    // }
-    //},100);
+    var translation = Moco.Matrix3.translation(100,50);
+    for(var i = 0,len = tmp.length; i < len; i++){
+        var obj = tmp[i].domElem;
+        var vec = tmp[i].vec;
+        vec.multiMatrix3(translation);
+        obj.style.top = vec.y+"px";
+        obj.style.left = vec.x+"px";
+    }
 
-
+    var deg = 0;
+    setInterval(function(){
+      deg+=10;
+      var rotate = Moco.Matrix3.rotation(deg);
+      for(var i = 0,len = tmp.length; i < len; i++){
+          var obj = tmp[i].domElem;
+          var vec = Moco.Vec3.clone(tmp[i].vec);
+          vec.multiMatrix3(rotate);
+          obj.style.top = vec.y+"px";
+          obj.style.left = vec.x+"px";
+      }
+    },100);
 
     var scaling = Moco.Matrix3.scaling(0.5,0.5);
      for(var i = 0,len = tmp.length; i < len; i++){
         var obj = tmp[i].domElem;
         var vec = tmp[i].vec;
         vec.multiMatrix3(scaling);
-        obj.style.top = vec.y+"px";
-        obj.style.left = vec.x+"px";
-    }
-    
-    var rotate = Moco.Matrix3.rotation(45);
-    for(var i = 0,len = tmp.length; i < len; i++){
-        var obj = tmp[i].domElem;
-        var vec = tmp[i].vec;
-        vec.multiMatrix3(rotate);
         obj.style.top = vec.y+"px";
         obj.style.left = vec.x+"px";
     }
