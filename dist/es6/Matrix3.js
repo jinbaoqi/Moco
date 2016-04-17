@@ -182,7 +182,7 @@ Matrix3.inverse = function (m) {
 	var a21 = matrix[7];
 	var a22 = matrix[8];
 
-	var deter = a00 * a11 * a22 + a01 * a12 * a20 - a02 * a10 * a20 - a01 * a10 * a22 - a00 * a12 * a21;
+	var deter = a00 * a11 * a22 + a01 * a12 * a20 + a02 * a10 * a21 - a02 * a11 * a20 - a01 * a10 * a22 - a00 * a12 * a21;
 
 	var c00 = (a11 * a22 - a21 * a12) / deter;
 	var c01 = -(a10 * a22 - a20 * a12) / deter;
@@ -196,7 +196,11 @@ Matrix3.inverse = function (m) {
 	var c21 = -(a00 * a12 - a10 * a02) / deter;
 	var c22 = (a00 * a11 - a10 * a01) / deter;
 
-	return new Matrix3([c00, c01, c02, c10, c11, c12, c20, c21, c22]);
+	matrix = new Matrix3([c00, c01, c02, c10, c11, c12, c20, c21, c22]);
+
+	Matrix3.transpose(matrix);
+
+	return matrix;
 };
 
 Moco.Matrix3 = Matrix3;

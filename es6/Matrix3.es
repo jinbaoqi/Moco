@@ -141,17 +141,16 @@ Matrix3.rotation = (angle) => {
 	let cosa = Math.cos(angle * Math.PI / 180);
 	let sina = Math.sin(angle * Math.PI / 180);
 	return new Matrix3([
-		cosa, 	sina, 	0, 
-		-sina, 	cosa, 	0,
-		0, 		0, 		1
+		cosa, sina, 0, -sina, cosa, 0,
+		0, 0, 1
 	]);
 };
 
 Matrix3.scaling = (scaleX, scaleY) => {
 	return new Matrix3([
-		scaleX, 0, 		0,
-		0, 		scaleY, 0,
-		0, 		0, 		1
+		scaleX, 0, 0,
+		0, scaleY, 0,
+		0, 0, 1
 	]);
 };
 
@@ -189,7 +188,7 @@ Matrix3.inverse = (m) => {
 	let a21 = matrix[7];
 	let a22 = matrix[8];
 
-	let deter = a00 * a11 * a22 + a01 * a12 * a20 - a02 * a10 * a20 - a01 * a10 * a22 - a00 * a12 * a21;
+	let deter = a00 * a11 * a22 + a01 * a12 * a20 + a02 * a10 * a21 - a02 * a11 * a20 - a01 * a10 * a22 - a00 * a12 * a21;
 
 	let c00 = (a11 * a22 - a21 * a12) / deter;
 	let c01 = -(a10 * a22 - a20 * a12) / deter;
@@ -203,11 +202,15 @@ Matrix3.inverse = (m) => {
 	let c21 = -(a00 * a12 - a10 * a02) / deter;
 	let c22 = (a00 * a11 - a10 * a01) / deter;
 
-	return new Matrix3([
+	matrix = new Matrix3([
 		c00, c01, c02,
 		c10, c11, c12,
 		c20, c21, c22
 	]);
+
+	Matrix3.transpose(matrix);
+	
+	return matrix;
 };
 
 Moco.Matrix3 = Matrix3;
