@@ -18,33 +18,33 @@
     </div>
 </div>
 <script>
-    var wrap1 = document.getElementById("wrap1");
-    var wrap2 = document.getElementById("wrap2");
-    var canvas = document.getElementById("canvas");
+   //  var wrap1 = document.getElementById("wrap1");
+   //  var wrap2 = document.getElementById("wrap2");
+   //  var canvas = document.getElementById("canvas");
 
-   var dispatcher = new Moco.EventDispatcher();
-   dispatcher.on(wrap1,"click",function(ev){
-    console.log("wrap1 useCapture");
-   },true);
-   dispatcher.on(wrap1,"click",function(ev){
-    console.log("wrap1 propagation");
-   },true);
-   dispatcher.on(wrap2,"click",function(ev){
-    console.log("wrap2 propagation");
-    ev.stopPropagation();
-   },false);
-   dispatcher.on(wrap2,"click",function(ev){
-    console.log("wrap211 propagation");
-   },false);
-   dispatcher.on(canvas,"click",function(ev){
-    console.log("canvas useCapture");
-   },true); 
-   dispatcher.on(canvas,"click",function(ev){
-    console.log("canvas propagation");
-   },false); 
+   // var dispatcher = new Moco.EventDispatcher();
+   // dispatcher.on(wrap1,"click",function(ev){
+   //  console.log("wrap1 useCapture");
+   // },true);
+   // dispatcher.on(wrap1,"click",function(ev){
+   //  console.log("wrap1 propagation");
+   // },true);
+   // dispatcher.on(wrap2,"click",function(ev){
+   //  console.log("wrap2 propagation");
+   //  ev.stopPropagation();
+   // },false);
+   // dispatcher.on(wrap2,"click",function(ev){
+   //  console.log("wrap211 propagation");
+   // },false);
+   // dispatcher.on(canvas,"click",function(ev){
+   //  console.log("canvas useCapture");
+   // },true); 
+   // dispatcher.on(canvas,"click",function(ev){
+   //  console.log("canvas propagation");
+   // },false); 
 
 
-   dispatcher.trigger(canvas,"click",{});
+   // dispatcher.trigger(canvas,"click",{});
 
    // var dispatcher = new Moco.EventDispatcher();
    // var obj = {};
