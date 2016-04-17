@@ -21,6 +21,7 @@ class DisplayObject extends EventDispatcher {
 		this.visible = true;
 		this.aIndex = this.objectIndex = "" + (guid++);
 		this._isSaved = false;
+		this._matrix = new Matrix3();
 	}
 
 	show(cord) {
@@ -31,7 +32,7 @@ class DisplayObject extends EventDispatcher {
 			return;
 		}
 
-		if (_me.parent && _me.parent instanceof(Stage)) {
+		if (_me.parent && _me.parent instanceof Stage) {
 			cord.ox = _me.x;
 			cord.oy = _me.y;
 		} else {
@@ -69,17 +70,12 @@ class DisplayObject extends EventDispatcher {
 			canvas.translate(_me.translateX, _me.translateY);
 		}
 
-		if (_me.scaleX != 1 || _me.scaleY != 1) {
-			canvas.scale(_me.scaleX, _me.scaleY);
+		if (_me.rotate != 0) {
+			canvas.rotate(Util.deg2rad(_me.rotate));
 		}
 
-		if (_me.rotate != 0) {
-			let ox = cord.x + cord.ox / cord.scaleX;
-			let oy = cord.y + cord.oy / cord.scaleY;
-
-			canvas.translate(ox, oy);
-			canvas.rotate(Util.deg2rad(_me.rotate));
-			canvas.translate(-ox, -oy);
+		if (_me.scaleX != 1 || _me.scaleY != 1) {
+			canvas.scale(_me.scaleX, _me.scaleY);
 		}
 	}
 
@@ -88,45 +84,6 @@ class DisplayObject extends EventDispatcher {
 		let eventNames = Util.keys(_me._handlers);
 
 		_me.off(eventNames);
-	}
-
-	_getOffset() {
-		let _me = this;
-		let parents = [];
-		let parent = _me;
-		let offset = {
-			x: 0,
-			y: 0,
-			scaleX: 1,
-			scaleY: 1
-		};
-
-		while (parent) {
-			parents.push(parent);
-			parent = parent.parent;
-		}
-
-		for (i = parents.length - 1; i >= 0; i--) {
-			parent = parents[i];
-			offset = self._getActualOffset(offset, parent);
-		}
-
-		return offset;
-	}
-
-	_getActualOffset(offset, parent) {
-		offset.scaleX *= parent.scaleX;
-		offset.scaleY *= parent.scaleY;
-
-		if (parent.parent instanceof Stage) {
-			offset.x += parent.x + parent.translateX;
-			offset.y += parent.y + parent.translateY;
-		} else {
-			offset.x += (parent.x + parent.translateX) * offset.scaleX;
-			offset.y += (parent.y + parent.translateY) * offset.scaleY;
-		}
-
-		return offset;
 	}
 }
 

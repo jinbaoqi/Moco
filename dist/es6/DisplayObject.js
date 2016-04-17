@@ -36,6 +36,7 @@ var DisplayObject = function (_EventDispatcher) {
 		_this.visible = true;
 		_this.aIndex = _this.objectIndex = "" + guid++;
 		_this._isSaved = false;
+		_this._matrix = new Matrix3();
 		return _this;
 	}
 
@@ -78,17 +79,12 @@ var DisplayObject = function (_EventDispatcher) {
 				canvas.translate(_me.translateX, _me.translateY);
 			}
 
-			if (_me.scaleX != 1 || _me.scaleY != 1) {
-				canvas.scale(_me.scaleX, _me.scaleY);
+			if (_me.rotate != 0) {
+				canvas.rotate(Util.deg2rad(_me.rotate));
 			}
 
-			if (_me.rotate != 0) {
-				var ox = cord.x + cord.ox / cord.scaleX;
-				var oy = cord.y + cord.oy / cord.scaleY;
-
-				canvas.translate(ox, oy);
-				canvas.rotate(Util.deg2rad(_me.rotate));
-				canvas.translate(-ox, -oy);
+			if (_me.scaleX != 1 || _me.scaleY != 1) {
+				canvas.scale(_me.scaleX, _me.scaleY);
 			}
 		}
 	}, {
@@ -98,47 +94,6 @@ var DisplayObject = function (_EventDispatcher) {
 			var eventNames = Util.keys(_me._handlers);
 
 			_me.off(eventNames);
-		}
-	}, {
-		key: "_getOffset",
-		value: function _getOffset() {
-			var _me = this;
-			var parents = [];
-			var parent = _me;
-			var offset = {
-				x: 0,
-				y: 0,
-				scaleX: 1,
-				scaleY: 1
-			};
-
-			while (parent) {
-				parents.push(parent);
-				parent = parent.parent;
-			}
-
-			for (i = parents.length - 1; i >= 0; i--) {
-				parent = parents[i];
-				offset = self._getActualOffset(offset, parent);
-			}
-
-			return offset;
-		}
-	}, {
-		key: "_getActualOffset",
-		value: function _getActualOffset(offset, parent) {
-			offset.scaleX *= parent.scaleX;
-			offset.scaleY *= parent.scaleY;
-
-			if (parent.parent instanceof Stage) {
-				offset.x += parent.x + parent.translateX;
-				offset.y += parent.y + parent.translateY;
-			} else {
-				offset.x += (parent.x + parent.translateX) * offset.scaleX;
-				offset.y += (parent.y + parent.translateY) * offset.scaleY;
-			}
-
-			return offset;
 		}
 	}]);
 

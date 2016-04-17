@@ -9,6 +9,8 @@ module.exports = function(grunt) {
                 files: {
                     "dist/es6/global.js": "es6/global.es",
                     "dist/es6/Util.js": "es6/Util.es",
+                    "dist/es6/Vec3.js": "es6/Vec3.es",
+                    "dist/es6/Matrix3.js": "es6/Matrix3.es",
                     "dist/es6/EventDispatcher.js": "es6/EventDispatcher.es",
                     "dist/es6/DisplayObject.js": "es6/DisplayObject.es",
                     "dist/es6/DisplayObjectContainer.js": "es6/DisplayObjectContainer.es",
@@ -22,6 +24,8 @@ module.exports = function(grunt) {
                     "es6/intro.es",
                     "dist/es6/global.js",
                     "dist/es6/Util.js",
+                    "dist/es6/Vec3.js",
+                    "dist/es6/Matrix3.js",
                     "dist/es6/EventDispatcher.js",
                     "dist/es6/DisplayObject.js",
                     "dist/es6/DisplayObjectContainer.js",
