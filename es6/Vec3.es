@@ -61,6 +61,14 @@ class Vec3 {
 		this.add(clone);
 		return this;
 	}
+
+	multiMatrix3(m) {
+		let matrix = m.getMatrix();
+		this.x = this.x * matrix[0] + this.y * matrix[3] + this.z * matrix[6];
+		this.y = this.x * matrix[1] + this.y * matrix[4] + this.z * matrix[7];
+		this.z = this.x * matrix[2] + this.y * matrix[5] + this.z * matrix[8];
+		return this;
+	}
 }
 
 Vec3.zero = () => {
@@ -76,6 +84,18 @@ Vec3.angle = (v1, v2) => {
 	let c2 = Vec3.clone(v2);
 	let rad = c1.multi(c2) / (v1.distance() * v2.distance());
 	return Math.acos(rad);
+};
+
+Vec3.equal = (v1, v2) => {
+	return v1.x == v2.x && v1.y == v2.y && v1.z == v2.z;
+};
+
+Vec3.crossProduct = (v1, v2) => {
+	return new Vec3(
+		v1.y * v2.z - v1.z * v2.y,
+		v1.z * v2.x - v1.x * v2.z,
+		v1.x * v2.y - v1.y * v2.x
+	);
 };
 
 Vec3.proj = (v1, v2) => {
