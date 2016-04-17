@@ -14,8 +14,6 @@ class EventDispatcher {
 					_me.on(item, callback, useCapture);
 				});
 			} else {
-				target._useCapture = target._useCapture | useCapture;
-
 				let handlers = target._handlers;
 				let fn = (event) => {
 					let callbacks = handlers[eventName];
@@ -109,7 +107,7 @@ class EventDispatcher {
 
 		let fn = function(event) {
 			callback.call(_me, event);
-			
+
 			if (event.isImmediatePropagationStopped()) {
 				_me.off(target, eventName, fn);
 			}
@@ -128,13 +126,13 @@ class EventDispatcher {
 		return _me.on(target, eventName, fn, useCapture);
 	}
 
-	trigger(target, eventName, event, isPropagation, isCapture) {
+	trigger(target, eventName, event) {
 		let _me = this;
 
 		if (!target && !eventName) {
 			return;
 		} else if (typeof target == "string") {
-			[target, eventName, event, isDeep, isCapture] = [_me, target, eventName, event, isDeep];
+			[target, eventName, event] = [_me, target, eventName];
 		}
 
 		let handlers = target && target._handlers;
@@ -151,21 +149,67 @@ class EventDispatcher {
 			ev.target = ev.currentTarget = target;
 		}
 
-		if (ev.target._captureList == null) {
-			ev.target._captureList = [];
-		}
-
 		ev = _me._fixEvent(ev);
 
-		ev.eventPhase = ev.eventPhase == null ? 1 : ev.eventPhase;
-		for (let i = 0, len = callbacks.length; i < len; i++) {
-			let item = callbacks[i];
+		// 此处分开冒泡阶段函数和捕获阶段函数
+		let parent = null;
+		let handlerList = {
+			propagations: [],
+			useCaptures: []
+		};
 
-			if (!isCapture && ~~ev.target._captureList.indexOf(target)) {
-				ev.target._captureList.push(target);
+		if (parent = target.parentNode) {
+			while (parent) {
+				let handlers = null;
+				if (handlers = parent._handlers) {
+					let callbacks = handlers[eventName] ? handlers[eventName] : [];
+					for (let i = 0, len = callbacks.length; i < len; i++) {
+						let useCapture = callbacks[i]._useCapture;
+						if (!useCapture) {
+							handlerList.propagations.push({
+								target: parent,
+								callback: callbacks[i]
+							});
+						} else {
+							handlerList.useCaptures.push({
+								target: parent,
+								callback: callbacks[i]
+							});
+						}
+					}
+				}
+				parent = parent.parentNode;
+			}
+		}
+
+		// 捕获阶段的模拟
+		let useCaptures = handlerList.useCaptures;
+		let prevTarget = null;
+		ev.eventPhase = 0;
+		for (let i = 0, len = useCaptures.length; i < len; i++) {
+			let handler = useCaptures[i];
+			target = handler.target;
+			if (ev.isImmediatePropagationStopped()) {
+				break;
+			} else if (prevTarget == target && ev.isPropagationStopped()) {
+				handler.callback.call(_me, ev);
+			} else {
+				handler.callback.call(_me, ev);
+				prevTarget = target;
 			}
 
-			if (ev.isImmediatePropagationStopped()) {
+		}
+
+		let isUseCapturePhaseStopped = false;
+		if (useCaptures.length) {
+			isUseCapturePhaseStopped = ev.isImmediatePropagationStopped() || ev.isPropagationStopped();
+		}
+
+		// 目标阶段
+		ev.eventPhase = 1;
+		for (let i = 0, len = callbacks.length; i < len; i++) {
+			let item = callbacks[i];
+			if (isUseCapturePhaseStopped) {
 				break;
 			} else {
 				item.call(_me, ev);
@@ -173,27 +217,35 @@ class EventDispatcher {
 		}
 
 		// 冒泡的模拟
+		let propagations = handlerList.propagations;
+		prevTarget = null;
 		ev.eventPhase = 2;
-		if (isPropagation) {
-			let parent = target.parentNode;
-			if (parent) {
-				_me.trigger(parent, eventName, ev, true, false);
-			}
-		}
-
-		// 捕获阶段的模拟
-		ev.eventPhase = 0;
-		if (isCapture && target == ev.target) {
-			let captureList = ev.target._captureList;
-			for (let i = captureList.length - 1; i >= 0; i--) {
-				let target = captureList[i];
-				if (target._useCapture) {
-					_me.trigger(target, eventName, ev, false, true);
+		for (let i = 0, len = propagations.length; i < len; i++) {
+			let handler = propagations[i];
+			target = handler.target;
+			ev.target = target;
+			if (isUseCapturePhaseStopped) {
+				if (ev.isImmediatePropagationStopped() || ev.isPropagationStopped()) {
+					break;
+				} else {
+					handler.callback.call(_me, ev);
+					prevTarget = target;
+				}
+			} else {
+				if (ev.isImmediatePropagationStopped()) {
+					break;
+				} else if (ev.isPropagationStopped()) {
+					if (prevTarget == target) {
+						handler.callback.call(_me, ev);
+					} else {
+						break;
+					}
+				} else {
+					handler.callback.call(_me, ev);
+					prevTarget = target;
 				}
 			}
 		}
-
-		return _me;
 	}
 
 	_fixEvent(event) {
