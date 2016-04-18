@@ -1,25 +1,25 @@
-class DisplayObjectContainer extends DisplayObject {
+class DisplayObjectContainer extends InteractiveObject {
 	constructor() {
 		super();
 		this.name = "DisplayObjectContainer";
 		this._childList = [];
 	}
 
-	addChild(obj) {
+	addChild(child) {
 		let _me = this;
-		if (obj instanceof(DisplayObject)) {
-			_me._childList.push(obj);
-			obj.parent = _me;
-			obj.objectIndex = _me.objectIndex + "." + _me._childList.length;
+		if (child instanceof(DisplayObject)) {
+			_me._childList.push(child);
+			child.parent = _me;
+			child.objectIndex = _me.objectIndex + "." + _me._childList.length;
 		}
 	}
 
-	removeChild(obj) {
+	removeChild(child) {
 		let _me = this;
-		if (obj instanceof(DisplayObject)) {
+		if (child instanceof(DisplayObject)) {
 			for (let i = _me._childList.length - 1; i >= 0; i--) {
 				let item = _me._childList[i];
-				if (item.aIndex == obj.aIndex) {
+				if (item.aIndex == child.aIndex) {
 					Array.prototype.splice.call(_me._childList, i, 1);
 				}
 			}
@@ -39,33 +39,29 @@ class DisplayObjectContainer extends DisplayObject {
 		return _me._childList[index];
 	}
 
-	contains(obj) {
+	contains(child) {
 		let _me = this;
-		if (obj instanceof DisplayObject) {
-			return Util.inArray(_me._childList, obj, function(obj, item) {
-				return obj.aIndex == item.aIndex;
+		if (child instanceof DisplayObject) {
+			return Util.inArray(_me._childList, child, function(child, item) {
+				return child.aIndex == item.aIndex;
 			}) == -1 ? false : true;
 		}
 	}
 
-	show() {
+	show(matrix) {
 		let _me = this;
 
-		if (cord == null) {
-			cord = {
-				x: 0,
-				y: 0,
-				scaleX: 1,
-				scaleY: 1
-			};
+		// if this is a top container, matrix base on the itself
+		if (matrix == null) {
+			matrix = Matrix3.clone(_me._matrix);
 		}
 
-		super.show(cord);
+		super.show(matrix);
 
 		for (let i = 0, len = _me._childList.length; i < len; i++) {
 			let item = _me._childList[i];
 			if (item.show) {
-				item.show(cord);
+				item.show(Matrix3.clone(matrix));
 			}
 		}
 	}

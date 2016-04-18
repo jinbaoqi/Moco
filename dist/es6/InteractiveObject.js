@@ -10,88 +10,65 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var DisplayObjectContainer = function (_InteractiveObject) {
-	_inherits(DisplayObjectContainer, _InteractiveObject);
+var InteractiveObject = function (_DisplayObject) {
+	_inherits(InteractiveObject, _DisplayObject);
 
-	function DisplayObjectContainer() {
-		_classCallCheck(this, DisplayObjectContainer);
+	function InteractiveObject() {
+		_classCallCheck(this, InteractiveObject);
 
-		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(DisplayObjectContainer).call(this));
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(InteractiveObject).call(this));
 
-		_this.name = "DisplayObjectContainer";
-		_this._childList = [];
+		_this.name = "InteractiveObject";
+		_this._isInMouseList = false;
+		_this._isInKeyboardList = false;
 		return _this;
 	}
 
-	_createClass(DisplayObjectContainer, [{
-		key: "addChild",
-		value: function addChild(child) {
+	_createClass(InteractiveObject, [{
+		key: "on",
+		value: function on(eventName, callback, useCapture) {
 			var _me = this;
-			if (child instanceof DisplayObject) {
-				_me._childList.push(child);
-				child.parent = _me;
-				child.objectIndex = _me.objectIndex + "." + _me._childList.length;
-			}
-		}
-	}, {
-		key: "removeChild",
-		value: function removeChild(child) {
-			var _me = this;
-			if (child instanceof DisplayObject) {
-				for (var i = _me._childList.length - 1; i >= 0; i--) {
-					var item = _me._childList[i];
-					if (item.aIndex == child.aIndex) {
-						Array.prototype.splice.call(_me._childList, i, 1);
-					}
-				}
-			}
-		}
-	}, {
-		key: "getChildAt",
-		value: function getChildAt(index) {
-			var _me = this;
-			var len = self._childList.length;
+			var isMouseEvent = ~Util.inArray(eventName, MouseEvent.nameList);
+			var isKeyboardEvent = ~Util.inArray(eventName, KeyboardEvent.nameList);
 
-			if (Math.abs(index) > len) {
+			if (!isMouseEvent && !isKeyboardEvent || isMouseEvent && _me._inMouseList || isKeyboardEvent && _me._inKeyboardList) {
 				return;
-			} else if (index < 0) {
-				index = len + index;
+			} else if (isMouseEvent) {
+				MouseEvent.add(_me);
+				_me._isInMouseList = true;
+			} else if (isKeyboardEvent) {
+				KeyboardEvent.add(_me);
+				_me._isInKeyboardList = true;
 			}
 
-			return _me._childList[index];
+			_get(Object.getPrototypeOf(InteractiveObject.prototype), "on", this).call(this, eventName, callback, useCapture);
 		}
 	}, {
-		key: "contains",
-		value: function contains(child) {
+		key: "off",
+		value: function off(eventName, callback) {
 			var _me = this;
-			if (child instanceof DisplayObject) {
-				return Util.inArray(_me._childList, child, function (child, item) {
-					return child.aIndex == item.aIndex;
-				}) == -1 ? false : true;
-			}
-		}
-	}, {
-		key: "show",
-		value: function show(matrix) {
-			var _me = this;
+			var isMouseEvent = ~Util.inArray(eventName, MouseEvent.nameList);
+			var isKeyboardEvent = ~Util.inArray(eventName, KeyBoardEvent.nameList);
 
-			// if this is a top container, matrix base on the itself
-			if (matrix == null) {
-				matrix = Matrix3.clone(_me._matrix);
+			if (!isMouseEvent && !isKeyboardEvent) {
+				return;
 			}
 
-			_get(Object.getPrototypeOf(DisplayObjectContainer.prototype), "show", this).call(this, matrix);
+			_get(Object.getPrototypeOf(InteractiveObject.prototype), "off", this).call(this, eventName, callback);
 
-			for (var i = 0, len = _me._childList.length; i < len; i++) {
-				var item = _me._childList[i];
-				if (item.show) {
-					item.show(Matrix3.clone(matrix));
+			if (!Util.keys(_me.handlers).length) {
+				if (isMouseEvent) {
+					MouseEvent.remove(_me);
+					_me._isInMouseList = true;
+				} else if (isKeyboardEvent) {
+					KeyBoardEvent.remove(_me);
+					_me._isInKeyboardList = true;
 				}
 			}
 		}
 	}]);
 
-	return DisplayObjectContainer;
-}(InteractiveObject);
+	return InteractiveObject;
+}(DisplayObject);
 
-Moco.DisplayObjectContainer = DisplayObjectContainer;
+Moco.InteractiveObject = InteractiveObject;

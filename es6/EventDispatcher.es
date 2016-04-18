@@ -14,7 +14,7 @@ class EventDispatcher {
 					_me.on(item, callback, useCapture);
 				});
 			} else {
-				let handlers = target._handlers;
+				let handlers = target.handlers;
 				let fn = (event) => {
 					let callbacks = handlers[eventName];
 					let ev = _me._fixEvent(event);
@@ -35,7 +35,7 @@ class EventDispatcher {
 				fn._guid = guid++;
 
 				if (!handlers) {
-					handlers = target._handlers = {};
+					handlers = target.handlers = {};
 				}
 
 				if (!handlers[eventName]) {
@@ -70,7 +70,7 @@ class EventDispatcher {
 					_me.off(target, item, callback);
 				});
 			} else if (!callback) {
-				let handlers = target._handlers;
+				let handlers = target.handlers;
 
 				if (handlers) {
 					let callbacks = handlers[eventName] ? handlers[eventName] : [];
@@ -79,7 +79,7 @@ class EventDispatcher {
 					});
 				}
 			} else {
-				let handlers = target._handlers;
+				let handlers = target.handlers;
 
 				if (handlers) {
 					let fnStr = callback.fnStr ? callback.fnStr : callback.toString().replace(fnRegExp, '');
@@ -135,7 +135,7 @@ class EventDispatcher {
 			[target, eventName, event] = [_me, target, eventName];
 		}
 
-		let handlers = target && target._handlers;
+		let handlers = target && target.handlers;
 
 		if (!handlers) {
 			return _me;
@@ -161,7 +161,7 @@ class EventDispatcher {
 		if (parent = target.parentNode) {
 			while (parent) {
 				let handlers = null;
-				if (handlers = parent._handlers) {
+				if (handlers = parent.handlers) {
 					let callbacks = handlers[eventName] ? handlers[eventName] : [];
 					for (let i = 0, len = callbacks.length; i < len; i++) {
 						let useCapture = callbacks[i]._useCapture;

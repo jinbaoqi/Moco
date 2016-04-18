@@ -1,4 +1,4 @@
-
+"use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -31,7 +31,7 @@ var EventDispatcher = function () {
 					});
 				} else {
 					(function () {
-						var handlers = target._handlers;
+						var handlers = target.handlers;
 						var fn = function fn(event) {
 							var callbacks = handlers[eventName];
 							var ev = _me._fixEvent(event);
@@ -52,7 +52,7 @@ var EventDispatcher = function () {
 						fn._guid = guid++;
 
 						if (!handlers) {
-							handlers = target._handlers = {};
+							handlers = target.handlers = {};
 						}
 
 						if (!handlers[eventName]) {
@@ -92,25 +92,25 @@ var EventDispatcher = function () {
 						_me.off(target, item, callback);
 					});
 				} else if (!callback) {
-					var handlers = target._handlers;
+					var handlers = target.handlers;
 
 					if (handlers) {
-						var _callbacks = handlers[eventName] ? handlers[eventName] : [];
-						Util.each(_callbacks, function (item) {
+						var callbacks = handlers[eventName] ? handlers[eventName] : [];
+						Util.each(callbacks, function (item) {
 							_me.off(target, eventName, item);
 						});
 					}
 				} else {
-					var _handlers = target._handlers;
+					var _handlers = target.handlers;
 
 					if (_handlers) {
 						var fnStr = callback.fnStr ? callback.fnStr : callback.toString().replace(fnRegExp, '');
-						var _callbacks2 = _handlers[eventName] ? _handlers[eventName] : [];
+						var _callbacks = _handlers[eventName] ? _handlers[eventName] : [];
 
-						for (var i = _callbacks2.length - 1; i >= 0; i--) {
-							var item = _callbacks2[i];
+						for (var i = _callbacks.length - 1; i >= 0; i--) {
+							var item = _callbacks[i];
 							if (item._fnStr == fnStr) {
-								Array.prototype.splice.call(_callbacks2, i, 1);
+								Array.prototype.splice.call(_callbacks, i, 1);
 							}
 						}
 					}
@@ -166,7 +166,7 @@ var EventDispatcher = function () {
 				event = _ref4[2];
 			}
 
-			var handlers = target && target._handlers;
+			var handlers = target && target.handlers;
 
 			if (!handlers) {
 				return _me;
@@ -192,19 +192,19 @@ var EventDispatcher = function () {
 			if (parent = target.parentNode) {
 				while (parent) {
 					var _handlers2 = null;
-					if (_handlers2 = parent._handlers) {
-						var _callbacks3 = _handlers2[eventName] ? _handlers2[eventName] : [];
-						for (var i = 0, len = _callbacks3.length; i < len; i++) {
-							var useCapture = _callbacks3[i]._useCapture;
+					if (_handlers2 = parent.handlers) {
+						var _callbacks2 = _handlers2[eventName] ? _handlers2[eventName] : [];
+						for (var i = 0, len = _callbacks2.length; i < len; i++) {
+							var useCapture = _callbacks2[i]._useCapture;
 							if (!useCapture) {
 								handlerList.propagations.push({
 									target: parent,
-									callback: _callbacks3[i]
+									callback: _callbacks2[i]
 								});
 							} else {
 								handlerList.useCaptures.push({
 									target: parent,
-									callback: _callbacks3[i]
+									callback: _callbacks2[i]
 								});
 							}
 						}

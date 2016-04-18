@@ -7,8 +7,6 @@ class DisplayObject extends EventDispatcher {
 		this.width = 0;
 		this.mask = null;
 		this.rotate = 0;
-		this.translateX = 0;
-		this.translateY = 0;
 		this.scaleX = 1;
 		this.scaleY = 1;
 		this.parent = null;
@@ -21,27 +19,16 @@ class DisplayObject extends EventDispatcher {
 		this.visible = true;
 		this.aIndex = this.objectIndex = "" + (guid++);
 		this._isSaved = false;
-		this._matrix = new Matrix3();
+		this._matrix = Matrix3.identity();
 	}
 
-	show(cord) {
+	show(matrix) {
 		let _me = this;
 		let canvas = _me.ctx || _me.stage.ctx;
 
 		if (!_me.visible) {
 			return;
 		}
-
-		if (_me.parent && _me.parent instanceof Stage) {
-			cord.ox = _me.x;
-			cord.oy = _me.y;
-		} else {
-			cord.x += _me.x;
-			cord.y += _me.y;
-		}
-
-		cord.scaleX *= _me.scaleX;
-		cord.scaleY *= _me.scaleY;
 
 		if (
 			(_me.mask != null && _me.mask.show) ||
@@ -66,23 +53,32 @@ class DisplayObject extends EventDispatcher {
 			canvas.globalAlpha = _me.alpha > 1 ? 1 : _me.alpha;
 		}
 
-		if (_me.translateX != 0 || _me.translateY != 0) {
-			canvas.translate(_me.translateX, _me.translateY);
+		if (_me.x != 0 || _me.y != 0) {
+			let x = _me.x;
+			let y = _me.y;
+			canvas.translate(x, y);
+			matrix.translation(x, y);
 		}
 
 		if (_me.rotate != 0) {
-			canvas.rotate(Util.deg2rad(_me.rotate));
+			let angle = _me.rotate;
+			canvas.rotate(Util.deg2rad(angle));
+			matrix.rotation(angle);
 		}
 
 		if (_me.scaleX != 1 || _me.scaleY != 1) {
-			canvas.scale(_me.scaleX, _me.scaleY);
+			let scaleX = _me.scaleX;
+			let scaleY = _me.scaleY;
+			canvas.scale(scaleX, scaleY);
+			matrix.scaling(scaleX, scaleY);
 		}
+
+		this._matrix = Matrix.clone(matrix);
 	}
 
 	dispose() {
 		let _me = this;
 		let eventNames = Util.keys(_me._handlers);
-
 		_me.off(eventNames);
 	}
 }

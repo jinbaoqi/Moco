@@ -1,5 +1,5 @@
 class Stage extends DisplayObjectContainer {
-	constructor() {
+	constructor(canvasId, fn) {
 		super();
 
 		this.name = "Stage";
@@ -7,7 +7,7 @@ class Stage extends DisplayObjectContainer {
 		this.ctx = this.domElem.getContext("2d");
 		this.width = parseFloat(this.domElem.getAttribute("width"), 10);
 		this.height = parseFloat(this.domElem.getAttribute("height"), 10);
-		this.offset = this._getOffset(this.domElem);
+		this.offset = this._getOffset();
 		this.x = this.offset.left;
 		this.y = this.offset.top;
 
@@ -19,10 +19,26 @@ class Stage extends DisplayObjectContainer {
 	}
 
 	initialize() {
+		let _me = this;
 
+		Util.each(MouseEvent.nameList, (eventName) => {
+			
+		});
 	}
 
-	_getOffset(domElem) {
+	on() {
+		let _me = this;
+		let args = Array.prototype.slice.call([], arguments);
+		EventDispatcher.prototype.on.apply(_me, args);
+	}
+
+	off() {
+		let _me = this;
+		let args = Array.prototype.slice.call([], arguments);
+		EventDispatcher.prototype.on.apply(_me, args);
+	}
+
+	_getOffset() {
 
 	}
 
