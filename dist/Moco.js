@@ -1,5 +1,5 @@
 ;(function(window, undefined) {
-		var Moco = {};
+var Moco = {};
 'use strict';
 
 var fnRegExp = /\s+/g;
