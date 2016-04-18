@@ -35,6 +35,8 @@ var DisplayObject = function (_EventDispatcher) {
 		_this.aIndex = _this.objectIndex = "" + guid++;
 		_this._isSaved = false;
 		_this._matrix = Matrix3.identity();
+
+		_this._observe();
 		return _this;
 	}
 
@@ -44,7 +46,9 @@ var DisplayObject = function (_EventDispatcher) {
 			var _me = this;
 			var canvas = _me.ctx || _me.stage.ctx;
 
-			if (!_me.visible) {
+			this._matrix = Matrix3.identity();
+
+			if (!_me.visible || _me.alpha <= 0.001) {
 				return;
 			}
 
@@ -65,24 +69,24 @@ var DisplayObject = function (_EventDispatcher) {
 			if (_me.x != 0 || _me.y != 0) {
 				var x = _me.x;
 				var y = _me.y;
+				this._matrix.tranlsate(x, y);
 				canvas.translate(x, y);
-				matrix.translation(x, y);
 			}
 
 			if (_me.rotate != 0) {
 				var angle = _me.rotate;
+				this._matrix.rotate(angle);
 				canvas.rotate(Util.deg2rad(angle));
-				matrix.rotation(angle);
 			}
 
 			if (_me.scaleX != 1 || _me.scaleY != 1) {
 				var scaleX = _me.scaleX;
 				var scaleY = _me.scaleY;
+				this._matrix.scale(scaleX, scaleY);
 				canvas.scale(scaleX, scaleY);
-				matrix.scaling(scaleX, scaleY);
 			}
 
-			this._matrix = Matrix.clone(matrix);
+			this._matrix.multi(matrix);
 		}
 	}, {
 		key: "dispose",
@@ -90,6 +94,62 @@ var DisplayObject = function (_EventDispatcher) {
 			var _me = this;
 			var eventNames = Util.keys(_me._handlers);
 			_me.off(eventNames);
+		}
+	}, {
+		key: "_observe",
+		value: function _observe() {
+			var _this2 = this;
+
+			var _me = this;
+			var properties = [{
+				key: 'x',
+				method: 'translate',
+				args: function args(value) {
+					return [value, _me.y];
+				}
+			}, {
+				key: 'y',
+				method: 'translate',
+				args: function args(value) {
+					return [_me.x, value];
+				}
+			}, {
+				key: 'rotate',
+				method: 'rotate',
+				args: function args(value) {
+					return value;
+				}
+			}, {
+				key: 'scaleX',
+				method: 'scale',
+				args: function args(value) {
+					return [value, _me.scaleY];
+				}
+			}, {
+				key: 'scaleY',
+				method: 'scale',
+				args: function args(value) {
+					return [_me.scaleX, value];
+				}
+			}];
+
+			var _loop = function _loop(i, len) {
+				var prop = properties[i];
+				var val = _me[prop.key];
+				Object.defineProperty(_this2, prop.key, {
+					set: function set(newValue) {
+						val = newValue;
+						_this2._matrix[prop.method].apply(_this2._matrix, prop.args(newValue));
+					},
+					get: function get() {
+						return val;
+					}
+				});
+			};
+
+			for (var i = 0, len = properties.length; i < len; i++) {
+				_loop(i, len);
+			}
 		}
 	}]);
 

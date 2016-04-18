@@ -20,13 +20,17 @@ class DisplayObject extends EventDispatcher {
 		this.aIndex = this.objectIndex = "" + (guid++);
 		this._isSaved = false;
 		this._matrix = Matrix3.identity();
+
+		this._observe();
 	}
 
 	show(matrix) {
 		let _me = this;
 		let canvas = _me.ctx || _me.stage.ctx;
 
-		if (!_me.visible) {
+		this._matrix = Matrix3.identity();
+
+		if (!_me.visible || _me.alpha <= 0.001) {
 			return;
 		}
 
@@ -56,30 +60,79 @@ class DisplayObject extends EventDispatcher {
 		if (_me.x != 0 || _me.y != 0) {
 			let x = _me.x;
 			let y = _me.y;
+			this._matrix.tranlsate(x, y);
 			canvas.translate(x, y);
-			matrix.translation(x, y);
 		}
 
 		if (_me.rotate != 0) {
 			let angle = _me.rotate;
+			this._matrix.rotate(angle);
 			canvas.rotate(Util.deg2rad(angle));
-			matrix.rotation(angle);
 		}
 
 		if (_me.scaleX != 1 || _me.scaleY != 1) {
 			let scaleX = _me.scaleX;
 			let scaleY = _me.scaleY;
+			this._matrix.scale(scaleX, scaleY);
 			canvas.scale(scaleX, scaleY);
-			matrix.scaling(scaleX, scaleY);
 		}
 
-		this._matrix = Matrix.clone(matrix);
+		this._matrix.multi(matrix);
 	}
 
 	dispose() {
 		let _me = this;
 		let eventNames = Util.keys(_me._handlers);
 		_me.off(eventNames);
+	}
+
+	_observe() {
+		let _me = this;
+		let properties = [{
+			key: 'x',
+			method: 'translate',
+			args: (value) => {
+				return [value, _me.y]
+			}
+		}, {
+			key: 'y',
+			method: 'translate',
+			args: (value) => {
+				return [_me.x, value]
+			}
+		}, {
+			key: 'rotate',
+			method: 'rotate',
+			args: (value) => {
+				return value
+			}
+		}, {
+			key: 'scaleX',
+			method: 'scale',
+			args: (value) => {
+				return [value, _me.scaleY]
+			}
+		}, {
+			key: 'scaleY',
+			method: 'scale',
+			args: (value) => {
+				return [_me.scaleX, value]
+			}
+		}];
+
+		for (let i = 0, len = properties.length; i < len; i++) {
+			let prop = properties[i];
+			let val = _me[prop.key];
+			Object.defineProperty(this, prop.key, {
+				set: (newValue) => {
+					val = newValue;
+					this._matrix[prop.method].apply(this._matrix, prop.args(newValue));
+				},
+				get: () => {
+					return val;
+				}
+			})
+		}
 	}
 }
 

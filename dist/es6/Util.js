@@ -54,21 +54,37 @@ var Util = function () {
 	}, {
 		key: "inArray",
 		value: function inArray(item, arr, fn) {
-			if (Array.prototype.inArray) {
-				return Array.prototype.inArray.call(arr, item);
-			} else {
-				for (var i = 0, len = arr.length; i < len; i++) {
-					if (typeof fn == "function") {
-						if (fn.call(item, item, arr[i], i, arr)) {
-							return i;
-						}
-					} else if (arr[i] == item) {
+			for (var i = 0, len = arr.length; i < len; i++) {
+				if (typeof fn == "function") {
+					if (fn.call(item, item, arr[i], i, arr)) {
 						return i;
 					}
+				} else if (arr[i] == item) {
+					return i;
 				}
-
-				return -1;
 			}
+
+			return -1;
+		}
+	}, {
+		key: "extends",
+		value: function _extends(obj) {
+			var _me = this;
+
+			if (!_me.isType(obj, "Object")) {
+				return obj;
+			}
+
+			for (var i = 1, length = arguments.length; i < length; i++) {
+				var source = arguments[i];
+				for (var prop in source) {
+					if (hasOwnProperty.call(source, prop)) {
+						obj[prop] = source[prop];
+					}
+				}
+			}
+
+			return obj;
 		}
 	}, {
 		key: "clone",

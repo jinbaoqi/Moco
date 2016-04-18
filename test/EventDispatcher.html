@@ -29,10 +29,9 @@
    },true);
    dispatcher.on(wrap1,"click",function(ev){
     console.log("wrap1 propagation");
-   },true);
+   },false);
    dispatcher.on(wrap2,"click",function(ev){
     console.log("wrap2 propagation");
-    ev.stopPropagation();
    },false);
    dispatcher.on(wrap2,"click",function(ev){
     console.log("wrap211 propagation");

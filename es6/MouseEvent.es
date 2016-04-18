@@ -1,9 +1,10 @@
 class MouseEvent extends InteractiveEvent {
-	static getItemsFromCord(cord) {
+	static getTopItem(eventName, cord) {
 		let _me = this;
+		let items = _me._list[eventName] || [];
 
-		let items = Util.filter(_me._list, function(item) {
-			if (item.isMouseon(cord)) {
+		items = Util.filter(items, function(item) {
+			if (item.isMouseon && item.isMouseon(cord)) {
 				return true;
 			}
 		});
@@ -22,24 +23,7 @@ class MouseEvent extends InteractiveEvent {
 			}
 		});
 
-		let tmp = [];
-		if (items.length) {
-			let k = items[0].objectIndex;
-
-			tmp.push(items[0]);
-
-			for (let i = 1, len = items.length; i < len; i++) {
-				item = items[i];
-				if (
-					k.indexOf(item.objectIndex) != -1 ||
-					k.indexOf(item.aIndex) != -1
-				) {
-					tmp.push(item);
-				}
-			}
-		}
-
-		return tmp;
+		return items[0];
 	}
 }
 

@@ -2,8 +2,6 @@ class InteractiveObject extends DisplayObject {
 	constructor() {
 		super();
 		this.name = "InteractiveObject";
-		this._isInMouseList = false;
-		this._isInKeyboardList = false;
 	}
 
 	on(eventName, callback, useCapture) {
@@ -11,18 +9,12 @@ class InteractiveObject extends DisplayObject {
 		let isMouseEvent = ~Util.inArray(eventName, MouseEvent.nameList);
 		let isKeyboardEvent = ~Util.inArray(eventName, KeyboardEvent.nameList);
 
-		if (
-			(!isMouseEvent && !isKeyboardEvent) ||
-			(isMouseEvent && _me._inMouseList) ||
-			(isKeyboardEvent && _me._inKeyboardList)
-		) {
+		if (!isMouseEvent && !isKeyboardEvent) {
 			return;
 		} else if (isMouseEvent) {
-			MouseEvent.add(_me);
-			_me._isInMouseList = true;
+			MouseEvent.add(eventName, _me);
 		} else if (isKeyboardEvent) {
-			KeyboardEvent.add(_me);
-			_me._isInKeyboardList = true;
+			KeyboardEvent.add(eventName, _me);
 		}
 
 		super.on(eventName, callback, useCapture);
@@ -35,19 +27,13 @@ class InteractiveObject extends DisplayObject {
 
 		if (!isMouseEvent && !isKeyboardEvent) {
 			return;
+		} else if (isMouseEvent) {
+			MouseEvent.remove(eventName, _me);
+		} else if (isKeyboardEvent) {
+			KeyBoardEvent.remove(eventName, _me);
 		}
 
 		super.off(eventName, callback);
-
-		if (!Util.keys(_me.handlers).length) {
-			if (isMouseEvent) {
-				MouseEvent.remove(_me);
-				_me._isInMouseList = true;
-			} else if (isKeyboardEvent) {
-				KeyBoardEvent.remove(_me);
-				_me._isInKeyboardList = true;
-			}
-		}
 	}
 }
 

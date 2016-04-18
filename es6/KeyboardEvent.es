@@ -1,4 +1,9 @@
-class KeyboardEvent extends InteractiveEvent {}
+class KeyboardEvent extends InteractiveEvent {
+	static getItems(eventName) {
+		let _me = this;
+		return _me._list[eventName] || [];
+	}
+}
 
 let keyboardEvents = {
 	KEY_DOWN: "keydown",

@@ -95,6 +95,31 @@ class Matrix3 {
 
 		return this;
 	}
+
+	translate(x, y) {
+		this._matrix[6] = x;
+		this._matrix[7] = y;
+
+		return this;
+	}
+
+	rotate(angle) {
+		let cosa = Math.cos(angle * Math.PI / 180);
+		let sina = Math.sin(angle * Math.PI / 180);
+		this._matrix[0] = cosa;
+		this._matrix[1] = sina;
+		this._matrix[3] = -sina;
+		this._matrix[4] = cosa;
+
+		return this;
+	}
+
+	scale(scaleX, scaleY) {
+		this._matrix[0] = scaleX;
+		this._matrix[4] = scaleY;
+
+		return this;
+	}
 }
 
 Matrix3.clone = (m) => {
@@ -141,7 +166,8 @@ Matrix3.rotation = (angle) => {
 	let cosa = Math.cos(angle * Math.PI / 180);
 	let sina = Math.sin(angle * Math.PI / 180);
 	return new Matrix3([
-		cosa, sina, 0, -sina, cosa, 0,
+		cosa, sina, 0, 
+		-sina, cosa, 0,
 		0, 0, 1
 	]);
 };
@@ -209,7 +235,7 @@ Matrix3.inverse = (m) => {
 	]);
 
 	Matrix3.transpose(matrix);
-	
+
 	return matrix;
 };
 

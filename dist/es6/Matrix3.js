@@ -105,6 +105,34 @@ var Matrix3 = function () {
 
 			return this;
 		}
+	}, {
+		key: "translate",
+		value: function translate(x, y) {
+			this._matrix[6] = x;
+			this._matrix[7] = y;
+
+			return this;
+		}
+	}, {
+		key: "rotate",
+		value: function rotate(angle) {
+			var cosa = Math.cos(angle * Math.PI / 180);
+			var sina = Math.sin(angle * Math.PI / 180);
+			this._matrix[0] = cosa;
+			this._matrix[1] = sina;
+			this._matrix[3] = -sina;
+			this._matrix[4] = cosa;
+
+			return this;
+		}
+	}, {
+		key: "scale",
+		value: function scale(scaleX, scaleY) {
+			this._matrix[0] = scaleX;
+			this._matrix[4] = scaleY;
+
+			return this;
+		}
 	}]);
 
 	return Matrix3;

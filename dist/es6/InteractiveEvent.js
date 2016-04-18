@@ -16,20 +16,32 @@ var InteractiveEvent = function () {
 		}
 	}, {
 		key: "add",
-		value: function add(item) {
+		value: function add(eventName, item) {
 			if (item instanceof EventDispatcher) {
-				this._list.push(item);
+				var list = this._list;
+				list[eventName] = list[eventName] ? list[eventName] : [];
+
+				var index = Util.inArray(item, list[eventName], function (a1, a2) {
+					return a1.aIndex == a2.aIndex;
+				});
+
+				if (! ~index) {
+					list[eventName].push(item);
+				}
 			}
 		}
 	}, {
 		key: "remove",
-		value: function remove(item) {
+		value: function remove(eventName, item) {
 			if (item instanceof EventDispatcher) {
-				for (var i = 0, len = this._list.length; i < len; i++) {
-					var listItem = this._list[i];
-					if (listItem.aIndex == item.aIndex) {
-						this._list.splice(i, 1);
-						break;
+				var list = this._list;
+				if (list[eventName]) {
+					var index = Util.inArray(item, list[eventName], function (a1, a2) {
+						return a1.aIndex == a2.aIndex;
+					});
+
+					if (~index) {
+						list[eventName].splice(i, 1);
 					}
 				}
 			}
@@ -39,6 +51,6 @@ var InteractiveEvent = function () {
 	return InteractiveEvent;
 }();
 
-InteractiveEvent._list = [];
+InteractiveEvent._list = {};
 
 Moco.InteractiveEvent = InteractiveEvent;

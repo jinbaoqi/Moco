@@ -34,7 +34,9 @@ var EventDispatcher = function () {
 						var handlers = target.handlers;
 						var fn = function fn(event) {
 							var callbacks = handlers[eventName];
-							var ev = _me._fixEvent(event);
+
+							// event需要clone出一个新对象，否则在严格模式下会抛错
+							var ev = _me._fixEvent(Util.clone(event));
 
 							for (var i = 0, len = callbacks.length; i < len; i++) {
 								var item = callbacks[i];
@@ -95,8 +97,8 @@ var EventDispatcher = function () {
 					var handlers = target.handlers;
 
 					if (handlers) {
-						var callbacks = handlers[eventName] ? handlers[eventName] : [];
-						Util.each(callbacks, function (item) {
+						var _callbacks = handlers[eventName] ? handlers[eventName] : [];
+						Util.each(_callbacks, function (item) {
 							_me.off(target, eventName, item);
 						});
 					}
@@ -105,12 +107,12 @@ var EventDispatcher = function () {
 
 					if (_handlers) {
 						var fnStr = callback.fnStr ? callback.fnStr : callback.toString().replace(fnRegExp, '');
-						var _callbacks = _handlers[eventName] ? _handlers[eventName] : [];
+						var _callbacks2 = _handlers[eventName] ? _handlers[eventName] : [];
 
-						for (var i = _callbacks.length - 1; i >= 0; i--) {
-							var item = _callbacks[i];
+						for (var i = _callbacks2.length - 1; i >= 0; i--) {
+							var item = _callbacks2[i];
 							if (item._fnStr == fnStr) {
-								Array.prototype.splice.call(_callbacks, i, 1);
+								Array.prototype.splice.call(_callbacks2, i, 1);
 							}
 						}
 					}
@@ -180,37 +182,35 @@ var EventDispatcher = function () {
 				ev.target = ev.currentTarget = target;
 			}
 
-			ev = _me._fixEvent(ev);
+			ev = _me._fixEvent(Util.clone(ev));
 
 			// 此处分开冒泡阶段函数和捕获阶段函数
-			var parent = null;
+			var parent = target.parent || target.parentNode;
 			var handlerList = {
 				propagations: [],
 				useCaptures: []
 			};
 
-			if (parent = target.parentNode) {
-				while (parent) {
-					var _handlers2 = null;
-					if (_handlers2 = parent.handlers) {
-						var _callbacks2 = _handlers2[eventName] ? _handlers2[eventName] : [];
-						for (var i = 0, len = _callbacks2.length; i < len; i++) {
-							var useCapture = _callbacks2[i]._useCapture;
-							if (!useCapture) {
-								handlerList.propagations.push({
-									target: parent,
-									callback: _callbacks2[i]
-								});
-							} else {
-								handlerList.useCaptures.push({
-									target: parent,
-									callback: _callbacks2[i]
-								});
-							}
+			while (parent) {
+				var _handlers2 = null;
+				if (_handlers2 = parent.handlers) {
+					var _callbacks3 = _handlers2[eventName] ? _handlers2[eventName] : [];
+					for (var i = 0, len = _callbacks3.length; i < len; i++) {
+						var useCapture = _callbacks3[i]._useCapture;
+						if (!useCapture) {
+							handlerList.propagations.push({
+								target: parent,
+								callback: _callbacks3[i]
+							});
+						} else {
+							handlerList.useCaptures.push({
+								target: parent,
+								callback: _callbacks3[i]
+							});
 						}
 					}
-					parent = parent.parentNode;
 				}
+				parent = parent.parent || parent.parentNode;
 			}
 
 			// 捕获阶段的模拟

@@ -36,21 +36,36 @@ class Util {
 	}
 
 	static inArray(item, arr, fn) {
-		if (Array.prototype.inArray) {
-			return Array.prototype.inArray.call(arr, item);
-		} else {
-			for (let i = 0, len = arr.length; i < len; i++) {
-				if (typeof fn == "function") {
-					if (fn.call(item, item, arr[i], i, arr)) {
-						return i;
-					}
-				} else if (arr[i] == item) {
+		for (let i = 0, len = arr.length; i < len; i++) {
+			if (typeof fn == "function") {
+				if (fn.call(item, item, arr[i], i, arr)) {
 					return i;
 				}
+			} else if (arr[i] == item) {
+				return i;
 			}
-
-			return -1;
 		}
+
+		return -1;
+	}
+
+	static extends(obj) {
+		var _me = this;
+
+		if (!_me.isType(obj, "Object")) {
+			return obj;
+		}
+
+		for (let i = 1, length = arguments.length; i < length; i++) {
+			let source = arguments[i];
+			for (let prop in source) {
+				if (hasOwnProperty.call(source, prop)) {
+					obj[prop] = source[prop];
+				}
+			}
+		}
+
+		return obj;
 	}
 
 	static clone(obj) {

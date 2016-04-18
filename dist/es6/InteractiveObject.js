@@ -19,8 +19,6 @@ var InteractiveObject = function (_DisplayObject) {
 		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(InteractiveObject).call(this));
 
 		_this.name = "InteractiveObject";
-		_this._isInMouseList = false;
-		_this._isInKeyboardList = false;
 		return _this;
 	}
 
@@ -31,14 +29,12 @@ var InteractiveObject = function (_DisplayObject) {
 			var isMouseEvent = ~Util.inArray(eventName, MouseEvent.nameList);
 			var isKeyboardEvent = ~Util.inArray(eventName, KeyboardEvent.nameList);
 
-			if (!isMouseEvent && !isKeyboardEvent || isMouseEvent && _me._inMouseList || isKeyboardEvent && _me._inKeyboardList) {
+			if (!isMouseEvent && !isKeyboardEvent) {
 				return;
 			} else if (isMouseEvent) {
-				MouseEvent.add(_me);
-				_me._isInMouseList = true;
+				MouseEvent.add(eventName, _me);
 			} else if (isKeyboardEvent) {
-				KeyboardEvent.add(_me);
-				_me._isInKeyboardList = true;
+				KeyboardEvent.add(eventName, _me);
 			}
 
 			_get(Object.getPrototypeOf(InteractiveObject.prototype), "on", this).call(this, eventName, callback, useCapture);
@@ -52,19 +48,13 @@ var InteractiveObject = function (_DisplayObject) {
 
 			if (!isMouseEvent && !isKeyboardEvent) {
 				return;
+			} else if (isMouseEvent) {
+				MouseEvent.remove(eventName, _me);
+			} else if (isKeyboardEvent) {
+				KeyBoardEvent.remove(eventName, _me);
 			}
 
 			_get(Object.getPrototypeOf(InteractiveObject.prototype), "off", this).call(this, eventName, callback);
-
-			if (!Util.keys(_me.handlers).length) {
-				if (isMouseEvent) {
-					MouseEvent.remove(_me);
-					_me._isInMouseList = true;
-				} else if (isKeyboardEvent) {
-					KeyBoardEvent.remove(_me);
-					_me._isInKeyboardList = true;
-				}
-			}
 		}
 	}]);
 

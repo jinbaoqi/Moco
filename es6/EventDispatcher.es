@@ -17,7 +17,9 @@ class EventDispatcher {
 				let handlers = target.handlers;
 				let fn = (event) => {
 					let callbacks = handlers[eventName];
-					let ev = _me._fixEvent(event);
+
+					// event需要clone出一个新对象，否则在严格模式下会抛错
+					let ev = _me._fixEvent(Util.clone(event));
 
 					for (let i = 0, len = callbacks.length; i < len; i++) {
 						let item = callbacks[i];
@@ -149,37 +151,35 @@ class EventDispatcher {
 			ev.target = ev.currentTarget = target;
 		}
 
-		ev = _me._fixEvent(ev);
+		ev = _me._fixEvent(Util.clone(ev));
 
 		// 此处分开冒泡阶段函数和捕获阶段函数
-		let parent = null;
+		let parent = target.parent || target.parentNode;
 		let handlerList = {
 			propagations: [],
 			useCaptures: []
 		};
 
-		if (parent = target.parentNode) {
-			while (parent) {
-				let handlers = null;
-				if (handlers = parent.handlers) {
-					let callbacks = handlers[eventName] ? handlers[eventName] : [];
-					for (let i = 0, len = callbacks.length; i < len; i++) {
-						let useCapture = callbacks[i]._useCapture;
-						if (!useCapture) {
-							handlerList.propagations.push({
-								target: parent,
-								callback: callbacks[i]
-							});
-						} else {
-							handlerList.useCaptures.push({
-								target: parent,
-								callback: callbacks[i]
-							});
-						}
+		while (parent) {
+			let handlers = null;
+			if (handlers = parent.handlers) {
+				let callbacks = handlers[eventName] ? handlers[eventName] : [];
+				for (let i = 0, len = callbacks.length; i < len; i++) {
+					let useCapture = callbacks[i]._useCapture;
+					if (!useCapture) {
+						handlerList.propagations.push({
+							target: parent,
+							callback: callbacks[i]
+						});
+					} else {
+						handlerList.useCaptures.push({
+							target: parent,
+							callback: callbacks[i]
+						});
 					}
 				}
-				parent = parent.parentNode;
 			}
+			parent = parent.parent || parent.parentNode;
 		}
 
 		// 捕获阶段的模拟

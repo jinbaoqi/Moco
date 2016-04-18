@@ -21,21 +21,72 @@ class Stage extends DisplayObjectContainer {
 	initialize() {
 		let _me = this;
 
+		// Stage接管所有交互事件
 		Util.each(MouseEvent.nameList, (eventName) => {
-			
+			eventName = mouseEvent[eventName];
+			EventDispatcher.prototype.on.call(_me, _me.domElem, eventName, (event) => {
+				_me._mouseEvent(event);
+			});
+		});
+
+		Util.each(KeyboardEvent.nameList, (event) => {
+			EventDispatcher.prototype.on.call(_me, _me.domElem, eventName, () => {
+				_me.keyboardEvent(event);
+			});
+		});
+
+		_me.show();
+	}
+
+	show() {
+		let _me = this;
+
+		_me.ctx.clearRect(0, 0, _me.width, _me.height);
+
+		super.show();
+
+		if (_me._isSaved) {
+			_me.ctx.restore();
+		}
+
+		raf(function() {
+			_me.show();
 		});
 	}
 
-	on() {
-		let _me = this;
-		let args = Array.prototype.slice.call([], arguments);
-		EventDispatcher.prototype.on.apply(_me, args);
+	_mouseEvent(event) {
+		let cord = {
+			x: 0,
+			y: 0
+		};
+
+		event = Util.clone(event);
+
+		if (event.clientX != null) {
+			cord.x = event.pageX - _me.x;
+			cord.y = event.pageY - _me.y;
+			_me.mouseX = cord.x;
+			_me.mouseY = cord.y;
+		}
+
+		event.cord = cord;
+
+		let eventName = event.type;
+		let item = MouseEvent.getTopItem(eventName, cord);
+		if (item) {
+			item.trigger(eventName, event);
+		}
 	}
 
-	off() {
-		let _me = this;
-		let args = Array.prototype.slice.call([], arguments);
-		EventDispatcher.prototype.on.apply(_me, args);
+	_keyboardEvent(event) {
+		let eventName = event.type;
+		let items = KeyboardEvent.getItems(eventName);
+
+		if (items.length) {
+			Util.each(items, (item) => {
+				item.trigger(eventName, event);
+			});
+		}
 	}
 
 	_getOffset() {

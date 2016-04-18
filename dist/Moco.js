@@ -88,21 +88,37 @@ var Util = function () {
 	}, {
 		key: "inArray",
 		value: function inArray(item, arr, fn) {
-			if (Array.prototype.inArray) {
-				return Array.prototype.inArray.call(arr, item);
-			} else {
-				for (var i = 0, len = arr.length; i < len; i++) {
-					if (typeof fn == "function") {
-						if (fn.call(item, item, arr[i], i, arr)) {
-							return i;
-						}
-					} else if (arr[i] == item) {
+			for (var i = 0, len = arr.length; i < len; i++) {
+				if (typeof fn == "function") {
+					if (fn.call(item, item, arr[i], i, arr)) {
 						return i;
 					}
+				} else if (arr[i] == item) {
+					return i;
 				}
-
-				return -1;
 			}
+
+			return -1;
+		}
+	}, {
+		key: "extends",
+		value: function _extends(obj) {
+			var _me = this;
+
+			if (!_me.isType(obj, "Object")) {
+				return obj;
+			}
+
+			for (var i = 1, length = arguments.length; i < length; i++) {
+				var source = arguments[i];
+				for (var prop in source) {
+					if (hasOwnProperty.call(source, prop)) {
+						obj[prop] = source[prop];
+					}
+				}
+			}
+
+			return obj;
 		}
 	}, {
 		key: "clone",
@@ -369,6 +385,34 @@ var Matrix3 = function () {
 
 			return this;
 		}
+	}, {
+		key: "translate",
+		value: function translate(x, y) {
+			this._matrix[6] = x;
+			this._matrix[7] = y;
+
+			return this;
+		}
+	}, {
+		key: "rotate",
+		value: function rotate(angle) {
+			var cosa = Math.cos(angle * Math.PI / 180);
+			var sina = Math.sin(angle * Math.PI / 180);
+			this._matrix[0] = cosa;
+			this._matrix[1] = sina;
+			this._matrix[3] = -sina;
+			this._matrix[4] = cosa;
+
+			return this;
+		}
+	}, {
+		key: "scale",
+		value: function scale(scaleX, scaleY) {
+			this._matrix[0] = scaleX;
+			this._matrix[4] = scaleY;
+
+			return this;
+		}
 	}]);
 
 	return Matrix3;
@@ -487,20 +531,32 @@ var InteractiveEvent = function () {
 		}
 	}, {
 		key: "add",
-		value: function add(item) {
+		value: function add(eventName, item) {
 			if (item instanceof EventDispatcher) {
-				this._list.push(item);
+				var list = this._list;
+				list[eventName] = list[eventName] ? list[eventName] : [];
+
+				var index = Util.inArray(item, list[eventName], function (a1, a2) {
+					return a1.aIndex == a2.aIndex;
+				});
+
+				if (! ~index) {
+					list[eventName].push(item);
+				}
 			}
 		}
 	}, {
 		key: "remove",
-		value: function remove(item) {
+		value: function remove(eventName, item) {
 			if (item instanceof EventDispatcher) {
-				for (var i = 0, len = this._list.length; i < len; i++) {
-					var listItem = this._list[i];
-					if (listItem.aIndex == item.aIndex) {
-						this._list.splice(i, 1);
-						break;
+				var list = this._list;
+				if (list[eventName]) {
+					var index = Util.inArray(item, list[eventName], function (a1, a2) {
+						return a1.aIndex == a2.aIndex;
+					});
+
+					if (~index) {
+						list[eventName].splice(i, 1);
 					}
 				}
 			}
@@ -510,7 +566,7 @@ var InteractiveEvent = function () {
 	return InteractiveEvent;
 }();
 
-InteractiveEvent._list = [];
+InteractiveEvent._list = {};
 
 Moco.InteractiveEvent = InteractiveEvent;
 
@@ -534,12 +590,13 @@ var MouseEvent = function (_InteractiveEvent) {
 	}
 
 	_createClass(MouseEvent, null, [{
-		key: "getItemsFromCord",
-		value: function getItemsFromCord(cord) {
+		key: "getTopItem",
+		value: function getTopItem(eventName, cord) {
 			var _me = this;
+			var items = _me._list[eventName] || [];
 
-			var items = Util.filter(_me._list, function (item) {
-				if (item.isMouseon(cord)) {
+			items = Util.filter(items, function (item) {
+				if (item.isMouseon && item.isMouseon(cord)) {
 					return true;
 				}
 			});
@@ -558,21 +615,7 @@ var MouseEvent = function (_InteractiveEvent) {
 				}
 			});
 
-			var tmp = [];
-			if (items.length) {
-				var k = items[0].objectIndex;
-
-				tmp.push(items[0]);
-
-				for (var i = 1, len = items.length; i < len; i++) {
-					item = items[i];
-					if (k.indexOf(item.objectIndex) != -1 || k.indexOf(item.aIndex) != -1) {
-						tmp.push(item);
-					}
-				}
-			}
-
-			return tmp;
+			return items[0];
 		}
 	}]);
 
@@ -596,6 +639,8 @@ Moco.MouseEvent = MouseEvent;
 
 "use strict";
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -610,6 +655,14 @@ var KeyboardEvent = function (_InteractiveEvent) {
 
 		return _possibleConstructorReturn(this, Object.getPrototypeOf(KeyboardEvent).apply(this, arguments));
 	}
+
+	_createClass(KeyboardEvent, null, [{
+		key: "getItems",
+		value: function getItems(eventName) {
+			var _me = this;
+			return _me._list[eventName] || [];
+		}
+	}]);
 
 	return KeyboardEvent;
 }(InteractiveEvent);
@@ -664,7 +717,9 @@ var EventDispatcher = function () {
 						var handlers = target.handlers;
 						var fn = function fn(event) {
 							var callbacks = handlers[eventName];
-							var ev = _me._fixEvent(event);
+
+							// event需要clone出一个新对象，否则在严格模式下会抛错
+							var ev = _me._fixEvent(Util.clone(event));
 
 							for (var i = 0, len = callbacks.length; i < len; i++) {
 								var item = callbacks[i];
@@ -725,8 +780,8 @@ var EventDispatcher = function () {
 					var handlers = target.handlers;
 
 					if (handlers) {
-						var callbacks = handlers[eventName] ? handlers[eventName] : [];
-						Util.each(callbacks, function (item) {
+						var _callbacks = handlers[eventName] ? handlers[eventName] : [];
+						Util.each(_callbacks, function (item) {
 							_me.off(target, eventName, item);
 						});
 					}
@@ -735,12 +790,12 @@ var EventDispatcher = function () {
 
 					if (_handlers) {
 						var fnStr = callback.fnStr ? callback.fnStr : callback.toString().replace(fnRegExp, '');
-						var _callbacks = _handlers[eventName] ? _handlers[eventName] : [];
+						var _callbacks2 = _handlers[eventName] ? _handlers[eventName] : [];
 
-						for (var i = _callbacks.length - 1; i >= 0; i--) {
-							var item = _callbacks[i];
+						for (var i = _callbacks2.length - 1; i >= 0; i--) {
+							var item = _callbacks2[i];
 							if (item._fnStr == fnStr) {
-								Array.prototype.splice.call(_callbacks, i, 1);
+								Array.prototype.splice.call(_callbacks2, i, 1);
 							}
 						}
 					}
@@ -810,37 +865,35 @@ var EventDispatcher = function () {
 				ev.target = ev.currentTarget = target;
 			}
 
-			ev = _me._fixEvent(ev);
+			ev = _me._fixEvent(Util.clone(ev));
 
 			// 此处分开冒泡阶段函数和捕获阶段函数
-			var parent = null;
+			var parent = target.parent || target.parentNode;
 			var handlerList = {
 				propagations: [],
 				useCaptures: []
 			};
 
-			if (parent = target.parentNode) {
-				while (parent) {
-					var _handlers2 = null;
-					if (_handlers2 = parent.handlers) {
-						var _callbacks2 = _handlers2[eventName] ? _handlers2[eventName] : [];
-						for (var i = 0, len = _callbacks2.length; i < len; i++) {
-							var useCapture = _callbacks2[i]._useCapture;
-							if (!useCapture) {
-								handlerList.propagations.push({
-									target: parent,
-									callback: _callbacks2[i]
-								});
-							} else {
-								handlerList.useCaptures.push({
-									target: parent,
-									callback: _callbacks2[i]
-								});
-							}
+			while (parent) {
+				var _handlers2 = null;
+				if (_handlers2 = parent.handlers) {
+					var _callbacks3 = _handlers2[eventName] ? _handlers2[eventName] : [];
+					for (var i = 0, len = _callbacks3.length; i < len; i++) {
+						var useCapture = _callbacks3[i]._useCapture;
+						if (!useCapture) {
+							handlerList.propagations.push({
+								target: parent,
+								callback: _callbacks3[i]
+							});
+						} else {
+							handlerList.useCaptures.push({
+								target: parent,
+								callback: _callbacks3[i]
+							});
 						}
 					}
-					parent = parent.parentNode;
 				}
+				parent = parent.parent || parent.parentNode;
 			}
 
 			// 捕获阶段的模拟
@@ -1030,6 +1083,8 @@ var DisplayObject = function (_EventDispatcher) {
 		_this.aIndex = _this.objectIndex = "" + guid++;
 		_this._isSaved = false;
 		_this._matrix = Matrix3.identity();
+
+		_this._observe();
 		return _this;
 	}
 
@@ -1039,7 +1094,9 @@ var DisplayObject = function (_EventDispatcher) {
 			var _me = this;
 			var canvas = _me.ctx || _me.stage.ctx;
 
-			if (!_me.visible) {
+			this._matrix = Matrix3.identity();
+
+			if (!_me.visible || _me.alpha <= 0.001) {
 				return;
 			}
 
@@ -1060,24 +1117,24 @@ var DisplayObject = function (_EventDispatcher) {
 			if (_me.x != 0 || _me.y != 0) {
 				var x = _me.x;
 				var y = _me.y;
+				this._matrix.tranlsate(x, y);
 				canvas.translate(x, y);
-				matrix.translation(x, y);
 			}
 
 			if (_me.rotate != 0) {
 				var angle = _me.rotate;
+				this._matrix.rotate(angle);
 				canvas.rotate(Util.deg2rad(angle));
-				matrix.rotation(angle);
 			}
 
 			if (_me.scaleX != 1 || _me.scaleY != 1) {
 				var scaleX = _me.scaleX;
 				var scaleY = _me.scaleY;
+				this._matrix.scale(scaleX, scaleY);
 				canvas.scale(scaleX, scaleY);
-				matrix.scaling(scaleX, scaleY);
 			}
 
-			this._matrix = Matrix.clone(matrix);
+			this._matrix.multi(matrix);
 		}
 	}, {
 		key: "dispose",
@@ -1085,6 +1142,62 @@ var DisplayObject = function (_EventDispatcher) {
 			var _me = this;
 			var eventNames = Util.keys(_me._handlers);
 			_me.off(eventNames);
+		}
+	}, {
+		key: "_observe",
+		value: function _observe() {
+			var _this2 = this;
+
+			var _me = this;
+			var properties = [{
+				key: 'x',
+				method: 'translate',
+				args: function args(value) {
+					return [value, _me.y];
+				}
+			}, {
+				key: 'y',
+				method: 'translate',
+				args: function args(value) {
+					return [_me.x, value];
+				}
+			}, {
+				key: 'rotate',
+				method: 'rotate',
+				args: function args(value) {
+					return value;
+				}
+			}, {
+				key: 'scaleX',
+				method: 'scale',
+				args: function args(value) {
+					return [value, _me.scaleY];
+				}
+			}, {
+				key: 'scaleY',
+				method: 'scale',
+				args: function args(value) {
+					return [_me.scaleX, value];
+				}
+			}];
+
+			var _loop = function _loop(i, len) {
+				var prop = properties[i];
+				var val = _me[prop.key];
+				Object.defineProperty(_this2, prop.key, {
+					set: function set(newValue) {
+						val = newValue;
+						_this2._matrix[prop.method].apply(_this2._matrix, prop.args(newValue));
+					},
+					get: function get() {
+						return val;
+					}
+				});
+			};
+
+			for (var i = 0, len = properties.length; i < len; i++) {
+				_loop(i, len);
+			}
 		}
 	}]);
 
@@ -1114,8 +1227,6 @@ var InteractiveObject = function (_DisplayObject) {
 		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(InteractiveObject).call(this));
 
 		_this.name = "InteractiveObject";
-		_this._isInMouseList = false;
-		_this._isInKeyboardList = false;
 		return _this;
 	}
 
@@ -1126,14 +1237,12 @@ var InteractiveObject = function (_DisplayObject) {
 			var isMouseEvent = ~Util.inArray(eventName, MouseEvent.nameList);
 			var isKeyboardEvent = ~Util.inArray(eventName, KeyboardEvent.nameList);
 
-			if (!isMouseEvent && !isKeyboardEvent || isMouseEvent && _me._inMouseList || isKeyboardEvent && _me._inKeyboardList) {
+			if (!isMouseEvent && !isKeyboardEvent) {
 				return;
 			} else if (isMouseEvent) {
-				MouseEvent.add(_me);
-				_me._isInMouseList = true;
+				MouseEvent.add(eventName, _me);
 			} else if (isKeyboardEvent) {
-				KeyboardEvent.add(_me);
-				_me._isInKeyboardList = true;
+				KeyboardEvent.add(eventName, _me);
 			}
 
 			_get(Object.getPrototypeOf(InteractiveObject.prototype), "on", this).call(this, eventName, callback, useCapture);
@@ -1147,19 +1256,13 @@ var InteractiveObject = function (_DisplayObject) {
 
 			if (!isMouseEvent && !isKeyboardEvent) {
 				return;
+			} else if (isMouseEvent) {
+				MouseEvent.remove(eventName, _me);
+			} else if (isKeyboardEvent) {
+				KeyBoardEvent.remove(eventName, _me);
 			}
 
 			_get(Object.getPrototypeOf(InteractiveObject.prototype), "off", this).call(this, eventName, callback);
-
-			if (!Util.keys(_me.handlers).length) {
-				if (isMouseEvent) {
-					MouseEvent.remove(_me);
-					_me._isInMouseList = true;
-				} else if (isKeyboardEvent) {
-					KeyBoardEvent.remove(_me);
-					_me._isInKeyboardList = true;
-				}
-			}
 		}
 	}]);
 
@@ -1270,6 +1373,8 @@ Moco.DisplayObjectContainer = DisplayObjectContainer;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -1306,21 +1411,75 @@ var Stage = function (_DisplayObjectContain) {
 		value: function initialize() {
 			var _me = this;
 
-			Util.each(MouseEvent.nameList, function (eventName) {});
+			// Stage接管所有交互事件
+			Util.each(MouseEvent.nameList, function (eventName) {
+				eventName = mouseEvent[eventName];
+				EventDispatcher.prototype.on.call(_me, _me.domElem, eventName, function (event) {
+					_me._mouseEvent(event);
+				});
+			});
+
+			Util.each(KeyboardEvent.nameList, function (event) {
+				EventDispatcher.prototype.on.call(_me, _me.domElem, eventName, function () {
+					_me.keyboardEvent(event);
+				});
+			});
+
+			_me.show();
 		}
 	}, {
-		key: "on",
-		value: function on() {
+		key: "show",
+		value: function show() {
 			var _me = this;
-			var args = Array.prototype.slice.call([], arguments);
-			EventDispatcher.prototype.on.apply(_me, args);
+
+			_me.ctx.clearRect(0, 0, _me.width, _me.height);
+
+			_get(Object.getPrototypeOf(Stage.prototype), "show", this).call(this);
+
+			if (_me._isSaved) {
+				_me.ctx.restore();
+			}
+
+			raf(function () {
+				_me.show();
+			});
 		}
 	}, {
-		key: "off",
-		value: function off() {
-			var _me = this;
-			var args = Array.prototype.slice.call([], arguments);
-			EventDispatcher.prototype.on.apply(_me, args);
+		key: "_mouseEvent",
+		value: function _mouseEvent(event) {
+			var cord = {
+				x: 0,
+				y: 0
+			};
+
+			event = Util.clone(event);
+
+			if (event.clientX != null) {
+				cord.x = event.pageX - _me.x;
+				cord.y = event.pageY - _me.y;
+				_me.mouseX = cord.x;
+				_me.mouseY = cord.y;
+			}
+
+			event.cord = cord;
+
+			var eventName = event.type;
+			var item = MouseEvent.getTopItem(eventName, cord);
+			if (item) {
+				item.trigger(eventName, event);
+			}
+		}
+	}, {
+		key: "_keyboardEvent",
+		value: function _keyboardEvent(event) {
+			var eventName = event.type;
+			var items = KeyboardEvent.getItems(eventName);
+
+			if (items.length) {
+				Util.each(items, function (item) {
+					item.trigger(eventName, event);
+				});
+			}
 		}
 	}, {
 		key: "_getOffset",
