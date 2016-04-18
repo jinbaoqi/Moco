@@ -72,50 +72,50 @@ class Vec3 {
 		this.z = x * matrix[2] + y * matrix[5] + z * matrix[8];
 		return this;
 	}
-}
 
-Vec3.zero = () => {
-	return new Vec3(0, 0, 0);
-};
-
-Vec3.clone = (vec3) => {
-	return new Vec3(vec3.x, vec3.y, vec3.z);
-};
-
-Vec3.angle = (v1, v2) => {
-	let c1 = Vec3.clone(v1);
-	let c2 = Vec3.clone(v2);
-	let rad = c1.multi(c2) / (v1.distance() * v2.distance());
-	return Math.acos(rad);
-};
-
-Vec3.equal = (v1, v2) => {
-	return v1.x == v2.x && v1.y == v2.y && v1.z == v2.z;
-};
-
-Vec3.crossProduct = (v1, v2) => {
-	return new Vec3(
-		v1.y * v2.z - v1.z * v2.y,
-		v1.z * v2.x - v1.x * v2.z,
-		v1.x * v2.y - v1.y * v2.x
-	);
-};
-
-Vec3.proj = (v1, v2) => {
-	let v = Vec3.clone(v2);
-	let distance = v.distance();
-	let vii = v.multi(Vec3.zero().add(v1).multi(v) / (distance * distance));
-	return v1.sub(vii);
-};
-
-Vec3.norm = (vec3) => {
-	let clone = Vec3.clone(vec3);
-	let distance = clone.distance();
-	if (distance) {
-		return clone.multi(1 / distance);
-	} else {
-		throw new Exception("zero vec3 can't be norm");
+	static zero() {
+		return new Vec3(0, 0, 0);
 	}
-};
+
+	static clone(vec3) {
+		return new Vec3(vec3.x, vec3.y, vec3.z);
+	}
+
+	static angle(v1, v2) {
+		let c1 = Vec3.clone(v1);
+		let c2 = Vec3.clone(v2);
+		let rad = c1.multi(c2) / (v1.distance() * v2.distance());
+		return Math.acos(rad);
+	}
+
+	static equal(v1, v2) {
+		return v1.x == v2.x && v1.y == v2.y && v1.z == v2.z;
+	}
+
+	static crossProduct(v1, v2) {
+		return new Vec3(
+			v1.y * v2.z - v1.z * v2.y,
+			v1.z * v2.x - v1.x * v2.z,
+			v1.x * v2.y - v1.y * v2.x
+		);
+	}
+
+	static proj(v1, v2) {
+		let v = Vec3.clone(v2);
+		let distance = v.distance();
+		let vii = v.multi(Vec3.zero().add(v1).multi(v) / (distance * distance));
+		return v1.sub(vii);
+	}
+
+	static norm(vec3) {
+		let clone = Vec3.clone(vec3);
+		let distance = clone.distance();
+		if (distance) {
+			return clone.multi(1 / distance);
+		} else {
+			throw new Exception("zero vec3 can't be norm");
+		}
+	}
+}
 
 Moco.Vec3 = Vec3;

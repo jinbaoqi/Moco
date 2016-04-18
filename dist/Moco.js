@@ -1,6 +1,5 @@
 ;(function(window, undefined) {
-var Moco = {};
-
+		var Moco = {};
 'use strict';
 
 var fnRegExp = /\s+/g;
@@ -13,20 +12,20 @@ var cancelAnimationFrame = window.cancelAnimationFrame;
 var i = vendors.length;
 
 while (--i >= 0 && !requestAnimationFrame) {
-    requestAnimationFrame = window[vendors[i] + 'RequestAnimationFrame'];
-    cancelAnimationFrame = window[vendors[i] + 'CancelAnimationFrame'];
+	requestAnimationFrame = window[vendors[i] + 'RequestAnimationFrame'];
+	cancelAnimationFrame = window[vendors[i] + 'CancelAnimationFrame'];
 }
 
 if (!requestAnimationFrame || !cancelAnimationFrame) {
-    requestAnimationFrame = function requestAnimationFrame(callback) {
-        var now = +new Date(),
-            nextTime = Math.max(lastTime + 16, now);
-        return setTimeout(function () {
-            callback(lastTime = nextTime);
-        }, nextTime - now);
-    };
+	requestAnimationFrame = function requestAnimationFrame(callback) {
+		var now = +new Date(),
+		    nextTime = Math.max(lastTime + 16, now);
+		return setTimeout(function () {
+			callback(lastTime = nextTime);
+		}, nextTime - now);
+	};
 
-    cancelAnimationFrame = clearTimeout;
+	cancelAnimationFrame = clearTimeout;
 }
 
 var raf = requestAnimationFrame;
@@ -231,50 +230,57 @@ var Vec3 = function () {
 			this.z = x * matrix[2] + y * matrix[5] + z * matrix[8];
 			return this;
 		}
+	}], [{
+		key: "zero",
+		value: function zero() {
+			return new Vec3(0, 0, 0);
+		}
+	}, {
+		key: "clone",
+		value: function clone(vec3) {
+			return new Vec3(vec3.x, vec3.y, vec3.z);
+		}
+	}, {
+		key: "angle",
+		value: function angle(v1, v2) {
+			var c1 = Vec3.clone(v1);
+			var c2 = Vec3.clone(v2);
+			var rad = c1.multi(c2) / (v1.distance() * v2.distance());
+			return Math.acos(rad);
+		}
+	}, {
+		key: "equal",
+		value: function equal(v1, v2) {
+			return v1.x == v2.x && v1.y == v2.y && v1.z == v2.z;
+		}
+	}, {
+		key: "crossProduct",
+		value: function crossProduct(v1, v2) {
+			return new Vec3(v1.y * v2.z - v1.z * v2.y, v1.z * v2.x - v1.x * v2.z, v1.x * v2.y - v1.y * v2.x);
+		}
+	}, {
+		key: "proj",
+		value: function proj(v1, v2) {
+			var v = Vec3.clone(v2);
+			var distance = v.distance();
+			var vii = v.multi(Vec3.zero().add(v1).multi(v) / (distance * distance));
+			return v1.sub(vii);
+		}
+	}, {
+		key: "norm",
+		value: function norm(vec3) {
+			var clone = Vec3.clone(vec3);
+			var distance = clone.distance();
+			if (distance) {
+				return clone.multi(1 / distance);
+			} else {
+				throw new Exception("zero vec3 can't be norm");
+			}
+		}
 	}]);
 
 	return Vec3;
 }();
-
-Vec3.zero = function () {
-	return new Vec3(0, 0, 0);
-};
-
-Vec3.clone = function (vec3) {
-	return new Vec3(vec3.x, vec3.y, vec3.z);
-};
-
-Vec3.angle = function (v1, v2) {
-	var c1 = Vec3.clone(v1);
-	var c2 = Vec3.clone(v2);
-	var rad = c1.multi(c2) / (v1.distance() * v2.distance());
-	return Math.acos(rad);
-};
-
-Vec3.equal = function (v1, v2) {
-	return v1.x == v2.x && v1.y == v2.y && v1.z == v2.z;
-};
-
-Vec3.crossProduct = function (v1, v2) {
-	return new Vec3(v1.y * v2.z - v1.z * v2.y, v1.z * v2.x - v1.x * v2.z, v1.x * v2.y - v1.y * v2.x);
-};
-
-Vec3.proj = function (v1, v2) {
-	var v = Vec3.clone(v2);
-	var distance = v.distance();
-	var vii = v.multi(Vec3.zero().add(v1).multi(v) / (distance * distance));
-	return v1.sub(vii);
-};
-
-Vec3.norm = function (vec3) {
-	var clone = Vec3.clone(vec3);
-	var distance = clone.distance();
-	if (distance) {
-		return clone.multi(1 / distance);
-	} else {
-		throw new Exception("zero vec3 can't be norm");
-	}
-};
 
 Moco.Vec3 = Vec3;
 
@@ -413,103 +419,112 @@ var Matrix3 = function () {
 
 			return this;
 		}
+	}], [{
+		key: "clone",
+		value: function clone(m) {
+			var matrix = m.getMatrix();
+			var tmp = [];
+
+			for (var i = 0, len = matrix.length; i < len; i++) {
+				tmp[i] = matrix[i];
+			}
+
+			return new Matrix3(tmp);
+		}
+	}, {
+		key: "copy",
+		value: function copy(m) {
+			var clone = Matrix3.clone(m2);
+			m1.setMatrix(clone.getMatrix());
+		}
+	}, {
+		key: "zero",
+		value: function zero() {
+			return new Matrix3([0, 0, 0, 0, 0, 0, 0, 0, 0]);
+		}
+	}, {
+		key: "identity",
+		value: function identity() {
+			return new Matrix3([1, 0, 0, 0, 1, 0, 0, 0, 1]);
+		}
+	}, {
+		key: "translation",
+		value: function translation(x, y) {
+			return new Matrix3([1, 0, 0, 0, 1, 0, x, y, 1]);
+		}
+	}, {
+		key: "rotation",
+		value: function rotation(angle) {
+			var cosa = Math.cos(angle * Math.PI / 180);
+			var sina = Math.sin(angle * Math.PI / 180);
+			return new Matrix3([cosa, sina, 0, -sina, cosa, 0, 0, 0, 1]);
+		}
+	}, {
+		key: "scaling",
+		value: function scaling(scaleX, scaleY) {
+			return new Matrix3([scaleX, 0, 0, 0, scaleY, 0, 0, 0, 1]);
+		}
+	}, {
+		key: "transpose",
+		value: function transpose(m) {
+			var matrix = m.getMatrix();
+			var tmp = null;
+
+			temp = matrix[1];
+			matrix[1] = matrix[3];
+			matrix[3] = temp;
+
+			temp = matrix[2];
+			matrix[2] = matrix[6];
+			matrix[6] = temp;
+
+			temp = matrix[5];
+			matrix[5] = matrix[7];
+			matrix[7] = temp;
+
+			m.setMatrix(matrix);
+		}
+	}, {
+		key: "inverse",
+		value: function inverse(m) {
+			var matrix = m.getMatrix();
+
+			var a00 = matrix[0];
+			var a01 = matrix[1];
+			var a02 = matrix[2];
+
+			var a10 = matrix[3];
+			var a11 = matrix[4];
+			var a12 = matrix[5];
+
+			var a20 = matrix[6];
+			var a21 = matrix[7];
+			var a22 = matrix[8];
+
+			var deter = a00 * a11 * a22 + a01 * a12 * a20 + a02 * a10 * a21 - a02 * a11 * a20 - a01 * a10 * a22 - a00 * a12 * a21;
+
+			var c00 = (a11 * a22 - a21 * a12) / deter;
+			var c01 = -(a10 * a22 - a20 * a12) / deter;
+			var c02 = (a10 * a21 - a20 * a11) / deter;
+
+			var c10 = -(a01 * a22 - a21 * a02) / deter;
+			var c11 = (a00 * a22 - a20 * a02) / deter;
+			var c12 = -(a00 * a21 - a20 * a01) / deter;
+
+			var c20 = (a01 * a12 - a11 * a02) / deter;
+			var c21 = -(a00 * a12 - a10 * a02) / deter;
+			var c22 = (a00 * a11 - a10 * a01) / deter;
+
+			matrix = new Matrix3([c00, c01, c02, c10, c11, c12, c20, c21, c22]);
+
+			Matrix3.transpose(matrix);
+
+			return matrix;
+		}
 	}]);
 
 	return Matrix3;
 }();
-
-Matrix3.clone = function (m) {
-	var matrix = m.getMatrix();
-	var tmp = [];
-
-	for (var i = 0, len = matrix.length; i < len; i++) {
-		tmp[i] = matrix[i];
-	}
-
-	return new Matrix3(tmp);
-};
-
-Matrix3.copy = function (m1, m2) {
-	var clone = Matrix3.clone(m2);
-	m1.setMatrix(clone.getMatrix());
-};
-
-Matrix3.zero = function () {
-	return new Matrix3([0, 0, 0, 0, 0, 0, 0, 0, 0]);
-};
-
-Matrix3.identity = function (m) {
-	return new Matrix3([1, 0, 0, 0, 1, 0, 0, 0, 1]);
-};
-
-Matrix3.translation = function (x, y) {
-	return new Matrix3([1, 0, 0, 0, 1, 0, x, y, 1]);
-};
-
-Matrix3.rotation = function (angle) {
-	var cosa = Math.cos(angle * Math.PI / 180);
-	var sina = Math.sin(angle * Math.PI / 180);
-	return new Matrix3([cosa, sina, 0, -sina, cosa, 0, 0, 0, 1]);
-};
-
-Matrix3.scaling = function (scaleX, scaleY) {
-	return new Matrix3([scaleX, 0, 0, 0, scaleY, 0, 0, 0, 1]);
-};
-
-Matrix3.transpose = function (m) {
-	var matrix = m.getMatrix();
-	var tmp = null;
-
-	temp = matrix[1];
-	matrix[1] = matrix[3];
-	matrix[3] = temp;
-
-	temp = matrix[2];
-	matrix[2] = matrix[6];
-	matrix[6] = temp;
-
-	temp = matrix[5];
-	matrix[5] = matrix[7];
-	matrix[7] = temp;
-
-	m.setMatrix(matrix);
-};
-
-Matrix3.inverse = function (m) {
-	var matrix = m.getMatrix();
-
-	var a00 = matrix[0];
-	var a01 = matrix[1];
-	var a02 = matrix[2];
-
-	var a10 = matrix[3];
-	var a11 = matrix[4];
-	var a12 = matrix[5];
-
-	var a20 = matrix[6];
-	var a21 = matrix[7];
-	var a22 = matrix[8];
-
-	var deter = a00 * a11 * a22 + a01 * a12 * a20 + a02 * a10 * a21 - a02 * a11 * a20 - a01 * a10 * a22 - a00 * a12 * a21;
-
-	var c00 = (a11 * a22 - a21 * a12) / deter;
-	var c01 = -(a10 * a22 - a20 * a12) / deter;
-	var c02 = (a10 * a21 - a20 * a11) / deter;
-
-	var c10 = -(a01 * a22 - a21 * a02) / deter;
-	var c11 = (a00 * a22 - a20 * a02) / deter;
-	var c12 = -(a00 * a21 - a20 * a01) / deter;
-
-	var c20 = (a01 * a12 - a11 * a02) / deter;
-	var c21 = -(a00 * a12 - a10 * a02) / deter;
-	var c22 = (a00 * a11 - a10 * a01) / deter;
-
-	matrix = new Matrix3([c00, c01, c02, c10, c11, c12, c20, c21, c22]);
-
-	Matrix3.transpose(matrix);
-
-	return matrix;
-};
 
 Moco.Matrix3 = Matrix3;
 

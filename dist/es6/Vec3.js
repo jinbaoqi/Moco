@@ -91,49 +91,56 @@ var Vec3 = function () {
 			this.z = x * matrix[2] + y * matrix[5] + z * matrix[8];
 			return this;
 		}
+	}], [{
+		key: "zero",
+		value: function zero() {
+			return new Vec3(0, 0, 0);
+		}
+	}, {
+		key: "clone",
+		value: function clone(vec3) {
+			return new Vec3(vec3.x, vec3.y, vec3.z);
+		}
+	}, {
+		key: "angle",
+		value: function angle(v1, v2) {
+			var c1 = Vec3.clone(v1);
+			var c2 = Vec3.clone(v2);
+			var rad = c1.multi(c2) / (v1.distance() * v2.distance());
+			return Math.acos(rad);
+		}
+	}, {
+		key: "equal",
+		value: function equal(v1, v2) {
+			return v1.x == v2.x && v1.y == v2.y && v1.z == v2.z;
+		}
+	}, {
+		key: "crossProduct",
+		value: function crossProduct(v1, v2) {
+			return new Vec3(v1.y * v2.z - v1.z * v2.y, v1.z * v2.x - v1.x * v2.z, v1.x * v2.y - v1.y * v2.x);
+		}
+	}, {
+		key: "proj",
+		value: function proj(v1, v2) {
+			var v = Vec3.clone(v2);
+			var distance = v.distance();
+			var vii = v.multi(Vec3.zero().add(v1).multi(v) / (distance * distance));
+			return v1.sub(vii);
+		}
+	}, {
+		key: "norm",
+		value: function norm(vec3) {
+			var clone = Vec3.clone(vec3);
+			var distance = clone.distance();
+			if (distance) {
+				return clone.multi(1 / distance);
+			} else {
+				throw new Exception("zero vec3 can't be norm");
+			}
+		}
 	}]);
 
 	return Vec3;
 }();
-
-Vec3.zero = function () {
-	return new Vec3(0, 0, 0);
-};
-
-Vec3.clone = function (vec3) {
-	return new Vec3(vec3.x, vec3.y, vec3.z);
-};
-
-Vec3.angle = function (v1, v2) {
-	var c1 = Vec3.clone(v1);
-	var c2 = Vec3.clone(v2);
-	var rad = c1.multi(c2) / (v1.distance() * v2.distance());
-	return Math.acos(rad);
-};
-
-Vec3.equal = function (v1, v2) {
-	return v1.x == v2.x && v1.y == v2.y && v1.z == v2.z;
-};
-
-Vec3.crossProduct = function (v1, v2) {
-	return new Vec3(v1.y * v2.z - v1.z * v2.y, v1.z * v2.x - v1.x * v2.z, v1.x * v2.y - v1.y * v2.x);
-};
-
-Vec3.proj = function (v1, v2) {
-	var v = Vec3.clone(v2);
-	var distance = v.distance();
-	var vii = v.multi(Vec3.zero().add(v1).multi(v) / (distance * distance));
-	return v1.sub(vii);
-};
-
-Vec3.norm = function (vec3) {
-	var clone = Vec3.clone(vec3);
-	var distance = clone.distance();
-	if (distance) {
-		return clone.multi(1 / distance);
-	} else {
-		throw new Exception("zero vec3 can't be norm");
-	}
-};
 
 Moco.Vec3 = Vec3;

@@ -8,19 +8,20 @@ let cancelAnimationFrame = window.cancelAnimationFrame;
 let i = vendors.length;
 
 while (--i >= 0 && !requestAnimationFrame) {
-    requestAnimationFrame = window[vendors[i] + 'RequestAnimationFrame'];
-    cancelAnimationFrame = window[vendors[i] + 'CancelAnimationFrame'];
+	requestAnimationFrame = window[vendors[i] + 'RequestAnimationFrame'];
+	cancelAnimationFrame = window[vendors[i] + 'CancelAnimationFrame'];
 }
 
 if (!requestAnimationFrame || !cancelAnimationFrame) {
-    requestAnimationFrame = function (callback) {
-        var now = +new Date(), nextTime = Math.max(lastTime + 16, now);
-        return setTimeout(function () {
-            callback(lastTime = nextTime);
-        }, nextTime - now);
-    };
+	requestAnimationFrame = function(callback) {
+		var now = +new Date(),
+			nextTime = Math.max(lastTime + 16, now);
+		return setTimeout(function() {
+			callback(lastTime = nextTime);
+		}, nextTime - now);
+	};
 
-    cancelAnimationFrame = clearTimeout;
+	cancelAnimationFrame = clearTimeout;
 }
 
 let raf = requestAnimationFrame;

@@ -174,7 +174,7 @@ class EventDispatcher {
 							target: parent,
 							callback: callbacks[i]
 						};
-						
+
 						!i ? handlerList.useCaptures.unshift(tmp) : handlerList.useCaptures.splice(1, 0, tmp);
 					}
 				}
