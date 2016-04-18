@@ -536,11 +536,11 @@ var InteractiveEvent = function () {
 				var list = this._list;
 				list[eventName] = list[eventName] ? list[eventName] : [];
 
-				var index = Util.inArray(item, list[eventName], function (a1, a2) {
+				var isNotExists = Util.inArray(item, list[eventName], function (a1, a2) {
 					return a1.aIndex == a2.aIndex;
-				});
+				}) == -1;
 
-				if (! ~index) {
+				if (isNotExists) {
 					list[eventName].push(item);
 				}
 			}
@@ -551,11 +551,11 @@ var InteractiveEvent = function () {
 			if (item instanceof EventDispatcher) {
 				var list = this._list;
 				if (list[eventName]) {
-					var index = Util.inArray(item, list[eventName], function (a1, a2) {
+					var isExists = Util.inArray(item, list[eventName], function (a1, a2) {
 						return a1.aIndex == a2.aIndex;
-					});
+					}) != -1;
 
-					if (~index) {
+					if (isExists) {
 						list[eventName].splice(i, 1);
 					}
 				}
@@ -717,9 +717,7 @@ var EventDispatcher = function () {
 						var handlers = target.handlers;
 						var fn = function fn(event) {
 							var callbacks = handlers[eventName];
-
-							// event需要clone出一个新对象，否则在严格模式下会抛错
-							var ev = _me._fixEvent(Util.clone(event));
+							var ev = _me._fixEvent(event);
 
 							for (var i = 0, len = callbacks.length; i < len; i++) {
 								var item = callbacks[i];
@@ -865,7 +863,7 @@ var EventDispatcher = function () {
 				ev.target = ev.currentTarget = target;
 			}
 
-			ev = _me._fixEvent(Util.clone(ev));
+			ev = _me._fixEvent(ev);
 
 			// 此处分开冒泡阶段函数和捕获阶段函数
 			var parent = target.parent || target.parentNode;
@@ -886,10 +884,12 @@ var EventDispatcher = function () {
 								callback: _callbacks3[i]
 							});
 						} else {
-							handlerList.useCaptures.push({
+							var tmp = {
 								target: parent,
 								callback: _callbacks3[i]
-							});
+							};
+
+							!i ? handlerList.useCaptures.unshift(tmp) : handlerList.useCaptures.splice(1, 0, tmp);
 						}
 					}
 				}
@@ -903,6 +903,7 @@ var EventDispatcher = function () {
 			for (var _i = 0, _len = useCaptures.length; _i < _len; _i++) {
 				var handler = useCaptures[_i];
 				target = handler.target;
+
 				if (ev.isImmediatePropagationStopped()) {
 					break;
 				} else if (prevTarget == target && ev.isPropagationStopped()) {
@@ -972,8 +973,6 @@ var EventDispatcher = function () {
 			};
 
 			if (!event || !event.isPropagationStopped) {
-				var doc, body;
-
 				(function () {
 					event = event ? event : {};
 
@@ -1024,9 +1023,8 @@ var EventDispatcher = function () {
 					event.isImmediatePropagationStopped = returnFalse;
 
 					if (event.clientX != null) {
-						doc = document.documentElement;
-						body = document.body;
-
+						var doc = document.documentElement,
+						    body = document.body;
 
 						event.pageX = event.clientX + (doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc && doc.clientLeft || body && body.clientLeft || 0);
 
@@ -1234,8 +1232,9 @@ var InteractiveObject = function (_DisplayObject) {
 		key: "on",
 		value: function on(eventName, callback, useCapture) {
 			var _me = this;
-			var isMouseEvent = ~Util.inArray(eventName, MouseEvent.nameList);
-			var isKeyboardEvent = ~Util.inArray(eventName, KeyboardEvent.nameList);
+			var eventNameUpperCase = eventName.toUpperCase();
+			var isMouseEvent = Util.inArray(eventNameUpperCase, MouseEvent.nameList) == -1;
+			var isKeyboardEvent = Util.inArray(eventNameUpperCase, KeyboardEvent.nameList) == -1;
 
 			if (!isMouseEvent && !isKeyboardEvent) {
 				return;
@@ -1251,8 +1250,9 @@ var InteractiveObject = function (_DisplayObject) {
 		key: "off",
 		value: function off(eventName, callback) {
 			var _me = this;
-			var isMouseEvent = ~Util.inArray(eventName, MouseEvent.nameList);
-			var isKeyboardEvent = ~Util.inArray(eventName, KeyBoardEvent.nameList);
+			var eventNameUpperCase = eventName.toUpperCase();
+			var isMouseEvent = Util.inArray(eventName, MouseEvent.nameList) == -1;
+			var isKeyboardEvent = Util.inArray(eventName, KeyBoardEvent.nameList) == -1;
 
 			if (!isMouseEvent && !isKeyboardEvent) {
 				return;
@@ -1301,9 +1301,16 @@ var DisplayObjectContainer = function (_InteractiveObject) {
 		value: function addChild(child) {
 			var _me = this;
 			if (child instanceof DisplayObject) {
-				_me._childList.push(child);
-				child.parent = _me;
-				child.objectIndex = _me.objectIndex + "." + _me._childList.length;
+				var isNotExists = Util.inArray(child, _me._childList, function (child, item) {
+					return child.aIndex == item.aIndex;
+				}) == -1;
+
+				if (isNotExists) {
+					child.parent = _me;
+					child.stage = child.stage ? child.stage : _me.stage;
+					child.objectIndex = _me.objectIndex + "." + (_me._childList.length + 1);
+					_me._childList.push(child);
+				}
 			}
 		}
 	}, {
@@ -1314,16 +1321,25 @@ var DisplayObjectContainer = function (_InteractiveObject) {
 				for (var i = _me._childList.length - 1; i >= 0; i--) {
 					var item = _me._childList[i];
 					if (item.aIndex == child.aIndex) {
+						item.parent = null;
+						item.stage = null;
 						Array.prototype.splice.call(_me._childList, i, 1);
+						break;
 					}
 				}
 			}
 		}
 	}, {
+		key: "getAllChild",
+		value: function getAllChild() {
+			var _me = this;
+			return Util.clone(_me._childList);
+		}
+	}, {
 		key: "getChildAt",
 		value: function getChildAt(index) {
 			var _me = this;
-			var len = self._childList.length;
+			var len = _me._childList.length;
 
 			if (Math.abs(index) > len) {
 				return;
@@ -1338,9 +1354,9 @@ var DisplayObjectContainer = function (_InteractiveObject) {
 		value: function contains(child) {
 			var _me = this;
 			if (child instanceof DisplayObject) {
-				return Util.inArray(_me._childList, child, function (child, item) {
+				return Util.inArray(child, _me._childList, function (child, item) {
 					return child.aIndex == item.aIndex;
-				}) == -1 ? false : true;
+				}) != -1;
 			}
 		}
 	}, {
@@ -1348,7 +1364,6 @@ var DisplayObjectContainer = function (_InteractiveObject) {
 		value: function show(matrix) {
 			var _me = this;
 
-			// if this is a top container, matrix base on the itself
 			if (matrix == null) {
 				matrix = Matrix3.clone(_me._matrix);
 			}
@@ -1391,12 +1406,13 @@ var Stage = function (_DisplayObjectContain) {
 
 		_this.name = "Stage";
 		_this.domElem = document.getElementById(canvasId);
-		_this.ctx = _this.domElem.getContext("2d");
 		_this.width = parseFloat(_this.domElem.getAttribute("width"), 10);
 		_this.height = parseFloat(_this.domElem.getAttribute("height"), 10);
-		_this.offset = _this._getOffset();
-		_this.x = _this.offset.left;
-		_this.y = _this.offset.top;
+		_this.ctx = _this.domElem.getContext("2d");
+
+		var offset = _this._getOffset();
+		_this.x = offset.left;
+		_this.y = offset.top;
 
 		if (typeof fn == "function") {
 			fn(_this);
@@ -1445,6 +1461,31 @@ var Stage = function (_DisplayObjectContain) {
 			});
 		}
 	}, {
+		key: "addChild",
+		value: function addChild(child) {
+			var _me = this;
+			var addStage = function addStage(child) {
+				child.stage = _me;
+
+				if (child instanceof Sprite) {
+					child.graphics.stage = _me;
+					child.graphics.parent = child;
+					child.graphics.objectIndex = child.objectIndex + ".0";
+				}
+			};
+
+			addStage(child);
+
+			if (child.getAllChild) {
+				var childs = child.getAllChild();
+				Util.each(childs, function (item) {
+					addStage(item);
+				});
+			}
+
+			_get(Object.getPrototypeOf(Stage.prototype), "addChild", this).call(this, child);
+		}
+	}, {
 		key: "_mouseEvent",
 		value: function _mouseEvent(event) {
 			var cord = {
@@ -1476,6 +1517,7 @@ var Stage = function (_DisplayObjectContain) {
 			var items = KeyboardEvent.getItems(eventName);
 
 			if (items.length) {
+				event = Util.clone(event);
 				Util.each(items, function (item) {
 					item.trigger(eventName, event);
 				});
@@ -1483,7 +1525,12 @@ var Stage = function (_DisplayObjectContain) {
 		}
 	}, {
 		key: "_getOffset",
-		value: function _getOffset() {}
+		value: function _getOffset() {
+			return {
+				top: 0,
+				left: 0
+			};
+		}
 	}]);
 
 	return Stage;

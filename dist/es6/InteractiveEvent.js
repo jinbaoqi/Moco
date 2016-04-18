@@ -21,11 +21,11 @@ var InteractiveEvent = function () {
 				var list = this._list;
 				list[eventName] = list[eventName] ? list[eventName] : [];
 
-				var index = Util.inArray(item, list[eventName], function (a1, a2) {
+				var isNotExists = Util.inArray(item, list[eventName], function (a1, a2) {
 					return a1.aIndex == a2.aIndex;
-				});
+				}) == -1;
 
-				if (! ~index) {
+				if (isNotExists) {
 					list[eventName].push(item);
 				}
 			}
@@ -36,11 +36,11 @@ var InteractiveEvent = function () {
 			if (item instanceof EventDispatcher) {
 				var list = this._list;
 				if (list[eventName]) {
-					var index = Util.inArray(item, list[eventName], function (a1, a2) {
+					var isExists = Util.inArray(item, list[eventName], function (a1, a2) {
 						return a1.aIndex == a2.aIndex;
-					});
+					}) != -1;
 
-					if (~index) {
+					if (isExists) {
 						list[eventName].splice(i, 1);
 					}
 				}

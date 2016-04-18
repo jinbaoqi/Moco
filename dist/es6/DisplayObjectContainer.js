@@ -28,9 +28,16 @@ var DisplayObjectContainer = function (_InteractiveObject) {
 		value: function addChild(child) {
 			var _me = this;
 			if (child instanceof DisplayObject) {
-				_me._childList.push(child);
-				child.parent = _me;
-				child.objectIndex = _me.objectIndex + "." + _me._childList.length;
+				var isNotExists = Util.inArray(child, _me._childList, function (child, item) {
+					return child.aIndex == item.aIndex;
+				}) == -1;
+
+				if (isNotExists) {
+					child.parent = _me;
+					child.stage = child.stage ? child.stage : _me.stage;
+					child.objectIndex = _me.objectIndex + "." + (_me._childList.length + 1);
+					_me._childList.push(child);
+				}
 			}
 		}
 	}, {
@@ -41,16 +48,25 @@ var DisplayObjectContainer = function (_InteractiveObject) {
 				for (var i = _me._childList.length - 1; i >= 0; i--) {
 					var item = _me._childList[i];
 					if (item.aIndex == child.aIndex) {
+						item.parent = null;
+						item.stage = null;
 						Array.prototype.splice.call(_me._childList, i, 1);
+						break;
 					}
 				}
 			}
 		}
 	}, {
+		key: "getAllChild",
+		value: function getAllChild() {
+			var _me = this;
+			return Util.clone(_me._childList);
+		}
+	}, {
 		key: "getChildAt",
 		value: function getChildAt(index) {
 			var _me = this;
-			var len = self._childList.length;
+			var len = _me._childList.length;
 
 			if (Math.abs(index) > len) {
 				return;
@@ -65,9 +81,9 @@ var DisplayObjectContainer = function (_InteractiveObject) {
 		value: function contains(child) {
 			var _me = this;
 			if (child instanceof DisplayObject) {
-				return Util.inArray(_me._childList, child, function (child, item) {
+				return Util.inArray(child, _me._childList, function (child, item) {
 					return child.aIndex == item.aIndex;
-				}) == -1 ? false : true;
+				}) != -1;
 			}
 		}
 	}, {
@@ -75,7 +91,6 @@ var DisplayObjectContainer = function (_InteractiveObject) {
 		value: function show(matrix) {
 			var _me = this;
 
-			// if this is a top container, matrix base on the itself
 			if (matrix == null) {
 				matrix = Matrix3.clone(_me._matrix);
 			}

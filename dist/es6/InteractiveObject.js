@@ -26,8 +26,9 @@ var InteractiveObject = function (_DisplayObject) {
 		key: "on",
 		value: function on(eventName, callback, useCapture) {
 			var _me = this;
-			var isMouseEvent = ~Util.inArray(eventName, MouseEvent.nameList);
-			var isKeyboardEvent = ~Util.inArray(eventName, KeyboardEvent.nameList);
+			var eventNameUpperCase = eventName.toUpperCase();
+			var isMouseEvent = Util.inArray(eventNameUpperCase, MouseEvent.nameList) == -1;
+			var isKeyboardEvent = Util.inArray(eventNameUpperCase, KeyboardEvent.nameList) == -1;
 
 			if (!isMouseEvent && !isKeyboardEvent) {
 				return;
@@ -43,8 +44,9 @@ var InteractiveObject = function (_DisplayObject) {
 		key: "off",
 		value: function off(eventName, callback) {
 			var _me = this;
-			var isMouseEvent = ~Util.inArray(eventName, MouseEvent.nameList);
-			var isKeyboardEvent = ~Util.inArray(eventName, KeyBoardEvent.nameList);
+			var eventNameUpperCase = eventName.toUpperCase();
+			var isMouseEvent = Util.inArray(eventName, MouseEvent.nameList) == -1;
+			var isKeyboardEvent = Util.inArray(eventName, KeyBoardEvent.nameList) == -1;
 
 			if (!isMouseEvent && !isKeyboardEvent) {
 				return;

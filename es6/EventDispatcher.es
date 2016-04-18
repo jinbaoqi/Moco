@@ -17,9 +17,7 @@ class EventDispatcher {
 				let handlers = target.handlers;
 				let fn = (event) => {
 					let callbacks = handlers[eventName];
-
-					// event需要clone出一个新对象，否则在严格模式下会抛错
-					let ev = _me._fixEvent(Util.clone(event));
+					let ev = _me._fixEvent(event);
 
 					for (let i = 0, len = callbacks.length; i < len; i++) {
 						let item = callbacks[i];
@@ -151,7 +149,7 @@ class EventDispatcher {
 			ev.target = ev.currentTarget = target;
 		}
 
-		ev = _me._fixEvent(Util.clone(ev));
+		ev = _me._fixEvent(ev);
 
 		// 此处分开冒泡阶段函数和捕获阶段函数
 		let parent = target.parent || target.parentNode;
@@ -172,10 +170,12 @@ class EventDispatcher {
 							callback: callbacks[i]
 						});
 					} else {
-						handlerList.useCaptures.push({
+						let tmp = {
 							target: parent,
 							callback: callbacks[i]
-						});
+						};
+						
+						!i ? handlerList.useCaptures.unshift(tmp) : handlerList.useCaptures.splice(1, 0, tmp);
 					}
 				}
 			}
@@ -189,6 +189,7 @@ class EventDispatcher {
 		for (let i = 0, len = useCaptures.length; i < len; i++) {
 			let handler = useCaptures[i];
 			target = handler.target;
+
 			if (ev.isImmediatePropagationStopped()) {
 				break;
 			} else if (prevTarget == target && ev.isPropagationStopped()) {
@@ -310,7 +311,7 @@ class EventDispatcher {
 			event.isImmediatePropagationStopped = returnFalse;
 
 			if (event.clientX != null) {
-				var doc = document.documentElement,
+				let doc = document.documentElement,
 					body = document.body;
 
 				event.pageX = event.clientX +

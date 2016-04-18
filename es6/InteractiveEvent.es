@@ -8,11 +8,11 @@ class InteractiveEvent {
 			let list = this._list;
 			list[eventName] = list[eventName] ? list[eventName] : [];
 
-			let index = Util.inArray(item, list[eventName], (a1, a2) => {
+			let isNotExists = Util.inArray(item, list[eventName], (a1, a2) => {
 				return a1.aIndex == a2.aIndex;
-			});
+			}) == -1;
 
-			if (!~index) {
+			if (isNotExists) {
 				list[eventName].push(item);
 			}
 		}
@@ -22,11 +22,11 @@ class InteractiveEvent {
 		if (item instanceof EventDispatcher) {
 			let list = this._list;
 			if (list[eventName]) {
-				let index = Util.inArray(item, list[eventName], (a1, a2) => {
+				let isExists = Util.inArray(item, list[eventName], (a1, a2) => {
 					return a1.aIndex == a2.aIndex;
-				});
+				}) != -1
 
-				if (~index) {
+				if (isExists) {
 					list[eventName].splice(i, 1);
 				}
 			}

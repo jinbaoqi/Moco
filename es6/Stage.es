@@ -4,12 +4,13 @@ class Stage extends DisplayObjectContainer {
 
 		this.name = "Stage";
 		this.domElem = document.getElementById(canvasId);
-		this.ctx = this.domElem.getContext("2d");
 		this.width = parseFloat(this.domElem.getAttribute("width"), 10);
 		this.height = parseFloat(this.domElem.getAttribute("height"), 10);
-		this.offset = this._getOffset();
-		this.x = this.offset.left;
-		this.y = this.offset.top;
+		this.ctx = this.domElem.getContext("2d");
+
+		let offset = this._getOffset();
+		this.x = offset.left;
+		this.y = offset.top;
 
 		if (typeof fn == "function") {
 			fn(this);
@@ -54,6 +55,30 @@ class Stage extends DisplayObjectContainer {
 		});
 	}
 
+	addChild(child) {
+		let _me = this;
+		let addStage = (child) => {
+			child.stage = _me;
+
+			if (child instanceof Sprite) {
+				child.graphics.stage = _me;
+				child.graphics.parent = child;
+				child.graphics.objectIndex = child.objectIndex + ".0";
+			}
+		};
+
+		addStage(child);
+
+		if (child.getAllChild) {
+			let childs = child.getAllChild();
+			Util.each(childs, (item) => {
+				addStage(item);
+			});
+		}
+
+		super.addChild(child);
+	}
+
 	_mouseEvent(event) {
 		let cord = {
 			x: 0,
@@ -83,6 +108,7 @@ class Stage extends DisplayObjectContainer {
 		let items = KeyboardEvent.getItems(eventName);
 
 		if (items.length) {
+			event = Util.clone(event);
 			Util.each(items, (item) => {
 				item.trigger(eventName, event);
 			});
@@ -90,7 +116,10 @@ class Stage extends DisplayObjectContainer {
 	}
 
 	_getOffset() {
-
+		return {
+			top: 0,
+			left: 0
+		}
 	}
 
 }

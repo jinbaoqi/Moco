@@ -34,9 +34,7 @@ var EventDispatcher = function () {
 						var handlers = target.handlers;
 						var fn = function fn(event) {
 							var callbacks = handlers[eventName];
-
-							// event需要clone出一个新对象，否则在严格模式下会抛错
-							var ev = _me._fixEvent(Util.clone(event));
+							var ev = _me._fixEvent(event);
 
 							for (var i = 0, len = callbacks.length; i < len; i++) {
 								var item = callbacks[i];
@@ -182,7 +180,7 @@ var EventDispatcher = function () {
 				ev.target = ev.currentTarget = target;
 			}
 
-			ev = _me._fixEvent(Util.clone(ev));
+			ev = _me._fixEvent(ev);
 
 			// 此处分开冒泡阶段函数和捕获阶段函数
 			var parent = target.parent || target.parentNode;
@@ -203,10 +201,12 @@ var EventDispatcher = function () {
 								callback: _callbacks3[i]
 							});
 						} else {
-							handlerList.useCaptures.push({
+							var tmp = {
 								target: parent,
 								callback: _callbacks3[i]
-							});
+							};
+
+							!i ? handlerList.useCaptures.unshift(tmp) : handlerList.useCaptures.splice(1, 0, tmp);
 						}
 					}
 				}
@@ -220,6 +220,7 @@ var EventDispatcher = function () {
 			for (var _i = 0, _len = useCaptures.length; _i < _len; _i++) {
 				var handler = useCaptures[_i];
 				target = handler.target;
+
 				if (ev.isImmediatePropagationStopped()) {
 					break;
 				} else if (prevTarget == target && ev.isPropagationStopped()) {
@@ -289,8 +290,6 @@ var EventDispatcher = function () {
 			};
 
 			if (!event || !event.isPropagationStopped) {
-				var doc, body;
-
 				(function () {
 					event = event ? event : {};
 
@@ -341,9 +340,8 @@ var EventDispatcher = function () {
 					event.isImmediatePropagationStopped = returnFalse;
 
 					if (event.clientX != null) {
-						doc = document.documentElement;
-						body = document.body;
-
+						var doc = document.documentElement,
+						    body = document.body;
 
 						event.pageX = event.clientX + (doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc && doc.clientLeft || body && body.clientLeft || 0);
 

@@ -20,12 +20,13 @@ var Stage = function (_DisplayObjectContain) {
 
 		_this.name = "Stage";
 		_this.domElem = document.getElementById(canvasId);
-		_this.ctx = _this.domElem.getContext("2d");
 		_this.width = parseFloat(_this.domElem.getAttribute("width"), 10);
 		_this.height = parseFloat(_this.domElem.getAttribute("height"), 10);
-		_this.offset = _this._getOffset();
-		_this.x = _this.offset.left;
-		_this.y = _this.offset.top;
+		_this.ctx = _this.domElem.getContext("2d");
+
+		var offset = _this._getOffset();
+		_this.x = offset.left;
+		_this.y = offset.top;
 
 		if (typeof fn == "function") {
 			fn(_this);
@@ -74,6 +75,31 @@ var Stage = function (_DisplayObjectContain) {
 			});
 		}
 	}, {
+		key: "addChild",
+		value: function addChild(child) {
+			var _me = this;
+			var addStage = function addStage(child) {
+				child.stage = _me;
+
+				if (child instanceof Sprite) {
+					child.graphics.stage = _me;
+					child.graphics.parent = child;
+					child.graphics.objectIndex = child.objectIndex + ".0";
+				}
+			};
+
+			addStage(child);
+
+			if (child.getAllChild) {
+				var childs = child.getAllChild();
+				Util.each(childs, function (item) {
+					addStage(item);
+				});
+			}
+
+			_get(Object.getPrototypeOf(Stage.prototype), "addChild", this).call(this, child);
+		}
+	}, {
 		key: "_mouseEvent",
 		value: function _mouseEvent(event) {
 			var cord = {
@@ -105,6 +131,7 @@ var Stage = function (_DisplayObjectContain) {
 			var items = KeyboardEvent.getItems(eventName);
 
 			if (items.length) {
+				event = Util.clone(event);
 				Util.each(items, function (item) {
 					item.trigger(eventName, event);
 				});
@@ -112,7 +139,12 @@ var Stage = function (_DisplayObjectContain) {
 		}
 	}, {
 		key: "_getOffset",
-		value: function _getOffset() {}
+		value: function _getOffset() {
+			return {
+				top: 0,
+				left: 0
+			};
+		}
 	}]);
 
 	return Stage;
