@@ -26,12 +26,15 @@
     shape.drawArc(1,"#0f0f0f",[160,160,10,0,2*Math.PI,true],true,"#f0f0f0");
 
     var sprite = new Moco.Sprite();
-    sprite.graphics = shape;
+    var sprite2 = new Moco.Sprite();
+    sprite2.graphics = shape;
+    sprite.addChild(sprite2);
+
     stage.addChild(sprite);
 
-    setInterval(function(){
-        sprite.x += 1;
-    },1000/60);
+    sprite.on(Moco.KeyboardEvent.KEYPRESS,function(){
+        sprite.x += 10;
+    });
 </script>
 </body>
 </html>

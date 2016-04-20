@@ -6,9 +6,9 @@ class KeyboardEvent extends InteractiveEvent {
 }
 
 let keyboardEvents = {
-	KEY_DOWN: "keydown",
-	KEY_UP: "keyup",
-	KEY_PRESS: "keypress"
+	KEYDOWN: "keydown",
+	KEYUP: "keyup",
+	KEYPRESS: "keypress"
 };
 
 for (let key in keyboardEvents) {

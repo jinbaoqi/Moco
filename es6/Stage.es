@@ -32,8 +32,8 @@ class Stage extends DisplayObjectContainer {
 
 		Util.each(KeyboardEvent.nameList, (eventName) => {
 			eventName = KeyboardEvent[eventName];
-			EventDispatcher.prototype.on.call(_me, _me.domElem, eventName, (event) => {
-				_me.keyboardEvent(event);
+			EventDispatcher.prototype.on.call(_me, document, eventName, (event) => {
+				_me._keyboardEvent(event);
 			});
 		}, false);
 

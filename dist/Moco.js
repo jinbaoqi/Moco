@@ -775,9 +775,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	}(InteractiveEvent);
 
 	var keyboardEvents = {
-		KEY_DOWN: "keydown",
-		KEY_UP: "keyup",
-		KEY_PRESS: "keypress"
+		KEYDOWN: "keydown",
+		KEYUP: "keyup",
+		KEYPRESS: "keypress"
 	};
 
 	for (var _key in keyboardEvents) {
@@ -1572,8 +1572,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 				Util.each(KeyboardEvent.nameList, function (eventName) {
 					eventName = KeyboardEvent[eventName];
-					EventDispatcher.prototype.on.call(_me, _me.domElem, eventName, function (event) {
-						_me.keyboardEvent(event);
+					EventDispatcher.prototype.on.call(_me, document, eventName, function (event) {
+						_me._keyboardEvent(event);
 					});
 				}, false);
 
