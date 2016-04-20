@@ -40,8 +40,8 @@ class DisplayObject extends EventDispatcher {
 			_me.rotate != 0 ||
 			_me.scaleX != 1 ||
 			_me.scaleY != 1 ||
-			_me.translateX != 0 ||
-			_me.translateY != 0 ||
+			_me.x != 0 ||
+			_me.y != 0 ||
 			_me.globalCompositeOperation != ""
 		) {
 			_me._isSaved = true;
@@ -104,7 +104,7 @@ class DisplayObject extends EventDispatcher {
 			key: 'rotate',
 			method: 'rotate',
 			args: (value) => {
-				return value
+				return [value];
 			}
 		}, {
 			key: 'scaleX',

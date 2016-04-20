@@ -22,13 +22,22 @@
         console.log("start!");
     });
 
-    var shape = new Moco.Shape();
-    shape.drawRect(1,"#0000ff",[0,0,100,100],true,"#ff0000");
+    var shape2 = new Moco.Shape();
+    shape2.x = 100;
+    shape2.y = 100;
+    shape2.rotate = 45;
+    shape2.drawRect(1,"#0000ff",[0,0,100,100],true,"#0000ff");
+    stage.addChild(shape2);
 
-    stage.addChild(shape);
-
-    stage.x = 100;
-    stage.y = 100;
+    var shape1 = new Moco.Shape();
+    shape1.x = 100;
+    shape1.y = 100;
+    shape1.rotate = 45;
+    shape1.scaleX = 0.5;
+    shape1.scaleY = 0.5;
+    shape1.drawRect(1,"#0000ff",[0,0,100,100],true,"#00ff00");
+    stage.addChild(shape1);
+    
 </script>
 </body>
 </html>

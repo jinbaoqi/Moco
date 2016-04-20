@@ -1053,8 +1053,8 @@ class DisplayObject extends EventDispatcher {
 			_me.rotate != 0 ||
 			_me.scaleX != 1 ||
 			_me.scaleY != 1 ||
-			_me.translateX != 0 ||
-			_me.translateY != 0 ||
+			_me.x != 0 ||
+			_me.y != 0 ||
 			_me.globalCompositeOperation != ""
 		) {
 			_me._isSaved = true;
@@ -1117,7 +1117,7 @@ class DisplayObject extends EventDispatcher {
 			key: 'rotate',
 			method: 'rotate',
 			args: (value) => {
-				return value
+				return [value];
 			}
 		}, {
 			key: 'scaleX',
@@ -1327,6 +1327,7 @@ class Stage extends DisplayObjectContainer {
 		super.show();
 
 		if (_me._isSaved) {
+			_me._isSaved = false;
 			_me.ctx.restore();
 		}
 	}
@@ -1340,7 +1341,7 @@ class Stage extends DisplayObjectContainer {
 		let _me = this;
 		let addStage = (child) => {
 			child.stage = _me;
-			
+
 			if (child instanceof Sprite) {
 				child.graphics.stage = _me;
 				child.graphics.parent = child;
@@ -1435,6 +1436,7 @@ class Shape extends DisplayObject {
 
 		if (_me._isSaved) {
 			let ctx = _me.ctx || _me.stage.ctx;
+			_me._isSaved = false;
 			ctx.restore();
 		}
 	}

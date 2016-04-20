@@ -1189,7 +1189,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					return;
 				}
 
-				if (_me.mask != null && _me.mask.show || _me.alpha < 1 || _me.rotate != 0 || _me.scaleX != 1 || _me.scaleY != 1 || _me.translateX != 0 || _me.translateY != 0 || _me.globalCompositeOperation != "") {
+				if (_me.mask != null && _me.mask.show || _me.alpha < 1 || _me.rotate != 0 || _me.scaleX != 1 || _me.scaleY != 1 || _me.x != 0 || _me.y != 0 || _me.globalCompositeOperation != "") {
 					_me._isSaved = true;
 					canvas.save();
 				}
@@ -1254,7 +1254,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					key: 'rotate',
 					method: 'rotate',
 					args: function args(value) {
-						return value;
+						return [value];
 					}
 				}, {
 					key: 'scaleX',
@@ -1510,6 +1510,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				_get(Object.getPrototypeOf(Stage.prototype), "show", this).call(this);
 
 				if (_me._isSaved) {
+					_me._isSaved = false;
 					_me.ctx.restore();
 				}
 			}
@@ -1643,6 +1644,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 				if (_me._isSaved) {
 					var ctx = _me.ctx || _me.stage.ctx;
+					_me._isSaved = false;
 					ctx.restore();
 				}
 			}

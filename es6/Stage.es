@@ -49,6 +49,7 @@ class Stage extends DisplayObjectContainer {
 		super.show();
 
 		if (_me._isSaved) {
+			_me._isSaved = false;
 			_me.ctx.restore();
 		}
 	}
@@ -62,7 +63,7 @@ class Stage extends DisplayObjectContainer {
 		let _me = this;
 		let addStage = (child) => {
 			child.stage = _me;
-			
+
 			if (child instanceof Sprite) {
 				child.graphics.stage = _me;
 				child.graphics.parent = child;

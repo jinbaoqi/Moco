@@ -22,6 +22,7 @@ class Shape extends DisplayObject {
 
 		if (_me._isSaved) {
 			let ctx = _me.ctx || _me.stage.ctx;
+			_me._isSaved = false;
 			ctx.restore();
 		}
 	}
