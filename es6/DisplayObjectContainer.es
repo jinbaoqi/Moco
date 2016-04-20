@@ -75,14 +75,14 @@ class DisplayObjectContainer extends InteractiveObject {
 		if (isDrew) {
 			if (_me instanceof Sprite) {
 				if (_me.graphics && _me.graphics.show) {
-					_me.graphics.show(Matrix3.clone(_me._matrix));
+					_me.graphics.show(_me._matrix);
 				}
 			}
-			
+
 			for (let i = 0, len = _me._childList.length; i < len; i++) {
 				let item = _me._childList[i];
 				if (item.show) {
-					item.show(Matrix3.clone(_me._matrix));
+					item.show(_me._matrix);
 				}
 			}
 
