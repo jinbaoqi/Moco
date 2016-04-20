@@ -7,30 +7,31 @@ class Shape extends DisplayObject {
 	}
 
 	on() {
-		console.error("shape object can't interative event");
+		console.error("shape object can't interative event, please add shape to sprite");
 	}
 
 	off() {
-		console.error("shape object can't interative event");
+		console.error("shape object can't interative event, please add shape to sprite");
 	}
 
 	show(matrix) {
 		let _me = this;
 		let showList = _me._showList;
+		let isDrew = super.show(matrix);
 
-		super.show(matrix);
-
-		for (let i = 0, len = showList.length; i < len; i++) {
-			let showListItem = showList[i];
-			if (typeof showListItem == "function") {
-				showListItem(matrix);
+		if (isDrew) {
+			for (let i = 0, len = showList.length; i < len; i++) {
+				let showListItem = showList[i];
+				if (typeof showListItem == "function") {
+					showListItem(matrix);
+				}
 			}
-		}
 
-		if (_me._isSaved) {
-			let ctx = _me.ctx || _me.stage.ctx;
-			_me._isSaved = false;
-			ctx.restore();
+			if (_me._isSaved) {
+				let ctx = _me.ctx || _me.stage.ctx;
+				_me._isSaved = false;
+				ctx.restore();
+			}
 		}
 	}
 
@@ -138,12 +139,12 @@ class Shape extends DisplayObject {
 		});
 	}
 
-	drawArc(thickness, lineColor, pointArr, isFill, color) {
+	drawArc(thickness, lineColor, arcArgs, isFill, color) {
 		let _me = this;
 		_me._showList.push(function() {
 			let ctx = _me.ctx || _me.stage.ctx;
 			ctx.beginPath();
-			ctx.arc(pointArr[0], pointArr[1], pointArr[2], pointArr[3], pointArr[4], pointArr[5]);
+			ctx.arc(arcArgs[0], arcArgs[1], arcArgs[2], arcArgs[3], arcArgs[4], arcArgs[5]);
 
 			if (isFill) {
 				ctx.fillStyle = color;
@@ -157,16 +158,16 @@ class Shape extends DisplayObject {
 
 		_me._setList.push({
 			type: "arc",
-			area: pointArr
+			area: arcArgs
 		});
 	}
 
-	drawRect(thickness, lineColor, pointArr, isFill, color) {
+	drawRect(thickness, lineColor, rectArgs, isFill, color) {
 		let _me = this;
 		_me._showList.push(function() {
 			let ctx = _me.ctx || _me.stage.ctx;
 			ctx.beginPath();
-			ctx.rect(pointArr[0], pointArr[1], pointArr[2], pointArr[3]);
+			ctx.rect(rectArgs[0], rectArgs[1], rectArgs[2], rectArgs[3]);
 
 			if (isFill) {
 				ctx.fillStyle = color;
@@ -180,7 +181,7 @@ class Shape extends DisplayObject {
 
 		_me._setList.push({
 			type: "rect",
-			area: pointArr
+			area: rectArgs
 		});
 	}
 
@@ -221,14 +222,14 @@ class Shape extends DisplayObject {
 		});
 	}
 
-	drawLine(thickness, lineColor, pointArr) {
+	drawLine(thickness, lineColor, points) {
 		let _me = this;
 
 		_me._showList.push(function() {
 			let ctx = _me.ctx || _me.stage.ctx;
 			ctx.beginPath();
-			ctx.moveTo(pointArr[0], pointArr[1]);
-			ctx.lineTo(pointArr[2], pointArr[3]);
+			ctx.moveTo(points[0], points[1]);
+			ctx.lineTo(points[2], points[3]);
 			ctx.lineWidth = thickness;
 			ctx.strokeStyle = lineColor;
 			ctx.closePath();
@@ -239,16 +240,9 @@ class Shape extends DisplayObject {
 	lineStyle(thickness, color, alpha) {
 		let _me = this;
 
-		if (!color) {
-			color = _me.color;
+		if (alpha) {
+			_me.alpha = alpha;
 		}
-
-		if (!alpha) {
-			alpha = _me.alpha;
-		}
-
-		_me.color = color;
-		_me.alpha = alpha;
 
 		_me._showList.push(function() {
 			let ctx = _me.ctx || _me.stage.ctx;

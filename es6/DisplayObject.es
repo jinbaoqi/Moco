@@ -13,8 +13,6 @@ class DisplayObject extends EventDispatcher {
 		this.globalCompositeOperation = "";
 		this.x = 0;
 		this.y = 0;
-		this.mouseX = 0;
-		this.mouseY = 0;
 		this.parent = null;
 		this.visible = true;
 		this.aIndex = this.objectIndex = "" + (guid++);
@@ -31,7 +29,7 @@ class DisplayObject extends EventDispatcher {
 		this._matrix = Matrix3.identity();
 
 		if (!_me.visible || _me.alpha <= 0.001) {
-			return;
+			return false;
 		}
 
 		if (
@@ -78,6 +76,8 @@ class DisplayObject extends EventDispatcher {
 		}
 
 		this._matrix.multi(matrix);
+
+		return true;
 	}
 
 	dispose() {

@@ -70,12 +70,20 @@ class DisplayObjectContainer extends InteractiveObject {
 			matrix = Matrix3.clone(_me._matrix);
 		}
 
-		super.show(matrix);
+		let isDrew = super.show(matrix);
 
-		for (let i = 0, len = _me._childList.length; i < len; i++) {
-			let item = _me._childList[i];
-			if (item.show) {
-				item.show(Matrix3.clone(matrix));
+		if (isDrew) {
+			for (let i = 0, len = _me._childList.length; i < len; i++) {
+				let item = _me._childList[i];
+				if (item.show) {
+					item.show(Matrix3.clone(matrix));
+				}
+			}
+
+			if (_me._isSaved) {
+				let ctx = _me.ctx || _me.stage.ctx;
+				_me._isSaved = false;
+				_me.ctx.restore();
 			}
 		}
 	}

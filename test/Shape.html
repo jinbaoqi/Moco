@@ -22,17 +22,6 @@
         console.log("start!");
     });
 
-    // stage.on(Moco.MouseEvent.CLICK,function(){
-    //     console.log("stage");
-    // });
-
-    var shape2 = new Moco.Shape();
-    shape2.x = 100;
-    shape2.y = 100;
-    shape2.rotate = 45;
-    shape2.drawRect(1,"#0000ff",[0,0,100,100],true,"#0000ff");
-    stage.addChild(shape2);
-
     var shape1 = new Moco.Shape();
     shape1.x = 100;
     shape1.y = 100;
@@ -42,9 +31,60 @@
     shape1.drawRect(1,"#0000ff",[0,0,100,100],true,"#00ff00");
     stage.addChild(shape1);
 
-    shape1.on(Moco.MouseEvent.CLICK,function(){
-        console.log("shape1");
-    });
+    var shape2 = new Moco.Shape();
+    shape2.beginPath();
+    shape2.lineWidth(5);
+    shape2.strokeStyle("#00ff00");
+    shape2.fillStyle("#0000ff");
+    shape2.rect(100,100,100,100);
+    shape2.fill();
+    stage.addChild(shape2);
+    shape2.closePath();
+
+    var shape3 = new Moco.Shape();
+    shape3.beginPath();
+    shape3.lineWidth(5);
+    shape3.strokeStyle("#00ff00");
+    shape3.fillStyle("#00ff00");
+    shape3.arc(150,150,10,0,2*Math.PI,true);
+    shape3.fill();
+    shape3.closePath();
+    stage.addChild(shape3);
+
+    var shape4 = new Moco.Shape();
+    shape4.beginPath();
+    shape4.lineWidth(5);
+    shape4.strokeStyle("#ffff00");
+    shape4.moveTo(100,100);
+    shape4.lineTo(150,150);
+    shape4.lineTo(100,150);
+    shape4.stroke();
+    shape4.closePath();
+    stage.addChild(shape4);
+
+    var shape5 = new Moco.Shape();
+    shape5.drawArc(1,"#0f0f0f",[160,160,10,0,2*Math.PI,true],true,"#f0f0f0");
+    stage.addChild(shape5);
+
+    var shape6 = new Moco.Shape();
+    shape6.beginPath();
+    shape6.lineStyle(1,"#ffffff",0.6);
+    shape6.moveTo(0,0);
+    shape6.lineTo(100,100);
+    shape6.lineTo(0,100);
+    shape6.stroke();
+    shape6.closePath();
+    stage.addChild(shape6);
+
+    var shape7 = new Moco.Shape();
+    shape7.drawLine(1,"#000",[0,0,10,50]);
+    shape7.drawLine(1,"#000",[10,50,50,50]);
+    shape7.drawLine(1,"#000",[50,50,0,0]);
+    stage.addChild(shape7);
+
+    var shape8 = new Moco.Shape();
+    shape8.drawVertices(1,"#ffbbff",[[0,0],[20,50],[50,100]]);
+    stage.addChild(shape8);
 </script>
 </body>
 </html>

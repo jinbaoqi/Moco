@@ -43,15 +43,8 @@ class Stage extends DisplayObjectContainer {
 
 	show() {
 		let _me = this;
-
 		_me.ctx.clearRect(0, 0, _me.width, _me.height);
-
 		super.show();
-
-		if (_me._isSaved) {
-			_me._isSaved = false;
-			_me.ctx.restore();
-		}
 	}
 
 	tick() {
@@ -97,8 +90,6 @@ class Stage extends DisplayObjectContainer {
 		if (event.clientX != null) {
 			cord.x = event.pageX - _me.x;
 			cord.y = event.pageY - _me.y;
-			_me.mouseX = cord.x;
-			_me.mouseY = cord.y;
 		}
 
 		event.cord = cord;

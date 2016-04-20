@@ -1165,8 +1165,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			_this3.globalCompositeOperation = "";
 			_this3.x = 0;
 			_this3.y = 0;
-			_this3.mouseX = 0;
-			_this3.mouseY = 0;
 			_this3.parent = null;
 			_this3.visible = true;
 			_this3.aIndex = _this3.objectIndex = "" + guid++;
@@ -1186,7 +1184,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				this._matrix = Matrix3.identity();
 
 				if (!_me.visible || _me.alpha <= 0.001) {
-					return;
+					return false;
 				}
 
 				if (_me.mask != null && _me.mask.show || _me.alpha < 1 || _me.rotate != 0 || _me.scaleX != 1 || _me.scaleY != 1 || _me.x != 0 || _me.y != 0 || _me.globalCompositeOperation != "") {
@@ -1224,6 +1222,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				}
 
 				this._matrix.multi(matrix);
+
+				return true;
 			}
 		}, {
 			key: "dispose",
@@ -1435,12 +1435,20 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					matrix = Matrix3.clone(_me._matrix);
 				}
 
-				_get(Object.getPrototypeOf(DisplayObjectContainer.prototype), "show", this).call(this, matrix);
+				var isDrew = _get(Object.getPrototypeOf(DisplayObjectContainer.prototype), "show", this).call(this, matrix);
 
-				for (var _i14 = 0, len = _me._childList.length; _i14 < len; _i14++) {
-					var item = _me._childList[_i14];
-					if (item.show) {
-						item.show(Matrix3.clone(matrix));
+				if (isDrew) {
+					for (var _i14 = 0, len = _me._childList.length; _i14 < len; _i14++) {
+						var item = _me._childList[_i14];
+						if (item.show) {
+							item.show(Matrix3.clone(matrix));
+						}
+					}
+
+					if (_me._isSaved) {
+						var ctx = _me.ctx || _me.stage.ctx;
+						_me._isSaved = false;
+						_me.ctx.restore();
 					}
 				}
 			}
@@ -1504,15 +1512,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: "show",
 			value: function show() {
 				var _me = this;
-
 				_me.ctx.clearRect(0, 0, _me.width, _me.height);
-
 				_get(Object.getPrototypeOf(Stage.prototype), "show", this).call(this);
-
-				if (_me._isSaved) {
-					_me._isSaved = false;
-					_me.ctx.restore();
-				}
 			}
 		}, {
 			key: "tick",
@@ -1562,8 +1563,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				if (event.clientX != null) {
 					cord.x = event.pageX - _me.x;
 					cord.y = event.pageY - _me.y;
-					_me.mouseX = cord.x;
-					_me.mouseY = cord.y;
 				}
 
 				event.cord = cord;
@@ -1630,32 +1629,33 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		_createClass(Shape, [{
 			key: "on",
 			value: function on() {
-				console.error("shape object can't interative event");
+				console.error("shape object can't interative event, please add shape to sprite");
 			}
 		}, {
 			key: "off",
 			value: function off() {
-				console.error("shape object can't interative event");
+				console.error("shape object can't interative event, please add shape to sprite");
 			}
 		}, {
 			key: "show",
 			value: function show(matrix) {
 				var _me = this;
 				var showList = _me._showList;
+				var isDrew = _get(Object.getPrototypeOf(Shape.prototype), "show", this).call(this, matrix);
 
-				_get(Object.getPrototypeOf(Shape.prototype), "show", this).call(this, matrix);
-
-				for (var _i15 = 0, len = showList.length; _i15 < len; _i15++) {
-					var showListItem = showList[_i15];
-					if (typeof showListItem == "function") {
-						showListItem(matrix);
+				if (isDrew) {
+					for (var _i15 = 0, len = showList.length; _i15 < len; _i15++) {
+						var showListItem = showList[_i15];
+						if (typeof showListItem == "function") {
+							showListItem(matrix);
+						}
 					}
-				}
 
-				if (_me._isSaved) {
-					var ctx = _me.ctx || _me.stage.ctx;
-					_me._isSaved = false;
-					ctx.restore();
+					if (_me._isSaved) {
+						var ctx = _me.ctx || _me.stage.ctx;
+						_me._isSaved = false;
+						ctx.restore();
+					}
 				}
 			}
 		}, {
@@ -1776,12 +1776,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			}
 		}, {
 			key: "drawArc",
-			value: function drawArc(thickness, lineColor, pointArr, isFill, color) {
+			value: function drawArc(thickness, lineColor, arcArgs, isFill, color) {
 				var _me = this;
 				_me._showList.push(function () {
 					var ctx = _me.ctx || _me.stage.ctx;
 					ctx.beginPath();
-					ctx.arc(pointArr[0], pointArr[1], pointArr[2], pointArr[3], pointArr[4], pointArr[5]);
+					ctx.arc(arcArgs[0], arcArgs[1], arcArgs[2], arcArgs[3], arcArgs[4], arcArgs[5]);
 
 					if (isFill) {
 						ctx.fillStyle = color;
@@ -1795,17 +1795,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 				_me._setList.push({
 					type: "arc",
-					area: pointArr
+					area: arcArgs
 				});
 			}
 		}, {
 			key: "drawRect",
-			value: function drawRect(thickness, lineColor, pointArr, isFill, color) {
+			value: function drawRect(thickness, lineColor, rectArgs, isFill, color) {
 				var _me = this;
 				_me._showList.push(function () {
 					var ctx = _me.ctx || _me.stage.ctx;
 					ctx.beginPath();
-					ctx.rect(pointArr[0], pointArr[1], pointArr[2], pointArr[3]);
+					ctx.rect(rectArgs[0], rectArgs[1], rectArgs[2], rectArgs[3]);
 
 					if (isFill) {
 						ctx.fillStyle = color;
@@ -1819,7 +1819,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 				_me._setList.push({
 					type: "rect",
-					area: pointArr
+					area: rectArgs
 				});
 			}
 		}, {
@@ -1862,14 +1862,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			}
 		}, {
 			key: "drawLine",
-			value: function drawLine(thickness, lineColor, pointArr) {
+			value: function drawLine(thickness, lineColor, points) {
 				var _me = this;
 
 				_me._showList.push(function () {
 					var ctx = _me.ctx || _me.stage.ctx;
 					ctx.beginPath();
-					ctx.moveTo(pointArr[0], pointArr[1]);
-					ctx.lineTo(pointArr[2], pointArr[3]);
+					ctx.moveTo(points[0], points[1]);
+					ctx.lineTo(points[2], points[3]);
 					ctx.lineWidth = thickness;
 					ctx.strokeStyle = lineColor;
 					ctx.closePath();
@@ -1881,16 +1881,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function lineStyle(thickness, color, alpha) {
 				var _me = this;
 
-				if (!color) {
-					color = _me.color;
+				if (alpha) {
+					_me.alpha = alpha;
 				}
-
-				if (!alpha) {
-					alpha = _me.alpha;
-				}
-
-				_me.color = color;
-				_me.alpha = alpha;
 
 				_me._showList.push(function () {
 					var ctx = _me.ctx || _me.stage.ctx;
