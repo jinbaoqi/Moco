@@ -29,9 +29,9 @@ class MouseEvent extends InteractiveEvent {
 
 let mouseEvents = {
 	CLICK: "click",
-	MOUSE_DOWN: "mousedown",
-	MOUSE_UP: "mouseup",
-	MOUSE_MOVE: "mousemove"
+	MOUSEDOWN: "mousedown",
+	MOUSEUP: "mouseup",
+	MOUSEMOVE: "mousemove"
 };
 
 for (let key in mouseEvents) {

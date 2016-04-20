@@ -182,17 +182,17 @@ class Matrix3 {
 		let matrix = m.getMatrix();
 		let tmp = null;
 
-		temp = matrix[1];
+		tmp = matrix[1];
 		matrix[1] = matrix[3];
-		matrix[3] = temp;
+		matrix[3] = tmp;
 
-		temp = matrix[2];
+		tmp = matrix[2];
 		matrix[2] = matrix[6];
-		matrix[6] = temp;
+		matrix[6] = tmp;
 
-		temp = matrix[5];
+		tmp = matrix[5];
 		matrix[5] = matrix[7];
-		matrix[7] = temp;
+		matrix[7] = tmp;
 
 		m.setMatrix(matrix);
 	}

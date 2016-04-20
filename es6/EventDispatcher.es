@@ -1,7 +1,7 @@
 class EventDispatcher {
 	on(target, eventName, callback, useCapture) {
 		let _me = this;
-
+		
 		if (typeof target == "string") {
 			[target, eventName, callback, useCapture] = [_me, target, eventName, callback];
 		}

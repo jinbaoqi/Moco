@@ -1,3 +1,3 @@
-window.Moco = Moco;
 
+window.Moco = Moco;
 }(window, undefined));

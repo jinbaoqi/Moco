@@ -9,7 +9,7 @@
             padding: 0;
         }
     </style>
-    <script src="../dist/Moco.min.js"></script>
+    <script src="../dist/Moco.js"></script>
 </head>
 <body>
 <div id="wrap1" style="position:absolute;top:0;left:0;background:red;width:1000px;height:1000px;overflow: hidden;">
@@ -18,8 +18,17 @@
     </div>
 </div>
 <script>
-  var displayObj = new Moco.DisplayObject();
-  console.log(displayObj);
+    var stage = new Moco.Stage("canvas",function(){
+        console.log("start!");
+    });
+
+    var shape = new Moco.Shape();
+    shape.drawRect(1,"#0000ff",[0,0,100,100],true,"#ff0000");
+
+    stage.addChild(shape);
+
+    stage.x = 100;
+    stage.y = 100;
 </script>
 </body>
 </html>

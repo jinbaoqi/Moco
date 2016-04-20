@@ -24,19 +24,21 @@ class Stage extends DisplayObjectContainer {
 
 		// Stage接管所有交互事件
 		Util.each(MouseEvent.nameList, (eventName) => {
-			eventName = mouseEvent[eventName];
+			eventName = MouseEvent[eventName];
 			EventDispatcher.prototype.on.call(_me, _me.domElem, eventName, (event) => {
 				_me._mouseEvent(event);
-			});
+			}, false);
 		});
 
-		Util.each(KeyboardEvent.nameList, (event) => {
-			EventDispatcher.prototype.on.call(_me, _me.domElem, eventName, () => {
+		Util.each(KeyboardEvent.nameList, (eventName) => {
+			eventName = KeyboardEvent[eventName];
+			EventDispatcher.prototype.on.call(_me, _me.domElem, eventName, (event) => {
 				_me.keyboardEvent(event);
 			});
-		});
+		}, false);
 
-		_me.show();
+		Timer.add(_me);
+		Timer.start();
 	}
 
 	show() {
@@ -49,17 +51,18 @@ class Stage extends DisplayObjectContainer {
 		if (_me._isSaved) {
 			_me.ctx.restore();
 		}
+	}
 
-		raf(function() {
-			_me.show();
-		});
+	tick() {
+		let _me = this;
+		_me.show();
 	}
 
 	addChild(child) {
 		let _me = this;
 		let addStage = (child) => {
 			child.stage = _me;
-
+			
 			if (child instanceof Sprite) {
 				child.graphics.stage = _me;
 				child.graphics.parent = child;
@@ -79,13 +82,16 @@ class Stage extends DisplayObjectContainer {
 		super.addChild(child);
 	}
 
+	isMouseon(cord) {
+		return true;
+	}
+
 	_mouseEvent(event) {
+		let _me = this;
 		let cord = {
 			x: 0,
 			y: 0
 		};
-
-		event = Util.clone(event);
 
 		if (event.clientX != null) {
 			cord.x = event.pageX - _me.x;
@@ -108,7 +114,6 @@ class Stage extends DisplayObjectContainer {
 		let items = KeyboardEvent.getItems(eventName);
 
 		if (items.length) {
-			event = Util.clone(event);
 			Util.each(items, (item) => {
 				item.trigger(eventName, event);
 			});

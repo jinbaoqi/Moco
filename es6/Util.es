@@ -4,12 +4,28 @@ class Util {
 	}
 
 	static each(arr, callback) {
-		if (arr && arrProto.forEach) {
-			arrProto.forEach.call(arr, callback);
+		if (arr && Array.prototype.forEach) {
+			Array.prototype.forEach.call(arr, callback);
 		} else if (this.isType("Array", arr)) {
 			for (var i = 0, len = arr.length; i < len; i++) {
 				callback(arr[i], i, arr);
 			}
+		}
+	}
+
+	static filter(arr, callback) {
+		let _me = this;
+
+		if (arr && Array.prototype.filter) {
+			return Array.prototype.filter.call(arr, callback);
+		} else {
+			let tmp = [];
+			_me.each(arr, function(item, index, arr) {
+				if (callback.call(arr, item, index, arr) == true) {
+					tmp.push(item);
+				}
+			});
+			return tmp;
 		}
 	}
 

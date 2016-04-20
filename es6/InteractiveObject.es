@@ -7,8 +7,8 @@ class InteractiveObject extends DisplayObject {
 	on(eventName, callback, useCapture) {
 		let _me = this;
 		let eventNameUpperCase = eventName.toUpperCase();
-		let isMouseEvent = Util.inArray(eventNameUpperCase, MouseEvent.nameList) == -1;
-		let isKeyboardEvent = Util.inArray(eventNameUpperCase, KeyboardEvent.nameList) == -1;
+		let isMouseEvent = Util.inArray(eventNameUpperCase, MouseEvent.nameList) != -1;
+		let isKeyboardEvent = Util.inArray(eventNameUpperCase, KeyboardEvent.nameList) != -1;
 
 		if (!isMouseEvent && !isKeyboardEvent) {
 			return;
@@ -24,8 +24,8 @@ class InteractiveObject extends DisplayObject {
 	off(eventName, callback) {
 		let _me = this;
 		let eventNameUpperCase = eventName.toUpperCase();
-		let isMouseEvent = Util.inArray(eventName, MouseEvent.nameList) == -1;
-		let isKeyboardEvent = Util.inArray(eventName, KeyBoardEvent.nameList) == -1;
+		let isMouseEvent = Util.inArray(eventName, MouseEvent.nameList) != -1;
+		let isKeyboardEvent = Util.inArray(eventName, KeyBoardEvent.nameList) != -1;
 
 		if (!isMouseEvent && !isKeyboardEvent) {
 			return;

@@ -60,7 +60,7 @@ class DisplayObject extends EventDispatcher {
 		if (_me.x != 0 || _me.y != 0) {
 			let x = _me.x;
 			let y = _me.y;
-			this._matrix.tranlsate(x, y);
+			this._matrix.translate(x, y);
 			canvas.translate(x, y);
 		}
 

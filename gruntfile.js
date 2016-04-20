@@ -7,18 +7,7 @@ module.exports = function(grunt) {
             },
             dist: {
                 files: {
-                    "dist/es6/global.js": "es6/global.es",
-                    "dist/es6/Util.js": "es6/Util.es",
-                    "dist/es6/Vec3.js": "es6/Vec3.es",
-                    "dist/es6/Matrix3.js": "es6/Matrix3.es",
-                    "dist/es6/InteractiveEvent.js": "es6/InteractiveEvent.es",
-                    "dist/es6/MouseEvent.js": "es6/MouseEvent.es",
-                    "dist/es6/KeyboardEvent.js": "es6/KeyboardEvent.es",
-                    "dist/es6/EventDispatcher.js": "es6/EventDispatcher.es",
-                    "dist/es6/DisplayObject.js": "es6/DisplayObject.es",
-                    "dist/es6/InteractiveObject.js": "es6/InteractiveObject.es",
-                    "dist/es6/DisplayObjectContainer.js": "es6/DisplayObjectContainer.es",
-                    "dist/es6/Stage.js": "es6/Stage.es"
+                    "dist/Moco.js": "dist/Moco.es",
                 }
             }
         },
@@ -26,32 +15,59 @@ module.exports = function(grunt) {
             dist: {
                 src: [
                     "es6/intro.es",
-                    "dist/es6/global.js",
-                    "dist/es6/Util.js",
-                    "dist/es6/Vec3.js",
-                    "dist/es6/Matrix3.js",
-                    "dist/es6/InteractiveEvent.js",
-                    "dist/es6/MouseEvent.js",
-                    "dist/es6/KeyboardEvent.js",
-                    "dist/es6/EventDispatcher.js",
-                    "dist/es6/DisplayObject.js",
-                    "dist/es6/InteractiveObject.js",
-                    "dist/es6/DisplayObjectContainer.js",
-                    "dist/es6/Stage.js",
+                    "es6/global.es",
+                    "es6/Util.es",
+                    "es6/Timer.es",
+                    "es6/Vec3.es",
+                    "es6/Matrix3.es",
+                    "es6/InteractiveEvent.es",
+                    "es6/MouseEvent.es",
+                    "es6/KeyboardEvent.es",
+                    "es6/EventDispatcher.es",
+                    "es6/DisplayObject.es",
+                    "es6/InteractiveObject.es",
+                    "es6/DisplayObjectContainer.es",
+                    "es6/Stage.es",
+                    "es6/Sprite.es",
+                    "es6/Shape.es",
                     "es6/outro.es"
                 ],
-                dest: 'dist/Moco.js'
+                dest: 'dist/Moco.es'
+            }
+        },
+        replace: {
+            another_example: {
+                src: ['dist/Moco.js'],
+                overwrite: true,
+                replacements: [{
+                    from: /['"]use strict['"]/g,
+                    to: ""
+                }]
+            }
+        },
+        uglify: {
+            options: {
+                compress: {
+                    drop_console: true
+                }
+            },
+            my_target: {
+                files: {
+                    'dist/Moco.min.js': ['dist/Moco.js']
+                }
             }
         },
         watch: {
             files: ['es6/**/*.es'],
-            tasks: ['babel', 'concat']
-        }
+            tasks: ['concat', 'babel', 'replace', 'uglify']
+        },
     });
 
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-babel');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-text-replace');
 
     grunt.registerTask('default', ['watch']);
 };
