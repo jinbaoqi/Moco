@@ -23,7 +23,7 @@ class DisplayObjectContainer extends InteractiveObject {
 
 	removeChild(child) {
 		let _me = this;
-		if (child instanceof(DisplayObject)) {
+		if (child instanceof DisplayObject) {
 			for (let i = _me._childList.length - 1; i >= 0; i--) {
 				let item = _me._childList[i];
 				if (item.aIndex == child.aIndex) {
@@ -73,19 +73,55 @@ class DisplayObjectContainer extends InteractiveObject {
 		let isDrew = super.show(matrix);
 
 		if (isDrew) {
+			if (_me instanceof Sprite) {
+				if (_me.graphics && _me.graphics.show) {
+					_me.graphics.show(Matrix3.clone(_me._matrix));
+				}
+			}
+			
 			for (let i = 0, len = _me._childList.length; i < len; i++) {
 				let item = _me._childList[i];
 				if (item.show) {
-					item.show(Matrix3.clone(matrix));
+					item.show(Matrix3.clone(_me._matrix));
 				}
 			}
 
 			if (_me._isSaved) {
 				let ctx = _me.ctx || _me.stage.ctx;
 				_me._isSaved = false;
-				_me.ctx.restore();
+				ctx.restore();
 			}
 		}
+
+		return isDrew;
+	}
+
+	_getWidth() {
+		let _me = this;
+		let ex = 0;
+		let childList = _me._childList;
+
+		for (let i = 0, len = childList.length; i < len; i++) {
+			let item = childList[i];
+			let itemEx = item.width + item.x;
+			ex = itemEx < ex ? ex : itemEx;
+		}
+
+		return ex;
+	}
+
+	_getHeight() {
+		let _me = this;
+		let ey = 0;
+		let childList = _me._childList;
+
+		for (let i = 0, len = childList.length; i < len; i++) {
+			let item = childList[i];
+			let itemEy = item.height + item.x;
+			ey = itemEy < ey ? ey : itemEy;
+		}
+
+		return ey;
 	}
 }
 

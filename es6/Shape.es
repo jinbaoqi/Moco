@@ -6,7 +6,7 @@ class Shape extends DisplayObject {
 		this._setList = [];
 	}
 
-	on() {
+	on() { 
 		console.error("shape object can't interative event, please add shape to sprite");
 	}
 
@@ -23,7 +23,7 @@ class Shape extends DisplayObject {
 			for (let i = 0, len = showList.length; i < len; i++) {
 				let showListItem = showList[i];
 				if (typeof showListItem == "function") {
-					showListItem(matrix);
+					showListItem();
 				}
 			}
 
@@ -33,6 +33,8 @@ class Shape extends DisplayObject {
 				ctx.restore();
 			}
 		}
+
+		return isDrew;
 	}
 
 	lineWidth(thickness) {
@@ -259,7 +261,15 @@ class Shape extends DisplayObject {
 	}
 
 	isMouseon(cord) {
-		return true;
+		return false;
+	}
+
+	_getWidth() {
+		return this._width;
+	}
+
+	_getHeight() {
+		return this._height;
 	}
 }
 

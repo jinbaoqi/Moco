@@ -1155,8 +1155,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 			_this3.name = "DisplayObject";
 			_this3.alpha = 1;
-			_this3.height = 0;
-			_this3.width = 0;
+			_this3._height = 0;
+			_this3._width = 0;
 			_this3.mask = null;
 			_this3.rotate = 0;
 			_this3.scaleX = 1;
@@ -1171,7 +1171,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			_this3._isSaved = false;
 			_this3._matrix = Matrix3.identity();
 
-			_this3._observe();
+			_this3._observeOffsetProperty();
+			_this3._observeTransformProperty();
 			return _this3;
 		}
 
@@ -1179,9 +1180,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: "show",
 			value: function show(matrix) {
 				var _me = this;
-				var canvas = _me.ctx || _me.stage.ctx;
+				var ctx = _me.ctx || _me.stage.ctx;
 
-				this._matrix = Matrix3.identity();
+				_me._matrix = Matrix3.identity();
 
 				if (!_me.visible || _me.alpha <= 0.001) {
 					return false;
@@ -1189,39 +1190,39 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 				if (_me.mask != null && _me.mask.show || _me.alpha < 1 || _me.rotate != 0 || _me.scaleX != 1 || _me.scaleY != 1 || _me.x != 0 || _me.y != 0 || _me.globalCompositeOperation != "") {
 					_me._isSaved = true;
-					canvas.save();
+					ctx.save();
 				}
 
 				if (_me.mask != null && _me.mask.show) {
 					_me.mask.show();
-					canvas.clip();
+					ctx.clip();
 				}
 
 				if (_me.alpha < 1) {
-					canvas.globalAlpha = _me.alpha > 1 ? 1 : _me.alpha;
+					ctx.globalAlpha = _me.alpha > 1 ? 1 : _me.alpha;
 				}
 
 				if (_me.x != 0 || _me.y != 0) {
 					var x = _me.x;
 					var _y2 = _me.y;
-					this._matrix.translate(x, _y2);
-					canvas.translate(x, _y2);
+					_me._matrix.translate(x, _y2);
+					ctx.translate(x, _y2);
 				}
 
 				if (_me.rotate != 0) {
 					var angle = _me.rotate;
-					this._matrix.rotate(angle);
-					canvas.rotate(Util.deg2rad(angle));
+					_me._matrix.rotate(angle);
+					ctx.rotate(Util.deg2rad(angle));
 				}
 
 				if (_me.scaleX != 1 || _me.scaleY != 1) {
 					var scaleX = _me.scaleX;
 					var scaleY = _me.scaleY;
-					this._matrix.scale(scaleX, scaleY);
-					canvas.scale(scaleX, scaleY);
+					_me._matrix.scale(scaleX, scaleY);
+					ctx.scale(scaleX, scaleY);
 				}
 
-				this._matrix.multi(matrix);
+				_me._matrix.multi(matrix);
 
 				return true;
 			}
@@ -1233,10 +1234,43 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				_me.off(eventNames);
 			}
 		}, {
-			key: "_observe",
-			value: function _observe() {
-				var _this4 = this;
+			key: "_getWidth",
+			value: function _getWidth() {
+				return this._width;
+			}
+		}, {
+			key: "_getHeight",
+			value: function _getHeight() {
+				return this._height;
+			}
+		}, {
+			key: "_observeOffsetProperty",
+			value: function _observeOffsetProperty() {
+				var _me = this;
+				var properties = [{
+					key: 'width',
+					method: "_getWidth"
+				}, {
+					key: 'height',
+					method: "_getHeight"
+				}];
 
+				var _loop = function _loop(len, _i12) {
+					var prop = properties[_i12];
+					Object.defineProperty(_me, prop.key, {
+						get: function get() {
+							return _me[prop.method].call(_me);
+						}
+					});
+				};
+
+				for (var _i12 = 0, len = properties.length; _i12 < len; _i12++) {
+					_loop(len, _i12);
+				}
+			}
+		}, {
+			key: "_observeTransformProperty",
+			value: function _observeTransformProperty() {
 				var _me = this;
 				var properties = [{
 					key: 'x',
@@ -1270,13 +1304,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					}
 				}];
 
-				var _loop = function _loop(len, _i12) {
-					var prop = properties[_i12];
+				var _loop2 = function _loop2(len, _i13) {
+					var prop = properties[_i13];
 					var val = _me[prop.key];
-					Object.defineProperty(_this4, prop.key, {
+					Object.defineProperty(_me, prop.key, {
 						set: function set(newValue) {
 							val = newValue;
-							_this4._matrix[prop.method].apply(_this4._matrix, prop.args(newValue));
+							_me._matrix[prop.method].apply(_me._matrix, prop.args(newValue));
 						},
 						get: function get() {
 							return val;
@@ -1284,8 +1318,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					});
 				};
 
-				for (var _i12 = 0, len = properties.length; _i12 < len; _i12++) {
-					_loop(len, _i12);
+				for (var _i13 = 0, len = properties.length; _i13 < len; _i13++) {
+					_loop2(len, _i13);
 				}
 			}
 		}]);
@@ -1301,10 +1335,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		function InteractiveObject() {
 			_classCallCheck(this, InteractiveObject);
 
-			var _this5 = _possibleConstructorReturn(this, Object.getPrototypeOf(InteractiveObject).call(this));
+			var _this4 = _possibleConstructorReturn(this, Object.getPrototypeOf(InteractiveObject).call(this));
 
-			_this5.name = "InteractiveObject";
-			return _this5;
+			_this4.name = "InteractiveObject";
+			return _this4;
 		}
 
 		_createClass(InteractiveObject, [{
@@ -1356,11 +1390,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		function DisplayObjectContainer() {
 			_classCallCheck(this, DisplayObjectContainer);
 
-			var _this6 = _possibleConstructorReturn(this, Object.getPrototypeOf(DisplayObjectContainer).call(this));
+			var _this5 = _possibleConstructorReturn(this, Object.getPrototypeOf(DisplayObjectContainer).call(this));
 
-			_this6.name = "DisplayObjectContainer";
-			_this6._childList = [];
-			return _this6;
+			_this5.name = "DisplayObjectContainer";
+			_this5._childList = [];
+			return _this5;
 		}
 
 		_createClass(DisplayObjectContainer, [{
@@ -1385,12 +1419,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function removeChild(child) {
 				var _me = this;
 				if (child instanceof DisplayObject) {
-					for (var _i13 = _me._childList.length - 1; _i13 >= 0; _i13--) {
-						var item = _me._childList[_i13];
+					for (var _i14 = _me._childList.length - 1; _i14 >= 0; _i14--) {
+						var item = _me._childList[_i14];
 						if (item.aIndex == child.aIndex) {
 							item.parent = null;
 							item.stage = null;
-							Array.prototype.splice.call(_me._childList, _i13, 1);
+							Array.prototype.splice.call(_me._childList, _i14, 1);
 							break;
 						}
 					}
@@ -1438,19 +1472,57 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var isDrew = _get(Object.getPrototypeOf(DisplayObjectContainer.prototype), "show", this).call(this, matrix);
 
 				if (isDrew) {
-					for (var _i14 = 0, len = _me._childList.length; _i14 < len; _i14++) {
-						var item = _me._childList[_i14];
+					if (_me instanceof Sprite) {
+						if (_me.graphics && _me.graphics.show) {
+							_me.graphics.show(Matrix3.clone(_me._matrix));
+						}
+					}
+
+					for (var _i15 = 0, len = _me._childList.length; _i15 < len; _i15++) {
+						var item = _me._childList[_i15];
 						if (item.show) {
-							item.show(Matrix3.clone(matrix));
+							item.show(Matrix3.clone(_me._matrix));
 						}
 					}
 
 					if (_me._isSaved) {
 						var ctx = _me.ctx || _me.stage.ctx;
 						_me._isSaved = false;
-						_me.ctx.restore();
+						ctx.restore();
 					}
 				}
+
+				return isDrew;
+			}
+		}, {
+			key: "_getWidth",
+			value: function _getWidth() {
+				var _me = this;
+				var ex = 0;
+				var childList = _me._childList;
+
+				for (var _i16 = 0, len = childList.length; _i16 < len; _i16++) {
+					var item = childList[_i16];
+					var itemEx = item.width + item.x;
+					ex = itemEx < ex ? ex : itemEx;
+				}
+
+				return ex;
+			}
+		}, {
+			key: "_getHeight",
+			value: function _getHeight() {
+				var _me = this;
+				var ey = 0;
+				var childList = _me._childList;
+
+				for (var _i17 = 0, len = childList.length; _i17 < len; _i17++) {
+					var item = childList[_i17];
+					var itemEy = item.height + item.x;
+					ey = itemEy < ey ? ey : itemEy;
+				}
+
+				return ey;
 			}
 		}]);
 
@@ -1465,24 +1537,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		function Stage(canvasId, fn) {
 			_classCallCheck(this, Stage);
 
-			var _this7 = _possibleConstructorReturn(this, Object.getPrototypeOf(Stage).call(this));
+			var _this6 = _possibleConstructorReturn(this, Object.getPrototypeOf(Stage).call(this));
 
-			_this7.name = "Stage";
-			_this7.domElem = document.getElementById(canvasId);
-			_this7.width = parseFloat(_this7.domElem.getAttribute("width"), 10);
-			_this7.height = parseFloat(_this7.domElem.getAttribute("height"), 10);
-			_this7.ctx = _this7.domElem.getContext("2d");
+			_this6.name = "Stage";
+			_this6.domElem = document.getElementById(canvasId);
+			_this6._width = parseFloat(_this6.domElem.getAttribute("width"), 10);
+			_this6._height = parseFloat(_this6.domElem.getAttribute("height"), 10);
+			_this6.ctx = _this6.domElem.getContext("2d");
 
-			var offset = _this7._getOffset();
-			_this7.x = offset.left;
-			_this7.y = offset.top;
+			var offset = _this6._getOffset();
+			_this6.x = offset.left;
+			_this6.y = offset.top;
 
 			if (typeof fn == "function") {
-				fn(_this7);
+				fn(_this6);
 			}
 
-			_this7.initialize();
-			return _this7;
+			_this6.initialize();
+			return _this6;
 		}
 
 		_createClass(Stage, [{
@@ -1512,7 +1584,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: "show",
 			value: function show() {
 				var _me = this;
-				_me.ctx.clearRect(0, 0, _me.width, _me.height);
+				_me.ctx.clearRect(0, 0, _me._width, _me._height);
 				_get(Object.getPrototypeOf(Stage.prototype), "show", this).call(this);
 			}
 		}, {
@@ -1528,7 +1600,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var addStage = function addStage(child) {
 					child.stage = _me;
 
-					if (child instanceof Sprite) {
+					if (child instanceof Sprite && child.graphics) {
 						child.graphics.stage = _me;
 						child.graphics.parent = child;
 						child.graphics.objectIndex = child.objectIndex + ".0";
@@ -1550,6 +1622,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: "isMouseon",
 			value: function isMouseon(cord) {
 				return true;
+			}
+		}, {
+			key: "_getWidth",
+			value: function _getWidth() {
+				return this._width;
+			}
+		}, {
+			key: "_getHeight",
+			value: function _getHeight() {
+				return this._height;
 			}
 		}, {
 			key: "_mouseEvent",
@@ -1606,11 +1688,86 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		function Sprite() {
 			_classCallCheck(this, Sprite);
 
-			return _possibleConstructorReturn(this, Object.getPrototypeOf(Sprite).apply(this, arguments));
+			var _this7 = _possibleConstructorReturn(this, Object.getPrototypeOf(Sprite).call(this));
+
+			_this7.name = "Sprite";
+			_this7.graphics = null;
+			return _this7;
 		}
+
+		_createClass(Sprite, [{
+			key: "addChild",
+			value: function addChild(child) {
+				if (child instanceof Shape) {
+					console.error("shape object should be linked to Sprite's graphics property");
+				} else {
+					_get(Object.getPrototypeOf(Sprite.prototype), "addChild", this).call(this, child);
+				}
+			}
+		}, {
+			key: "removeChild",
+			value: function removeChild(child) {
+				if (child instanceof Shape) {
+					console.error("shape object should be linked to Sprite's graphics property");
+				} else {
+					_get(Object.getPrototypeOf(Sprite.prototype), "removeChild", this).call(this, child);
+				}
+			}
+		}, {
+			key: "show",
+			value: function show(matrix) {
+				var _me = this;
+				var isDrew = _get(Object.getPrototypeOf(Sprite.prototype), "show", this).call(this, matrix);
+
+				if (isDrew) {
+					if (_me._isSaved) {
+						var ctx = _me.ctx || _me.stage.ctx;
+						_me._isSaved = false;
+						ctx.restore();
+					}
+				}
+
+				return isDrew;
+			}
+		}, {
+			key: "isMouseon",
+			value: function isMouseon(cord) {
+				return true;
+			}
+		}, {
+			key: "_getWidth",
+			value: function _getWidth() {
+				var _me = this;
+				var shape = _me.graphics;
+				var width = _get(Object.getPrototypeOf(Sprite.prototype), "_getWidth", this).call(this);
+
+				if (shape) {
+					var shapeWidth = shape.x + shape.width;
+					width = shapeWidth < width ? width : shapeWidth;
+				}
+
+				return width;
+			}
+		}, {
+			key: "_getHeight",
+			value: function _getHeight() {
+				var _me = this;
+				var shape = _me.graphics;
+				var height = _get(Object.getPrototypeOf(Sprite.prototype), "_getHeight", this).call(this);
+
+				if (shape) {
+					var shapeHeight = shape.x + shape.height;
+					height = shapeHeight < height ? height : shapeHeight;
+				}
+
+				return height;
+			}
+		}]);
 
 		return Sprite;
 	}(DisplayObjectContainer);
+
+	Moco.Sprite = Sprite;
 
 	var Shape = function (_DisplayObject2) {
 		_inherits(Shape, _DisplayObject2);
@@ -1618,12 +1775,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		function Shape() {
 			_classCallCheck(this, Shape);
 
-			var _this9 = _possibleConstructorReturn(this, Object.getPrototypeOf(Shape).call(this));
+			var _this8 = _possibleConstructorReturn(this, Object.getPrototypeOf(Shape).call(this));
 
-			_this9.name = "Shape";
-			_this9._showList = [];
-			_this9._setList = [];
-			return _this9;
+			_this8.name = "Shape";
+			_this8._showList = [];
+			_this8._setList = [];
+			return _this8;
 		}
 
 		_createClass(Shape, [{
@@ -1644,10 +1801,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var isDrew = _get(Object.getPrototypeOf(Shape.prototype), "show", this).call(this, matrix);
 
 				if (isDrew) {
-					for (var _i15 = 0, len = showList.length; _i15 < len; _i15++) {
-						var showListItem = showList[_i15];
+					for (var _i18 = 0, len = showList.length; _i18 < len; _i18++) {
+						var showListItem = showList[_i18];
 						if (typeof showListItem == "function") {
-							showListItem(matrix);
+							showListItem();
 						}
 					}
 
@@ -1657,6 +1814,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						ctx.restore();
 					}
 				}
+
+				return isDrew;
 			}
 		}, {
 			key: "lineWidth",
@@ -1902,7 +2061,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: "isMouseon",
 			value: function isMouseon(cord) {
-				return true;
+				return false;
+			}
+		}, {
+			key: "_getWidth",
+			value: function _getWidth() {
+				return this._width;
+			}
+		}, {
+			key: "_getHeight",
+			value: function _getHeight() {
+				return this._height;
 			}
 		}]);
 

@@ -3,8 +3,8 @@ class DisplayObject extends EventDispatcher {
 		super();
 		this.name = "DisplayObject";
 		this.alpha = 1;
-		this.height = 0;
-		this.width = 0;
+		this._height = 0;
+		this._width = 0;
 		this.mask = null;
 		this.rotate = 0;
 		this.scaleX = 1;
@@ -19,14 +19,15 @@ class DisplayObject extends EventDispatcher {
 		this._isSaved = false;
 		this._matrix = Matrix3.identity();
 
-		this._observe();
+		this._observeOffsetProperty();
+		this._observeTransformProperty();
 	}
 
 	show(matrix) {
 		let _me = this;
-		let canvas = _me.ctx || _me.stage.ctx;
+		let ctx = _me.ctx || _me.stage.ctx;
 
-		this._matrix = Matrix3.identity();
+		_me._matrix = Matrix3.identity();
 
 		if (!_me.visible || _me.alpha <= 0.001) {
 			return false;
@@ -43,39 +44,39 @@ class DisplayObject extends EventDispatcher {
 			_me.globalCompositeOperation != ""
 		) {
 			_me._isSaved = true;
-			canvas.save();
+			ctx.save();
 		}
 
 		if (_me.mask != null && _me.mask.show) {
 			_me.mask.show();
-			canvas.clip();
+			ctx.clip();
 		}
 
 		if (_me.alpha < 1) {
-			canvas.globalAlpha = _me.alpha > 1 ? 1 : _me.alpha;
+			ctx.globalAlpha = _me.alpha > 1 ? 1 : _me.alpha;
 		}
 
 		if (_me.x != 0 || _me.y != 0) {
 			let x = _me.x;
 			let y = _me.y;
-			this._matrix.translate(x, y);
-			canvas.translate(x, y);
+			_me._matrix.translate(x, y);
+			ctx.translate(x, y);
 		}
 
 		if (_me.rotate != 0) {
 			let angle = _me.rotate;
-			this._matrix.rotate(angle);
-			canvas.rotate(Util.deg2rad(angle));
+			_me._matrix.rotate(angle);
+			ctx.rotate(Util.deg2rad(angle));
 		}
 
 		if (_me.scaleX != 1 || _me.scaleY != 1) {
 			let scaleX = _me.scaleX;
 			let scaleY = _me.scaleY;
-			this._matrix.scale(scaleX, scaleY);
-			canvas.scale(scaleX, scaleY);
+			_me._matrix.scale(scaleX, scaleY);
+			ctx.scale(scaleX, scaleY);
 		}
 
-		this._matrix.multi(matrix);
+		_me._matrix.multi(matrix);
 
 		return true;
 	}
@@ -86,7 +87,35 @@ class DisplayObject extends EventDispatcher {
 		_me.off(eventNames);
 	}
 
-	_observe() {
+	_getWidth() {
+		return this._width;
+	}
+
+	_getHeight() {
+		return this._height;
+	}
+
+	_observeOffsetProperty() {
+		let _me = this;
+		let properties = [{
+			key: 'width',
+			method: "_getWidth"
+		}, {
+			key: 'height',
+			method: "_getHeight"
+		}];
+
+		for (let i = 0, len = properties.length; i < len; i++) {
+			let prop = properties[i];
+			Object.defineProperty(_me, prop.key, {
+				get: () => {
+					return _me[prop.method].call(_me);
+				}
+			});
+		}
+	}
+
+	_observeTransformProperty() {
 		let _me = this;
 		let properties = [{
 			key: 'x',
@@ -123,10 +152,10 @@ class DisplayObject extends EventDispatcher {
 		for (let i = 0, len = properties.length; i < len; i++) {
 			let prop = properties[i];
 			let val = _me[prop.key];
-			Object.defineProperty(this, prop.key, {
+			Object.defineProperty(_me, prop.key, {
 				set: (newValue) => {
 					val = newValue;
-					this._matrix[prop.method].apply(this._matrix, prop.args(newValue));
+					_me._matrix[prop.method].apply(_me._matrix, prop.args(newValue));
 				},
 				get: () => {
 					return val;

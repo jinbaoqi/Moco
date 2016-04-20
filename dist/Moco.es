@@ -1016,8 +1016,8 @@ class DisplayObject extends EventDispatcher {
 		super();
 		this.name = "DisplayObject";
 		this.alpha = 1;
-		this.height = 0;
-		this.width = 0;
+		this._height = 0;
+		this._width = 0;
 		this.mask = null;
 		this.rotate = 0;
 		this.scaleX = 1;
@@ -1032,14 +1032,15 @@ class DisplayObject extends EventDispatcher {
 		this._isSaved = false;
 		this._matrix = Matrix3.identity();
 
-		this._observe();
+		this._observeOffsetProperty();
+		this._observeTransformProperty();
 	}
 
 	show(matrix) {
 		let _me = this;
-		let canvas = _me.ctx || _me.stage.ctx;
+		let ctx = _me.ctx || _me.stage.ctx;
 
-		this._matrix = Matrix3.identity();
+		_me._matrix = Matrix3.identity();
 
 		if (!_me.visible || _me.alpha <= 0.001) {
 			return false;
@@ -1056,39 +1057,39 @@ class DisplayObject extends EventDispatcher {
 			_me.globalCompositeOperation != ""
 		) {
 			_me._isSaved = true;
-			canvas.save();
+			ctx.save();
 		}
 
 		if (_me.mask != null && _me.mask.show) {
 			_me.mask.show();
-			canvas.clip();
+			ctx.clip();
 		}
 
 		if (_me.alpha < 1) {
-			canvas.globalAlpha = _me.alpha > 1 ? 1 : _me.alpha;
+			ctx.globalAlpha = _me.alpha > 1 ? 1 : _me.alpha;
 		}
 
 		if (_me.x != 0 || _me.y != 0) {
 			let x = _me.x;
 			let y = _me.y;
-			this._matrix.translate(x, y);
-			canvas.translate(x, y);
+			_me._matrix.translate(x, y);
+			ctx.translate(x, y);
 		}
 
 		if (_me.rotate != 0) {
 			let angle = _me.rotate;
-			this._matrix.rotate(angle);
-			canvas.rotate(Util.deg2rad(angle));
+			_me._matrix.rotate(angle);
+			ctx.rotate(Util.deg2rad(angle));
 		}
 
 		if (_me.scaleX != 1 || _me.scaleY != 1) {
 			let scaleX = _me.scaleX;
 			let scaleY = _me.scaleY;
-			this._matrix.scale(scaleX, scaleY);
-			canvas.scale(scaleX, scaleY);
+			_me._matrix.scale(scaleX, scaleY);
+			ctx.scale(scaleX, scaleY);
 		}
 
-		this._matrix.multi(matrix);
+		_me._matrix.multi(matrix);
 
 		return true;
 	}
@@ -1099,7 +1100,35 @@ class DisplayObject extends EventDispatcher {
 		_me.off(eventNames);
 	}
 
-	_observe() {
+	_getWidth() {
+		return this._width;
+	}
+
+	_getHeight() {
+		return this._height;
+	}
+
+	_observeOffsetProperty() {
+		let _me = this;
+		let properties = [{
+			key: 'width',
+			method: "_getWidth"
+		}, {
+			key: 'height',
+			method: "_getHeight"
+		}];
+
+		for (let i = 0, len = properties.length; i < len; i++) {
+			let prop = properties[i];
+			Object.defineProperty(_me, prop.key, {
+				get: () => {
+					return _me[prop.method].call(_me);
+				}
+			});
+		}
+	}
+
+	_observeTransformProperty() {
 		let _me = this;
 		let properties = [{
 			key: 'x',
@@ -1136,10 +1165,10 @@ class DisplayObject extends EventDispatcher {
 		for (let i = 0, len = properties.length; i < len; i++) {
 			let prop = properties[i];
 			let val = _me[prop.key];
-			Object.defineProperty(this, prop.key, {
+			Object.defineProperty(_me, prop.key, {
 				set: (newValue) => {
 					val = newValue;
-					this._matrix[prop.method].apply(this._matrix, prop.args(newValue));
+					_me._matrix[prop.method].apply(_me._matrix, prop.args(newValue));
 				},
 				get: () => {
 					return val;
@@ -1217,7 +1246,7 @@ class DisplayObjectContainer extends InteractiveObject {
 
 	removeChild(child) {
 		let _me = this;
-		if (child instanceof(DisplayObject)) {
+		if (child instanceof DisplayObject) {
 			for (let i = _me._childList.length - 1; i >= 0; i--) {
 				let item = _me._childList[i];
 				if (item.aIndex == child.aIndex) {
@@ -1267,19 +1296,55 @@ class DisplayObjectContainer extends InteractiveObject {
 		let isDrew = super.show(matrix);
 
 		if (isDrew) {
+			if (_me instanceof Sprite) {
+				if (_me.graphics && _me.graphics.show) {
+					_me.graphics.show(Matrix3.clone(_me._matrix));
+				}
+			}
+			
 			for (let i = 0, len = _me._childList.length; i < len; i++) {
 				let item = _me._childList[i];
 				if (item.show) {
-					item.show(Matrix3.clone(matrix));
+					item.show(Matrix3.clone(_me._matrix));
 				}
 			}
 
 			if (_me._isSaved) {
 				let ctx = _me.ctx || _me.stage.ctx;
 				_me._isSaved = false;
-				_me.ctx.restore();
+				ctx.restore();
 			}
 		}
+
+		return isDrew;
+	}
+
+	_getWidth() {
+		let _me = this;
+		let ex = 0;
+		let childList = _me._childList;
+
+		for (let i = 0, len = childList.length; i < len; i++) {
+			let item = childList[i];
+			let itemEx = item.width + item.x;
+			ex = itemEx < ex ? ex : itemEx;
+		}
+
+		return ex;
+	}
+
+	_getHeight() {
+		let _me = this;
+		let ey = 0;
+		let childList = _me._childList;
+
+		for (let i = 0, len = childList.length; i < len; i++) {
+			let item = childList[i];
+			let itemEy = item.height + item.x;
+			ey = itemEy < ey ? ey : itemEy;
+		}
+
+		return ey;
 	}
 }
 
@@ -1290,8 +1355,8 @@ class Stage extends DisplayObjectContainer {
 
 		this.name = "Stage";
 		this.domElem = document.getElementById(canvasId);
-		this.width = parseFloat(this.domElem.getAttribute("width"), 10);
-		this.height = parseFloat(this.domElem.getAttribute("height"), 10);
+		this._width = parseFloat(this.domElem.getAttribute("width"), 10);
+		this._height = parseFloat(this.domElem.getAttribute("height"), 10);
 		this.ctx = this.domElem.getContext("2d");
 
 		let offset = this._getOffset();
@@ -1329,7 +1394,7 @@ class Stage extends DisplayObjectContainer {
 
 	show() {
 		let _me = this;
-		_me.ctx.clearRect(0, 0, _me.width, _me.height);
+		_me.ctx.clearRect(0, 0, _me._width, _me._height);
 		super.show();
 	}
 
@@ -1343,7 +1408,7 @@ class Stage extends DisplayObjectContainer {
 		let addStage = (child) => {
 			child.stage = _me;
 
-			if (child instanceof Sprite) {
+			if (child instanceof Sprite && child.graphics) {
 				child.graphics.stage = _me;
 				child.graphics.parent = child;
 				child.graphics.objectIndex = child.objectIndex + ".0";
@@ -1364,6 +1429,14 @@ class Stage extends DisplayObjectContainer {
 
 	isMouseon(cord) {
 		return true;
+	}
+
+	_getWidth() {
+		return this._width;
+	}
+
+	_getHeight() {
+		return this._height;
 	}
 
 	_mouseEvent(event) {
@@ -1409,8 +1482,75 @@ class Stage extends DisplayObjectContainer {
 
 Moco.Stage = Stage;
 class Sprite extends DisplayObjectContainer {
+	constructor() {
+		super();
+		this.name = "Sprite";
+		this.graphics = null;
+	}
 
+	addChild(child) {
+		if (child instanceof Shape) {
+			console.error("shape object should be linked to Sprite's graphics property");
+		} else {
+			super.addChild(child);
+		}
+	}
+
+	removeChild(child) {
+		if (child instanceof Shape) {
+			console.error("shape object should be linked to Sprite's graphics property");
+		} else {
+			super.removeChild(child);
+		}
+	}
+
+	show(matrix) {
+		let _me = this;
+		let isDrew = super.show(matrix);
+
+		if (isDrew) {
+			if (_me._isSaved) {
+				let ctx = _me.ctx || _me.stage.ctx;
+				_me._isSaved = false;
+				ctx.restore();
+			}
+		}
+
+		return isDrew;
+	}
+
+	isMouseon(cord) {
+		return true;
+	}
+
+	_getWidth() {
+		let _me = this;
+		let shape = _me.graphics;
+		let width = super._getWidth();
+
+		if (shape) {
+			let shapeWidth = shape.x + shape.width;
+			width = shapeWidth < width ? width : shapeWidth;
+		}
+
+		return width;
+	}
+
+	_getHeight() {
+		let _me = this;
+		let shape = _me.graphics;
+		let height = super._getHeight();
+
+		if (shape) {
+			let shapeHeight = shape.x + shape.height;
+			height = shapeHeight < height ? height : shapeHeight;
+		}
+
+		return height;
+	}
 }
+
+Moco.Sprite = Sprite;
 class Shape extends DisplayObject {
 	constructor() {
 		super();
@@ -1419,7 +1559,7 @@ class Shape extends DisplayObject {
 		this._setList = [];
 	}
 
-	on() {
+	on() { 
 		console.error("shape object can't interative event, please add shape to sprite");
 	}
 
@@ -1436,7 +1576,7 @@ class Shape extends DisplayObject {
 			for (let i = 0, len = showList.length; i < len; i++) {
 				let showListItem = showList[i];
 				if (typeof showListItem == "function") {
-					showListItem(matrix);
+					showListItem();
 				}
 			}
 
@@ -1446,6 +1586,8 @@ class Shape extends DisplayObject {
 				ctx.restore();
 			}
 		}
+
+		return isDrew;
 	}
 
 	lineWidth(thickness) {
@@ -1672,7 +1814,15 @@ class Shape extends DisplayObject {
 	}
 
 	isMouseon(cord) {
-		return true;
+		return false;
+	}
+
+	_getWidth() {
+		return this._width;
+	}
+
+	_getHeight() {
+		return this._height;
 	}
 }
 

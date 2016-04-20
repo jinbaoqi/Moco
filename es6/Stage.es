@@ -4,8 +4,8 @@ class Stage extends DisplayObjectContainer {
 
 		this.name = "Stage";
 		this.domElem = document.getElementById(canvasId);
-		this.width = parseFloat(this.domElem.getAttribute("width"), 10);
-		this.height = parseFloat(this.domElem.getAttribute("height"), 10);
+		this._width = parseFloat(this.domElem.getAttribute("width"), 10);
+		this._height = parseFloat(this.domElem.getAttribute("height"), 10);
 		this.ctx = this.domElem.getContext("2d");
 
 		let offset = this._getOffset();
@@ -43,7 +43,7 @@ class Stage extends DisplayObjectContainer {
 
 	show() {
 		let _me = this;
-		_me.ctx.clearRect(0, 0, _me.width, _me.height);
+		_me.ctx.clearRect(0, 0, _me._width, _me._height);
 		super.show();
 	}
 
@@ -57,7 +57,7 @@ class Stage extends DisplayObjectContainer {
 		let addStage = (child) => {
 			child.stage = _me;
 
-			if (child instanceof Sprite) {
+			if (child instanceof Sprite && child.graphics) {
 				child.graphics.stage = _me;
 				child.graphics.parent = child;
 				child.graphics.objectIndex = child.objectIndex + ".0";
@@ -78,6 +78,14 @@ class Stage extends DisplayObjectContainer {
 
 	isMouseon(cord) {
 		return true;
+	}
+
+	_getWidth() {
+		return this._width;
+	}
+
+	_getHeight() {
+		return this._height;
 	}
 
 	_mouseEvent(event) {
