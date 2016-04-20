@@ -117,7 +117,7 @@ class DisplayObjectContainer extends InteractiveObject {
 
 		for (let i = 0, len = childList.length; i < len; i++) {
 			let item = childList[i];
-			let itemEy = item.height + item.x;
+			let itemEy = item.height + item.y;
 			ey = itemEy < ey ? ey : itemEy;
 		}
 

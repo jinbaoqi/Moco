@@ -1474,14 +1474,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				if (isDrew) {
 					if (_me instanceof Sprite) {
 						if (_me.graphics && _me.graphics.show) {
-							_me.graphics.show(Matrix3.clone(_me._matrix));
+							_me.graphics.show(_me._matrix);
 						}
 					}
 
 					for (var _i15 = 0, len = _me._childList.length; _i15 < len; _i15++) {
 						var item = _me._childList[_i15];
 						if (item.show) {
-							item.show(Matrix3.clone(_me._matrix));
+							item.show(_me._matrix);
 						}
 					}
 
@@ -1518,7 +1518,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 				for (var _i17 = 0, len = childList.length; _i17 < len; _i17++) {
 					var item = childList[_i17];
-					var itemEy = item.height + item.x;
+					var itemEy = item.height + item.y;
 					ey = itemEy < ey ? ey : itemEy;
 				}
 
