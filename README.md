@@ -1,2 +1,2 @@
 # Moco.js
-Canvas Animation Render
+Canvas Library
