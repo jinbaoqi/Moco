@@ -1415,10 +1415,17 @@ class Sprite extends DisplayObjectContainer {
 class Shape extends DisplayObject {
 	constructor() {
 		super();
-
 		this.name = "Shape";
 		this._showList = [];
 		this._setList = [];
+	}
+
+	on() {
+		console.error("shape object can't interative event");
+	}
+
+	off() {
+		console.error("shape object can't interative event");
 	}
 
 	show(matrix) {

@@ -1628,6 +1628,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}
 
 		_createClass(Shape, [{
+			key: "on",
+			value: function on() {
+				console.error("shape object can't interative event");
+			}
+		}, {
+			key: "off",
+			value: function off() {
+				console.error("shape object can't interative event");
+			}
+		}, {
 			key: "show",
 			value: function show(matrix) {
 				var _me = this;

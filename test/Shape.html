@@ -22,6 +22,10 @@
         console.log("start!");
     });
 
+    // stage.on(Moco.MouseEvent.CLICK,function(){
+    //     console.log("stage");
+    // });
+
     var shape2 = new Moco.Shape();
     shape2.x = 100;
     shape2.y = 100;
@@ -32,12 +36,15 @@
     var shape1 = new Moco.Shape();
     shape1.x = 100;
     shape1.y = 100;
-    shape1.rotate = 45;
+    shape1.rotate = -135;
     shape1.scaleX = 0.5;
     shape1.scaleY = 0.5;
     shape1.drawRect(1,"#0000ff",[0,0,100,100],true,"#00ff00");
     stage.addChild(shape1);
-    
+
+    shape1.on(Moco.MouseEvent.CLICK,function(){
+        console.log("shape1");
+    });
 </script>
 </body>
 </html>
