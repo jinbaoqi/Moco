@@ -1296,12 +1296,6 @@ class DisplayObjectContainer extends InteractiveObject {
 		let isDrew = super.show(matrix);
 
 		if (isDrew) {
-			if (_me instanceof Sprite) {
-				if (_me.graphics && _me.graphics.show) {
-					_me.graphics.show(_me._matrix);
-				}
-			}
-
 			for (let i = 0, len = _me._childList.length; i < len; i++) {
 				let item = _me._childList[i];
 				if (item.show) {
@@ -1509,6 +1503,11 @@ class Sprite extends DisplayObjectContainer {
 		let isDrew = super.show(matrix);
 
 		if (isDrew) {
+			if (_me.graphics && _me.graphics.show) {
+				DisplayObject.prototype.show.call(_me, matrix);
+				_me.graphics.show(_me._matrix);
+			}
+			
 			if (_me._isSaved) {
 				let ctx = _me.ctx || _me.stage.ctx;
 				_me._isSaved = false;

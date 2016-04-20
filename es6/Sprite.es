@@ -26,6 +26,11 @@ class Sprite extends DisplayObjectContainer {
 		let isDrew = super.show(matrix);
 
 		if (isDrew) {
+			if (_me.graphics && _me.graphics.show) {
+				DisplayObject.prototype.show.call(_me, matrix);
+				_me.graphics.show(_me._matrix);
+			}
+			
 			if (_me._isSaved) {
 				let ctx = _me.ctx || _me.stage.ctx;
 				_me._isSaved = false;

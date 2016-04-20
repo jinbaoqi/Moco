@@ -879,8 +879,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						var handlers = target.handlers;
 
 						if (handlers) {
-							var callbacks = handlers[eventName] ? handlers[eventName] : [];
-							Util.each(callbacks, function (item) {
+							var _callbacks = handlers[eventName] ? handlers[eventName] : [];
+							Util.each(_callbacks, function (item) {
 								_me.off(target, eventName, item);
 							});
 						}
@@ -889,12 +889,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 						if (_handlers) {
 							var fnStr = callback.fnStr ? callback.fnStr : callback.toString().replace(fnRegExp, '');
-							var _callbacks = _handlers[eventName] ? _handlers[eventName] : [];
+							var _callbacks2 = _handlers[eventName] ? _handlers[eventName] : [];
 
-							for (var _i7 = _callbacks.length - 1; _i7 >= 0; _i7--) {
-								var item = _callbacks[_i7];
+							for (var _i7 = _callbacks2.length - 1; _i7 >= 0; _i7--) {
+								var item = _callbacks2[_i7];
 								if (item._fnStr == fnStr) {
-									Array.prototype.splice.call(_callbacks, _i7, 1);
+									Array.prototype.splice.call(_callbacks2, _i7, 1);
 								}
 							}
 						}
@@ -976,18 +976,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				while (parent) {
 					var _handlers2 = null;
 					if (_handlers2 = parent.handlers) {
-						var _callbacks2 = _handlers2[eventName] ? _handlers2[eventName] : [];
-						for (var _i8 = 0, len = _callbacks2.length; _i8 < len; _i8++) {
-							var useCapture = _callbacks2[_i8]._useCapture;
+						var _callbacks3 = _handlers2[eventName] ? _handlers2[eventName] : [];
+						for (var _i8 = 0, len = _callbacks3.length; _i8 < len; _i8++) {
+							var useCapture = _callbacks3[_i8]._useCapture;
 							if (!useCapture) {
 								handlerList.propagations.push({
 									target: parent,
-									callback: _callbacks2[_i8]
+									callback: _callbacks3[_i8]
 								});
 							} else {
 								var tmp = {
 									target: parent,
-									callback: _callbacks2[_i8]
+									callback: _callbacks3[_i8]
 								};
 
 								!_i8 ? handlerList.useCaptures.unshift(tmp) : handlerList.useCaptures.splice(1, 0, tmp);
@@ -1472,12 +1472,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var isDrew = _get(Object.getPrototypeOf(DisplayObjectContainer.prototype), "show", this).call(this, matrix);
 
 				if (isDrew) {
-					if (_me instanceof Sprite) {
-						if (_me.graphics && _me.graphics.show) {
-							_me.graphics.show(_me._matrix);
-						}
-					}
-
 					for (var _i15 = 0, len = _me._childList.length; _i15 < len; _i15++) {
 						var item = _me._childList[_i15];
 						if (item.show) {
@@ -1720,6 +1714,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var isDrew = _get(Object.getPrototypeOf(Sprite.prototype), "show", this).call(this, matrix);
 
 				if (isDrew) {
+					if (_me.graphics && _me.graphics.show) {
+						DisplayObject.prototype.show.call(_me, matrix);
+						_me.graphics.show(_me._matrix);
+					}
+
 					if (_me._isSaved) {
 						var ctx = _me.ctx || _me.stage.ctx;
 						_me._isSaved = false;
