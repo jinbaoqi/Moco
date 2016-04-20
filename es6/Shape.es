@@ -6,7 +6,7 @@ class Shape extends DisplayObject {
 		this._setList = [];
 	}
 
-	on() { 
+	on() {
 		console.error("shape object can't interative event, please add shape to sprite");
 	}
 
@@ -265,11 +265,89 @@ class Shape extends DisplayObject {
 	}
 
 	_getWidth() {
-		return this._width;
+		let _me = this;
+		let setList = _me._setList;
+		let ex = 0;
+
+		for (let i = 0, len = setList.length; i < len; i++) {
+			let item = setList[i];
+			let area = item.area;
+			let width = 0;
+			switch (item.type) {
+				case "rect":
+					width = area[0] + area[2];
+					break;
+				case "arc":
+					let arcMaxRect = _me._computeArcMaxRect.apply(_me, area);
+					width = arcMaxRect.x + arcMaxRect.width;
+					break;
+				case "vertices":
+					let verticeMaxRect = _me._computeVerticeMaxRect.call(_me, area);
+					width = verticeMaxRect.x + verticeMaxRect.width;
+					break;
+			}
+			ex = ex < width ? width : ex;
+		}
+
+		return ex;
 	}
 
 	_getHeight() {
-		return this._height;
+		let _me = this;
+		let setList = _me._setList;
+		let ey = 0;
+
+		for (let i = 0, len = setList.length; i < len; i++) {
+			let item = setList[i];
+			let area = item.area;
+			let height = 0;
+			switch (item.type) {
+				case "rect":
+					height = area[1] + area[3];
+					break;
+				case "arc":
+					let arcMaxRect = _me._computeArcMaxRect.apply(_me, area);
+					height = arcMaxRect.y + arcMaxRect.height;
+					break;
+				case "vertices":
+					let verticeMaxRect = _me._computeVerticeMaxRect.call(_me, area);
+					height = verticeMaxRect.y + verticeMaxRect.height;
+					break;
+			}
+			ex = ex < height ? height : ex;
+		}
+
+		return ey;
+	}
+
+	_computeArcMaxRect(ox, oy, sAngle, eAngle, direct) {
+		let x = 0;
+		let y = 0;
+		let width = 0;
+		let height = 0;
+
+		sAngle = sAngle / Math.PI * 180;
+		eAngle = eAngle / Math.PI * 180;
+
+		sAngle = sAngle - Math.floor(sAngle / 360) * 360;
+		eAngle = eAngle - Math.floor(eAngle / 360) * 360;
+
+		eAngle = direct ? 360 - eAngle : eAngle;
+
+		let angle = eAngle - sAngle;
+
+		// wait to write....
+
+		return {
+			x: x,
+			y: y,
+			height: height,
+			width: width
+		};
+	}
+
+	_computeVerticeMaxRect(vertices) {
+
 	}
 }
 
