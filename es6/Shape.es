@@ -278,11 +278,11 @@ class Shape extends DisplayObject {
 					width = area[0] + area[2];
 					break;
 				case "arc":
-					let arcMaxRect = _me._computeArcMaxRect.apply(_me, area);
-					width = arcMaxRect.x + arcMaxRect.width;
+					let arcMaxRect = _me._computeArcMinRect.apply(_me, area);
+					width = arcMaxRect.ex;
 					break;
 				case "vertices":
-					let verticeMaxRect = _me._computeVerticeMaxRect.call(_me, area);
+					let verticeMaxRect = _me._computeVerticeMinRect.call(_me, area);
 					width = verticeMaxRect.x + verticeMaxRect.width;
 					break;
 			}
@@ -306,11 +306,11 @@ class Shape extends DisplayObject {
 					height = area[1] + area[3];
 					break;
 				case "arc":
-					let arcMaxRect = _me._computeArcMaxRect.apply(_me, area);
-					height = arcMaxRect.y + arcMaxRect.height;
+					let arcMaxRect = _me._computeArcMinRect.apply(_me, area);
+					height = arcMaxRect.ey;
 					break;
 				case "vertices":
-					let verticeMaxRect = _me._computeVerticeMaxRect.call(_me, area);
+					let verticeMaxRect = _me._computeVerticeMinRect.call(_me, area);
 					height = verticeMaxRect.y + verticeMaxRect.height;
 					break;
 			}
@@ -320,33 +320,36 @@ class Shape extends DisplayObject {
 		return ey;
 	}
 
-	_computeArcMaxRect(ox, oy, sAngle, eAngle, direct) {
-		let x = 0;
-		let y = 0;
-		let width = 0;
-		let height = 0;
+	_computeArcMinRect(ox, oy, sAngle, eAngle, direct) {
+		let sx = 0;
+		let sy = 0;
+		let ex = 0;
+		let ey = 0;
 
-		sAngle = sAngle / Math.PI * 180;
-		eAngle = eAngle / Math.PI * 180;
+		sAngle = Util.rad2deg(sAngle);
+		eAngle = Util.rad2deg(eAngle);
 
+		// 1.规范为0~360度范围
 		sAngle = sAngle - Math.floor(sAngle / 360) * 360;
 		eAngle = eAngle - Math.floor(eAngle / 360) * 360;
 
-		eAngle = direct ? 360 - eAngle : eAngle;
+		// 2.以Shape的x,y为圆心画开始角度为sAngle，终止角度为eAngle的圆弧
 
-		let angle = eAngle - sAngle;
+		// 3.根于sAngle，将起始点统一旋转到第一象限进行计算，得到最小包围矩形的四个点坐标
 
-		// wait to write....
+		// 4.利用旋转矩阵，将四个点坐标向量旋转回原有象限，比进行比较得到开始坐标(sx,sy)以及结束坐标(ex,ey)
+
+		// 5.将(sx,sy)以及(ex,ey)利用平移矩阵进行平移，最终圆心为(ox,oy)，得到最后的(sx,sy)以及(ex,ey)的位置
 
 		return {
-			x: x,
-			y: y,
-			height: height,
-			width: width
+			sx: sx,
+			sy: sy,
+			ex: ex,
+			ey: ey
 		};
 	}
 
-	_computeVerticeMaxRect(vertices) {
+	_computeVerticeMinRect(vertices) {
 
 	}
 }

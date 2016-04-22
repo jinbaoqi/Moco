@@ -33,6 +33,10 @@ class Util {
 		return deg * Math.PI / 180;
 	}
 
+	static rad2deg(rad) {
+		return rad / Math.PI * 180;
+	}
+
 	static keys(obj) {
 		var keys = [];
 
