@@ -356,6 +356,7 @@ class Shape extends DisplayObject {
 
 		sAngle -= rotateAngle;
 		eAngle -= rotateAngle;
+		eAngle = eAngle < 0 ? eAngle + 360 : eAngle;
 
 		let sin = Math.sin;
 		let cos = Math.cos;
@@ -385,7 +386,7 @@ class Shape extends DisplayObject {
 			v1 = new Vec3(-r, -r, 1);
 			v2 = new Vec3(cos(o) * r, r, 1);
 		}
-		
+
 		let translateMat = Matrix3.translation(ox, oy);
 		let rotateMat = Matrix3.rotation(rotateAngle);
 		let mat = translateMat.multi(rotateMat);

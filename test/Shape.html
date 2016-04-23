@@ -66,7 +66,7 @@
     stage.addChild(shape5);
     stage.addChild(shape6);
 
-    var arcArgs = [160,160,50,(1/4+1/2)*Math.PI,(1/3+1)*Math.PI,true];
+    var arcArgs = [160,160,50,(1/4+1)*Math.PI,(1/3)*Math.PI,true];
     shape5.drawArc(1,"#0f0f0f",arcArgs,true,"#f0f0f0");
 
     var v = shape5._computeArcMinRect.apply(shape5,arcArgs);

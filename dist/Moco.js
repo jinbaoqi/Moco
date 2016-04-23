@@ -2165,6 +2165,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 				sAngle -= rotateAngle;
 				eAngle -= rotateAngle;
+				eAngle = eAngle < 0 ? eAngle + 360 : eAngle;
 
 				var sin = Math.sin;
 				var cos = Math.cos;
