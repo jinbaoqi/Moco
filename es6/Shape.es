@@ -385,10 +385,10 @@ class Shape extends DisplayObject {
 			v1 = new Vec3(-r, -r, 1);
 			v2 = new Vec3(cos(o) * r, r, 1);
 		}
-
-		let rotateMat = Matrix3.rotation(rotateAngle);
+		
 		let translateMat = Matrix3.translation(ox, oy);
-		let mat = rotateMat.multi(translateMat);
+		let rotateMat = Matrix3.rotation(rotateAngle);
+		let mat = translateMat.multi(rotateMat);
 
 		v1.multiMatrix3(mat);
 		v2.multiMatrix3(mat);

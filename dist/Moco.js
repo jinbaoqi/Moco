@@ -2195,9 +2195,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					v2 = new Vec3(cos(_o5) * r, r, 1);
 				}
 
-				var rotateMat = Matrix3.rotation(rotateAngle);
 				var translateMat = Matrix3.translation(ox, oy);
-				var mat = rotateMat.multi(translateMat);
+				var rotateMat = Matrix3.rotation(rotateAngle);
+				var mat = translateMat.multi(rotateMat);
 
 				v1.multiMatrix3(mat);
 				v2.multiMatrix3(mat);

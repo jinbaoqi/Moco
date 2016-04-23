@@ -66,22 +66,12 @@
     stage.addChild(shape5);
     stage.addChild(shape6);
 
-    var i = 0;
-    var timer = setInterval(function(){
-        shape5.clear();
-        shape6.clear();
-        var arcArgs = [160,160,50,1/4*Math.PI,(1/3+i*1/2)*Math.PI];
-        shape5.drawArc(1,"#0f0f0f",arcArgs,true,"#f0f0f0");
+    var arcArgs = [160,160,50,(1/4+1/2)*Math.PI,(1/3+1)*Math.PI,true];
+    shape5.drawArc(1,"#0f0f0f",arcArgs,true,"#f0f0f0");
 
-        var v = shape5._computeArcMinRect.apply(shape5,arcArgs);
-        shape6.drawRect(1,"#000",[v.sx,v.sy,v.ex-v.sx,v.ey-v.sy]);
-
-        if(i == 3){
-            clearInterval(timer);
-        }
-
-        i++;
-    },1000);
+    var v = shape5._computeArcMinRect.apply(shape5,arcArgs);
+    console.log(v);
+    shape6.drawRect(1,"#000",[v.sx,v.sy,v.ex-v.sx,v.ey-v.sy]);
 
    /*var shape6 = new Moco.Shape();
     shape6.beginPath();
