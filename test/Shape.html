@@ -22,7 +22,7 @@
         console.log("start!");
     });
 
-    var shape1 = new Moco.Shape();
+    /*var shape1 = new Moco.Shape();
     shape1.x = 100;
     shape1.y = 100;
     shape1.rotate = -135;
@@ -60,13 +60,30 @@
     shape4.lineTo(100,150);
     shape4.stroke();
     shape4.closePath();
-    stage.addChild(shape4);
-
+    stage.addChild(shape4);*/
     var shape5 = new Moco.Shape();
-    shape5.drawArc(1,"#0f0f0f",[160,160,10,0,2*Math.PI,true],true,"#f0f0f0");
-    stage.addChild(shape5);
-
     var shape6 = new Moco.Shape();
+    stage.addChild(shape5);
+    stage.addChild(shape6);
+
+    var i = 0;
+    var timer = setInterval(function(){
+        shape5.clear();
+        shape6.clear();
+        var arcArgs = [160,160,50,1/4*Math.PI,(1/3+i*1/2)*Math.PI];
+        shape5.drawArc(1,"#0f0f0f",arcArgs,true,"#f0f0f0");
+
+        var v = shape5._computeArcMinRect.apply(shape5,arcArgs);
+        shape6.drawRect(1,"#000",[v.sx,v.sy,v.ex-v.sx,v.ey-v.sy]);
+
+        if(i == 3){
+            clearInterval(timer);
+        }
+
+        i++;
+    },1000);
+
+   /*var shape6 = new Moco.Shape();
     shape6.beginPath();
     shape6.lineStyle(1,"#ffffff",0.6);
     shape6.moveTo(0,0);
@@ -84,7 +101,7 @@
 
     var shape8 = new Moco.Shape();
     shape8.drawVertices(1,"#ffbbff",[[0,0],[20,50],[50,100]]);
-    stage.addChild(shape8);
+    stage.addChild(shape8);*/
 </script>
 </body>
 </html>

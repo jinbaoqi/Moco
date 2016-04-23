@@ -320,7 +320,7 @@ class Shape extends DisplayObject {
 		return ey;
 	}
 
-	_computeArcMinRect(ox, oy, sAngle, eAngle, direct) {
+	_computeArcMinRect(ox, oy, r, sAngle, eAngle, direct) {
 		let sx = 0;
 		let sy = 0;
 		let ex = 0;
@@ -329,17 +329,85 @@ class Shape extends DisplayObject {
 		sAngle = Util.rad2deg(sAngle);
 		eAngle = Util.rad2deg(eAngle);
 
-		// 1.规范为0~360度范围
+		if ((eAngle - sAngle) / 360 >= 1) {
+			return {
+				sx: ox - r,
+				sy: oy - r,
+				ex: ox + r,
+				ey: oy + r
+			}
+		}
+
 		sAngle = sAngle - Math.floor(sAngle / 360) * 360;
 		eAngle = eAngle - Math.floor(eAngle / 360) * 360;
 
-		// 2.以Shape的x,y为圆心画开始角度为sAngle，终止角度为eAngle的圆弧
+		if (direct) {
+			[sAngle, eAngle] = [eAngle, sAngle];
+		}
 
-		// 3.根于sAngle，将起始点统一旋转到第一象限进行计算，得到最小包围矩形的四个点坐标
+		let rotateAngle = 0;
+		if (sAngle < 180 && sAngle >= 90) {
+			rotateAngle = 90;
+		} else if (sAngle < 270 && sAngle >= 180) {
+			rotateAngle = 180;
+		} else if (sAngle < 360 && sAngle >= 270) {
+			rotateAngle = 270;
+		}
 
-		// 4.利用旋转矩阵，将四个点坐标向量旋转回原有象限，比进行比较得到开始坐标(sx,sy)以及结束坐标(ex,ey)
+		sAngle -= rotateAngle;
+		eAngle -= rotateAngle;
 
-		// 5.将(sx,sy)以及(ex,ey)利用平移矩阵进行平移，最终圆心为(ox,oy)，得到最后的(sx,sy)以及(ex,ey)的位置
+		let sin = Math.sin;
+		let cos = Math.cos;
+		let v1 = Vec3.zero();
+		let v2 = Vec3.zero();
+		if (eAngle < 90 && eAngle > sAngle) {
+			let o1 = Util.deg2rad(sAngle);
+			let o2 = Util.deg2rad(eAngle);
+			v1 = new Vec3(cos(o2) * r, sin(o1) * r, 1);
+			v2 = new Vec3(cos(o1) * r, sin(o2) * r, 1);
+		} else if (eAngle < 90 && eAngle < sAngle) {
+			v1 = new Vec3(-r, -r, 1);
+			v2 = new Vec3(r, r, 1);
+		} else if (eAngle < 180 && eAngle >= 90) {
+			let o = Util.deg2rad(Math.min(180 - eAngle, sAngle));
+			let o1 = Util.deg2rad(sAngle);
+			let o2 = Util.deg2rad(180 - eAngle);
+			v1 = new Vec3(-cos(o2) * r, sin(o) * r, 1);
+			v2 = new Vec3(cos(o1) * r, r, 1);
+		} else if (eAngle < 270 && eAngle >= 180) {
+			let o1 = Util.deg2rad(sAngle);
+			let o2 = Util.deg2rad(eAngle - 180);
+			v1 = new Vec3(-r, -sin(o2) * r, 1);
+			v2 = new Vec3(cos(o1) * r, r, 1);
+		} else if (eAngle < 360 && eAngle >= 270) {
+			let o = Util.deg2rad(Math.min(360 - eAngle, sAngle));
+			v1 = new Vec3(-r, -r, 1);
+			v2 = new Vec3(cos(o) * r, r, 1);
+		}
+
+		let rotateMat = Matrix3.rotation(rotateAngle);
+		let translateMat = Matrix3.translation(ox, oy);
+		let mat = rotateMat.multi(translateMat);
+
+		v1.multiMatrix3(mat);
+		v2.multiMatrix3(mat);
+
+		if (v1.x < v2.x) {
+			sx = v1.x;
+			ex = v2.x;
+		} else {
+			sx = v2.x;
+			ex = v1.x;
+		}
+
+		if (v1.y < v2.y) {
+			sy = v1.y;
+			ey = v2.y;
+		} else {
+			sy = v2.y;
+			ey = v1.y;
+		}
 
 		return {
 			sx: sx,

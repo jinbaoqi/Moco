@@ -38,6 +38,10 @@ class Util {
 		return deg * Math.PI / 180;
 	}
 
+	static rad2deg(rad) {
+		return rad / Math.PI * 180;
+	}
+
 	static keys(obj) {
 		var keys = [];
 
@@ -1558,7 +1562,7 @@ class Shape extends DisplayObject {
 		this._setList = [];
 	}
 
-	on() { 
+	on() {
 		console.error("shape object can't interative event, please add shape to sprite");
 	}
 
@@ -1817,11 +1821,160 @@ class Shape extends DisplayObject {
 	}
 
 	_getWidth() {
-		return this._width;
+		let _me = this;
+		let setList = _me._setList;
+		let ex = 0;
+
+		for (let i = 0, len = setList.length; i < len; i++) {
+			let item = setList[i];
+			let area = item.area;
+			let width = 0;
+			switch (item.type) {
+				case "rect":
+					width = area[0] + area[2];
+					break;
+				case "arc":
+					let arcMaxRect = _me._computeArcMinRect.apply(_me, area);
+					width = arcMaxRect.ex;
+					break;
+				case "vertices":
+					let verticeMaxRect = _me._computeVerticeMinRect.call(_me, area);
+					width = verticeMaxRect.x + verticeMaxRect.width;
+					break;
+			}
+			ex = ex < width ? width : ex;
+		}
+
+		return ex;
 	}
 
 	_getHeight() {
-		return this._height;
+		let _me = this;
+		let setList = _me._setList;
+		let ey = 0;
+
+		for (let i = 0, len = setList.length; i < len; i++) {
+			let item = setList[i];
+			let area = item.area;
+			let height = 0;
+			switch (item.type) {
+				case "rect":
+					height = area[1] + area[3];
+					break;
+				case "arc":
+					let arcMaxRect = _me._computeArcMinRect.apply(_me, area);
+					height = arcMaxRect.ey;
+					break;
+				case "vertices":
+					let verticeMaxRect = _me._computeVerticeMinRect.call(_me, area);
+					height = verticeMaxRect.y + verticeMaxRect.height;
+					break;
+			}
+			ex = ex < height ? height : ex;
+		}
+
+		return ey;
+	}
+
+	_computeArcMinRect(ox, oy, r, sAngle, eAngle, direct) {
+		let sx = 0;
+		let sy = 0;
+		let ex = 0;
+		let ey = 0;
+
+		sAngle = Util.rad2deg(sAngle);
+		eAngle = Util.rad2deg(eAngle);
+
+		if ((eAngle - sAngle) / 360 >= 1) {
+			return {
+				sx: ox - r,
+				sy: oy - r,
+				ex: ox + r,
+				ey: oy + r
+			}
+		}
+
+		sAngle = sAngle - Math.floor(sAngle / 360) * 360;
+		eAngle = eAngle - Math.floor(eAngle / 360) * 360;
+
+		if (direct) {
+			[sAngle, eAngle] = [eAngle, sAngle];
+		}
+
+		let rotateAngle = 0;
+		if (sAngle < 180 && sAngle >= 90) {
+			rotateAngle = 90;
+		} else if (sAngle < 270 && sAngle >= 180) {
+			rotateAngle = 180;
+		} else if (sAngle < 360 && sAngle >= 270) {
+			rotateAngle = 270;
+		}
+
+		sAngle -= rotateAngle;
+		eAngle -= rotateAngle;
+
+		let sin = Math.sin;
+		let cos = Math.cos;
+		let v1 = Vec3.zero();
+		let v2 = Vec3.zero();
+		if (eAngle < 90 && eAngle > sAngle) {
+			let o1 = Util.deg2rad(sAngle);
+			let o2 = Util.deg2rad(eAngle);
+			v1 = new Vec3(cos(o2) * r, sin(o1) * r, 1);
+			v2 = new Vec3(cos(o1) * r, sin(o2) * r, 1);
+		} else if (eAngle < 90 && eAngle < sAngle) {
+			v1 = new Vec3(-r, -r, 1);
+			v2 = new Vec3(r, r, 1);
+		} else if (eAngle < 180 && eAngle >= 90) {
+			let o = Util.deg2rad(Math.min(180 - eAngle, sAngle));
+			let o1 = Util.deg2rad(sAngle);
+			let o2 = Util.deg2rad(180 - eAngle);
+			v1 = new Vec3(-cos(o2) * r, sin(o) * r, 1);
+			v2 = new Vec3(cos(o1) * r, r, 1);
+		} else if (eAngle < 270 && eAngle >= 180) {
+			let o1 = Util.deg2rad(sAngle);
+			let o2 = Util.deg2rad(eAngle - 180);
+			v1 = new Vec3(-r, -sin(o2) * r, 1);
+			v2 = new Vec3(cos(o1) * r, r, 1);
+		} else if (eAngle < 360 && eAngle >= 270) {
+			let o = Util.deg2rad(Math.min(360 - eAngle, sAngle));
+			v1 = new Vec3(-r, -r, 1);
+			v2 = new Vec3(cos(o) * r, r, 1);
+		}
+
+		let rotateMat = Matrix3.rotation(rotateAngle);
+		let translateMat = Matrix3.translation(ox, oy);
+		let mat = rotateMat.multi(translateMat);
+
+		v1.multiMatrix3(mat);
+		v2.multiMatrix3(mat);
+
+		if (v1.x < v2.x) {
+			sx = v1.x;
+			ex = v2.x;
+		} else {
+			sx = v2.x;
+			ex = v1.x;
+		}
+
+		if (v1.y < v2.y) {
+			sy = v1.y;
+			ey = v2.y;
+		} else {
+			sy = v2.y;
+			ey = v1.y;
+		}
+
+		return {
+			sx: sx,
+			sy: sy,
+			ex: ex,
+			ey: ey
+		};
+	}
+
+	_computeVerticeMinRect(vertices) {
+
 	}
 }
 
