@@ -59,20 +59,20 @@ class DisplayObject extends EventDispatcher {
 		if (_me.x != 0 || _me.y != 0) {
 			let x = _me.x;
 			let y = _me.y;
-			_me._matrix.translate(x, y);
+			_me._matrix.multi(Matrix3.translation(x, y));
 			ctx.translate(x, y);
 		}
 
 		if (_me.rotate != 0) {
 			let angle = _me.rotate;
-			_me._matrix.rotate(angle);
+			_me._matrix.multi(Matrix3.rotation(angle));
 			ctx.rotate(Util.deg2rad(angle));
 		}
 
 		if (_me.scaleX != 1 || _me.scaleY != 1) {
 			let scaleX = _me.scaleX;
 			let scaleY = _me.scaleY;
-			_me._matrix.scale(scaleX, scaleY);
+			_me._matrix.multi(Matrix3.scaling(scaleX, scaleY));
 			ctx.scale(scaleX, scaleY);
 		}
 

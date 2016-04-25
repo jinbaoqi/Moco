@@ -14,7 +14,7 @@
 <body>
 <div id="wrap1" style="position:absolute;top:0;left:0;background:red;width:1000px;height:1000px;overflow: hidden;">
     <div id="wrap2" style="position:absolute;top:0;left:0;background:red;width:400px;height:300px;overflow:hidden;">
-        <canvas id="canvas" width="400" height="300"></canvas>
+        <canvas id="canvas" width="800" height="600"></canvas>
     </div>
 </div>
 <script>
@@ -62,16 +62,41 @@
     shape4.closePath();
     stage.addChild(shape4);*/
     var shape5 = new Moco.Shape();
-    var shape6 = new Moco.Shape();
+    //sprite.rotate = 30;
+    //shape5.x = shape5.y = 50;
+    shape5.rotate = 10;
+    shape5.scaleX = shape5.scaleY = 0.5;
     stage.addChild(shape5);
+
+    var shape6 = new Moco.Shape();
     stage.addChild(shape6);
 
-    var arcArgs = [160,160,50,(1/4+1)*Math.PI,(1/3)*Math.PI,true];
-    shape5.drawArc(1,"#0f0f0f",arcArgs,true,"#f0f0f0");
+    var i = 0;
+    var j = i+1;
+    var limit = 4+i;
+    var timer = setInterval(function(){
+        shape5.clear();
+        var arcArgs = [50,50,25,(1/4)*Math.PI,(1/3+j*1/2)*Math.PI];
+        shape5.drawArc(1,"#0f0f0f",arcArgs,true,"#f0f0f0");
 
-    var v = shape5._computeArcMinRect.apply(shape5,arcArgs);
-    console.log(v);
-    shape6.drawRect(1,"#000",[v.sx,v.sy,v.ex-v.sx,v.ey-v.sy]);
+        console.log(shape5.width,shape5.height);
+        var mat = shape5._computeArcMinRect.apply(shape5,arcArgs);
+         for(var key in mat){
+            mat[key].multiMatrix3(shape5._matrix);
+        }
+        shape6.clear();
+        shape6.drawVertices(1,"#000",[
+            [mat.s1v.x,mat.s1v.y],
+            [mat.s2v.x,mat.s2v.y],
+            [mat.e2v.x,mat.e2v.y],
+            [mat.e1v.x,mat.e1v.y]
+        ]);
+        if(j >= limit){
+           clearInterval(timer);
+        }
+
+        j++;
+    },1000);
 
    /*var shape6 = new Moco.Shape();
     shape6.beginPath();

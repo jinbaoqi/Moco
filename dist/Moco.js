@@ -1210,20 +1210,20 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				if (_me.x != 0 || _me.y != 0) {
 					var x = _me.x;
 					var _y2 = _me.y;
-					_me._matrix.translate(x, _y2);
+					_me._matrix.multi(Matrix3.translation(x, _y2));
 					ctx.translate(x, _y2);
 				}
 
 				if (_me.rotate != 0) {
 					var angle = _me.rotate;
-					_me._matrix.rotate(angle);
+					_me._matrix.multi(Matrix3.rotation(angle));
 					ctx.rotate(Util.deg2rad(angle));
 				}
 
 				if (_me.scaleX != 1 || _me.scaleY != 1) {
 					var scaleX = _me.scaleX;
 					var scaleY = _me.scaleY;
-					_me._matrix.scale(scaleX, scaleY);
+					_me._matrix.multi(Matrix3.scaling(scaleX, scaleY));
 					ctx.scale(scaleX, scaleY);
 				}
 
@@ -1760,7 +1760,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var height = _get(Object.getPrototypeOf(Sprite.prototype), "_getHeight", this).call(this);
 
 				if (shape) {
-					var shapeHeight = shape.x + shape.height;
+					var shapeHeight = shape.y + shape.height;
 					height = shapeHeight < height ? height : shapeHeight;
 				}
 
@@ -2078,17 +2078,22 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					var item = setList[_i19];
 					var area = item.area;
 					var width = 0;
+					var _ev = Vec3.zero();
 					switch (item.type) {
 						case "rect":
 							width = area[0] + area[2];
 							break;
 						case "arc":
 							var arcMaxRect = _me._computeArcMinRect.apply(_me, area);
-							width = arcMaxRect.ex;
+							_ev = arcMaxRect.e2v;
+							_ev.multiMatrix3(_me._matrix);
+							width = _ev.x;
 							break;
 						case "vertices":
 							var verticeMaxRect = _me._computeVerticeMinRect.call(_me, area);
-							width = verticeMaxRect.x + verticeMaxRect.width;
+							_ev = verticeMaxRect.ev;
+							_ev.multiMatrix3(_me._matrix);
+							width = _ev.x;
 							break;
 					}
 					ex = ex < width ? width : ex;
@@ -2107,20 +2112,25 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					var item = setList[_i20];
 					var area = item.area;
 					var height = 0;
+					var _ev2 = Vec3.zero();
 					switch (item.type) {
 						case "rect":
 							height = area[1] + area[3];
 							break;
 						case "arc":
 							var arcMaxRect = _me._computeArcMinRect.apply(_me, area);
-							height = arcMaxRect.ey;
+							_ev2 = arcMaxRect.e2v;
+							_ev2.multiMatrix3(_me._matrix);
+							height = _ev2.y;
 							break;
 						case "vertices":
 							var verticeMaxRect = _me._computeVerticeMinRect.call(_me, area);
-							height = verticeMaxRect.y + verticeMaxRect.height;
+							_ev2 = verticeMaxRect.ev;
+							_ev2.multiMatrix3(_me._matrix);
+							height = _ev2.y;
 							break;
 					}
-					ex = ex < height ? height : ex;
+					ey = ey < height ? height : ey;
 				}
 
 				return ey;
@@ -2136,12 +2146,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				sAngle = Util.rad2deg(sAngle);
 				eAngle = Util.rad2deg(eAngle);
 
-				if ((eAngle - sAngle) / 360 >= 1) {
+				if (Math.abs(eAngle - sAngle) / 360 >= 1) {
 					return {
-						sx: ox - r,
-						sy: oy - r,
-						ex: ox + r,
-						ey: oy + r
+						s1v: new Vec3(ox - r, oy - r, 1),
+						s2v: new Vec3(ox + r, oy - r, 1),
+						e1v: new Vec3(ox - r, oy + r, 1),
+						e2v: new Vec3(ox + r, oy + r, 1)
 					};
 				}
 
@@ -2165,6 +2175,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 				sAngle -= rotateAngle;
 				eAngle -= rotateAngle;
+				sAngle = sAngle < 0 ? sAngle + 360 : sAngle;
 				eAngle = eAngle < 0 ? eAngle + 360 : eAngle;
 
 				var sin = Math.sin;
@@ -2220,15 +2231,33 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				}
 
 				return {
-					sx: sx,
-					sy: sy,
-					ex: ex,
-					ey: ey
+					s1v: new Vec3(sx, sy, 1),
+					s2v: new Vec3(ex, sy, 1),
+					e1v: new Vec3(sx, ey, 1),
+					e2v: new Vec3(ex, ey, 1)
 				};
 			}
 		}, {
 			key: "_computeVerticeMinRect",
-			value: function _computeVerticeMinRect(vertices) {}
+			value: function _computeVerticeMinRect(vertices) {
+				var sx = 0;
+				var sy = 0;
+				var ex = 0;
+				var ey = 0;
+
+				for (var _i21 = 0, len = vertices.length; _i21 < len; _i21++) {
+					var v = vertices[_i21];
+					sx = sx < v[0] ? sx : v[0];
+					sy = sy < v[1] ? sy : v[1];
+					ex = ex > v[0] ? ex : v[0];
+					ey = ey > v[1] ? ey : ey[0];
+				}
+
+				return {
+					sv: new Vec3(sx, sy, 1),
+					ev: new Vec3(ex, ey, 1)
+				};
+			}
 		}]);
 
 		return Shape;

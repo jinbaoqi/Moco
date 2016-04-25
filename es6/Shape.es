@@ -273,17 +273,22 @@ class Shape extends DisplayObject {
 			let item = setList[i];
 			let area = item.area;
 			let width = 0;
+			let ev = Vec3.zero();
 			switch (item.type) {
 				case "rect":
 					width = area[0] + area[2];
 					break;
 				case "arc":
 					let arcMaxRect = _me._computeArcMinRect.apply(_me, area);
-					width = arcMaxRect.ex;
+					ev = arcMaxRect.e2v;
+					ev.multiMatrix3(_me._matrix);
+					width = ev.x;
 					break;
 				case "vertices":
 					let verticeMaxRect = _me._computeVerticeMinRect.call(_me, area);
-					width = verticeMaxRect.x + verticeMaxRect.width;
+					ev = verticeMaxRect.ev;
+					ev.multiMatrix3(_me._matrix);
+					width = ev.x;
 					break;
 			}
 			ex = ex < width ? width : ex;
@@ -301,20 +306,25 @@ class Shape extends DisplayObject {
 			let item = setList[i];
 			let area = item.area;
 			let height = 0;
+			let ev = Vec3.zero();
 			switch (item.type) {
 				case "rect":
 					height = area[1] + area[3];
 					break;
 				case "arc":
 					let arcMaxRect = _me._computeArcMinRect.apply(_me, area);
-					height = arcMaxRect.ey;
+					ev = arcMaxRect.e2v;
+					ev.multiMatrix3(_me._matrix);
+					height = ev.y;
 					break;
 				case "vertices":
 					let verticeMaxRect = _me._computeVerticeMinRect.call(_me, area);
-					height = verticeMaxRect.y + verticeMaxRect.height;
+					ev = verticeMaxRect.ev;
+					ev.multiMatrix3(_me._matrix);
+					height = ev.y;
 					break;
 			}
-			ex = ex < height ? height : ex;
+			ey = ey < height ? height : ey;
 		}
 
 		return ey;
@@ -329,12 +339,12 @@ class Shape extends DisplayObject {
 		sAngle = Util.rad2deg(sAngle);
 		eAngle = Util.rad2deg(eAngle);
 
-		if ((eAngle - sAngle) / 360 >= 1) {
+		if (Math.abs(eAngle - sAngle) / 360 >= 1) {
 			return {
-				sx: ox - r,
-				sy: oy - r,
-				ex: ox + r,
-				ey: oy + r
+				s1v: new Vec3(ox - r, oy - r, 1),
+				s2v: new Vec3(ox + r, oy - r, 1),
+				e1v: new Vec3(ox - r, oy + r, 1),
+				e2v: new Vec3(ox + r, oy + r, 1)
 			}
 		}
 
@@ -356,6 +366,7 @@ class Shape extends DisplayObject {
 
 		sAngle -= rotateAngle;
 		eAngle -= rotateAngle;
+		sAngle = sAngle < 0 ? sAngle + 360 : sAngle;
 		eAngle = eAngle < 0 ? eAngle + 360 : eAngle;
 
 		let sin = Math.sin;
@@ -395,31 +406,43 @@ class Shape extends DisplayObject {
 		v2.multiMatrix3(mat);
 
 		if (v1.x < v2.x) {
-			sx = v1.x;
-			ex = v2.x;
+			[sx, ex] = [v1.x, v2.x];
 		} else {
-			sx = v2.x;
-			ex = v1.x;
+			[sx, ex] = [v2.x, v1.x];
 		}
 
 		if (v1.y < v2.y) {
-			sy = v1.y;
-			ey = v2.y;
+			[sy, ey] = [v1.y, v2.y];
 		} else {
-			sy = v2.y;
-			ey = v1.y;
+			[sy, ey] = [v2.y, v1.y];
 		}
 
 		return {
-			sx: sx,
-			sy: sy,
-			ex: ex,
-			ey: ey
+			s1v: new Vec3(sx, sy, 1),
+			s2v: new Vec3(ex, sy, 1),
+			e1v: new Vec3(sx, ey, 1),
+			e2v: new Vec3(ex, ey, 1)
 		};
 	}
 
 	_computeVerticeMinRect(vertices) {
+		let sx = 0;
+		let sy = 0;
+		let ex = 0;
+		let ey = 0;
 
+		for (let i = 0, len = vertices.length; i < len; i++) {
+			let v = vertices[i];
+			sx = sx < v[0] ? sx : v[0];
+			sy = sy < v[1] ? sy : v[1];
+			ex = ex > v[0] ? ex : v[0];
+			ey = ey > v[1] ? ey : ey[0];
+		}
+
+		return {
+			sv: new Vec3(sx, sy, 1),
+			ev: new Vec3(ex, ey, 1)
+		};
 	}
 }
 

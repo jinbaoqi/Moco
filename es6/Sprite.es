@@ -64,7 +64,7 @@ class Sprite extends DisplayObjectContainer {
 		let height = super._getHeight();
 
 		if (shape) {
-			let shapeHeight = shape.x + shape.height;
+			let shapeHeight = shape.y + shape.height;
 			height = shapeHeight < height ? height : shapeHeight;
 		}
 
