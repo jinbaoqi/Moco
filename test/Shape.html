@@ -64,7 +64,7 @@
     var shape5 = new Moco.Shape();
     //sprite.rotate = 30;
     //shape5.x = shape5.y = 50;
-    shape5.rotate = 10;
+    shape5.rotate = 45;
     shape5.scaleX = shape5.scaleY = 0.5;
     stage.addChild(shape5);
 
@@ -76,7 +76,7 @@
     var limit = 4+i;
     var timer = setInterval(function(){
         shape5.clear();
-        var arcArgs = [50,50,25,(1/4)*Math.PI,(1/3+j*1/2)*Math.PI];
+        var arcArgs = [0,0,25,(1/4)*Math.PI,(1/3+j*1/2)*Math.PI];
         shape5.drawArc(1,"#0f0f0f",arcArgs,true,"#f0f0f0");
 
         console.log(shape5.width,shape5.height);

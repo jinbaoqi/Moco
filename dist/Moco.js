@@ -14,263 +14,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 ;(function (window, undefined) {
 	var Moco = {};
-	var fnRegExp = /\s+/g;
-	var guid = 0;
-
-	var Util = function () {
-		function Util() {
-			_classCallCheck(this, Util);
-		}
-
-		_createClass(Util, null, [{
-			key: "isType",
-			value: function isType(target, type) {
-				return Object.prototype.toString.call(target) == "[object " + type + "]";
-			}
-		}, {
-			key: "each",
-			value: function each(arr, callback) {
-				if (arr && Array.prototype.forEach) {
-					Array.prototype.forEach.call(arr, callback);
-				} else if (this.isType("Array", arr)) {
-					for (var i = 0, len = arr.length; i < len; i++) {
-						callback(arr[i], i, arr);
-					}
-				}
-			}
-		}, {
-			key: "filter",
-			value: function filter(arr, callback) {
-				var _me = this;
-
-				if (arr && Array.prototype.filter) {
-					return Array.prototype.filter.call(arr, callback);
-				} else {
-					var _ret = function () {
-						var tmp = [];
-						_me.each(arr, function (item, index, arr) {
-							if (callback.call(arr, item, index, arr) == true) {
-								tmp.push(item);
-							}
-						});
-						return {
-							v: tmp
-						};
-					}();
-
-					if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
-				}
-			}
-		}, {
-			key: "deg2rad",
-			value: function deg2rad(deg) {
-				return deg * Math.PI / 180;
-			}
-		}, {
-			key: "rad2deg",
-			value: function rad2deg(rad) {
-				return rad / Math.PI * 180;
-			}
-		}, {
-			key: "keys",
-			value: function keys(obj) {
-				var keys = [];
-
-				if (obj) {
-					if (Object.keys) {
-						return Object.keys(obj);
-					} else {
-						for (var key in obj) {
-							if (obj.hasOwnProperty(key)) {
-								keys.push(key);
-							}
-						}
-					}
-				}
-
-				return keys;
-			}
-		}, {
-			key: "inArray",
-			value: function inArray(item, arr, fn) {
-				for (var _i = 0, len = arr.length; _i < len; _i++) {
-					if (typeof fn == "function") {
-						if (fn.call(item, item, arr[_i], _i, arr)) {
-							return _i;
-						}
-					} else if (arr[_i] == item) {
-						return _i;
-					}
-				}
-
-				return -1;
-			}
-		}, {
-			key: "extends",
-			value: function _extends(obj) {
-				var _me = this;
-
-				if (!_me.isType(obj, "Object")) {
-					return obj;
-				}
-
-				for (var _i2 = 1, length = arguments.length; _i2 < length; _i2++) {
-					var source = arguments[_i2];
-					for (var prop in source) {
-						if (hasOwnProperty.call(source, prop)) {
-							obj[prop] = source[prop];
-						}
-					}
-				}
-
-				return obj;
-			}
-		}, {
-			key: "clone",
-			value: function clone(obj) {
-				var _me = this;
-
-				if ((typeof obj === "undefined" ? "undefined" : _typeof(obj)) != "object") {
-					return obj;
-				}
-
-				return _me.isType(obj, "Array") ? Array.prototype.slice.call(obj) : _me.extends({}, obj);
-			}
-		}]);
-
-		return Util;
-	}();
-
-	Moco.Util = Util;
-
-	var Timer = function () {
-		function Timer() {
-			_classCallCheck(this, Timer);
-		}
-
-		_createClass(Timer, null, [{
-			key: "add",
-			value: function add(timerObject) {
-				var _me = this;
-				var index = Util.inArray(timerObject, _me._list, function (obj, item) {
-					return obj.aIndex == item.aIndex;
-				});
-
-				if (index == -1) {
-					_me._list.push(timerObject);
-				}
-
-				return _me;
-			}
-		}, {
-			key: "remove",
-			value: function remove(timerObject) {
-				var _me = this;
-				var index = Util.inArray(timerObject, _me._list, function (obj, item) {
-					return obj.aIndex == item.aIndex;
-				});
-
-				if (index != -1) {
-					_me._list.splice(index, 1);
-				}
-
-				return _me;
-			}
-		}, {
-			key: "start",
-			value: function start() {
-				var _me = this;
-				_me.isStoped = false;
-
-				if (!_me._isInit) {
-					_me._init();
-				}
-
-				_me._raf();
-
-				return _me;
-			}
-		}, {
-			key: "stop",
-			value: function stop() {
-				var _me = this;
-				_me.isStoped = true;
-
-				if (!_me._isInit) {
-					_me._init();
-				}
-
-				_me._craf();
-
-				return _me;
-			}
-		}, {
-			key: "_init",
-			value: function _init() {
-				var _me = this;
-				var lastTime = 0;
-				var vendors = ['webkit', 'moz'];
-				var requestAnimationFrame = window.requestAnimationFrame;
-				var cancelAnimationFrame = window.cancelAnimationFrame;
-				var i = vendors.length;
-
-				while (--i >= 0 && !requestAnimationFrame) {
-					requestAnimationFrame = window[vendors[i] + 'RequestAnimationFrame'];
-					cancelAnimationFrame = window[vendors[i] + 'CancelAnimationFrame'];
-				}
-
-				if (!requestAnimationFrame || !cancelAnimationFrame) {
-					requestAnimationFrame = function requestAnimationFrame(callback) {
-						var now = +new Date(),
-						    nextTime = Math.max(lastTime + 16, now);
-						return setTimeout(function () {
-							callback(lastTime = nextTime);
-						}, nextTime - now);
-					};
-
-					cancelAnimationFrame = clearTimeout;
-				}
-
-				_me._requestAnimationFrame = requestAnimationFrame;
-				_me._cancelAnimationFrame = cancelAnimationFrame;
-				_me._isInit = true;
-			}
-		}, {
-			key: "_raf",
-			value: function _raf() {
-				var _me = this;
-				var callback = function callback() {
-					var list = _me._list;
-					for (var _i3 = 0, len = list.length; _i3 < len; _i3++) {
-						var item = list[_i3];
-						if (item.tick) {
-							item.tick();
-						}
-					}
-					_me._raf();
-				};
-
-				_me._timer = _me._requestAnimationFrame.call(window, callback);
-			}
-		}, {
-			key: "_craf",
-			value: function _craf() {
-				var _me = this;
-				_me._cancelAnimationFrame.call(window, _me._timer);
-			}
-		}]);
-
-		return Timer;
-	}();
-
-	Timer._list = [];
-	Timer._isInit = false;
-	Timer._timer = null;
-	Timer._requestAnimationFrame = null;
-	Timer._cancelAnimationFrame = null;
-	Timer.isStoped = false;
-
-	Moco.Timer = Timer;
 
 	var Vec3 = function () {
 		function Vec3(x, y, z) {
@@ -548,8 +291,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var matrix = m.getMatrix();
 				var tmp = [];
 
-				for (var _i4 = 0, len = matrix.length; _i4 < len; _i4++) {
-					tmp[_i4] = matrix[_i4];
+				for (var _i = 0, len = matrix.length; _i < len; _i++) {
+					tmp[_i] = matrix[_i];
 				}
 
 				return new Matrix3(tmp);
@@ -650,6 +393,296 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	}();
 
 	Moco.Matrix3 = Matrix3;
+	var fnRegExp = /\s+/g;
+	var guid = 0;
+	var maxNumber = Number.MAX_VALUE;
+	var minNumber = Number.MIN_VALUE;
+	var maxNumberVec3 = new Vec3(maxNumber, maxNumber, 1);
+	var minNumberVec3 = new Vec3(minNumber, minNumber, 1);
+
+	var Util = function () {
+		function Util() {
+			_classCallCheck(this, Util);
+		}
+
+		_createClass(Util, null, [{
+			key: "isType",
+			value: function isType(target, type) {
+				return Object.prototype.toString.call(target) == "[object " + type + "]";
+			}
+		}, {
+			key: "each",
+			value: function each(arr, callback) {
+				var _me = this;
+
+				if (_me.isType(arr, "Array") && Array.prototype.forEach) {
+					Array.prototype.forEach.call(arr, callback);
+				} else if (_me.isType(arr, "Array")) {
+					for (var i = 0, len = arr.length; i < len; i++) {
+						callback(arr[i], i, arr);
+					}
+				} else if (_me.isType(arr, "Object")) {
+					for (var key in arr) {
+						if (arr.hasOwnProperty(key)) {
+							callback(arr[key], key, arr);
+						}
+					}
+				}
+			}
+		}, {
+			key: "filter",
+			value: function filter(arr, callback) {
+				var _me = this;
+
+				if (_me.isType(arr, "Array") && Array.prototype.filter) {
+					return Array.prototype.filter.call(arr, callback);
+				} else {
+					var _ret = function () {
+						var tmp = [];
+						_me.each(arr, function (item, index, arr) {
+							if (callback.call(arr, item, index, arr) == true) {
+								tmp.push(item);
+							}
+						});
+						return {
+							v: tmp
+						};
+					}();
+
+					if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
+				}
+			}
+		}, {
+			key: "map",
+			value: function map(arr, callback) {
+				var _me = this;
+
+				if (_me.isType(arr, "Array") && Array.prototype.map) {
+					return Array.prototype.map.call(arr, callback);
+				} else {
+					var _ret2 = function () {
+						var tmp = [];
+						_me.each(arr, function (item, index, arr) {
+							tmp.push(callback.call(arr, item, index, arr));
+						});
+						return {
+							v: tmp
+						};
+					}();
+
+					if ((typeof _ret2 === "undefined" ? "undefined" : _typeof(_ret2)) === "object") return _ret2.v;
+				}
+			}
+		}, {
+			key: "deg2rad",
+			value: function deg2rad(deg) {
+				return deg * Math.PI / 180;
+			}
+		}, {
+			key: "rad2deg",
+			value: function rad2deg(rad) {
+				return rad / Math.PI * 180;
+			}
+		}, {
+			key: "keys",
+			value: function keys(obj) {
+				var keys = [];
+
+				if (obj) {
+					if (Object.keys) {
+						return Object.keys(obj);
+					} else {
+						for (var key in obj) {
+							if (obj.hasOwnProperty(key)) {
+								keys.push(key);
+							}
+						}
+					}
+				}
+
+				return keys;
+			}
+		}, {
+			key: "inArray",
+			value: function inArray(item, arr, fn) {
+				for (var _i2 = 0, len = arr.length; _i2 < len; _i2++) {
+					if (typeof fn == "function") {
+						if (fn.call(item, item, arr[_i2], _i2, arr)) {
+							return _i2;
+						}
+					} else if (arr[_i2] == item) {
+						return _i2;
+					}
+				}
+
+				return -1;
+			}
+		}, {
+			key: "extends",
+			value: function _extends(obj) {
+				var _me = this;
+
+				if (!_me.isType(obj, "Object")) {
+					return obj;
+				}
+
+				for (var _i3 = 1, length = arguments.length; _i3 < length; _i3++) {
+					var source = arguments[_i3];
+					for (var prop in source) {
+						if (hasOwnProperty.call(source, prop)) {
+							obj[prop] = source[prop];
+						}
+					}
+				}
+
+				return obj;
+			}
+		}, {
+			key: "clone",
+			value: function clone(obj) {
+				var _me = this;
+
+				if ((typeof obj === "undefined" ? "undefined" : _typeof(obj)) != "object") {
+					return obj;
+				}
+
+				return _me.isType(obj, "Array") ? Array.prototype.slice.call(obj) : _me.extends({}, obj);
+			}
+		}]);
+
+		return Util;
+	}();
+
+	Moco.Util = Util;
+
+	var Timer = function () {
+		function Timer() {
+			_classCallCheck(this, Timer);
+		}
+
+		_createClass(Timer, null, [{
+			key: "add",
+			value: function add(timerObject) {
+				var _me = this;
+				var index = Util.inArray(timerObject, _me._list, function (obj, item) {
+					return obj.aIndex == item.aIndex;
+				});
+
+				if (index == -1) {
+					_me._list.push(timerObject);
+				}
+
+				return _me;
+			}
+		}, {
+			key: "remove",
+			value: function remove(timerObject) {
+				var _me = this;
+				var index = Util.inArray(timerObject, _me._list, function (obj, item) {
+					return obj.aIndex == item.aIndex;
+				});
+
+				if (index != -1) {
+					_me._list.splice(index, 1);
+				}
+
+				return _me;
+			}
+		}, {
+			key: "start",
+			value: function start() {
+				var _me = this;
+				_me.isStoped = false;
+
+				if (!_me._isInit) {
+					_me._init();
+				}
+
+				_me._raf();
+
+				return _me;
+			}
+		}, {
+			key: "stop",
+			value: function stop() {
+				var _me = this;
+				_me.isStoped = true;
+
+				if (!_me._isInit) {
+					_me._init();
+				}
+
+				_me._craf();
+
+				return _me;
+			}
+		}, {
+			key: "_init",
+			value: function _init() {
+				var _me = this;
+				var lastTime = 0;
+				var vendors = ['webkit', 'moz'];
+				var requestAnimationFrame = window.requestAnimationFrame;
+				var cancelAnimationFrame = window.cancelAnimationFrame;
+				var i = vendors.length;
+
+				while (--i >= 0 && !requestAnimationFrame) {
+					requestAnimationFrame = window[vendors[i] + 'RequestAnimationFrame'];
+					cancelAnimationFrame = window[vendors[i] + 'CancelAnimationFrame'];
+				}
+
+				if (!requestAnimationFrame || !cancelAnimationFrame) {
+					requestAnimationFrame = function requestAnimationFrame(callback) {
+						var now = +new Date(),
+						    nextTime = Math.max(lastTime + 16, now);
+						return setTimeout(function () {
+							callback(lastTime = nextTime);
+						}, nextTime - now);
+					};
+
+					cancelAnimationFrame = clearTimeout;
+				}
+
+				_me._requestAnimationFrame = requestAnimationFrame;
+				_me._cancelAnimationFrame = cancelAnimationFrame;
+				_me._isInit = true;
+			}
+		}, {
+			key: "_raf",
+			value: function _raf() {
+				var _me = this;
+				var callback = function callback() {
+					var list = _me._list;
+					for (var _i4 = 0, len = list.length; _i4 < len; _i4++) {
+						var item = list[_i4];
+						if (item.tick) {
+							item.tick();
+						}
+					}
+					_me._raf();
+				};
+
+				_me._timer = _me._requestAnimationFrame.call(window, callback);
+			}
+		}, {
+			key: "_craf",
+			value: function _craf() {
+				var _me = this;
+				_me._cancelAnimationFrame.call(window, _me._timer);
+			}
+		}]);
+
+		return Timer;
+	}();
+
+	Timer._list = [];
+	Timer._isInit = false;
+	Timer._timer = null;
+	Timer._requestAnimationFrame = null;
+	Timer._cancelAnimationFrame = null;
+	Timer.isStoped = false;
+
+	Moco.Timer = Timer;
 
 	var InteractiveEvent = function () {
 		function InteractiveEvent() {
@@ -884,8 +917,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						var handlers = target.handlers;
 
 						if (handlers) {
-							var _callbacks = handlers[eventName] ? handlers[eventName] : [];
-							Util.each(_callbacks, function (item) {
+							var callbacks = handlers[eventName] ? handlers[eventName] : [];
+							Util.each(callbacks, function (item) {
 								_me.off(target, eventName, item);
 							});
 						}
@@ -894,12 +927,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 						if (_handlers) {
 							var fnStr = callback.fnStr ? callback.fnStr : callback.toString().replace(fnRegExp, '');
-							var _callbacks2 = _handlers[eventName] ? _handlers[eventName] : [];
+							var _callbacks = _handlers[eventName] ? _handlers[eventName] : [];
 
-							for (var _i7 = _callbacks2.length - 1; _i7 >= 0; _i7--) {
-								var item = _callbacks2[_i7];
+							for (var _i7 = _callbacks.length - 1; _i7 >= 0; _i7--) {
+								var item = _callbacks[_i7];
 								if (item._fnStr == fnStr) {
-									Array.prototype.splice.call(_callbacks2, _i7, 1);
+									Array.prototype.splice.call(_callbacks, _i7, 1);
 								}
 							}
 						}
@@ -981,18 +1014,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				while (parent) {
 					var _handlers2 = null;
 					if (_handlers2 = parent.handlers) {
-						var _callbacks3 = _handlers2[eventName] ? _handlers2[eventName] : [];
-						for (var _i8 = 0, len = _callbacks3.length; _i8 < len; _i8++) {
-							var useCapture = _callbacks3[_i8]._useCapture;
+						var _callbacks2 = _handlers2[eventName] ? _handlers2[eventName] : [];
+						for (var _i8 = 0, len = _callbacks2.length; _i8 < len; _i8++) {
+							var useCapture = _callbacks2[_i8]._useCapture;
 							if (!useCapture) {
 								handlerList.propagations.push({
 									target: parent,
-									callback: _callbacks3[_i8]
+									callback: _callbacks2[_i8]
 								});
 							} else {
 								var tmp = {
 									target: parent,
-									callback: _callbacks3[_i8]
+									callback: _callbacks2[_i8]
 								};
 
 								!_i8 ? handlerList.useCaptures.unshift(tmp) : handlerList.useCaptures.splice(1, 0, tmp);
@@ -1494,34 +1527,45 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				return isDrew;
 			}
 		}, {
+			key: "getBounds",
+			value: function getBounds() {
+				var _me = this;
+				var childList = _me._childList;
+				var sv = Vec3.clone(maxNumberVec3);
+				var ev = Vec3.clone(minNumberVec3);
+
+				Util.each(childList, function (child) {
+					if (typeof child.getBounds == "function") {
+						var bounds = child.getBounds();
+						sv.x = bounds.sv.x < sv.x ? bounds.sv.x : sv.x;
+						sv.y = bounds.sv.y < sv.y ? bounds.sv.y : sv.y;
+						ev.x = bounds.ev.x > ev.x ? bounds.ev.x : ev.x;
+						sv.x = bounds.ev.y > ev.y ? bounds.ev.y : ev.y;
+					}
+				});
+
+				if (sv.x == maxNumber || ev.x == minNumber || sv.y == maxNumber || ev.y == minNumber) {
+					sx = sy = ex = ey = 0;
+				}
+
+				return {
+					sv: sv,
+					ev: ev
+				};
+			}
+		}, {
 			key: "_getWidth",
 			value: function _getWidth() {
 				var _me = this;
-				var ex = 0;
-				var childList = _me._childList;
-
-				for (var _i16 = 0, len = childList.length; _i16 < len; _i16++) {
-					var item = childList[_i16];
-					var itemEx = item.width + item.x;
-					ex = itemEx < ex ? ex : itemEx;
-				}
-
-				return ex;
+				var bounds = _me.getBounds();
+				return Math.abs(bounds.ev.x - bounds.sv.x);
 			}
 		}, {
 			key: "_getHeight",
 			value: function _getHeight() {
 				var _me = this;
-				var ey = 0;
-				var childList = _me._childList;
-
-				for (var _i17 = 0, len = childList.length; _i17 < len; _i17++) {
-					var item = childList[_i17];
-					var itemEy = item.height + item.y;
-					ey = itemEy < ey ? ey : itemEy;
-				}
-
-				return ey;
+				var bounds = _me.getBounds();
+				return Math.abs(bounds.ev.y - bounds.sv.y);
 			}
 		}]);
 
@@ -1742,29 +1786,39 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: "_getWidth",
 			value: function _getWidth() {
 				var _me = this;
-				var shape = _me.graphics;
-				var width = _get(Object.getPrototypeOf(Sprite.prototype), "_getWidth", this).call(this);
+				var bounds = _get(Object.getPrototypeOf(Sprite.prototype), "getBounds", this).call(this);
+				var shapeBounds = null;
 
-				if (shape) {
-					var shapeWidth = shape.x + shape.width;
-					width = shapeWidth < width ? width : shapeWidth;
+				if (_me.graphics instanceof Shape) {
+					shapeBounds = _me.graphics.getBounds();
 				}
 
-				return width;
+				if (shapeBounds) {
+					bounds.sv.x = bounds.sv.x < shapeBounds.sv.x ? bounds.sv.x : shapeBounds.sv.x;
+					bounds.ev.x = bounds.ev.x > shapeBounds.ev.x ? bounds.ev.x : shapeBounds.ev.x;
+				}
+
+				var width = Math.abs(bounds.ev.x - bounds.sv.x);
+				return Number.isNaN(width) ? 0 : width;
 			}
 		}, {
 			key: "_getHeight",
 			value: function _getHeight() {
 				var _me = this;
-				var shape = _me.graphics;
-				var height = _get(Object.getPrototypeOf(Sprite.prototype), "_getHeight", this).call(this);
+				var bounds = _get(Object.getPrototypeOf(Sprite.prototype), "getBounds", this).call(this);
+				var shapeBounds = null;
 
-				if (shape) {
-					var shapeHeight = shape.y + shape.height;
-					height = shapeHeight < height ? height : shapeHeight;
+				if (_me.graphics instanceof Shape) {
+					shapeBounds = _me.graphics.getBounds();
 				}
 
-				return height;
+				if (shapeBounds) {
+					bounds.sv.y = bounds.sv.y < shapeBounds.sv.y ? bounds.sv.y : shapeBounds.sv.y;
+					bounds.ev.y = bounds.ev.y > shapeBounds.ev.y ? bounds.ev.y : shapeBounds.ev.y;
+				}
+
+				var height = Math.abs(bounds.ev.y - bounds.sv.y);
+				return Number.isNaN(height) ? 0 : height;
 			}
 		}]);
 
@@ -1805,8 +1859,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var isDrew = _get(Object.getPrototypeOf(Shape.prototype), "show", this).call(this, matrix);
 
 				if (isDrew) {
-					for (var _i18 = 0, len = showList.length; _i18 < len; _i18++) {
-						var showListItem = showList[_i18];
+					for (var _i16 = 0, len = showList.length; _i16 < len; _i16++) {
+						var showListItem = showList[_i16];
 						if (typeof showListItem == "function") {
 							showListItem();
 						}
@@ -2068,72 +2122,64 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				return false;
 			}
 		}, {
+			key: "getBounds",
+			value: function getBounds() {
+				var _me = this;
+				var setList = _me._setList;
+				var sx = maxNumber;
+				var ex = minNumber;
+				var sy = maxNumber;
+				var ey = minNumber;
+
+				for (var _i17 = 0, len = setList.length; _i17 < len; _i17++) {
+					var item = setList[_i17];
+					var area = item.area;
+					var minRect = {};
+					switch (item.type) {
+						case "rect":
+							area = [[area[0], area[1]], [area[0] + area[2], area[1]], [area[0] + area[2], area[1] + area[3]], [area[0], area[1] + area[3]]];
+						case "vertices":
+							minRect = _me._computeVerticeMinRect(area);
+							break;
+						case "arc":
+							minRect = _me._computeArcMinRect.apply(_me, area);
+							break;
+					}
+
+					var vs = Util.map(minRect, function (item) {
+						return item.multiMatrix3(_me._matrix);
+					});
+
+					Util.each(vs, function (item) {
+						sx = item.x < sx ? item.x : sx;
+						ex = item.x > ex ? item.x : ex;
+						sy = item.y < sy ? item.y : sy;
+						ey = item.y > ey ? item.y : ey;
+					});
+				}
+
+				if (sx == maxNumber || ex == minNumber || sy == maxNumber || ey == minNumber) {
+					sx = sy = ex = ey = 0;
+				}
+
+				return {
+					sv: new Vec3(sx, sy, 1),
+					ev: new Vec3(ex, ey, 1)
+				};
+			}
+		}, {
 			key: "_getWidth",
 			value: function _getWidth() {
 				var _me = this;
-				var setList = _me._setList;
-				var ex = 0;
-
-				for (var _i19 = 0, len = setList.length; _i19 < len; _i19++) {
-					var item = setList[_i19];
-					var area = item.area;
-					var width = 0;
-					var _ev = Vec3.zero();
-					switch (item.type) {
-						case "rect":
-							width = area[0] + area[2];
-							break;
-						case "arc":
-							var arcMaxRect = _me._computeArcMinRect.apply(_me, area);
-							_ev = arcMaxRect.e2v;
-							_ev.multiMatrix3(_me._matrix);
-							width = _ev.x;
-							break;
-						case "vertices":
-							var verticeMaxRect = _me._computeVerticeMinRect.call(_me, area);
-							_ev = verticeMaxRect.ev;
-							_ev.multiMatrix3(_me._matrix);
-							width = _ev.x;
-							break;
-					}
-					ex = ex < width ? width : ex;
-				}
-
-				return ex;
+				var bounds = _me.getBounds();
+				return Math.abs(bounds.ev.x - bounds.sv.x);
 			}
 		}, {
 			key: "_getHeight",
 			value: function _getHeight() {
 				var _me = this;
-				var setList = _me._setList;
-				var ey = 0;
-
-				for (var _i20 = 0, len = setList.length; _i20 < len; _i20++) {
-					var item = setList[_i20];
-					var area = item.area;
-					var height = 0;
-					var _ev2 = Vec3.zero();
-					switch (item.type) {
-						case "rect":
-							height = area[1] + area[3];
-							break;
-						case "arc":
-							var arcMaxRect = _me._computeArcMinRect.apply(_me, area);
-							_ev2 = arcMaxRect.e2v;
-							_ev2.multiMatrix3(_me._matrix);
-							height = _ev2.y;
-							break;
-						case "vertices":
-							var verticeMaxRect = _me._computeVerticeMinRect.call(_me, area);
-							_ev2 = verticeMaxRect.ev;
-							_ev2.multiMatrix3(_me._matrix);
-							height = _ev2.y;
-							break;
-					}
-					ey = ey < height ? height : ey;
-				}
-
-				return ey;
+				var bounds = _me.getBounds();
+				return Math.abs(bounds.ev.y - bounds.sv.y);
 			}
 		}, {
 			key: "_computeArcMinRect",
@@ -2245,8 +2291,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var ex = 0;
 				var ey = 0;
 
-				for (var _i21 = 0, len = vertices.length; _i21 < len; _i21++) {
-					var v = vertices[_i21];
+				for (var _i18 = 0, len = vertices.length; _i18 < len; _i18++) {
+					var v = vertices[_i18];
 					sx = sx < v[0] ? sx : v[0];
 					sy = sy < v[1] ? sy : v[1];
 					ex = ex > v[0] ? ex : v[0];
@@ -2254,8 +2300,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				}
 
 				return {
-					sv: new Vec3(sx, sy, 1),
-					ev: new Vec3(ex, ey, 1)
+					s1v: new Vec3(sx, sy, 1),
+					s2v: new Vec3(ex, sy, 1),
+					e1v: new Vec3(sx, ey, 1),
+					e2v: new Vec3(ex, ey, 1)
 				};
 			}
 		}]);
