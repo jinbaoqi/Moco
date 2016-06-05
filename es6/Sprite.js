@@ -59,7 +59,7 @@ class Sprite extends DisplayObjectContainer {
             bounds.ev.x = bounds.ev.x > shapeBounds.ev.x ? bounds.ev.x : shapeBounds.ev.x;
         }
 
-        return  Math.abs(bounds.ev.x - bounds.sv.x);
+        return Math.abs(bounds.ev.x - bounds.sv.x);
     }
 
     _getHeight() {

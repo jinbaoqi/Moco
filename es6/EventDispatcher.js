@@ -1,333 +1,333 @@
 class EventDispatcher {
-	on(target, eventName, callback, useCapture) {
-		let _me = this;
-		
-		if (typeof target == "string") {
-			[target, eventName, callback, useCapture] = [_me, target, eventName, callback];
-		}
+    on(target, eventName, callback, useCapture) {
+        let _me = this;
 
-		if (eventName && callback) {
-			useCapture = useCapture ? useCapture : false;
+        if (typeof target == "string") {
+            [target, eventName, callback, useCapture] = [_me, target, eventName, callback];
+        }
 
-			if (Util.isType(eventName, "Array")) {
-				Util.each(eventName, (item) => {
-					_me.on(item, callback, useCapture);
-				});
-			} else {
-				let handlers = target.handlers;
-				let fn = (event) => {
-					let callbacks = handlers[eventName];
-					let ev = _me._fixEvent(event);
+        if (eventName && callback) {
+            useCapture = useCapture ? useCapture : false;
 
-					for (let i = 0, len = callbacks.length; i < len; i++) {
-						let item = callbacks[i];
-						if (ev.isImmediatePropagationStopped()) {
-							break;
-						} else if (item._guid == fn._guid) {
-							item._callback.call(_me, ev);
-						}
-					}
-				};
+            if (Util.isType(eventName, "Array")) {
+                Util.each(eventName, (item) => {
+                    _me.on(item, callback, useCapture);
+                });
+            } else {
+                let handlers = target.handlers;
+                let fn = (event) => {
+                    let callbacks = handlers[eventName];
+                    let ev = _me._fixEvent(event);
 
-				fn._fnStr = callback._fntStr ? callback._fnStr : callback.toString().replace(fnRegExp, '');
-				fn._callback = callback;
-				fn._useCapture = useCapture;
-				fn._guid = guid++;
+                    for (let i = 0, len = callbacks.length; i < len; i++) {
+                        let item = callbacks[i];
+                        if (ev.isImmediatePropagationStopped()) {
+                            break;
+                        } else if (item._guid == fn._guid) {
+                            item._callback.call(_me, ev);
+                        }
+                    }
+                };
 
-				if (!handlers) {
-					handlers = target.handlers = {};
-				}
+                fn._fnStr = callback._fntStr ? callback._fnStr : callback.toString().replace(fnRegExp, '');
+                fn._callback = callback;
+                fn._useCapture = useCapture;
+                fn._guid = guid++;
 
-				if (!handlers[eventName]) {
-					handlers[eventName] = [];
-				}
+                if (!handlers) {
+                    handlers = target.handlers = {};
+                }
 
-				handlers[eventName].push(fn);
+                if (!handlers[eventName]) {
+                    handlers[eventName] = [];
+                }
 
-				if (handlers[eventName].length) {
-					if (target.addEventListener) {
-						target.addEventListener(eventName, fn, useCapture);
-					} else if (target.attachEvent) {
-						target.attachEvent(eventName, fn);
-					}
-				}
-			}
-		}
+                handlers[eventName].push(fn);
 
-		return _me;
-	}
+                if (handlers[eventName].length) {
+                    if (target.addEventListener) {
+                        target.addEventListener(eventName, fn, useCapture);
+                    } else if (target.attachEvent) {
+                        target.attachEvent(eventName, fn);
+                    }
+                }
+            }
+        }
 
-	off(target, eventName, callback) {
-		let _me = this;
+        return _me;
+    }
 
-		if (typeof target == "string") {
-			[target, eventName, callback] = [_me, target, eventName];
-		}
+    off(target, eventName, callback) {
+        let _me = this;
 
-		if (eventName || callback) {
-			if (Util.isType(eventName, "Array")) {
-				Util.each(eventName, function(item) {
-					_me.off(target, item, callback);
-				});
-			} else if (!callback) {
-				let handlers = target.handlers;
+        if (typeof target == "string") {
+            [target, eventName, callback] = [_me, target, eventName];
+        }
 
-				if (handlers) {
-					let callbacks = handlers[eventName] ? handlers[eventName] : [];
-					Util.each(callbacks, function(item) {
-						_me.off(target, eventName, item);
-					});
-				}
-			} else {
-				let handlers = target.handlers;
+        if (eventName || callback) {
+            if (Util.isType(eventName, "Array")) {
+                Util.each(eventName, function(item) {
+                    _me.off(target, item, callback);
+                });
+            } else if (!callback) {
+                let handlers = target.handlers;
 
-				if (handlers) {
-					let fnStr = callback.fnStr ? callback.fnStr : callback.toString().replace(fnRegExp, '');
-					let callbacks = handlers[eventName] ? handlers[eventName] : [];
+                if (handlers) {
+                    let callbacks = handlers[eventName] ? handlers[eventName] : [];
+                    Util.each(callbacks, function(item) {
+                        _me.off(target, eventName, item);
+                    });
+                }
+            } else {
+                let handlers = target.handlers;
 
-					for (let i = callbacks.length - 1; i >= 0; i--) {
-						let item = callbacks[i];
-						if (item._fnStr == fnStr) {
-							Array.prototype.splice.call(callbacks, i, 1);
-						}
-					}
-				}
-			}
-		}
+                if (handlers) {
+                    let fnStr = callback.fnStr ? callback.fnStr : callback.toString().replace(fnRegExp, '');
+                    let callbacks = handlers[eventName] ? handlers[eventName] : [];
 
-		return _me;
-	}
+                    for (let i = callbacks.length - 1; i >= 0; i--) {
+                        let item = callbacks[i];
+                        if (item._fnStr == fnStr) {
+                            Array.prototype.splice.call(callbacks, i, 1);
+                        }
+                    }
+                }
+            }
+        }
 
-	once(target, eventName, callback, useCapture) {
-		var _me = this;
+        return _me;
+    }
 
-		if (typeof target == "string") {
-			[target, eventName, callback, useCapture] = [_me, target, eventName, callback];
-		}
+    once(target, eventName, callback, useCapture) {
+        var _me = this;
 
-		let fn = function(event) {
-			callback.call(_me, event);
+        if (typeof target == "string") {
+            [target, eventName, callback, useCapture] = [_me, target, eventName, callback];
+        }
 
-			if (event.isImmediatePropagationStopped()) {
-				_me.off(target, eventName, fn);
-			}
+        let fn = function(event) {
+            callback.call(_me, event);
 
-			if (useCapture) {
-				if (event.eventPhase == 0) {
-					_me.off(target, eventName, fn);
-				}
-			} else {
-				_me.off(target, eventName, fn);
-			}
-		};
+            if (event.isImmediatePropagationStopped()) {
+                _me.off(target, eventName, fn);
+            }
 
-		fn._fnStr = callback.toString().replace(fnRegExp, '');
+            if (useCapture) {
+                if (event.eventPhase == 0) {
+                    _me.off(target, eventName, fn);
+                }
+            } else {
+                _me.off(target, eventName, fn);
+            }
+        };
 
-		return _me.on(target, eventName, fn, useCapture);
-	}
+        fn._fnStr = callback.toString().replace(fnRegExp, '');
 
-	trigger(target, eventName, event) {
-		let _me = this;
+        return _me.on(target, eventName, fn, useCapture);
+    }
 
-		if (!target && !eventName) {
-			return;
-		} else if (typeof target == "string") {
-			[target, eventName, event] = [_me, target, eventName];
-		}
+    trigger(target, eventName, event) {
+        let _me = this;
 
-		let handlers = target && target.handlers;
+        if (!target && !eventName) {
+            return;
+        } else if (typeof target == "string") {
+            [target, eventName, event] = [_me, target, eventName];
+        }
 
-		if (!handlers) {
-			return _me;
-		}
+        let handlers = target && target.handlers;
 
-		let callbacks = handlers[eventName] ? handlers[eventName] : [];
+        if (!handlers) {
+            return _me;
+        }
 
-		//自定义事件trigger的时候需要修正target和currentTarget
-		let ev = event || {};
-		if (ev.target == null) {
-			ev.target = ev.currentTarget = target;
-		}
+        let callbacks = handlers[eventName] ? handlers[eventName] : [];
 
-		ev = _me._fixEvent(ev);
+        //自定义事件trigger的时候需要修正target和currentTarget
+        let ev = event || {};
+        if (ev.target == null) {
+            ev.target = ev.currentTarget = target;
+        }
 
-		// 此处分开冒泡阶段函数和捕获阶段函数
-		let parent = target.parent || target.parentNode;
-		let handlerList = {
-			propagations: [],
-			useCaptures: []
-		};
+        ev = _me._fixEvent(ev);
 
-		while (parent) {
-			let handlers = null;
-			if (handlers = parent.handlers) {
-				let callbacks = handlers[eventName] ? handlers[eventName] : [];
-				for (let i = 0, len = callbacks.length; i < len; i++) {
-					let useCapture = callbacks[i]._useCapture;
-					if (!useCapture) {
-						handlerList.propagations.push({
-							target: parent,
-							callback: callbacks[i]
-						});
-					} else {
-						let tmp = {
-							target: parent,
-							callback: callbacks[i]
-						};
+        // 此处分开冒泡阶段函数和捕获阶段函数
+        let parent = target.parent || target.parentNode;
+        let handlerList = {
+            propagations: [],
+            useCaptures: []
+        };
 
-						!i ? handlerList.useCaptures.unshift(tmp) : handlerList.useCaptures.splice(1, 0, tmp);
-					}
-				}
-			}
-			parent = parent.parent || parent.parentNode;
-		}
+        while (parent) {
+            let handlers = null;
+            if (handlers = parent.handlers) {
+                let callbacks = handlers[eventName] ? handlers[eventName] : [];
+                for (let i = 0, len = callbacks.length; i < len; i++) {
+                    let useCapture = callbacks[i]._useCapture;
+                    if (!useCapture) {
+                        handlerList.propagations.push({
+                            target: parent,
+                            callback: callbacks[i]
+                        });
+                    } else {
+                        let tmp = {
+                            target: parent,
+                            callback: callbacks[i]
+                        };
 
-		// 捕获阶段的模拟
-		let useCaptures = handlerList.useCaptures;
-		let prevTarget = null;
-		ev.eventPhase = 0;
-		for (let i = 0, len = useCaptures.length; i < len; i++) {
-			let handler = useCaptures[i];
-			target = handler.target;
+                        !i ? handlerList.useCaptures.unshift(tmp) : handlerList.useCaptures.splice(1, 0, tmp);
+                    }
+                }
+            }
+            parent = parent.parent || parent.parentNode;
+        }
 
-			if (ev.isImmediatePropagationStopped()) {
-				break;
-			} else if (prevTarget == target && ev.isPropagationStopped()) {
-				handler.callback.call(_me, ev);
-			} else {
-				handler.callback.call(_me, ev);
-				prevTarget = target;
-			}
+        // 捕获阶段的模拟
+        let useCaptures = handlerList.useCaptures;
+        let prevTarget = null;
+        ev.eventPhase = 0;
+        for (let i = 0, len = useCaptures.length; i < len; i++) {
+            let handler = useCaptures[i];
+            target = handler.target;
 
-		}
+            if (ev.isImmediatePropagationStopped()) {
+                break;
+            } else if (prevTarget == target && ev.isPropagationStopped()) {
+                handler.callback.call(_me, ev);
+            } else {
+                handler.callback.call(_me, ev);
+                prevTarget = target;
+            }
 
-		let isUseCapturePhaseStopped = false;
-		if (useCaptures.length) {
-			isUseCapturePhaseStopped = ev.isImmediatePropagationStopped() || ev.isPropagationStopped();
-		}
+        }
 
-		// 目标阶段
-		ev.eventPhase = 1;
-		for (let i = 0, len = callbacks.length; i < len; i++) {
-			let item = callbacks[i];
-			if (isUseCapturePhaseStopped) {
-				break;
-			} else {
-				item.call(_me, ev);
-			}
-		}
+        let isUseCapturePhaseStopped = false;
+        if (useCaptures.length) {
+            isUseCapturePhaseStopped = ev.isImmediatePropagationStopped() || ev.isPropagationStopped();
+        }
 
-		// 冒泡的模拟
-		let propagations = handlerList.propagations;
-		prevTarget = null;
-		ev.eventPhase = 2;
-		for (let i = 0, len = propagations.length; i < len; i++) {
-			let handler = propagations[i];
-			target = handler.target;
-			ev.target = target;
-			if (isUseCapturePhaseStopped) {
-				if (ev.isImmediatePropagationStopped() || ev.isPropagationStopped()) {
-					break;
-				} else {
-					handler.callback.call(_me, ev);
-					prevTarget = target;
-				}
-			} else {
-				if (ev.isImmediatePropagationStopped()) {
-					break;
-				} else if (ev.isPropagationStopped()) {
-					if (prevTarget == target) {
-						handler.callback.call(_me, ev);
-					} else {
-						break;
-					}
-				} else {
-					handler.callback.call(_me, ev);
-					prevTarget = target;
-				}
-			}
-		}
-	}
+        // 目标阶段
+        ev.eventPhase = 1;
+        for (let i = 0, len = callbacks.length; i < len; i++) {
+            let item = callbacks[i];
+            if (isUseCapturePhaseStopped) {
+                break;
+            } else {
+                item.call(_me, ev);
+            }
+        }
 
-	_fixEvent(event) {
-		let _me = this;
-		let returnTrue = () => {
-			return true
-		};
-		let returnFalse = () => {
-			return false
-		};
+        // 冒泡的模拟
+        let propagations = handlerList.propagations;
+        prevTarget = null;
+        ev.eventPhase = 2;
+        for (let i = 0, len = propagations.length; i < len; i++) {
+            let handler = propagations[i];
+            target = handler.target;
+            ev.target = target;
+            if (isUseCapturePhaseStopped) {
+                if (ev.isImmediatePropagationStopped() || ev.isPropagationStopped()) {
+                    break;
+                } else {
+                    handler.callback.call(_me, ev);
+                    prevTarget = target;
+                }
+            } else {
+                if (ev.isImmediatePropagationStopped()) {
+                    break;
+                } else if (ev.isPropagationStopped()) {
+                    if (prevTarget == target) {
+                        handler.callback.call(_me, ev);
+                    } else {
+                        break;
+                    }
+                } else {
+                    handler.callback.call(_me, ev);
+                    prevTarget = target;
+                }
+            }
+        }
+    }
 
-		if (!event || !event.isPropagationStopped) {
-			event = event ? event : {};
+    _fixEvent(event) {
+        let _me = this;
+        let returnTrue = () => {
+            return true
+        };
+        let returnFalse = () => {
+            return false
+        };
 
-			let preventDefault = event.preventDefault;
-			let stopPropagation = event.stopPropagation;
-			let stopImmediatePropagation = event.stopImmediatePropagation;
+        if (!event || !event.isPropagationStopped) {
+            event = event ? event : {};
+
+            let preventDefault = event.preventDefault;
+            let stopPropagation = event.stopPropagation;
+            let stopImmediatePropagation = event.stopImmediatePropagation;
 
 
-			if (!event.target) {
-				event.target = event.srcElement || document;
-			}
+            if (!event.target) {
+                event.target = event.srcElement || document;
+            }
 
-			if (!event.currentTarget) {
-				event.currentTarget = _me;
-			}
+            if (!event.currentTarget) {
+                event.currentTarget = _me;
+            }
 
-			event.relatedTarget = event.fromElement === event.target ?
-				event.toElement :
-				event.fromElement;
+            event.relatedTarget = event.fromElement === event.target ?
+                event.toElement :
+                event.fromElement;
 
-			event.preventDefault = () => {
-				if (preventDefault) {
-					preventDefault.call(event);
-				}
-				event.returnValue = false;
-				event.isDefaultPrevented = returnTrue;
-				event.defaultPrevented = true;
-			};
+            event.preventDefault = () => {
+                if (preventDefault) {
+                    preventDefault.call(event);
+                }
+                event.returnValue = false;
+                event.isDefaultPrevented = returnTrue;
+                event.defaultPrevented = true;
+            };
 
-			event.isDefaultPrevented = returnFalse;
-			event.defaultPrevented = false;
+            event.isDefaultPrevented = returnFalse;
+            event.defaultPrevented = false;
 
-			event.stopPropagation = () => {
-				if (stopPropagation) {
-					stopPropagation.call(event);
-				}
-				event.cancelBubble = true;
-				event.isPropagationStopped = returnTrue;
-			};
+            event.stopPropagation = () => {
+                if (stopPropagation) {
+                    stopPropagation.call(event);
+                }
+                event.cancelBubble = true;
+                event.isPropagationStopped = returnTrue;
+            };
 
-			event.isPropagationStopped = returnFalse;
+            event.isPropagationStopped = returnFalse;
 
-			event.stopImmediatePropagation = () => {
-				if (stopImmediatePropagation) {
-					stopImmediatePropagation.call(event);
-				}
-				event.isImmediatePropagationStopped = returnTrue;
-				event.stopPropagation();
-			};
+            event.stopImmediatePropagation = () => {
+                if (stopImmediatePropagation) {
+                    stopImmediatePropagation.call(event);
+                }
+                event.isImmediatePropagationStopped = returnTrue;
+                event.stopPropagation();
+            };
 
-			event.isImmediatePropagationStopped = returnFalse;
+            event.isImmediatePropagationStopped = returnFalse;
 
-			if (event.clientX != null) {
-				let doc = document.documentElement,
-					body = document.body;
+            if (event.clientX != null) {
+                let doc = document.documentElement,
+                    body = document.body;
 
-				event.pageX = event.clientX +
-					(doc && doc.scrollLeft || body && body.scrollLeft || 0) -
-					(doc && doc.clientLeft || body && body.clientLeft || 0);
+                event.pageX = event.clientX +
+                    (doc && doc.scrollLeft || body && body.scrollLeft || 0) -
+                    (doc && doc.clientLeft || body && body.clientLeft || 0);
 
-				event.pageY = event.clientY +
-					(doc && doc.scrollTop || body && body.scrollTop || 0) -
-					(doc && doc.clientTop || body && body.clientTop || 0);
-			}
+                event.pageY = event.clientY +
+                    (doc && doc.scrollTop || body && body.scrollTop || 0) -
+                    (doc && doc.clientTop || body && body.clientTop || 0);
+            }
 
-			event.which = event.charCode || event.keyCode;
-		}
+            event.which = event.charCode || event.keyCode;
+        }
 
-		return event;
-	}
+        return event;
+    }
 }
 
 Moco.EventDispatcher = EventDispatcher;
