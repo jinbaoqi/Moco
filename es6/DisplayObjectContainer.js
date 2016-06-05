@@ -90,6 +90,19 @@ class DisplayObjectContainer extends InteractiveObject {
         return isDrew;
     }
 
+    isMouseon(cord) {
+        let _me = this;
+
+        for (let i = 0, len = _me._childList.length; i < len; i++) {
+            let item = _me._childList[i];
+            if (item.isMouseon && item.isMouseon(cord)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     getBounds() {
         let _me = this;
         let childList = _me._childList;

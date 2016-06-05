@@ -474,6 +474,40 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 }
             }
         }, {
+            key: "some",
+            value: function some(arr, callback) {
+                var _me = this;
+
+                if (_me.isType(arr, "Array") && Array.prototype.some) {
+                    return Array.prototype.some.call(arr, callback);
+                } else {
+                    var bol = false;
+                    _me.each(arr, function (item, index, arr) {
+                        if (callback.call(arr, item, index, arr) == true) {
+                            bol = true;
+                        }
+                    });
+                    return bol;
+                }
+            }
+        }, {
+            key: "every",
+            value: function every(arr, callback) {
+                var _me = this;
+
+                if (_me.isType(arr, "Array") && Array.prototype.some) {
+                    return Array.prototype.some.call(arr, callback);
+                } else {
+                    var bol = true;
+                    _me.each(arr, function (item, index, arr) {
+                        if (!callback.call(arr, item, index, arr)) {
+                            bol = false;
+                        }
+                    });
+                    return bol;
+                }
+            }
+        }, {
             key: "deg2rad",
             value: function deg2rad(deg) {
                 return deg * Math.PI / 180;
@@ -1527,6 +1561,20 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 return isDrew;
             }
         }, {
+            key: "isMouseon",
+            value: function isMouseon(cord) {
+                var _me = this;
+
+                for (var _i16 = 0, len = _me._childList.length; _i16 < len; _i16++) {
+                    var item = _me._childList[_i16];
+                    if (item.isMouseon && item.isMouseon(cord)) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        }, {
             key: "getBounds",
             value: function getBounds() {
                 var _me = this;
@@ -1780,7 +1828,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }, {
             key: "isMouseon",
             value: function isMouseon(cord) {
-                return true;
+                var _me = this;
+                var isOn = _get(Object.getPrototypeOf(Sprite.prototype), "isMouseon", this).call(this, cord);
+
+                if (!isOn && _me.graphics && _me.graphics instanceof Shape) {
+                    isOn = _me.graphics.isMouseon && _me.graphics.isMouseon(cord);
+                }
+
+                return isOn;
             }
         }, {
             key: "_getWidth",
@@ -1857,8 +1912,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var isDrew = _get(Object.getPrototypeOf(Shape.prototype), "show", this).call(this, matrix);
 
                 if (isDrew) {
-                    for (var _i16 = 0, len = showList.length; _i16 < len; _i16++) {
-                        var showListItem = showList[_i16];
+                    for (var _i17 = 0, len = showList.length; _i17 < len; _i17++) {
+                        var showListItem = showList[_i17];
                         if (typeof showListItem == "function") {
                             showListItem();
                         }
@@ -2117,6 +2172,36 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }, {
             key: "isMouseon",
             value: function isMouseon(cord) {
+                var _me = this;
+                var vec = new Vec3(cord.x, cord.y, 1);
+                var inverse = Matrix3.inverse(_me._matrix);
+                vec.multiMatrix3(inverse);
+
+                var setList = _me._setList;
+                for (var _i18 = 0, len = setList.length; _i18 < len; _i18++) {
+                    var item = setList[_i18];
+                    var area = item.area;
+                    var minRect = {};
+                    var isOn = false;
+
+                    switch (item.type) {
+                        case "rect":
+                            area = [[area[0], area[1]], [area[0] + area[2], area[1]], [area[0] + area[2], area[1] + area[3]], [area[0], area[1] + area[3]]];
+                        case "vertices":
+                            break;
+                        case "arc":
+                            minRect = _me._computeArcMinRect.apply(_me, area);
+                            area = [[minRect.s1v.x, minRect.s1v.y], [minRect.s2v.x, minRect.s2v.y], [minRect.e2v.x, minRect.e2v.y], [minRect.e1v.x, minRect.e1v.y]];
+                            isOn = _me._pip([vec.x, vec.y], area);
+                            break;
+                    }
+
+                    isOn = _me._pip([vec.x, vec.y], area);
+                    if (isOn) {
+                        return true;
+                    }
+                }
+
                 return false;
             }
         }, {
@@ -2129,8 +2214,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var sy = maxNumber;
                 var ey = minNumber;
 
-                for (var _i17 = 0, len = setList.length; _i17 < len; _i17++) {
-                    var item = setList[_i17];
+                for (var _i19 = 0, len = setList.length; _i19 < len; _i19++) {
+                    var item = setList[_i19];
                     var area = item.area;
                     var minRect = {};
                     var vec3s = [];
@@ -2286,6 +2371,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     e2v: new Vec3(ex, ey, 1)
                 };
             }
+
+            // ray-casting algorithm
+            // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
+
         }, {
             key: "_pip",
             value: function _pip(point, vs) {
@@ -2293,9 +2382,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var x = point[0],
                     y = point[1];
 
-                for (var _i18 = 0, j = vs.length - 1; _i18 < vs.length; j = _i18++) {
-                    var xi = vs[_i18][0],
-                        yi = vs[_i18][1];
+                for (var _i20 = 0, j = vs.length - 1; _i20 < vs.length; j = _i20++) {
+                    var xi = vs[_i20][0],
+                        yi = vs[_i20][1];
                     var xj = vs[j][0],
                         yj = vs[j][1];
 

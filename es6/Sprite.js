@@ -42,7 +42,14 @@ class Sprite extends DisplayObjectContainer {
     }
 
     isMouseon(cord) {
-        return true;
+        let _me = this;
+        let isOn = super.isMouseon(cord);
+
+        if (!isOn && _me.graphics && _me.graphics instanceof Shape) {
+            isOn = _me.graphics.isMouseon && _me.graphics.isMouseon(cord);
+        }
+
+        return isOn;
     }
 
     _getWidth() {

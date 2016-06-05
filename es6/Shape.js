@@ -261,6 +261,44 @@ class Shape extends DisplayObject {
     }
 
     isMouseon(cord) {
+        let _me = this;
+        let vec = new Vec3(cord.x, cord.y, 1);
+        let inverse = Matrix3.inverse(_me._matrix);
+        vec.multiMatrix3(inverse);
+
+        let setList = _me._setList;
+        for (let i = 0, len = setList.length; i < len; i++) {
+            let item = setList[i];
+            let area = item.area;
+            let minRect = {};
+            let isOn = false;
+
+            switch (item.type) {
+                case "rect":
+                    area = [
+                        [area[0], area[1]],
+                        [area[0] + area[2], area[1]],
+                        [area[0] + area[2], area[1] + area[3]],
+                        [area[0], area[1] + area[3]]
+                    ];
+                case "vertices":
+                    break;
+                case "arc":
+                    minRect = _me._computeArcMinRect.apply(_me, area);
+                    area = [
+                        [minRect.s1v.x, minRect.s1v.y],
+                        [minRect.s2v.x, minRect.s2v.y],
+                        [minRect.e2v.x, minRect.e2v.y],
+                        [minRect.e1v.x, minRect.e1v.y]
+                    ];
+                    break;
+            }
+
+            if (_me._pip([vec.x, vec.y], area)) {
+                return true;
+            }
+        }
+
         return false;
     }
 

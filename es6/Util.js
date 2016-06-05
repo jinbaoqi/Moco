@@ -51,6 +51,38 @@ class Util {
         }
     }
 
+    static some(arr, callback) {
+        let _me = this;
+
+        if (_me.isType(arr, "Array") && Array.prototype.some) {
+            return Array.prototype.some.call(arr, callback);
+        } else {
+            let bol = false;
+            _me.each(arr, function(item, index, arr) {
+                if (callback.call(arr, item, index, arr) == true) {
+                    bol = true;
+                }
+            });
+            return bol;
+        }
+    }
+
+    static every(arr, callback) {
+        let _me = this;
+
+        if (_me.isType(arr, "Array") && Array.prototype.some) {
+            return Array.prototype.some.call(arr, callback);
+        } else {
+            let bol = true;
+            _me.each(arr, function(item, index, arr) {
+                if (!callback.call(arr, item, index, arr)) {
+                    bol = false;
+                }
+            });
+            return bol;
+        }
+    }
+
     static deg2rad(deg) {
         return deg * Math.PI / 180;
     }
