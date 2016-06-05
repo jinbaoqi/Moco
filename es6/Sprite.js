@@ -59,8 +59,7 @@ class Sprite extends DisplayObjectContainer {
             bounds.ev.x = bounds.ev.x > shapeBounds.ev.x ? bounds.ev.x : shapeBounds.ev.x;
         }
 
-        let width = Math.abs(bounds.ev.x - bounds.sv.x);
-        return Number.isNaN(width) ? 0 : width;
+        return  Math.abs(bounds.ev.x - bounds.sv.x);
     }
 
     _getHeight() {
@@ -77,8 +76,7 @@ class Sprite extends DisplayObjectContainer {
             bounds.ev.y = bounds.ev.y > shapeBounds.ev.y ? bounds.ev.y : shapeBounds.ev.y;
         }
 
-        let height = Math.abs(bounds.ev.y - bounds.sv.y);
-        return Number.isNaN(height) ? 0 : height;
+        return Math.abs(bounds.ev.y - bounds.sv.y);
     }
 }
 
