@@ -276,6 +276,8 @@ class Shape extends DisplayObject {
             let item = setList[i];
             let area = item.area;
             let minRect = {};
+            let vec3s = [];
+
             switch (item.type) {
                 case "rect":
                     area = [
@@ -285,18 +287,20 @@ class Shape extends DisplayObject {
                         [area[0], area[1] + area[3]]
                     ];
                 case "vertices":
-                    minRect = _me._computeVerticeMinRect(area);
+                    vec3s = Util.map(area, (item) => {
+                        let vec = new Vec3(item[0], item[1], 1);
+                        return vec.multiMatrix3(_me._matrix);
+                    });
                     break;
                 case "arc":
                     minRect = _me._computeArcMinRect.apply(_me, area);
+                    vec3s = Util.map(minRect, (item) => {
+                        return item.multiMatrix3(_me._matrix);
+                    });
                     break;
             }
 
-            let vs = Util.map(minRect, (item) => {
-                return item.multiMatrix3(_me._matrix);
-            });
-
-            Util.each(vs, (item) => {
+            Util.each(vec3s, (item) => {
                 sx = item.x < sx ? item.x : sx;
                 ex = item.x > ex ? item.x : ex;
                 sy = item.y < sy ? item.y : sy;
@@ -317,6 +321,7 @@ class Shape extends DisplayObject {
     _getWidth() {
         let _me = this;
         let bounds = _me.getBounds();
+        console.log(bounds);
         return Math.abs(bounds.ev.x - bounds.sv.x);
     }
 
@@ -421,26 +426,26 @@ class Shape extends DisplayObject {
         };
     }
 
-    _computeVerticeMinRect(vertices) {
-        let sx = 0;
-        let sy = 0;
-        let ex = 0;
-        let ey = 0;
+    // ray-casting algorithm
+    // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
+    _pip(point, vs) {
+        let isInside = false;
+        let x = point[0],
+            y = point[1];
 
-        for (let i = 0, len = vertices.length; i < len; i++) {
-            let v = vertices[i];
-            sx = sx < v[0] ? sx : v[0];
-            sy = sy < v[1] ? sy : v[1];
-            ex = ex > v[0] ? ex : v[0];
-            ey = ey > v[1] ? ey : ey[0];
+        for (let i = 0, j = vs.length - 1; i < vs.length; j = i++) {
+            let xi = vs[i][0],
+                yi = vs[i][1];
+            let xj = vs[j][0],
+                yj = vs[j][1];
+
+            let intersect = ((yi > y) != (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+            if (intersect) {
+                isInside = !isInside;
+            }
         }
 
-        return {
-            s1v: new Vec3(sx, sy, 1),
-            s2v: new Vec3(ex, sy, 1),
-            e1v: new Vec3(sx, ey, 1),
-            e2v: new Vec3(ex, ey, 1)
-        };
+        return isInside;
     }
 }
 
