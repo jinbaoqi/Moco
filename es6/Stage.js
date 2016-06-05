@@ -25,14 +25,14 @@ class Stage extends DisplayObjectContainer {
         // Stage接管所有交互事件
         Util.each(MouseEvent.nameList, (eventName) => {
             eventName = MouseEvent[eventName];
-            EventDispatcher.prototype.on.call(_me, _me.domElem, eventName, (event) => {
+            EventDispatcher.prototype.bind.call(_me, _me.domElem, eventName, (event) => {
                 _me._mouseEvent(event);
             }, false);
         });
 
         Util.each(KeyboardEvent.nameList, (eventName) => {
             eventName = KeyboardEvent[eventName];
-            EventDispatcher.prototype.on.call(_me, document, eventName, (event) => {
+            EventDispatcher.prototype.bind.call(_me, document, eventName, (event) => {
                 _me._keyboardEvent(event);
             });
         }, false);

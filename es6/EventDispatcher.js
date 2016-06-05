@@ -1,5 +1,5 @@
 class EventDispatcher {
-    on(target, eventName, callback, useCapture) {
+    bind(target, eventName, callback, useCapture) {
         let _me = this;
 
         if (typeof target == "string") {
@@ -11,7 +11,7 @@ class EventDispatcher {
 
             if (Util.isType(eventName, "Array")) {
                 Util.each(eventName, (item) => {
-                    _me.on(item, callback, useCapture);
+                    _me.bind(item, callback, useCapture);
                 });
             } else {
                 let handlers = target.handlers;
@@ -57,9 +57,8 @@ class EventDispatcher {
         return _me;
     }
 
-    off(target, eventName, callback) {
+    unbind(target, eventName, callback) {
         let _me = this;
-
         if (typeof target == "string") {
             [target, eventName, callback] = [_me, target, eventName];
         }
@@ -67,7 +66,7 @@ class EventDispatcher {
         if (eventName || callback) {
             if (Util.isType(eventName, "Array")) {
                 Util.each(eventName, function(item) {
-                    _me.off(target, item, callback);
+                    _me.unbind(target, item, callback);
                 });
             } else if (!callback) {
                 let handlers = target.handlers;
@@ -75,14 +74,14 @@ class EventDispatcher {
                 if (handlers) {
                     let callbacks = handlers[eventName] ? handlers[eventName] : [];
                     Util.each(callbacks, function(item) {
-                        _me.off(target, eventName, item);
+                        _me.unbind(target, eventName, item);
                     });
                 }
             } else {
                 let handlers = target.handlers;
 
                 if (handlers) {
-                    let fnStr = callback.fnStr ? callback.fnStr : callback.toString().replace(fnRegExp, '');
+                    let fnStr = callback._fnStr ? callback._fnStr : callback.toString().replace(fnRegExp, '');
                     let callbacks = handlers[eventName] ? handlers[eventName] : [];
 
                     for (let i = callbacks.length - 1; i >= 0; i--) {
@@ -109,21 +108,21 @@ class EventDispatcher {
             callback.call(_me, event);
 
             if (event.isImmediatePropagationStopped()) {
-                _me.off(target, eventName, fn);
+                _me.unbind(target, eventName, fn);
             }
 
             if (useCapture) {
                 if (event.eventPhase == 0) {
-                    _me.off(target, eventName, fn);
+                    _me.unbind(target, eventName, fn);
                 }
             } else {
-                _me.off(target, eventName, fn);
+                _me.unbind(target, eventName, fn);
             }
         };
 
         fn._fnStr = callback.toString().replace(fnRegExp, '');
 
-        return _me.on(target, eventName, fn, useCapture);
+        return _me.bind(target, eventName, fn, useCapture);
     }
 
     trigger(target, eventName, event) {

@@ -18,14 +18,14 @@ class InteractiveObject extends DisplayObject {
             KeyboardEvent.add(eventName, _me);
         }
 
-        super.on(eventName, callback, useCapture);
+        super.bind(_me, eventName, callback, useCapture);
     }
 
     off(eventName, callback) {
         let _me = this;
         let eventNameUpperCase = eventName.toUpperCase();
-        let isMouseEvent = Util.inArray(eventName, MouseEvent.nameList) != -1;
-        let isKeyboardEvent = Util.inArray(eventName, KeyBoardEvent.nameList) != -1;
+        let isMouseEvent = Util.inArray(eventNameUpperCase, MouseEvent.nameList) != -1;
+        let isKeyboardEvent = Util.inArray(eventNameUpperCase, KeyboardEvent.nameList) != -1;
 
         if (!isMouseEvent && !isKeyboardEvent) {
             return;
@@ -34,8 +34,8 @@ class InteractiveObject extends DisplayObject {
         } else if (isKeyboardEvent) {
             KeyBoardEvent.remove(eventName, _me);
         }
-
-        super.off(eventName, callback);
+        
+        super.unbind(_me, eventName, callback);
     }
 }
 

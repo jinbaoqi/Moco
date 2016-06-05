@@ -750,12 +750,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 if (item instanceof EventDispatcher) {
                     var list = this._list;
                     if (list[eventName]) {
-                        var isExists = Util.inArray(item, list[eventName], function (a1, a2) {
+                        var index = Util.inArray(item, list[eventName], function (a1, a2) {
                             return a1.aIndex == a2.aIndex;
-                        }) != -1;
+                        });
 
-                        if (isExists) {
-                            list[eventName].splice(i, 1);
+                        if (index != -1) {
+                            list[eventName].splice(index, 1);
                         }
                     }
                 }
@@ -866,8 +866,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
 
         _createClass(EventDispatcher, [{
-            key: "on",
-            value: function on(target, eventName, callback, useCapture) {
+            key: "bind",
+            value: function bind(target, eventName, callback, useCapture) {
                 var _me = this;
 
                 if (typeof target == "string") {
@@ -883,7 +883,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                     if (Util.isType(eventName, "Array")) {
                         Util.each(eventName, function (item) {
-                            _me.on(item, callback, useCapture);
+                            _me.bind(item, callback, useCapture);
                         });
                     } else {
                         (function () {
@@ -931,10 +931,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 return _me;
             }
         }, {
-            key: "off",
-            value: function off(target, eventName, callback) {
+            key: "unbind",
+            value: function unbind(target, eventName, callback) {
                 var _me = this;
-
                 if (typeof target == "string") {
                     var _ref2 = [_me, target, eventName];
                     target = _ref2[0];
@@ -945,7 +944,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 if (eventName || callback) {
                     if (Util.isType(eventName, "Array")) {
                         Util.each(eventName, function (item) {
-                            _me.off(target, item, callback);
+                            _me.unbind(target, item, callback);
                         });
                     } else if (!callback) {
                         var handlers = target.handlers;
@@ -953,14 +952,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         if (handlers) {
                             var callbacks = handlers[eventName] ? handlers[eventName] : [];
                             Util.each(callbacks, function (item) {
-                                _me.off(target, eventName, item);
+                                _me.unbind(target, eventName, item);
                             });
                         }
                     } else {
                         var _handlers = target.handlers;
 
                         if (_handlers) {
-                            var fnStr = callback.fnStr ? callback.fnStr : callback.toString().replace(fnRegExp, '');
+                            var fnStr = callback._fnStr ? callback._fnStr : callback.toString().replace(fnRegExp, '');
                             var _callbacks = _handlers[eventName] ? _handlers[eventName] : [];
 
                             for (var _i7 = _callbacks.length - 1; _i7 >= 0; _i7--) {
@@ -992,21 +991,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     callback.call(_me, event);
 
                     if (event.isImmediatePropagationStopped()) {
-                        _me.off(target, eventName, fn);
+                        _me.unbind(target, eventName, fn);
                     }
 
                     if (useCapture) {
                         if (event.eventPhase == 0) {
-                            _me.off(target, eventName, fn);
+                            _me.unbind(target, eventName, fn);
                         }
                     } else {
-                        _me.off(target, eventName, fn);
+                        _me.unbind(target, eventName, fn);
                     }
                 };
 
                 fn._fnStr = callback.toString().replace(fnRegExp, '');
 
-                return _me.on(target, eventName, fn, useCapture);
+                return _me.bind(target, eventName, fn, useCapture);
             }
         }, {
             key: "trigger",
@@ -1429,15 +1428,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     KeyboardEvent.add(eventName, _me);
                 }
 
-                _get(Object.getPrototypeOf(InteractiveObject.prototype), "on", this).call(this, eventName, callback, useCapture);
+                _get(Object.getPrototypeOf(InteractiveObject.prototype), "bind", this).call(this, _me, eventName, callback, useCapture);
             }
         }, {
             key: "off",
             value: function off(eventName, callback) {
                 var _me = this;
                 var eventNameUpperCase = eventName.toUpperCase();
-                var isMouseEvent = Util.inArray(eventName, MouseEvent.nameList) != -1;
-                var isKeyboardEvent = Util.inArray(eventName, KeyBoardEvent.nameList) != -1;
+                var isMouseEvent = Util.inArray(eventNameUpperCase, MouseEvent.nameList) != -1;
+                var isKeyboardEvent = Util.inArray(eventNameUpperCase, KeyboardEvent.nameList) != -1;
 
                 if (!isMouseEvent && !isKeyboardEvent) {
                     return;
@@ -1447,7 +1446,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     KeyBoardEvent.remove(eventName, _me);
                 }
 
-                _get(Object.getPrototypeOf(InteractiveObject.prototype), "off", this).call(this, eventName, callback);
+                _get(Object.getPrototypeOf(InteractiveObject.prototype), "unbind", this).call(this, _me, eventName, callback);
             }
         }]);
 
@@ -1656,14 +1655,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 // Stage接管所有交互事件
                 Util.each(MouseEvent.nameList, function (eventName) {
                     eventName = MouseEvent[eventName];
-                    EventDispatcher.prototype.on.call(_me, _me.domElem, eventName, function (event) {
+                    EventDispatcher.prototype.bind.call(_me, _me.domElem, eventName, function (event) {
                         _me._mouseEvent(event);
                     }, false);
                 });
 
                 Util.each(KeyboardEvent.nameList, function (eventName) {
                     eventName = KeyboardEvent[eventName];
-                    EventDispatcher.prototype.on.call(_me, document, eventName, function (event) {
+                    EventDispatcher.prototype.bind.call(_me, document, eventName, function (event) {
                         _me._keyboardEvent(event);
                     });
                 }, false);
@@ -2192,12 +2191,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         case "arc":
                             minRect = _me._computeArcMinRect.apply(_me, area);
                             area = [[minRect.s1v.x, minRect.s1v.y], [minRect.s2v.x, minRect.s2v.y], [minRect.e2v.x, minRect.e2v.y], [minRect.e1v.x, minRect.e1v.y]];
-                            isOn = _me._pip([vec.x, vec.y], area);
                             break;
                     }
 
-                    isOn = _me._pip([vec.x, vec.y], area);
-                    if (isOn) {
+                    if (_me._pip([vec.x, vec.y], area)) {
                         return true;
                     }
                 }
