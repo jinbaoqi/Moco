@@ -45,6 +45,7 @@ class Sprite extends DisplayObjectContainer {
         let _me = this;
         let isOn = super.isMouseon(cord);
 
+        debugger;
         if (!isOn && _me.graphics && _me.graphics instanceof Shape) {
             isOn = _me.graphics.isMouseon && _me.graphics.isMouseon(cord);
         }

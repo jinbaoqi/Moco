@@ -55,6 +55,8 @@ class DisplayObject extends EventDispatcher {
         if (_me.alpha < 1) {
             ctx.globalAlpha = _me.alpha > 1 ? 1 : _me.alpha;
         }
+        
+        _me._matrix.multi(matrix);
 
         if (_me.x != 0 || _me.y != 0) {
             let x = _me.x;
@@ -75,8 +77,6 @@ class DisplayObject extends EventDispatcher {
             _me._matrix.multi(Matrix3.scaling(scaleX, scaleY));
             ctx.scale(scaleX, scaleY);
         }
-
-        _me._matrix.multi(matrix);
 
         return true;
     }

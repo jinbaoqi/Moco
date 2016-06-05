@@ -22,33 +22,50 @@
         console.log("start!");
     });
 
+    // var bottomShape = new Moco.Shape();
+    // bottomShape.drawArc(1,"#0f0f0f",[25,25,25,0,2*Math.PI,true],true,"#f0f0f0");
+
+    // var bottomSprite = new Moco.Sprite();
+    // bottomSprite.graphics = bottomShape;
+
+    // bottomSprite.on(Moco.MouseEvent.MOUSEDOWN,function(event){
+    //     event.preventDefault();
+    //     console.log("bottom");
+    // })
+
+    // stage.addChild(bottomSprite);
+
     var shape = new Moco.Shape();
+    shape.rotate = 45;
     shape.drawArc(1,"#0f0f0f",[25,25,25,0,2*Math.PI,true],true,"#f0f0f0");
     
-    var spirteChild = new Moco.Sprite();
-    spirteChild.graphics = shape;
-
+    var spriteChild = new Moco.Sprite();
+    spriteChild.graphics = shape;
 
     var shape1 = new Moco.Shape();
     shape1.drawVertices(1,"#ffbbff",[[0,0],[100,0],[100,100],[0,100]]);
 
     var sprite = new Moco.Sprite();
     sprite.rotate = 45;
+    sprite.x = sprite.y = 100;
     sprite.graphics = shape1;
     
-    sprite.addChild(spirteChild);
+    sprite.addChild(spriteChild);
     stage.addChild(sprite);
 
     var obj = null;
-    spirteChild.on(Moco.MouseEvent.MOUSEDOWN,function(event){
+    spriteChild.on(Moco.MouseEvent.MOUSEDOWN,function(event){
         event.preventDefault();
+        console.log("top");
         obj = sprite;
     });
 
     stage.on(Moco.MouseEvent.MOUSEDOWN,function(event){
         stage.on(Moco.MouseEvent.MOUSEMOVE, function(event){
-            obj.x = event.x;
-            obj.y = event.y;
+            if(obj){
+                obj.x = event.x;
+                obj.y = event.y;
+            }
         });
         stage.on(Moco.MouseEvent.MOUSEUP, function(event){
             obj = null;

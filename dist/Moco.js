@@ -1273,6 +1273,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     ctx.globalAlpha = _me.alpha > 1 ? 1 : _me.alpha;
                 }
 
+                _me._matrix.multi(matrix);
+
                 if (_me.x != 0 || _me.y != 0) {
                     var x = _me.x;
                     var _y2 = _me.y;
@@ -1292,8 +1294,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     _me._matrix.multi(Matrix3.scaling(scaleX, scaleY));
                     ctx.scale(scaleX, scaleY);
                 }
-
-                _me._matrix.multi(matrix);
 
                 return true;
             }
@@ -1830,6 +1830,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var _me = this;
                 var isOn = _get(Object.getPrototypeOf(Sprite.prototype), "isMouseon", this).call(this, cord);
 
+                debugger;
                 if (!isOn && _me.graphics && _me.graphics instanceof Shape) {
                     isOn = _me.graphics.isMouseon && _me.graphics.isMouseon(cord);
                 }
