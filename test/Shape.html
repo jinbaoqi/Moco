@@ -61,12 +61,14 @@
     shape4.stroke();
     shape4.closePath();
     stage.addChild(shape4);*/
+    var sprite = new Moco.Sprite();
     var shape5 = new Moco.Shape();
-    //sprite.rotate = 30;
-    //shape5.x = shape5.y = 50;
-    shape5.rotate = 10;
+    sprite.rotate = 45;
+    shape5.x = shape5.y = 50;
+    //shape5.rotate = 10;
     shape5.scaleX = shape5.scaleY = 0.5;
-    stage.addChild(shape5);
+    sprite.graphics =shape5;
+    stage.addChild(sprite);
 
     var shape6 = new Moco.Shape();
     stage.addChild(shape6);
