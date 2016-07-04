@@ -33,6 +33,7 @@
     stage.addChild(sprite);
 
     sprite.on(Moco.KeyboardEvent.KEYPRESS,function(){
+        sprite.rotate += 1;
         sprite.x += 10;
     });
 </script>

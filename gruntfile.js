@@ -7,32 +7,32 @@ module.exports = function(grunt) {
             },
             dist: {
                 files: {
-                    "dist/Moco.js": "dist/Moco.es",
+                    "dist/Moco.js": "dist/Moco.js",
                 }
             }
         },
         concat: {
             dist: {
                 src: [
-                    "es6/intro.es",
-                    "es6/global.es",
-                    "es6/Util.es",
-                    "es6/Timer.es",
-                    "es6/Vec3.es",
-                    "es6/Matrix3.es",
-                    "es6/InteractiveEvent.es",
-                    "es6/MouseEvent.es",
-                    "es6/KeyboardEvent.es",
-                    "es6/EventDispatcher.es",
-                    "es6/DisplayObject.es",
-                    "es6/InteractiveObject.es",
-                    "es6/DisplayObjectContainer.es",
-                    "es6/Stage.es",
-                    "es6/Sprite.es",
-                    "es6/Shape.es",
-                    "es6/outro.es"
+                    "es6/intro.js",
+                    "es6/Vec3.js",
+                    "es6/Matrix3.js",
+                    "es6/global.js",
+                    "es6/Util.js",
+                    "es6/Timer.js",
+                    "es6/InteractiveEvent.js",
+                    "es6/MouseEvent.js",
+                    "es6/KeyboardEvent.js",
+                    "es6/EventDispatcher.js",
+                    "es6/DisplayObject.js",
+                    "es6/InteractiveObject.js",
+                    "es6/DisplayObjectContainer.js",
+                    "es6/Stage.js",
+                    "es6/Sprite.js",
+                    "es6/Shape.js",
+                    "es6/outro.js"
                 ],
-                dest: 'dist/Moco.es'
+                dest: 'dist/Moco.js'
             }
         },
         replace: {
@@ -58,7 +58,7 @@ module.exports = function(grunt) {
             }
         },
         watch: {
-            files: ['es6/**/*.es'],
+            files: ['es6/**/*.js'],
             tasks: ['concat', 'babel', 'replace', 'uglify']
         },
     });
