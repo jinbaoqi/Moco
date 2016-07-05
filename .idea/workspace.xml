@@ -2,31 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3894964d-577d-42c6-b64b-b6cf49c67cd1" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/es6/Bitmap.js" afterPath="$PROJECT_DIR$/src/Bitmap.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/es6/BitmapData.js" afterPath="$PROJECT_DIR$/src/BitmapData.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/es6/DisplayObject.js" afterPath="$PROJECT_DIR$/src/DisplayObject.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/es6/DisplayObjectContainer.js" afterPath="$PROJECT_DIR$/src/DisplayObjectContainer.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/es6/EventDispatcher.js" afterPath="$PROJECT_DIR$/src/EventDispatcher.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/es6/InteractiveEvent.js" afterPath="$PROJECT_DIR$/src/InteractiveEvent.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/es6/InteractiveObject.js" afterPath="$PROJECT_DIR$/src/InteractiveObject.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/es6/KeyboardEvent.js" afterPath="$PROJECT_DIR$/src/KeyboardEvent.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/es6/Loader.js" afterPath="$PROJECT_DIR$/src/Loader.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/es6/Matrix3.js" afterPath="$PROJECT_DIR$/src/Matrix3.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/es6/MouseEvent.js" afterPath="$PROJECT_DIR$/src/MouseEvent.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/es6/Shape.js" afterPath="$PROJECT_DIR$/src/Shape.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/es6/Sprite.js" afterPath="$PROJECT_DIR$/src/Sprite.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/es6/Stage.js" afterPath="$PROJECT_DIR$/src/Stage.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/es6/Timer.js" afterPath="$PROJECT_DIR$/src/Timer.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/es6/URLLoader.js" afterPath="$PROJECT_DIR$/src/URLLoader.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/es6/URLRequest.js" afterPath="$PROJECT_DIR$/src/URLRequest.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/es6/Util.js" afterPath="$PROJECT_DIR$/src/Util.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/es6/Vec3.js" afterPath="$PROJECT_DIR$/src/Vec3.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/es6/global.js" afterPath="$PROJECT_DIR$/src/global.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/es6/intro.js" afterPath="$PROJECT_DIR$/src/intro.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/es6/outro.js" afterPath="$PROJECT_DIR$/src/outro.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gruntfile.js" afterPath="$PROJECT_DIR$/gruntfile.js" />
     </list>
     <ignored path="Moco.js.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -62,7 +39,7 @@
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="15">
-              <caret line="1" column="5" selection-start-line="1" selection-start-column="5" selection-end-line="1" selection-end-column="5" />
+              <caret line="1" column="6" selection-start-line="1" selection-start-column="6" selection-end-line="1" selection-end-column="6" />
               <folding />
             </state>
           </provider>
@@ -722,12 +699,12 @@
       <workItem from="1467730317451" duration="784000" />
       <workItem from="1467731106517" duration="2636000" />
       <workItem from="1467734661469" duration="317000" />
-      <workItem from="1467735008083" duration="120000" />
+      <workItem from="1467735008083" duration="155000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="7975000" />
+    <option name="totallyTimeSpent" value="8010000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="53" y="23" width="1313" height="745" extended-state="6" />
@@ -1093,7 +1070,7 @@
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
-          <caret line="1" column="5" selection-start-line="1" selection-start-column="5" selection-end-line="1" selection-end-column="5" />
+          <caret line="1" column="6" selection-start-line="1" selection-start-column="6" selection-end-line="1" selection-end-column="6" />
           <folding />
         </state>
       </provider>
