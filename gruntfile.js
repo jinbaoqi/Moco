@@ -1,4 +1,4 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
     grunt.initConfig({
         babel: {
             options: {
@@ -30,6 +30,10 @@ module.exports = function(grunt) {
                     "es6/Stage.js",
                     "es6/Sprite.js",
                     "es6/Shape.js",
+                    "es/Loader.js",
+                    "es/Bitmap.js",
+                    "es/BitmapData.js",
+                    "es/URLLoader.js",
                     "es6/outro.js"
                 ],
                 dest: 'dist/Moco.js'

@@ -13,7 +13,7 @@ class Shape extends DisplayObject {
     off() {
         console.error("shape object can't interative event, please add shape to sprite");
     }
-
+    
     show(matrix) {
         let _me = this;
         let showList = _me._showList;
