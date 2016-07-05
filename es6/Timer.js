@@ -68,7 +68,7 @@ class Timer {
             requestAnimationFrame = (callback) => {
                 var now = +new Date(),
                     nextTime = Math.max(lastTime + 16, now);
-                return setTimeout(function() {
+                return setTimeout(function () {
                     callback(lastTime = nextTime);
                 }, nextTime - now);
             };

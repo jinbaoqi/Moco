@@ -1,10 +1,10 @@
 class Matrix3 {
     constructor(m) {
         this._matrix = m || [
-            1.0, 0.0, 0.0,
-            0.0, 1.0, 0.0,
-            0.0, 0.0, 1.0
-        ];
+                1.0, 0.0, 0.0,
+                0.0, 1.0, 0.0,
+                0.0, 0.0, 1.0
+            ];
     }
 
     setMatrix(matrix) {

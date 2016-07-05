@@ -1,2 +1,2 @@
-;(function(window, undefined) {
-var Moco = {};
+;(function (window, undefined) {
+    var Moco = {};

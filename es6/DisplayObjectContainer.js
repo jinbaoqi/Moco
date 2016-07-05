@@ -9,8 +9,8 @@ class DisplayObjectContainer extends InteractiveObject {
         let _me = this;
         if (child instanceof DisplayObject) {
             let isNotExists = Util.inArray(child, _me._childList, (child, item) => {
-                return child.aIndex == item.aIndex;
-            }) == -1;
+                    return child.aIndex == item.aIndex;
+                }) == -1;
 
             if (isNotExists) {
                 child.parent = _me;
@@ -57,9 +57,9 @@ class DisplayObjectContainer extends InteractiveObject {
     contains(child) {
         let _me = this;
         if (child instanceof DisplayObject) {
-            return Util.inArray(child, _me._childList, function(child, item) {
-                return child.aIndex == item.aIndex;
-            }) != -1;
+            return Util.inArray(child, _me._childList, function (child, item) {
+                    return child.aIndex == item.aIndex;
+                }) != -1;
         }
     }
 

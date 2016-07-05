@@ -28,7 +28,7 @@ class Util {
             return Array.prototype.filter.call(arr, callback);
         } else {
             let tmp = [];
-            _me.each(arr, function(item, index, arr) {
+            _me.each(arr, function (item, index, arr) {
                 if (callback.call(arr, item, index, arr) == true) {
                     tmp.push(item);
                 }
@@ -44,7 +44,7 @@ class Util {
             return Array.prototype.map.call(arr, callback);
         } else {
             let tmp = [];
-            _me.each(arr, function(item, index, arr) {
+            _me.each(arr, function (item, index, arr) {
                 tmp.push(callback.call(arr, item, index, arr))
             });
             return tmp;
@@ -58,7 +58,7 @@ class Util {
             return Array.prototype.some.call(arr, callback);
         } else {
             let bol = false;
-            _me.each(arr, function(item, index, arr) {
+            _me.each(arr, function (item, index, arr) {
                 if (callback.call(arr, item, index, arr) == true) {
                     bol = true;
                 }
@@ -74,7 +74,7 @@ class Util {
             return Array.prototype.some.call(arr, callback);
         } else {
             let bol = true;
-            _me.each(arr, function(item, index, arr) {
+            _me.each(arr, function (item, index, arr) {
                 if (!callback.call(arr, item, index, arr)) {
                     bol = false;
                 }

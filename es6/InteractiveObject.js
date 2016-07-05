@@ -34,7 +34,7 @@ class InteractiveObject extends DisplayObject {
         } else if (isKeyboardEvent) {
             KeyBoardEvent.remove(eventName, _me);
         }
-        
+
         super.unbind(_me, eventName, callback);
     }
 }

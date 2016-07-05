@@ -3,13 +3,13 @@ class MouseEvent extends InteractiveEvent {
         let _me = this;
         let items = _me._list[eventName] || [];
 
-        items = Util.filter(items, function(item) {
+        items = Util.filter(items, function (item) {
             if (item.isMouseon && item.isMouseon(cord)) {
                 return true;
             }
         });
 
-        items = Array.prototype.sort.call(items, function(i, j) {
+        items = Array.prototype.sort.call(items, function (i, j) {
             let a1 = i.objectIndex.split(".");
             let a2 = j.objectIndex.split(".");
             let len = Math.max(a1.length, a2.length);

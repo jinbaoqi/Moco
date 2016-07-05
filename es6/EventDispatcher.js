@@ -65,7 +65,7 @@ class EventDispatcher {
 
         if (eventName || callback) {
             if (Util.isType(eventName, "Array")) {
-                Util.each(eventName, function(item) {
+                Util.each(eventName, function (item) {
                     _me.unbind(target, item, callback);
                 });
             } else if (!callback) {
@@ -73,7 +73,7 @@ class EventDispatcher {
 
                 if (handlers) {
                     let callbacks = handlers[eventName] ? handlers[eventName] : [];
-                    Util.each(callbacks, function(item) {
+                    Util.each(callbacks, function (item) {
                         _me.unbind(target, eventName, item);
                     });
                 }
@@ -104,7 +104,7 @@ class EventDispatcher {
             [target, eventName, callback, useCapture] = [_me, target, eventName, callback];
         }
 
-        let fn = function(event) {
+        let fn = function (event) {
             callback.call(_me, event);
 
             if (event.isImmediatePropagationStopped()) {

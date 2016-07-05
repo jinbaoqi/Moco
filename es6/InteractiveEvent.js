@@ -9,8 +9,8 @@ class InteractiveEvent {
             list[eventName] = list[eventName] ? list[eventName] : [];
 
             let isNotExists = Util.inArray(item, list[eventName], (a1, a2) => {
-                return a1.aIndex == a2.aIndex;
-            }) == -1;
+                    return a1.aIndex == a2.aIndex;
+                }) == -1;
 
             if (isNotExists) {
                 list[eventName].push(item);
