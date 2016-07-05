@@ -14,27 +14,27 @@ module.exports = function (grunt) {
         concat: {
             dist: {
                 src: [
-                    "es6/intro.js",
-                    "es6/Vec3.js",
-                    "es6/Matrix3.js",
-                    "es6/global.js",
-                    "es6/Util.js",
-                    "es6/Timer.js",
-                    "es6/InteractiveEvent.js",
-                    "es6/MouseEvent.js",
-                    "es6/KeyboardEvent.js",
-                    "es6/EventDispatcher.js",
-                    "es6/DisplayObject.js",
-                    "es6/InteractiveObject.js",
-                    "es6/DisplayObjectContainer.js",
-                    "es6/Stage.js",
-                    "es6/Sprite.js",
-                    "es6/Shape.js",
-                    "es/Loader.js",
-                    "es/Bitmap.js",
-                    "es/BitmapData.js",
-                    "es/URLLoader.js",
-                    "es6/outro.js"
+                    "src/intro.js",
+                    "src/Vec3.js",
+                    "src/Matrix3.js",
+                    "src/global.js",
+                    "src/Util.js",
+                    "src/Timer.js",
+                    "src/InteractiveEvent.js",
+                    "src/MouseEvent.js",
+                    "src/KeyboardEvent.js",
+                    "src/EventDispatcher.js",
+                    "src/DisplayObject.js",
+                    "src/InteractiveObject.js",
+                    "src/DisplayObjectContainer.js",
+                    "src/Stage.js",
+                    "src/Sprite.js",
+                    "src/Shape.js",
+                    "src/Loader.js",
+                    "src/Bitmap.js",
+                    "src/BitmapData.js",
+                    "src/URLLoader.js",
+                    "src/outro.js"
                 ],
                 dest: 'dist/Moco.js'
             }
@@ -62,7 +62,7 @@ module.exports = function (grunt) {
             }
         },
         watch: {
-            files: ['es6/**/*.js'],
+            files: ['src/**/*.js'],
             tasks: ['concat', 'babel', 'replace', 'uglify']
         },
     });
