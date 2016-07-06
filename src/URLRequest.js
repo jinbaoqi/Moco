@@ -3,7 +3,7 @@ class URLRequest {
         this.url = url || "";
         this.data = {};
         this.method = "GET";
-        this.requestHeaders = [];
+        this.requestHeaders = {};
         this.contentType = "";
     }
 }

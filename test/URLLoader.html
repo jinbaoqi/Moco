@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <script src="../dist/Moco.js"></script>
+</head>
+<body>
+<script>
+    var request = new Moco.URLRequest("./moco");
+    request.method = "GET";
+    request.requestHeaders = {
+        Accept: "text/plain"
+    };
+    request.data = {
+        username: "zyEros",
+        password: "zysuper"
+    };
+
+    var xhr = new Moco.URLLoader(request);
+    xhr.on(Moco.URLLoaderEvent.COMPLETE, function (event) {
+        console.log(event.data);
+    });
+    xhr.on(Moco.URLLoaderEvent.ERROR, function (event) {
+        console.log(event.data);
+    });
+    xhr.load();
+
+    request.method = "POST";
+    xhr.load(request);
+</script>
+</body>
+</html>

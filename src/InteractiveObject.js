@@ -32,7 +32,7 @@ class InteractiveObject extends DisplayObject {
         } else if (isMouseEvent) {
             MouseEvent.remove(eventName, _me);
         } else if (isKeyboardEvent) {
-            KeyBoardEvent.remove(eventName, _me);
+            KeyboardEvent.remove(eventName, _me);
         }
 
         super.unbind(_me, eventName, callback);

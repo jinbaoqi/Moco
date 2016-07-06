@@ -34,6 +34,7 @@ module.exports = function (grunt) {
                     "src/Bitmap.js",
                     "src/BitmapData.js",
                     "src/URLLoader.js",
+                    "src/URLRequest.js",
                     "src/outro.js"
                 ],
                 dest: 'dist/Moco.js'

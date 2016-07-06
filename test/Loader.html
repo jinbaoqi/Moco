@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <script src="../dist/Moco.js"></script>
+</head>
+<body>
+<script>
+    var loader = new Moco.Loader();
+    loader.on(Moco.LoaderEvent.COMPLETE, function (ev) {
+        var target = ev.target;
+        console.log(target.content);
+        console.log(target.content.width, target.content.height);
+    });
+    loader.on(Moco.LoaderEvent.ERROR, function () {
+        console.log("load img error");
+    });
+    loader.load(new Moco.URLRequest("http://img1.imgtn.bdimg.com/it/u=969923083,578042286&fm=21&gp=0.jpg"));
+</script>
+</body>
+</html>

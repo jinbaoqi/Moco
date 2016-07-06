@@ -1,6 +1,6 @@
 class BitmapData {
     constructor(width, height) {
-
+    
     }
 
     clone() {

@@ -23,6 +23,14 @@ class DisplayObject extends EventDispatcher {
         this._observeTransformProperty();
     }
 
+    on() {
+        super.bind.apply(this, arguments);
+    }
+
+    off() {
+        super.bind.apply(this, arguments);
+    }
+
     show(matrix) {
         let _me = this;
         let ctx = _me.ctx || _me.stage.ctx;

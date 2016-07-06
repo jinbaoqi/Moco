@@ -1248,6 +1248,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
 
         _createClass(DisplayObject, [{
+            key: "on",
+            value: function on() {
+                _get(Object.getPrototypeOf(DisplayObject.prototype), "bind", this).apply(this, arguments);
+            }
+        }, {
+            key: "off",
+            value: function off() {
+                _get(Object.getPrototypeOf(DisplayObject.prototype), "bind", this).apply(this, arguments);
+            }
+        }, {
             key: "show",
             value: function show(matrix) {
                 var _me = this;
@@ -1443,7 +1453,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 } else if (isMouseEvent) {
                     MouseEvent.remove(eventName, _me);
                 } else if (isKeyboardEvent) {
-                    KeyBoardEvent.remove(eventName, _me);
+                    KeyboardEvent.remove(eventName, _me);
                 }
 
                 _get(Object.getPrototypeOf(InteractiveObject.prototype), "unbind", this).call(this, _me, eventName, callback);
@@ -2400,5 +2410,364 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }(DisplayObject);
 
     Moco.Shape = Shape;
+    var loaderEvent = {
+        COMPLETE: "complete",
+        ERROR: "error"
+    };
+
+    var Loader = function (_DisplayObjectContain3) {
+        _inherits(Loader, _DisplayObjectContain3);
+
+        function Loader() {
+            _classCallCheck(this, Loader);
+
+            var _this9 = _possibleConstructorReturn(this, Object.getPrototypeOf(Loader).call(this));
+
+            _this9.content = new Image();
+            _this9._close = false;
+            _this9._loading = false;
+            _this9._queue = [];
+            return _this9;
+        }
+
+        _createClass(Loader, [{
+            key: "on",
+            value: function on(eventName, callback) {
+                _get(Object.getPrototypeOf(Loader.prototype), "bind", this).apply(this, [this, eventName, callback, false]);
+            }
+        }, {
+            key: "off",
+            value: function off(eventName, callback) {
+                _get(Object.getPrototypeOf(Loader.prototype), "bind", this).apply(this, [this, eventName, callback]);
+            }
+        }, {
+            key: "load",
+            value: function load(request) {
+                var _me = this;
+                var params = [];
+
+                request.method = request.method.toUpperCase();
+
+                if (request == null) {
+                    console.error("Loader need URLRequest instance");
+                    return;
+                }
+                debugger;
+
+                if (_me._loading) {
+                    _me._queue.push(request);
+                    return;
+                }
+
+                var url = request.url;
+                var data = request.data;
+                var keys = Util.keys(request.data);
+                if (keys.length) {
+                    params = Util.map(request.data, function (val, key) {
+                        return key + "=" + encodeURIComponent(val);
+                    });
+                    data = params.join("&");
+                }
+
+                if (request.method == "GET") {
+                    if (keys.length) {
+                        url += "?" + data;
+                    }
+                    data = null;
+                }
+
+                _me.content.onload = function () {
+                    _me._onload();
+                };
+
+                _me.content.onerror = function () {
+                    _me._onerror();
+                };
+
+                _me.content.src = url;
+                _me._loading = true;
+            }
+        }, {
+            key: "close",
+            value: function close() {
+                this._close = true;
+            }
+        }, {
+            key: "_onload",
+            value: function _onload() {
+                var _me = this;
+                if (!_me._close) {
+                    _me.trigger(_me, loaderEvent.COMPLETE, {
+                        target: _me
+                    });
+                }
+
+                _me._close = false;
+                _me._loading = false;
+                _me._next();
+            }
+        }, {
+            key: "_onerror",
+            value: function _onerror() {
+                var _me = this;
+                if (!_me._close) {
+                    _me.trigger(_me, loaderEvent.ERROR);
+                }
+
+                _me._close = false;
+                _me._loading = false;
+                _me._next();
+            }
+        }, {
+            key: "_next",
+            value: function _next() {
+                var _me = this;
+                if (_me._queue.length) {
+                    _me.load(_me._queue.shift());
+                }
+            }
+        }]);
+
+        return Loader;
+    }(DisplayObjectContainer);
+
+    Moco.Loader = Loader;
+    Moco.LoaderEvent = loaderEvent;
+
+    var Bitmap = function (_DisplayObject3) {
+        _inherits(Bitmap, _DisplayObject3);
+
+        function Bitmap(bitmapData) {
+            _classCallCheck(this, Bitmap);
+
+            return _possibleConstructorReturn(this, Object.getPrototypeOf(Bitmap).call(this));
+        }
+
+        return Bitmap;
+    }(DisplayObject);
+
+    Moco.Bitmap = Bitmap;
+
+    var BitmapData = function () {
+        function BitmapData(width, height) {
+            _classCallCheck(this, BitmapData);
+        }
+
+        _createClass(BitmapData, [{
+            key: "clone",
+            value: function clone() {}
+        }, {
+            key: "copyChannel",
+            value: function copyChannel(sourceBitmapData, sourceRect, destPoint, sourceChannel, destChannel) {}
+        }, {
+            key: "copyPixels",
+            value: function copyPixels(sourceBitmapData, sourceRect, destPoint) {}
+        }, {
+            key: "copyPixelsToByteArray",
+            value: function copyPixelsToByteArray(rect, data) {}
+        }, {
+            key: "dispose",
+            value: function dispose() {}
+        }, {
+            key: "draw",
+            value: function draw(source, matrix) {}
+        }, {
+            key: "getPixel",
+            value: function getPixel(x, y) {}
+        }, {
+            key: "getPixel32",
+            value: function getPixel32(x, y) {}
+        }, {
+            key: "getPixels",
+            value: function getPixels(rect) {}
+        }, {
+            key: "getVector",
+            value: function getVector(rect) {}
+        }, {
+            key: "setPixel",
+            value: function setPixel(x, y, color) {}
+        }, {
+            key: "setPixel32",
+            value: function setPixel32(x, y, color) {}
+        }, {
+            key: "setPixels",
+            value: function setPixels(rect, inputByteArray) {}
+        }, {
+            key: "setVector",
+            value: function setVector(rect, inputVector) {}
+        }, {
+            key: "lock",
+            value: function lock() {}
+        }, {
+            key: "unlock",
+            value: function unlock() {}
+        }]);
+
+        return BitmapData;
+    }();
+
+    Moco.BitmapData = BitmapData;
+    var URLLoaderEvent = {
+        COMPLETE: "complete",
+        ERROR: "error"
+    };
+
+    var URLLoader = function (_EventDispatcher2) {
+        _inherits(URLLoader, _EventDispatcher2);
+
+        function URLLoader(request) {
+            _classCallCheck(this, URLLoader);
+
+            var _this11 = _possibleConstructorReturn(this, Object.getPrototypeOf(URLLoader).call(this));
+
+            _this11._request = request;
+            _this11._close = false;
+            _this11._loading = false;
+            _this11._queue = [];
+            return _this11;
+        }
+
+        _createClass(URLLoader, [{
+            key: "on",
+            value: function on(eventName, callback) {
+                _get(Object.getPrototypeOf(URLLoader.prototype), "bind", this).apply(this, [this, eventName, callback, false]);
+            }
+        }, {
+            key: "off",
+            value: function off(eventName, callback) {
+                _get(Object.getPrototypeOf(URLLoader.prototype), "bind", this).apply(this, [this, eventName, callback]);
+            }
+        }, {
+            key: "load",
+            value: function load(request) {
+                var _me = this;
+                var xhr = false;
+                var params = [];
+                request = request || _me._request;
+                request.method = request.method.toUpperCase();
+
+                if (request == null) {
+                    console.error("URLLoader need URLRequest instance");
+                    return xhr;
+                }
+
+                if (_me._loading) {
+                    _me._queue.push(request);
+                    return xhr;
+                }
+
+                try {
+                    xhr = new XMLHttpRequest();
+                } catch (e) {
+                    try {
+                        xhr = new ActiveXObject("Msxml2.XMLHTTP");
+                    } catch (e) {
+                        try {
+                            xhr = new ActiveXObject("Microsoft.XMLHTTP");
+                        } catch (failed) {
+                            xhr = false;
+                        }
+                    }
+                }
+
+                if (xhr == false) {
+                    console.error("xhr cant be init");
+                    return xhr;
+                }
+
+                _me._xhr = xhr;
+
+                var url = request.url;
+                var data = request.data;
+                var keys = Util.keys(request.data);
+                if (keys.length) {
+                    params = Util.map(request.data, function (val, key) {
+                        return key + "=" + encodeURIComponent(val);
+                    });
+                    data = params.join("&");
+                }
+
+                if (request.method == "GET") {
+                    if (keys.length) {
+                        url += "?" + data;
+                    }
+                    data = null;
+                }
+
+                xhr.open(request.method, url, true);
+                xhr.onreadystatechange = function () {
+                    _me._onreadystatechange();
+                };
+
+                if (request.contentType) {
+                    request.requestHeaders["Content-Type"] = request.contentType;
+                }
+
+                Util.each(request.requestHeaders, function (val, key) {
+                    xhr.setRequestHeader(key, val);
+                });
+
+                xhr.send(data);
+                _me._loading = true;
+            }
+        }, {
+            key: "close",
+            value: function close() {
+                this._close = true;
+            }
+        }, {
+            key: "_onreadystatechange",
+            value: function _onreadystatechange() {
+                var _me = this;
+                var xhr = _me._xhr;
+                var eventName = '';
+
+                if (xhr.readyState == 4) {
+                    var isClosed = _me._close;
+
+                    if (!isClosed) {
+                        if (xhr.status == 200) {
+                            eventName = URLLoaderEvent.COMPLETE;
+                        } else {
+                            eventName = URLLoaderEvent.ERROR;
+                        }
+                        _me.trigger(_me, eventName, {
+                            data: xhr.responseText,
+                            status: xhr.status
+                        });
+                    }
+
+                    _me._close = false;
+                    _me._loading = false;
+                    _me._next();
+                }
+            }
+        }, {
+            key: "_next",
+            value: function _next() {
+                var _me = this;
+                if (_me._queue.length) {
+                    _me.load(_me._queue.shift());
+                }
+            }
+        }]);
+
+        return URLLoader;
+    }(EventDispatcher);
+
+    Moco.URLLoader = URLLoader;
+    Moco.URLLoaderEvent = URLLoaderEvent;
+
+    var URLRequest = function URLRequest(url) {
+        _classCallCheck(this, URLRequest);
+
+        this.url = url || "";
+        this.data = {};
+        this.method = "GET";
+        this.requestHeaders = {};
+        this.contentType = "";
+    };
+
+    Moco.URLRequest = URLRequest;
     window.Moco = Moco;
 })(window, undefined);
