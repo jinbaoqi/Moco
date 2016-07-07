@@ -24,7 +24,7 @@
     var loader = new Moco.Loader();
     loader.on(Moco.LoaderEvent.COMPLETE, function (ev) {
         var target = ev.target;
-        var translateMreix = Moco.Matrix3.translation(10,10);
+        var translateMreix = Moco.Matrix3.translation(100,100);
         var scaleMatrix = Moco.Matrix3.scaling(1.5,1.5);
         var rotateMatrix = Moco.Matrix3.rotation(45);
         rotateMatrix.multi(scaleMatrix);
