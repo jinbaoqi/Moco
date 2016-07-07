@@ -12,12 +12,26 @@
     <script src="../dist/Moco.js"></script>
 </head>
 <body>
+<div id="wrap1" style="position:absolute;top:0;left:0;width:1000px;height:1000px;overflow: hidden;">
+    <div id="wrap2" style="position:absolute;top:0;left:0;width:400px;height:300px;overflow:hidden;">
+        <canvas id="canvas" width="400" height="300"></canvas>
+    </div>
+</div>
 <script>
+    var stage = new Moco.Stage("canvas", function () {
+        console.log("start!");
+    });
     var loader = new Moco.Loader();
     loader.on(Moco.LoaderEvent.COMPLETE, function (ev) {
         var target = ev.target;
-        console.log(target.content);
-        console.log(target.content.width, target.content.height);
+        var translateMreix = Moco.Matrix3.translation(10,10);
+        var scaleMatrix = Moco.Matrix3.scaling(1.5,1.5);
+        var rotateMatrix = Moco.Matrix3.rotation(45);
+        rotateMatrix.multi(scaleMatrix);
+        translateMreix.multi(rotateMatrix);
+        var bmd = target.toBitmapData(translateMreix);
+        var bm = new Moco.Bitmap(bmd);
+        stage.addChild(bm);
     });
     loader.on(Moco.LoaderEvent.ERROR, function () {
         console.log("load img error");

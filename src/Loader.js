@@ -20,6 +20,13 @@ class Loader extends DisplayObjectContainer {
         super.bind.apply(this, [this, eventName, callback]);
     }
 
+    toBitmapData(matrix) {
+        let _me = this;
+        let bmd = new BitmapData(_me.content.width, _me.content.height);
+        bmd.draw(_me.content, matrix);
+        return bmd;
+    }
+
     load(request) {
         var _me = this;
         var params = [];
@@ -30,7 +37,6 @@ class Loader extends DisplayObjectContainer {
             console.error("Loader need URLRequest instance");
             return;
         }
-        debugger;
 
         if (_me._loading) {
             _me._queue.push(request);

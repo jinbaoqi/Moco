@@ -2441,6 +2441,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 _get(Object.getPrototypeOf(Loader.prototype), "bind", this).apply(this, [this, eventName, callback]);
             }
         }, {
+            key: "toBitmapData",
+            value: function toBitmapData(matrix) {
+                var _me = this;
+                var bmd = new BitmapData(_me.content.width, _me.content.height);
+                bmd.draw(_me.content, matrix);
+                return bmd;
+            }
+        }, {
             key: "load",
             value: function load(request) {
                 var _me = this;
@@ -2452,7 +2460,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     console.error("Loader need URLRequest instance");
                     return;
                 }
-                debugger;
 
                 if (_me._loading) {
                     _me._queue.push(request);
@@ -2540,8 +2547,41 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         function Bitmap(bitmapData) {
             _classCallCheck(this, Bitmap);
 
-            return _possibleConstructorReturn(this, Object.getPrototypeOf(Bitmap).call(this));
+            if (!bitmapData) {
+                console.error("bitmapData must not be empty");
+                return _possibleConstructorReturn(_this10);
+            }
+
+            var _this10 = _possibleConstructorReturn(this, Object.getPrototypeOf(Bitmap).call(this));
+
+            _this10.name = "Bitmap";
+            _this10._bitmapData = bitmapData;
+            return _this10;
         }
+
+        _createClass(Bitmap, [{
+            key: "show",
+            value: function show(matrix) {
+                var isShow = _get(Object.getPrototypeOf(Bitmap.prototype), "show", this).call(this, matrix);
+                if (!isShow) {
+                    return isShow;
+                }
+
+                var _me = this;
+                var ctx = _me.ctx || _me.stage.ctx;
+
+                matrix = _me._bitmapData._matrix.getMatrix();
+
+                if (_me._bitmapData._source) {
+                    ctx.save();
+                    ctx.transform(matrix[0], matrix[1], matrix[3], matrix[4], matrix[6], matrix[7]);
+                    ctx.drawImage(_me._bitmapData._source, 0, 0);
+                    ctx.restore();
+                }
+
+                return isShow;
+            }
+        }]);
 
         return Bitmap;
     }(DisplayObject);
@@ -2551,11 +2591,27 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     var BitmapData = function () {
         function BitmapData(width, height) {
             _classCallCheck(this, BitmapData);
+
+            this._source = null;
+            this._matrix = Matrix3.identity();
+            this._locked = false;
+            this.width = width || 0;
+            this.height = height || 0;
+            this.rect = {
+                x: 0,
+                y: 0,
+                width: this.width,
+                height: this.height
+            };
         }
 
         _createClass(BitmapData, [{
             key: "clone",
-            value: function clone() {}
+            value: function clone() {
+                var bmd = new BitmapData(this.width, this.height);
+                bmd.draw(this._source, this._matrix);
+                return bmd;
+            }
         }, {
             key: "copyChannel",
             value: function copyChannel(sourceBitmapData, sourceRect, destPoint, sourceChannel, destChannel) {}
@@ -2567,10 +2623,43 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             value: function copyPixelsToByteArray(rect, data) {}
         }, {
             key: "dispose",
-            value: function dispose() {}
+            value: function dispose() {
+                this._source = null;
+                this._matrix = Matrix3.identity();
+                this._locked = false;
+                this.width = 0;
+                this.height = 0;
+                this.rect = {
+                    x: 0,
+                    y: 0,
+                    width: 0,
+                    height: 0
+                };
+            }
         }, {
             key: "draw",
-            value: function draw(source, matrix) {}
+            value: function draw(source, matrix) {
+                var _me = this;
+                if (_me._locked) {
+                    return;
+                }
+
+                if (!(source instanceof Image || source instanceof Node && source.nodeName.toUpperCase() == "CANVAS")) {
+                    return;
+                }
+
+                var canvas = document.createElement("CANVAS");
+                canvas.width = source.width;
+                canvas.height = source.height;
+
+                var ctx = canvas.getContext("2d");
+                ctx.drawImage(source, 0, 0);
+                this._source = canvas;
+
+                if (matrix instanceof Matrix3) {
+                    this._matrix.multi(matrix);
+                }
+            }
         }, {
             key: "getPixel",
             value: function getPixel(x, y) {}
@@ -2585,22 +2674,46 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             value: function getVector(rect) {}
         }, {
             key: "setPixel",
-            value: function setPixel(x, y, color) {}
+            value: function setPixel(x, y, color) {
+                var _me = this;
+                if (_me._locked) {
+                    return;
+                }
+            }
         }, {
             key: "setPixel32",
-            value: function setPixel32(x, y, color) {}
+            value: function setPixel32(x, y, color) {
+                var _me = this;
+                if (_me._locked) {
+                    return;
+                }
+            }
         }, {
             key: "setPixels",
-            value: function setPixels(rect, inputByteArray) {}
+            value: function setPixels(rect, inputByteArray) {
+                var _me = this;
+                if (_me._locked) {
+                    return;
+                }
+            }
         }, {
             key: "setVector",
-            value: function setVector(rect, inputVector) {}
+            value: function setVector(rect, inputVector) {
+                var _me = this;
+                if (_me._locked) {
+                    return;
+                }
+            }
         }, {
             key: "lock",
-            value: function lock() {}
+            value: function lock() {
+                this._locked = true;
+            }
         }, {
             key: "unlock",
-            value: function unlock() {}
+            value: function unlock() {
+                this._locked = false;
+            }
         }]);
 
         return BitmapData;
@@ -2723,9 +2836,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var eventName = '';
 
                 if (xhr.readyState == 4) {
-                    var isClosed = _me._close;
-
-                    if (!isClosed) {
+                    if (!_me._close) {
                         if (xhr.status == 200) {
                             eventName = URLLoaderEvent.COMPLETE;
                         } else {
