@@ -2,25 +2,22 @@ class DisplayObject extends EventDispatcher {
     constructor() {
         super();
         this.name = "DisplayObject";
-        this.alpha = 1;
-        this._height = 0;
-        this._width = 0;
         this.mask = null;
-        this.rotate = 0;
-        this.scaleX = 1;
-        this.scaleY = 1;
         this.parent = null;
         this.globalCompositeOperation = "";
-        this.x = 0;
-        this.y = 0;
+        this._x = 0;
+        this._y = 0;
+        this._rotate = 0;
+        this._scaleX = 1;
+        this._scaleY = 1;
+        this._height = 0;
+        this._width = 0;
+        this._alpha = 1;
         this.parent = null;
         this.visible = true;
         this.aIndex = this.objectIndex = "" + (guid++);
         this._isSaved = false;
         this._matrix = Matrix3.identity();
-
-        this._observeOffsetProperty();
-        this._observeTransformProperty();
     }
 
     on() {
@@ -37,7 +34,7 @@ class DisplayObject extends EventDispatcher {
 
         _me._matrix = Matrix3.identity();
 
-        if (!_me.visible || _me.alpha <= 0.001) {
+        if (!_me.visible || !_me.alpha) {
             return false;
         }
 
@@ -60,7 +57,7 @@ class DisplayObject extends EventDispatcher {
         }
 
         if (_me.alpha < 1) {
-            ctx.globalAlpha = _me.alpha > 1 ? 1 : _me.alpha;
+            ctx.globalAlpha = _me._alpha;
         }
 
         _me._matrix.multi(matrix);
@@ -94,81 +91,70 @@ class DisplayObject extends EventDispatcher {
         _me.off(eventNames);
     }
 
-    _getWidth() {
+    get width() {
         return this._width;
     }
 
-    _getHeight() {
+    get height() {
         return this._height;
     }
 
-    _observeOffsetProperty() {
-        let _me = this;
-        let properties = [{
-            key: 'width',
-            method: "_getWidth"
-        }, {
-            key: 'height',
-            method: "_getHeight"
-        }];
-
-        for (let i = 0, len = properties.length; i < len; i++) {
-            let prop = properties[i];
-            Object.defineProperty(_me, prop.key, {
-                get: () => {
-                    return _me[prop.method].call(_me);
-                }
-            });
-        }
+    get x() {
+        return this._x;
     }
 
-    _observeTransformProperty() {
-        let _me = this;
-        let properties = [{
-            key: 'x',
-            method: 'translate',
-            args: (value) => {
-                return [value, _me.y]
-            }
-        }, {
-            key: 'y',
-            method: 'translate',
-            args: (value) => {
-                return [_me.x, value]
-            }
-        }, {
-            key: 'rotate',
-            method: 'rotate',
-            args: (value) => {
-                return [value];
-            }
-        }, {
-            key: 'scaleX',
-            method: 'scale',
-            args: (value) => {
-                return [value, _me.scaleY]
-            }
-        }, {
-            key: 'scaleY',
-            method: 'scale',
-            args: (value) => {
-                return [_me.scaleX, value]
-            }
-        }];
+    set x(x) {
+        this._x = x;
+        this._matrix.translate(x, this._y);
+    }
 
-        for (let i = 0, len = properties.length; i < len; i++) {
-            let prop = properties[i];
-            let val = _me[prop.key];
-            Object.defineProperty(_me, prop.key, {
-                set: (newValue) => {
-                    val = newValue;
-                    _me._matrix[prop.method].apply(_me._matrix, prop.args(newValue));
-                },
-                get: () => {
-                    return val;
-                }
-            })
+    get y() {
+        return this._y;
+    }
+
+    set y(y) {
+        this._y = y;
+        this._matrix.translate(this._x, y);
+    }
+
+    get rotate() {
+        return this._rotate;
+    }
+
+    set rotate(rotate) {
+        this._rotate = rotate;
+        this._matrix.rotate(rotate);
+    }
+
+    get scaleX() {
+        return this._scaleX;
+    }
+
+    set scaleX(scaleX) {
+        this._scaleX = scaleX;
+        this._matrix.scale(scaleX, this._scaleY);
+    }
+
+    get scaleY() {
+        return this._scaleY;
+    }
+
+    set scaleY(scaleY) {
+        this._scaleY = scaleY;
+        this._matrix.scale(this._scaleX, scaleY);
+    }
+
+    get alpha() {
+        return this._alpha;
+    }
+
+    set alpha(alpha) {
+        if (alpha > 1) {
+            alpha = 1;
+        } else if (alpha < 0.001) {
+            alpha = 0;
         }
+        this._alpha = alpha;
     }
 }
 

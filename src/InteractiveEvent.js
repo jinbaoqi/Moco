@@ -32,8 +32,15 @@ class InteractiveEvent {
             }
         }
     }
-}
 
-InteractiveEvent._list = {};
+    static get _list() {
+        this._list_ = this._list_ || {};
+        return this._list_;
+    }
+
+    static set _list(list) {
+        this._list_ = list;
+    }
+}
 
 Moco.InteractiveEvent = InteractiveEvent;

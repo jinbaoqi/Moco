@@ -13,7 +13,7 @@ class Shape extends DisplayObject {
     off() {
         console.error("shape object can't interative event, please add shape to sprite");
     }
-    
+
     show(matrix) {
         let _me = this;
         let showList = _me._showList;
@@ -271,7 +271,6 @@ class Shape extends DisplayObject {
             let item = setList[i];
             let area = item.area;
             let minRect = {};
-            let isOn = false;
 
             switch (item.type) {
                 case "rect":
@@ -354,19 +353,6 @@ class Shape extends DisplayObject {
             sv: new Vec3(sx, sy, 1),
             ev: new Vec3(ex, ey, 1)
         }
-    }
-
-    _getWidth() {
-        let _me = this;
-        let bounds = _me.getBounds();
-        console.log(bounds);
-        return Math.abs(bounds.ev.x - bounds.sv.x);
-    }
-
-    _getHeight() {
-        let _me = this;
-        let bounds = _me.getBounds();
-        return Math.abs(bounds.ev.y - bounds.sv.y);
     }
 
     _computeArcMinRect(ox, oy, r, sAngle, eAngle, direct) {
@@ -484,6 +470,18 @@ class Shape extends DisplayObject {
         }
 
         return isInside;
+    }
+
+    get width() {
+        let _me = this;
+        let bounds = _me.getBounds();
+        return Math.abs(bounds.ev.x - bounds.sv.x);
+    }
+
+    get height() {
+        let _me = this;
+        let bounds = _me.getBounds();
+        return Math.abs(bounds.ev.y - bounds.sv.y);
     }
 }
 

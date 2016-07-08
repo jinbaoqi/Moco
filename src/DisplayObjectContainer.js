@@ -79,7 +79,7 @@ class DisplayObjectContainer extends InteractiveObject {
                     item.show(_me._matrix);
                 }
             }
-            
+
             if (_me._isSaved) {
                 let ctx = _me.ctx || _me.stage.ctx;
                 _me._isSaved = false;
@@ -120,7 +120,7 @@ class DisplayObjectContainer extends InteractiveObject {
         });
 
         if (sv.x == maxNumber || ev.x == minNumber || sv.y == maxNumber || ev.y == minNumber) {
-            sx = sy = ex = ey = Vec3.zero();
+            sv = ev = Vec3.zero();
         }
 
         return {
@@ -129,13 +129,13 @@ class DisplayObjectContainer extends InteractiveObject {
         }
     }
 
-    _getWidth() {
+    get width() {
         let _me = this;
         let bounds = _me.getBounds();
         return Math.abs(bounds.ev.x - bounds.sv.x);
     }
 
-    _getHeight() {
+    get width() {
         let _me = this;
         let bounds = _me.getBounds();
         return Math.abs(bounds.ev.y - bounds.sv.y);

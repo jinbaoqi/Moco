@@ -9,8 +9,8 @@ class Stage extends DisplayObjectContainer {
         this.ctx = this.domElem.getContext("2d");
 
         let offset = this._getOffset();
-        this.x = offset.left;
-        this.y = offset.top;
+        this._x = offset.left;
+        this._y = offset.top;
 
         if (typeof fn == "function") {
             fn(this);
@@ -80,14 +80,6 @@ class Stage extends DisplayObjectContainer {
         return true;
     }
 
-    _getWidth() {
-        return this._width;
-    }
-
-    _getHeight() {
-        return this._height;
-    }
-
     _mouseEvent(event) {
         let _me = this;
         let cord = {
@@ -125,6 +117,14 @@ class Stage extends DisplayObjectContainer {
             top: 0,
             left: 0
         }
+    }
+    
+    get width() {
+        return this._width;
+    }
+
+    get height() {
+        return this._height;
     }
 
 }

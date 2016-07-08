@@ -396,7 +396,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     var fnRegExp = /\s+/g;
     var guid = 0;
     var maxNumber = Number.MAX_VALUE;
-    var minNumber = Number.MIN_VALUE;
+    var minNumber = -1 * maxNumber;
     var maxNumberVec3 = new Vec3(maxNumber, maxNumber, 1);
     var minNumberVec3 = new Vec3(minNumber, minNumber, 1);
 
@@ -704,17 +704,59 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var _me = this;
                 _me._cancelAnimationFrame.call(window, _me._timer);
             }
+        }, {
+            key: "isStoped",
+            get: function get() {
+                return this._isStoped;
+            },
+            set: function set(isStoped) {
+                this._isStoped = isStoped;
+            }
+        }, {
+            key: "_list",
+            get: function get() {
+                this._list_ = this._list_ || [];
+                return this._list_;
+            },
+            set: function set(list) {
+                this._list_ = list;
+            }
+        }, {
+            key: "_isInit",
+            get: function get() {
+                return this._isInit_ || false;
+            },
+            set: function set(isInit) {
+                this._isInit_ = isInit;
+            }
+        }, {
+            key: "_timer",
+            get: function get() {
+                return this._timer_;
+            },
+            set: function set(timer) {
+                this._timer_ = timer;
+            }
+        }, {
+            key: "_requestAnimationFrame",
+            get: function get() {
+                return this._requestAnimationFrame_;
+            },
+            set: function set(requestAnimationFrame) {
+                this._requestAnimationFrame_ = requestAnimationFrame;
+            }
+        }, {
+            key: "_cancelAnimationFrame",
+            get: function get() {
+                return this._cancelAnimationFrame_;
+            },
+            set: function set(cancelAnimationFrame) {
+                this._cancelAnimationFrame_ = cancelAnimationFrame;
+            }
         }]);
 
         return Timer;
     }();
-
-    Timer._list = [];
-    Timer._isInit = false;
-    Timer._timer = null;
-    Timer._requestAnimationFrame = null;
-    Timer._cancelAnimationFrame = null;
-    Timer.isStoped = false;
 
     Moco.Timer = Timer;
 
@@ -760,12 +802,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     }
                 }
             }
+        }, {
+            key: "_list",
+            get: function get() {
+                this._list_ = this._list_ || {};
+                return this._list_;
+            },
+            set: function set(list) {
+                this._list_ = list;
+            }
         }]);
 
         return InteractiveEvent;
     }();
-
-    InteractiveEvent._list = {};
 
     Moco.InteractiveEvent = InteractiveEvent;
 
@@ -1225,25 +1274,22 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(DisplayObject).call(this));
 
             _this3.name = "DisplayObject";
-            _this3.alpha = 1;
-            _this3._height = 0;
-            _this3._width = 0;
             _this3.mask = null;
-            _this3.rotate = 0;
-            _this3.scaleX = 1;
-            _this3.scaleY = 1;
             _this3.parent = null;
             _this3.globalCompositeOperation = "";
-            _this3.x = 0;
-            _this3.y = 0;
+            _this3._x = 0;
+            _this3._y = 0;
+            _this3._rotate = 0;
+            _this3._scaleX = 1;
+            _this3._scaleY = 1;
+            _this3._height = 0;
+            _this3._width = 0;
+            _this3._alpha = 1;
             _this3.parent = null;
             _this3.visible = true;
             _this3.aIndex = _this3.objectIndex = "" + guid++;
             _this3._isSaved = false;
             _this3._matrix = Matrix3.identity();
-
-            _this3._observeOffsetProperty();
-            _this3._observeTransformProperty();
             return _this3;
         }
 
@@ -1265,7 +1311,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                 _me._matrix = Matrix3.identity();
 
-                if (!_me.visible || _me.alpha <= 0.001) {
+                if (!_me.visible || !_me.alpha) {
                     return false;
                 }
 
@@ -1280,7 +1326,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 }
 
                 if (_me.alpha < 1) {
-                    ctx.globalAlpha = _me.alpha > 1 ? 1 : _me.alpha;
+                    ctx.globalAlpha = _me._alpha;
                 }
 
                 _me._matrix.multi(matrix);
@@ -1315,93 +1361,72 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 _me.off(eventNames);
             }
         }, {
-            key: "_getWidth",
-            value: function _getWidth() {
+            key: "width",
+            get: function get() {
                 return this._width;
             }
         }, {
-            key: "_getHeight",
-            value: function _getHeight() {
+            key: "height",
+            get: function get() {
                 return this._height;
             }
         }, {
-            key: "_observeOffsetProperty",
-            value: function _observeOffsetProperty() {
-                var _me = this;
-                var properties = [{
-                    key: 'width',
-                    method: "_getWidth"
-                }, {
-                    key: 'height',
-                    method: "_getHeight"
-                }];
-
-                var _loop = function _loop(len, _i12) {
-                    var prop = properties[_i12];
-                    Object.defineProperty(_me, prop.key, {
-                        get: function get() {
-                            return _me[prop.method].call(_me);
-                        }
-                    });
-                };
-
-                for (var _i12 = 0, len = properties.length; _i12 < len; _i12++) {
-                    _loop(len, _i12);
-                }
+            key: "x",
+            get: function get() {
+                return this._x;
+            },
+            set: function set(x) {
+                this._x = x;
+                this._matrix.translate(x, this._y);
             }
         }, {
-            key: "_observeTransformProperty",
-            value: function _observeTransformProperty() {
-                var _me = this;
-                var properties = [{
-                    key: 'x',
-                    method: 'translate',
-                    args: function args(value) {
-                        return [value, _me.y];
-                    }
-                }, {
-                    key: 'y',
-                    method: 'translate',
-                    args: function args(value) {
-                        return [_me.x, value];
-                    }
-                }, {
-                    key: 'rotate',
-                    method: 'rotate',
-                    args: function args(value) {
-                        return [value];
-                    }
-                }, {
-                    key: 'scaleX',
-                    method: 'scale',
-                    args: function args(value) {
-                        return [value, _me.scaleY];
-                    }
-                }, {
-                    key: 'scaleY',
-                    method: 'scale',
-                    args: function args(value) {
-                        return [_me.scaleX, value];
-                    }
-                }];
-
-                var _loop2 = function _loop2(len, _i13) {
-                    var prop = properties[_i13];
-                    var val = _me[prop.key];
-                    Object.defineProperty(_me, prop.key, {
-                        set: function set(newValue) {
-                            val = newValue;
-                            _me._matrix[prop.method].apply(_me._matrix, prop.args(newValue));
-                        },
-                        get: function get() {
-                            return val;
-                        }
-                    });
-                };
-
-                for (var _i13 = 0, len = properties.length; _i13 < len; _i13++) {
-                    _loop2(len, _i13);
+            key: "y",
+            get: function get() {
+                return this._y;
+            },
+            set: function set(y) {
+                this._y = y;
+                this._matrix.translate(this._x, y);
+            }
+        }, {
+            key: "rotate",
+            get: function get() {
+                return this._rotate;
+            },
+            set: function set(rotate) {
+                this._rotate = rotate;
+                this._matrix.rotate(rotate);
+            }
+        }, {
+            key: "scaleX",
+            get: function get() {
+                return this._scaleX;
+            },
+            set: function set(scaleX) {
+                this._scaleX = scaleX;
+                this._matrix.scale(scaleX, this._scaleY);
+            }
+        }, {
+            key: "scaleY",
+            get: function get() {
+                return this._scaleY;
+            },
+            set: function set(scaleY) {
+                this._scaleY = scaleY;
+                this._matrix.scale(this._scaleX, scaleY);
+            }
+        }, {
+            key: "alpha",
+            get: function get() {
+                return this._alpha;
+            },
+            set: function set(alpha) {
+                if (alpha > 1) {
+                    alpha = 1;
+                } else if (alpha < 0.001) {
+                    alpha = 0;
                 }
+                this._alpha = alpha;
             }
         }]);
 
@@ -1500,12 +1525,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             value: function removeChild(child) {
                 var _me = this;
                 if (child instanceof DisplayObject) {
-                    for (var _i14 = _me._childList.length - 1; _i14 >= 0; _i14--) {
-                        var item = _me._childList[_i14];
+                    for (var _i12 = _me._childList.length - 1; _i12 >= 0; _i12--) {
+                        var item = _me._childList[_i12];
                         if (item.aIndex == child.aIndex) {
                             item.parent = null;
                             item.stage = null;
-                            Array.prototype.splice.call(_me._childList, _i14, 1);
+                            Array.prototype.splice.call(_me._childList, _i12, 1);
                             break;
                         }
                     }
@@ -1553,8 +1578,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var isDrew = _get(Object.getPrototypeOf(DisplayObjectContainer.prototype), "show", this).call(this, matrix);
 
                 if (isDrew) {
-                    for (var _i15 = 0, len = _me._childList.length; _i15 < len; _i15++) {
-                        var item = _me._childList[_i15];
+                    for (var _i13 = 0, len = _me._childList.length; _i13 < len; _i13++) {
+                        var item = _me._childList[_i13];
                         if (item.show) {
                             item.show(_me._matrix);
                         }
@@ -1574,8 +1599,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             value: function isMouseon(cord) {
                 var _me = this;
 
-                for (var _i16 = 0, len = _me._childList.length; _i16 < len; _i16++) {
-                    var item = _me._childList[_i16];
+                for (var _i14 = 0, len = _me._childList.length; _i14 < len; _i14++) {
+                    var item = _me._childList[_i14];
                     if (item.isMouseon && item.isMouseon(cord)) {
                         return true;
                     }
@@ -1602,7 +1627,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 });
 
                 if (sv.x == maxNumber || ev.x == minNumber || sv.y == maxNumber || ev.y == minNumber) {
-                    sx = sy = ex = ey = Vec3.zero();
+                    sv = ev = Vec3.zero();
                 }
 
                 return {
@@ -1611,15 +1636,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 };
             }
         }, {
-            key: "_getWidth",
-            value: function _getWidth() {
-                var _me = this;
-                var bounds = _me.getBounds();
-                return Math.abs(bounds.ev.x - bounds.sv.x);
-            }
-        }, {
-            key: "_getHeight",
-            value: function _getHeight() {
+            key: "width",
+            get: function get() {
                 var _me = this;
                 var bounds = _me.getBounds();
                 return Math.abs(bounds.ev.y - bounds.sv.y);
@@ -1646,8 +1664,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             _this6.ctx = _this6.domElem.getContext("2d");
 
             var offset = _this6._getOffset();
-            _this6.x = offset.left;
-            _this6.y = offset.top;
+            _this6._x = offset.left;
+            _this6._y = offset.top;
 
             if (typeof fn == "function") {
                 fn(_this6);
@@ -1724,16 +1742,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 return true;
             }
         }, {
-            key: "_getWidth",
-            value: function _getWidth() {
-                return this._width;
-            }
-        }, {
-            key: "_getHeight",
-            value: function _getHeight() {
-                return this._height;
-            }
-        }, {
             key: "_mouseEvent",
             value: function _mouseEvent(event) {
                 var _me = this;
@@ -1774,6 +1782,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     top: 0,
                     left: 0
                 };
+            }
+        }, {
+            key: "width",
+            get: function get() {
+                return this._width;
+            }
+        }, {
+            key: "height",
+            get: function get() {
+                return this._height;
             }
         }]);
 
@@ -1840,7 +1858,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var _me = this;
                 var isOn = _get(Object.getPrototypeOf(Sprite.prototype), "isMouseon", this).call(this, cord);
 
-                debugger;
                 if (!isOn && _me.graphics && _me.graphics instanceof Shape) {
                     isOn = _me.graphics.isMouseon && _me.graphics.isMouseon(cord);
                 }
@@ -1848,8 +1865,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 return isOn;
             }
         }, {
-            key: "_getWidth",
-            value: function _getWidth() {
+            key: "width",
+            get: function get() {
                 var _me = this;
                 var bounds = _get(Object.getPrototypeOf(Sprite.prototype), "getBounds", this).call(this);
                 var shapeBounds = null;
@@ -1866,8 +1883,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 return Math.abs(bounds.ev.x - bounds.sv.x);
             }
         }, {
-            key: "_getHeight",
-            value: function _getHeight() {
+            key: "height",
+            get: function get() {
                 var _me = this;
                 var bounds = _get(Object.getPrototypeOf(Sprite.prototype), "getBounds", this).call(this);
                 var shapeBounds = null;
@@ -1922,8 +1939,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var isDrew = _get(Object.getPrototypeOf(Shape.prototype), "show", this).call(this, matrix);
 
                 if (isDrew) {
-                    for (var _i17 = 0, len = showList.length; _i17 < len; _i17++) {
-                        var showListItem = showList[_i17];
+                    for (var _i15 = 0, len = showList.length; _i15 < len; _i15++) {
+                        var showListItem = showList[_i15];
                         if (typeof showListItem == "function") {
                             showListItem();
                         }
@@ -2188,11 +2205,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 vec.multiMatrix3(inverse);
 
                 var setList = _me._setList;
-                for (var _i18 = 0, len = setList.length; _i18 < len; _i18++) {
-                    var item = setList[_i18];
+                for (var _i16 = 0, len = setList.length; _i16 < len; _i16++) {
+                    var item = setList[_i16];
                     var area = item.area;
                     var minRect = {};
-                    var isOn = false;
 
                     switch (item.type) {
                         case "rect":
@@ -2222,8 +2238,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var sy = maxNumber;
                 var ey = minNumber;
 
-                for (var _i19 = 0, len = setList.length; _i19 < len; _i19++) {
-                    var item = setList[_i19];
+                for (var _i17 = 0, len = setList.length; _i17 < len; _i17++) {
+                    var item = setList[_i17];
                     var area = item.area;
                     var minRect = {};
                     var vec3s = [];
@@ -2261,21 +2277,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     sv: new Vec3(sx, sy, 1),
                     ev: new Vec3(ex, ey, 1)
                 };
-            }
-        }, {
-            key: "_getWidth",
-            value: function _getWidth() {
-                var _me = this;
-                var bounds = _me.getBounds();
-                console.log(bounds);
-                return Math.abs(bounds.ev.x - bounds.sv.x);
-            }
-        }, {
-            key: "_getHeight",
-            value: function _getHeight() {
-                var _me = this;
-                var bounds = _me.getBounds();
-                return Math.abs(bounds.ev.y - bounds.sv.y);
             }
         }, {
             key: "_computeArcMinRect",
@@ -2390,9 +2391,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var x = point[0],
                     y = point[1];
 
-                for (var _i20 = 0, j = vs.length - 1; _i20 < vs.length; j = _i20++) {
-                    var xi = vs[_i20][0],
-                        yi = vs[_i20][1];
+                for (var _i18 = 0, j = vs.length - 1; _i18 < vs.length; j = _i18++) {
+                    var xi = vs[_i18][0],
+                        yi = vs[_i18][1];
                     var xj = vs[j][0],
                         yj = vs[j][1];
 
@@ -2403,6 +2404,20 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 }
 
                 return isInside;
+            }
+        }, {
+            key: "width",
+            get: function get() {
+                var _me = this;
+                var bounds = _me.getBounds();
+                return Math.abs(bounds.ev.x - bounds.sv.x);
+            }
+        }, {
+            key: "height",
+            get: function get() {
+                var _me = this;
+                var bounds = _me.getBounds();
+                return Math.abs(bounds.ev.y - bounds.sv.y);
             }
         }]);
 

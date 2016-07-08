@@ -45,7 +45,6 @@ class Sprite extends DisplayObjectContainer {
         let _me = this;
         let isOn = super.isMouseon(cord);
 
-        debugger;
         if (!isOn && _me.graphics && _me.graphics instanceof Shape) {
             isOn = _me.graphics.isMouseon && _me.graphics.isMouseon(cord);
         }
@@ -53,7 +52,7 @@ class Sprite extends DisplayObjectContainer {
         return isOn;
     }
 
-    _getWidth() {
+    get width() {
         let _me = this;
         let bounds = super.getBounds();
         let shapeBounds = null;
@@ -70,7 +69,7 @@ class Sprite extends DisplayObjectContainer {
         return Math.abs(bounds.ev.x - bounds.sv.x);
     }
 
-    _getHeight() {
+    get height() {
         let _me = this;
         let bounds = super.getBounds();
         let shapeBounds = null;

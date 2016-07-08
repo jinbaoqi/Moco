@@ -92,7 +92,7 @@ class Timer {
                 }
             }
             _me._raf();
-        }
+        };
 
         _me._timer = _me._requestAnimationFrame.call(window, callback);
     }
@@ -101,13 +101,55 @@ class Timer {
         let _me = this;
         _me._cancelAnimationFrame.call(window, _me._timer);
     }
-}
 
-Timer._list = [];
-Timer._isInit = false;
-Timer._timer = null;
-Timer._requestAnimationFrame = null;
-Timer._cancelAnimationFrame = null;
-Timer.isStoped = false;
+    static get isStoped() {
+        return this._isStoped;
+    }
+
+    static set isStoped(isStoped) {
+        this._isStoped = isStoped;
+    }
+
+    static get _list() {
+        this._list_ = this._list_ || [];
+        return this._list_;
+    }
+
+    static set _list(list) {
+        this._list_ = list;
+    }
+
+    static get _isInit() {
+        return this._isInit_ || false;
+    }
+
+    static set _isInit(isInit) {
+        this._isInit_ = isInit;
+    }
+
+    static get _timer() {
+        return this._timer_;
+    }
+
+    static set _timer(timer) {
+        this._timer_ = timer;
+    }
+
+    static get _requestAnimationFrame() {
+        return this._requestAnimationFrame_;
+    }
+
+    static set _requestAnimationFrame(requestAnimationFrame) {
+        this._requestAnimationFrame_ = requestAnimationFrame;
+    }
+
+    static get _cancelAnimationFrame() {
+        return this._cancelAnimationFrame_;
+    }
+
+    static set _cancelAnimationFrame(cancelAnimationFrame) {
+        this._cancelAnimationFrame_ = cancelAnimationFrame;
+    }
+}
 
 Moco.Timer = Timer;
