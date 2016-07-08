@@ -1,5 +1,6 @@
 class BitmapData {
     constructor(width, height) {
+        this._ctx = null;
         this._source = null;
         this._matrix = Matrix3.identity();
         this._locked = false;
@@ -19,18 +20,6 @@ class BitmapData {
         return bmd;
     }
 
-    copyChannel(sourceBitmapData, sourceRect, destPoint, sourceChannel, destChannel) {
-
-    }
-
-    copyPixels(sourceBitmapData, sourceRect, destPoint) {
-
-    }
-
-    copyPixelsToByteArray(rect, data) {
-
-    }
-
     dispose() {
         this._source = null;
         this._matrix = Matrix3.identity();
@@ -46,7 +35,7 @@ class BitmapData {
     }
 
     draw(source, matrix) {
-        var _me = this;
+        let _me = this;
         if (_me._locked) {
             return;
         }
@@ -62,6 +51,7 @@ class BitmapData {
         let ctx = canvas.getContext("2d");
         ctx.drawImage(source, 0, 0);
         this._source = canvas;
+        this._ctx = canvas.getContext("2d");
 
         if (matrix instanceof Matrix3) {
             this._matrix.multi(matrix);
@@ -69,47 +59,87 @@ class BitmapData {
     }
 
     getPixel(x, y) {
+        let _me = this;
+        if (!_me._ctx || x > _me.width || y > _me.height) {
+            return new ImageData(new Uint8ClampedArray(new Array(4), 0, 4), 1, 1);
+        }
 
+        let imageData = _me._ctx.getImageData(x, y, 1, 1);
+        let data = imageData.data;
+        return new ImageData(new Uint8ClampedArray([data[0], data[1], data[2], 0], 0, 4), 1, 1);
     }
 
     getPixel32(x, y) {
+        let _me = this;
 
+        if (!_me._ctx || x > _me.width || y > _me.height) {
+            return tmp;
+        }
+
+        return _me._ctx.getImageData(x, y, 1, 1);
     }
 
-    getPixels(rect) {
+    getPixels(x, y, width, height) {
+        let _me = this;
 
+        if (!_me._ctx || x > _me.width || y > _me.height) {
+            return tmp;
+        }
+
+        width = x + width > _me.width ? _me.width - x : width;
+        height = y + height > _me.height ? _me.height : height;
+
+        return _me._ctx.getImageData(x, y, width, height);
     }
 
-    getVector(rect) {
+    setPixel(x, y, imageData) {
+        let _me = this;
+        let _ctx = _me._ctx;
 
-    }
-
-    setPixel(x, y, color) {
-        var _me = this;
-        if (_me._locked) {
+        if (_me._locked || !_ctx || !imageData) {
             return;
         }
+
+        let tmp = _me.getPixels(x, y, 1, 1);
+        tmp.data[0] = imageData.data[0];
+        tmp.data[1] = imageData.data[1];
+        tmp.data[2] = imageData.data[2];
+        _ctx.putImageData(tmp, x, y, 0, 0, 1, 1);
     }
 
-    setPixel32(x, y, color) {
-        var _me = this;
-        if (_me._locked) {
+    setPixel32(x, y, imageData) {
+        let _me = this;
+        let _ctx = _me._ctx;
+
+        if (_me._locked || !_ctx || !imageData) {
             return;
         }
+
+        let tmp = _me.getPixels(x, y, 1, 1);
+        tmp.data[0] = imageData.data[0];
+        tmp.data[1] = imageData.data[1];
+        tmp.data[2] = imageData.data[2];
+        tmp.data[3] = imageData.data[3];
+        _ctx.putImageData(tmp, x, y, 0, 0, 1, 1);
     }
 
-    setPixels(rect, inputByteArray) {
-        var _me = this;
-        if (_me._locked) {
-            return;
-        }
-    }
+    setPixels(x, y, width, height, imageData) {
+        let _me = this;
+        let _ctx = _me._ctx;
 
-    setVector(rect, inputVector) {
-        var _me = this;
-        if (_me._locked) {
+        if (_me._locked || !_ctx || x > _me.width || y > _me.height || !imageData) {
             return;
         }
+
+        width = x + width > _me.width ? _me.width - x : width;
+        height = y + height > _me.height ? _me.height : height;
+
+        let tmp = _me.getPixels(x, y, width, height);
+        for (var i = 0, len = imageData.data.length; i < len; i++) {
+            tmp.data[i] = imageData.data[i];
+        }
+
+        _ctx.putImageData(tmp, x, y, x, y, width, height);
     }
 
     lock() {

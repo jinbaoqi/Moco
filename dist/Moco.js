@@ -1056,12 +1056,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                                     callback: _callbacks3[_i8]
                                 });
                             } else {
-                                var tmp = {
+                                var _tmp = {
                                     target: parent,
                                     callback: _callbacks3[_i8]
                                 };
 
-                                !_i8 ? handlerList.useCaptures.unshift(tmp) : handlerList.useCaptures.splice(1, 0, tmp);
+                                !_i8 ? handlerList.useCaptures.unshift(_tmp) : handlerList.useCaptures.splice(1, 0, _tmp);
                             }
                         }
                     }
@@ -2594,6 +2594,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         function BitmapData(width, height) {
             _classCallCheck(this, BitmapData);
 
+            this._ctx = null;
             this._source = null;
             this._matrix = Matrix3.identity();
             this._locked = false;
@@ -2614,15 +2615,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 bmd.draw(this._source, this._matrix);
                 return bmd;
             }
-        }, {
-            key: "copyChannel",
-            value: function copyChannel(sourceBitmapData, sourceRect, destPoint, sourceChannel, destChannel) {}
-        }, {
-            key: "copyPixels",
-            value: function copyPixels(sourceBitmapData, sourceRect, destPoint) {}
-        }, {
-            key: "copyPixelsToByteArray",
-            value: function copyPixelsToByteArray(rect, data) {}
         }, {
             key: "dispose",
             value: function dispose() {
@@ -2657,6 +2649,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var ctx = canvas.getContext("2d");
                 ctx.drawImage(source, 0, 0);
                 this._source = canvas;
+                this._ctx = canvas.getContext("2d");
 
                 if (matrix instanceof Matrix3) {
                     this._matrix.multi(matrix);
@@ -2664,47 +2657,93 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }
         }, {
             key: "getPixel",
-            value: function getPixel(x, y) {}
+            value: function getPixel(x, y) {
+                var _me = this;
+                if (!_me._ctx || x > _me.width || y > _me.height) {
+                    return new ImageData(new Uint8ClampedArray(new Array(4), 0, 4), 1, 1);
+                }
+
+                var imageData = _me._ctx.getImageData(x, y, 1, 1);
+                var data = imageData.data;
+                return new ImageData(new Uint8ClampedArray([data[0], data[1], data[2], 0], 0, 4), 1, 1);
+            }
         }, {
             key: "getPixel32",
-            value: function getPixel32(x, y) {}
+            value: function getPixel32(x, y) {
+                var _me = this;
+
+                if (!_me._ctx || x > _me.width || y > _me.height) {
+                    return tmp;
+                }
+
+                return _me._ctx.getImageData(x, y, 1, 1);
+            }
         }, {
             key: "getPixels",
-            value: function getPixels(rect) {}
-        }, {
-            key: "getVector",
-            value: function getVector(rect) {}
+            value: function getPixels(x, y, width, height) {
+                var _me = this;
+
+                if (!_me._ctx || x > _me.width || y > _me.height) {
+                    return tmp;
+                }
+
+                width = x + width > _me.width ? _me.width - x : width;
+                height = y + height > _me.height ? _me.height : height;
+
+                return _me._ctx.getImageData(x, y, width, height);
+            }
         }, {
             key: "setPixel",
-            value: function setPixel(x, y, color) {
+            value: function setPixel(x, y, imageData) {
                 var _me = this;
-                if (_me._locked) {
+                var _ctx = _me._ctx;
+
+                if (_me._locked || !_ctx || !imageData) {
                     return;
                 }
+
+                var tmp = _me.getPixels(x, y, 1, 1);
+                tmp.data[0] = imageData.data[0];
+                tmp.data[1] = imageData.data[1];
+                tmp.data[2] = imageData.data[2];
+                _ctx.putImageData(tmp, x, y, 0, 0, 1, 1);
             }
         }, {
             key: "setPixel32",
-            value: function setPixel32(x, y, color) {
+            value: function setPixel32(x, y, imageData) {
                 var _me = this;
-                if (_me._locked) {
+                var _ctx = _me._ctx;
+
+                if (_me._locked || !_ctx || !imageData) {
                     return;
                 }
+
+                var tmp = _me.getPixels(x, y, 1, 1);
+                tmp.data[0] = imageData.data[0];
+                tmp.data[1] = imageData.data[1];
+                tmp.data[2] = imageData.data[2];
+                tmp.data[3] = imageData.data[3];
+                _ctx.putImageData(tmp, x, y, 0, 0, 1, 1);
             }
         }, {
             key: "setPixels",
-            value: function setPixels(rect, inputByteArray) {
+            value: function setPixels(x, y, width, height, imageData) {
                 var _me = this;
-                if (_me._locked) {
+                var _ctx = _me._ctx;
+
+                if (_me._locked || !_ctx || x > _me.width || y > _me.height || !imageData) {
                     return;
                 }
-            }
-        }, {
-            key: "setVector",
-            value: function setVector(rect, inputVector) {
-                var _me = this;
-                if (_me._locked) {
-                    return;
+
+                width = x + width > _me.width ? _me.width - x : width;
+                height = y + height > _me.height ? _me.height : height;
+
+                var tmp = _me.getPixels(x, y, width, height);
+                for (var i = 0, len = imageData.data.length; i < len; i++) {
+                    tmp.data[i] = imageData.data[i];
                 }
+
+                _ctx.putImageData(tmp, x, y, x, y, width, height);
             }
         }, {
             key: "lock",

@@ -24,8 +24,8 @@
     var loader = new Moco.Loader();
     loader.on(Moco.LoaderEvent.COMPLETE, function (ev) {
         var target = ev.target;
-        var translateMreix = Moco.Matrix3.translation(100,100);
-        var scaleMatrix = Moco.Matrix3.scaling(0.5,0.5);
+        var translateMreix = Moco.Matrix3.translation(100, 100);
+        var scaleMatrix = Moco.Matrix3.scaling(0.5, 0.5);
         var rotateMatrix = Moco.Matrix3.rotation(0);
         rotateMatrix.multi(scaleMatrix);
         translateMreix.multi(rotateMatrix);
@@ -36,11 +36,20 @@
         sprite.rotate = 15;
         sprite.addChild(bm);
         stage.addChild(sprite);
+
+        for (var i = 0; i < bmd.width; i++) {
+            for (var j = 0; j < bmd.height; j++) {
+                bmd.setPixel32(i, j, new ImageData(new Uint8ClampedArray([255, 0, 0, 0.2 * 255], 0, 4), 1, 1));
+            }
+        }
+
+        var tmp = bmd.getPixels(20, 20, 80, 80);
+        bmd.setPixels(0, 0, 100, 100, tmp);
     });
     loader.on(Moco.LoaderEvent.ERROR, function () {
         console.log("load img error");
     });
-    loader.load(new Moco.URLRequest("http://www.quanmin.tv/static/images/qr-weixin.png"));
+    loader.load(new Moco.URLRequest("../images/qr-weixin.png"));
 </script>
 </body>
 </html>
