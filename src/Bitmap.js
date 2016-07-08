@@ -28,6 +28,8 @@ class Bitmap extends DisplayObject {
             ctx.restore();
         }
 
+        ctx.restore();
+
         return isShow;
 
     }

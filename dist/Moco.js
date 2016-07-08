@@ -1269,7 +1269,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     return false;
                 }
 
-                if (_me.mask != null && _me.mask.show || _me.alpha < 1 || _me.rotate != 0 || _me.scaleX != 1 || _me.scaleY != 1 || _me.x != 0 || _me.y != 0 || _me.globalCompositeOperation != "") {
+                if (_me.mask != null && _me.mask.show || _me.rotate != 0 || _me.scaleX != 1 || _me.scaleY != 1 || _me.x != 0 || _me.y != 0 || _me.globalCompositeOperation != "") {
                     _me._isSaved = true;
                     ctx.save();
                 }
@@ -1682,16 +1682,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }
         }, {
             key: "show",
-            value: function show() {
+            value: function show(matrix) {
                 var _me = this;
                 _me.ctx.clearRect(0, 0, _me._width, _me._height);
-                _get(Object.getPrototypeOf(Stage.prototype), "show", this).call(this);
+                _get(Object.getPrototypeOf(Stage.prototype), "show", this).call(this, matrix);
             }
         }, {
             key: "tick",
             value: function tick() {
                 var _me = this;
-                _me.show();
+                _me.show(_me._matrix);
             }
         }, {
             key: "addChild",
@@ -2578,6 +2578,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     ctx.drawImage(_me._bitmapData._source, 0, 0);
                     ctx.restore();
                 }
+
+                ctx.restore();
 
                 return isShow;
             }

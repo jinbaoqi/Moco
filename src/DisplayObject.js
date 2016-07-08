@@ -43,7 +43,6 @@ class DisplayObject extends EventDispatcher {
 
         if (
             (_me.mask != null && _me.mask.show) ||
-            _me.alpha < 1 ||
             _me.rotate != 0 ||
             _me.scaleX != 1 ||
             _me.scaleY != 1 ||

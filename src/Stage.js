@@ -41,15 +41,15 @@ class Stage extends DisplayObjectContainer {
         Timer.start();
     }
 
-    show() {
+    show(matrix) {
         let _me = this;
         _me.ctx.clearRect(0, 0, _me._width, _me._height);
-        super.show();
+        super.show(matrix);
     }
 
     tick() {
         let _me = this;
-        _me.show();
+        _me.show(_me._matrix);
     }
 
     addChild(child) {

@@ -79,7 +79,7 @@ class DisplayObjectContainer extends InteractiveObject {
                     item.show(_me._matrix);
                 }
             }
-
+            
             if (_me._isSaved) {
                 let ctx = _me.ctx || _me.stage.ctx;
                 _me._isSaved = false;
