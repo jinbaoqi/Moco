@@ -19,6 +19,9 @@ import BitmapData from './BitmapData';
 import URLLoaderEvent from './URLLoaderEvent';
 import URLLoader from './URLLoader';
 import URLRequest from './URLRequest';
+import TextField from './TextField';
+import Label from './Label';
+import Animate from './Animate';
 
 export default {
     Vec3: Vec3,
@@ -41,5 +44,8 @@ export default {
     BitmapData: BitmapData,
     URLLoaderEvent: URLLoaderEvent,
     URLLoader: URLLoader,
-    URLRequest: URLRequest
+    URLRequest: URLRequest,
+    TextField: TextField,
+    Label: Label,
+    Animate: Animate
 };

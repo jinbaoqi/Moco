@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3894964d-577d-42c6-b64b-b6cf49c67cd1" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Animate.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Label.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/TextField.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/index.html" afterPath="$PROJECT_DIR$/doc/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gruntfile.js" afterPath="$PROJECT_DIR$/gruntfile.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Moco.js" afterPath="$PROJECT_DIR$/src/Moco.js" />
     </list>
     <ignored path="Moco.js.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -49,12 +45,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Animate.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Animate.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Animate.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="15">
               <caret line="1" column="4" selection-start-line="1" selection-start-column="4" selection-end-line="1" selection-end-column="4" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Moco.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Moco.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="565">
+              <caret line="49" column="20" selection-start-line="49" selection-start-column="20" selection-end-line="49" selection-end-column="20" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -91,7 +99,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/example.html" />
         <option value="$PROJECT_DIR$/es2015-src/EventDispatcher.es.js" />
         <option value="$PROJECT_DIR$/es2015-src/EventDispatcher.es" />
         <option value="$PROJECT_DIR$/node_modules/grunt-babel/tasks/babel.js" />
@@ -142,6 +149,7 @@
         <option value="$PROJECT_DIR$/src/TextField.js" />
         <option value="$PROJECT_DIR$/src/Label.js" />
         <option value="$PROJECT_DIR$/src/Animate.js" />
+        <option value="$PROJECT_DIR$/src/Moco.js" />
       </list>
     </option>
   </component>
@@ -757,7 +765,7 @@
       <workItem from="1467998948394" duration="4245000" />
       <workItem from="1468034122098" duration="219000" />
       <workItem from="1468232335131" duration="993000" />
-      <workItem from="1468234064465" duration="84000" />
+      <workItem from="1468234064465" duration="172000" />
     </task>
     <task id="LOCAL-00001" summary="complete Bitmap code">
       <created>1467984783227</created>
@@ -780,11 +788,18 @@
       <option name="project" value="LOCAL" />
       <updated>1468003396635</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="add class defined">
+      <created>1468234170568</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1468234170568</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="39984000" />
+    <option name="totallyTimeSpent" value="40072000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="53" y="23" width="1313" height="745" extended-state="6" />
@@ -842,7 +857,8 @@
     <MESSAGE value="complete Bitmap code" />
     <MESSAGE value="Bitmap render complete" />
     <MESSAGE value="add get and set method" />
-    <option name="LAST_COMMIT_MESSAGE" value="add get and set method" />
+    <MESSAGE value="add class defined" />
+    <option name="LAST_COMMIT_MESSAGE" value="add class defined" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -851,7 +867,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/node_modules/grunt-babel/tasks/babel.js" />
     <entry file="file://$PROJECT_DIR$/example.html" />
     <entry file="file://$PROJECT_DIR$/dist/es6/EventDispatcher.js" />
     <entry file="file://$PROJECT_DIR$/dist/es6/EventDispatcher.js.map" />
@@ -1124,6 +1139,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
           <caret line="25" column="38" selection-start-line="25" selection-start-column="38" selection-end-line="25" selection-end-column="38" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1155,6 +1171,16 @@
         <state relative-caret-position="15">
           <caret line="1" column="4" selection-start-line="1" selection-start-column="4" selection-end-line="1" selection-end-column="4" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Moco.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="565">
+          <caret line="49" column="20" selection-start-line="49" selection-start-column="20" selection-end-line="49" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
