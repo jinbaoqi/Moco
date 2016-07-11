@@ -301,7 +301,7 @@ export default class Shape extends DisplayObject {
             }
             // jshint ignore:end
 
-            if (_me._pip([vec.x, vec.y], area)) {
+            if (Util.pip([vec.x, vec.y], area)) {
                 return true;
             }
         }
@@ -462,28 +462,6 @@ export default class Shape extends DisplayObject {
             e1v: new Vec3(sx, ey, 1),
             e2v: new Vec3(ex, ey, 1)
         };
-    }
-
-    // ray-casting algorithm
-    // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
-    _pip(point, vs) {
-        let isInside = false;
-        let x = point[0],
-            y = point[1];
-
-        for (let i = 0, j = vs.length - 1; i < vs.length; j = i += 1) {
-            let xi = vs[i][0],
-                yi = vs[i][1];
-            let xj = vs[j][0],
-                yj = vs[j][1];
-
-            let intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
-            if (intersect) {
-                isInside = !isInside;
-            }
-        }
-
-        return isInside;
     }
 
     get width() {

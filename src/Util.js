@@ -151,4 +151,26 @@ export default class Util {
 
         return _me.isType(obj, 'Array') ? Array.prototype.slice.call(obj) : _me.extends({}, obj);
     }
+
+    // ray-casting algorithm
+    // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
+    static pip(point, vs) {
+        let isInside = false;
+        let x = point[0],
+            y = point[1];
+
+        for (let i = 0, j = vs.length - 1; i < vs.length; j = i += 1) {
+            let xi = vs[i][0],
+                yi = vs[i][1];
+            let xj = vs[j][0],
+                yj = vs[j][1];
+
+            let intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+            if (intersect) {
+                isInside = !isInside;
+            }
+        }
+
+        return isInside;
+    }
 }

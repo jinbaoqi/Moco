@@ -34,4 +34,12 @@ export default class Bitmap extends DisplayObject {
 
         return isShow;
     }
+
+    isMouseon() {
+        return true;
+    }
+
+    getBounds() {
+
+    }
 }

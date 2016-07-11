@@ -5,6 +5,7 @@ import Timer from './Timer';
 import KeyboardEvent from './KeyboardEvent';
 import MouseEvent from './MouseEvent';
 import Sprite from './Sprite';
+import Vec3 from './Vec3';
 
 export default class Stage extends DisplayObjectContainer {
     constructor(canvasId, fn) {
@@ -30,7 +31,6 @@ export default class Stage extends DisplayObjectContainer {
     initialize() {
         let _me = this;
 
-        // Stage接管所有交互事件
         Util.each(MouseEvent.nameList, (eventName) => {
             eventName = MouseEvent[eventName];
             EventDispatcher.prototype.bind.call(_me, _me.domElem, eventName, (event) => {
@@ -86,6 +86,13 @@ export default class Stage extends DisplayObjectContainer {
 
     isMouseon() {
         return true;
+    }
+
+    getBounds() {
+        return {
+            sv: new Vec3(0, 0, 1),
+            ev: new Vec3(this.width, this.height, 1)
+        };
     }
 
     _mouseEvent(event) {

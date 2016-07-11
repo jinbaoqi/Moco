@@ -90,6 +90,18 @@ export default class DisplayObject extends EventDispatcher {
         return true;
     }
 
+    // jshint ignore:start
+
+    isMouseon(cord) {
+        // abstrct method, child class need to realize
+    }
+
+    getBounds() {
+        // abstrct method, child class need to realize
+    }
+
+    // jshint ignore:end
+
     dispose() {
         let _me = this;
         let eventNames = Util.keys(_me._handlers);
@@ -110,7 +122,6 @@ export default class DisplayObject extends EventDispatcher {
 
     set x(x) {
         this._x = x;
-        this._matrix.translate(x, this._y);
     }
 
     get y() {
@@ -119,7 +130,6 @@ export default class DisplayObject extends EventDispatcher {
 
     set y(y) {
         this._y = y;
-        this._matrix.translate(this._x, y);
     }
 
     get rotate() {
@@ -128,7 +138,6 @@ export default class DisplayObject extends EventDispatcher {
 
     set rotate(rotate) {
         this._rotate = rotate;
-        this._matrix.rotate(rotate);
     }
 
     get scaleX() {
@@ -137,7 +146,6 @@ export default class DisplayObject extends EventDispatcher {
 
     set scaleX(scaleX) {
         this._scaleX = scaleX;
-        this._matrix.scale(scaleX, this._scaleY);
     }
 
     get scaleY() {
@@ -146,7 +154,6 @@ export default class DisplayObject extends EventDispatcher {
 
     set scaleY(scaleY) {
         this._scaleY = scaleY;
-        this._matrix.scale(this._scaleX, scaleY);
     }
 
     get alpha() {
