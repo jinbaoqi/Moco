@@ -149,7 +149,7 @@ module.exports = function (grunt) {
     grunt.registerTask('build', [
         'clean:all',
         'force:jshint:all',
-        'karma:production',
+        //'karma:production',
         'browserify:build',
         // TODO: Concat and compres css.
         // TODO: Figure out how to fix script source for production.
