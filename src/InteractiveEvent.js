@@ -1,4 +1,7 @@
-class InteractiveEvent {
+import Util from './Util';
+import EventDispatcher from './EventDispatcher';
+
+export default class InteractiveEvent {
     static getList() {
         return Util.clone(this._list);
     }
@@ -9,8 +12,8 @@ class InteractiveEvent {
             list[eventName] = list[eventName] ? list[eventName] : [];
 
             let isNotExists = Util.inArray(item, list[eventName], (a1, a2) => {
-                    return a1.aIndex == a2.aIndex;
-                }) == -1;
+                    return a1.aIndex === a2.aIndex;
+                }) === -1;
 
             if (isNotExists) {
                 list[eventName].push(item);
@@ -23,10 +26,10 @@ class InteractiveEvent {
             let list = this._list;
             if (list[eventName]) {
                 let index = Util.inArray(item, list[eventName], (a1, a2) => {
-                    return a1.aIndex == a2.aIndex;
+                    return a1.aIndex === a2.aIndex;
                 });
 
-                if (index != -1) {
+                if (index !== -1) {
                     list[eventName].splice(index, 1);
                 }
             }
@@ -42,5 +45,3 @@ class InteractiveEvent {
         this._list_ = list;
     }
 }
-
-Moco.InteractiveEvent = InteractiveEvent;

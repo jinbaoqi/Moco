@@ -1,17 +1,23 @@
-class Shape extends DisplayObject {
+import DisplayObject from './DisplayObject';
+import Util from './Util';
+import Vec3 from './Vec3';
+import Matrix3 from './Matrix3';
+import Global from './Global';
+
+export default class Shape extends DisplayObject {
     constructor() {
         super();
-        this.name = "Shape";
+        this.name = 'Shape';
         this._showList = [];
         this._setList = [];
     }
 
     on() {
-        console.error("shape object can't interative event, please add shape to sprite");
+        console.error('shape object can\'t interative event, please add shape to sprite'); // jshint ignore:line
     }
 
     off() {
-        console.error("shape object can't interative event, please add shape to sprite");
+        console.error('shape object can\'t interative event, please add shape to sprite'); // jshint ignore:line
     }
 
     show(matrix) {
@@ -20,9 +26,9 @@ class Shape extends DisplayObject {
         let isDrew = super.show(matrix);
 
         if (isDrew) {
-            for (let i = 0, len = showList.length; i < len; i++) {
+            for (let i = 0, len = showList.length; i < len; i += 1) {
                 let showListItem = showList[i];
-                if (typeof showListItem == "function") {
+                if (typeof showListItem === 'function') {
                     showListItem();
                 }
             }
@@ -103,11 +109,11 @@ class Shape extends DisplayObject {
         let _me = this;
         _me._showList.push(function () {
             let ctx = _me.ctx || _me.stage.ctx;
-            _me.stage.ctx.rect(x, y, width, height);
+            ctx.rect(x, y, width, height);
         });
 
         _me._setList.push({
-            type: "rect",
+            type: 'rect',
             area: [x, y, width, height]
         });
     }
@@ -136,7 +142,7 @@ class Shape extends DisplayObject {
         });
 
         _me._setList.push({
-            type: "arc",
+            type: 'arc',
             area: [x, y, r, sAngle, eAngle, direct]
         });
     }
@@ -159,7 +165,7 @@ class Shape extends DisplayObject {
         });
 
         _me._setList.push({
-            type: "arc",
+            type: 'arc',
             area: arcArgs
         });
     }
@@ -182,7 +188,7 @@ class Shape extends DisplayObject {
         });
 
         _me._setList.push({
-            type: "rect",
+            type: 'rect',
             area: rectArgs
         });
     }
@@ -200,7 +206,7 @@ class Shape extends DisplayObject {
             ctx.beginPath();
             ctx.moveTo(vertices[0][0], vertices[0][1]);
 
-            for (i = 1; i < len; i++) {
+            for (let i = 1; i < len; i += 1) {
                 let pointArr = vertices[i];
                 ctx.lineTo(pointArr[0], pointArr[1]);
             }
@@ -219,7 +225,7 @@ class Shape extends DisplayObject {
         });
 
         _me._setList.push({
-            type: "vertices",
+            type: 'vertices',
             area: vertices
         });
     }
@@ -267,22 +273,23 @@ class Shape extends DisplayObject {
         vec.multiMatrix3(inverse);
 
         let setList = _me._setList;
-        for (let i = 0, len = setList.length; i < len; i++) {
+        for (let i = 0, len = setList.length; i < len; i += 1) {
             let item = setList[i];
-            let area = item.area;
-            let minRect = {};
+            let area = item.area; // jshint ignore:line
+            let minRect = {}; // jshint ignore:line
 
+            // jshint ignore:start
             switch (item.type) {
-                case "rect":
+                case 'rect':
                     area = [
                         [area[0], area[1]],
                         [area[0] + area[2], area[1]],
                         [area[0] + area[2], area[1] + area[3]],
                         [area[0], area[1] + area[3]]
                     ];
-                case "vertices":
+                case 'vertices':
                     break;
-                case "arc":
+                case 'arc':
                     minRect = _me._computeArcMinRect.apply(_me, area);
                     area = [
                         [minRect.s1v.x, minRect.s1v.y],
@@ -292,6 +299,7 @@ class Shape extends DisplayObject {
                     ];
                     break;
             }
+            // jshint ignore:end
 
             if (_me._pip([vec.x, vec.y], area)) {
                 return true;
@@ -304,38 +312,40 @@ class Shape extends DisplayObject {
     getBounds() {
         let _me = this;
         let setList = _me._setList;
-        let sx = maxNumber;
-        let ex = minNumber;
-        let sy = maxNumber;
-        let ey = minNumber;
+        let sx = Global.maxNumber;
+        let ex = Global.minNumber;
+        let sy = Global.maxNumber;
+        let ey = Global.minNumber;
 
-        for (let i = 0, len = setList.length; i < len; i++) {
+        for (let i = 0, len = setList.length; i < len; i += 1) {
             let item = setList[i];
-            let area = item.area;
-            let minRect = {};
+            let area = item.area; // jshint ignore:line
+            let minRect = {}; // jshint ignore:line
             let vec3s = [];
 
+            // jshint ignore:start
             switch (item.type) {
-                case "rect":
+                case 'rect':
                     area = [
                         [area[0], area[1]],
                         [area[0] + area[2], area[1]],
                         [area[0] + area[2], area[1] + area[3]],
                         [area[0], area[1] + area[3]]
                     ];
-                case "vertices":
+                case 'vertices':
                     vec3s = Util.map(area, (item) => {
                         let vec = new Vec3(item[0], item[1], 1);
                         return vec.multiMatrix3(_me._matrix);
                     });
                     break;
-                case "arc":
+                case 'arc':
                     minRect = _me._computeArcMinRect.apply(_me, area);
                     vec3s = Util.map(minRect, (item) => {
                         return item.multiMatrix3(_me._matrix);
                     });
                     break;
             }
+            // jshint ignore:end
 
             Util.each(vec3s, (item) => {
                 sx = item.x < sx ? item.x : sx;
@@ -345,14 +355,17 @@ class Shape extends DisplayObject {
             });
         }
 
-        if (sx == maxNumber || ex == minNumber || sy == maxNumber || ey == minNumber) {
+        if (sx === Global.maxNumber ||
+            ex === Global.minNumber ||
+            sy === Global.maxNumber ||
+            ey === Global.minNumber) {
             sx = sy = ex = ey = 0;
         }
 
         return {
             sv: new Vec3(sx, sy, 1),
             ev: new Vec3(ex, ey, 1)
-        }
+        };
     }
 
     _computeArcMinRect(ox, oy, r, sAngle, eAngle, direct) {
@@ -370,7 +383,7 @@ class Shape extends DisplayObject {
                 s2v: new Vec3(ox + r, oy - r, 1),
                 e1v: new Vec3(ox - r, oy + r, 1),
                 e2v: new Vec3(ox + r, oy + r, 1)
-            }
+            };
         }
 
         sAngle = sAngle - Math.floor(sAngle / 360) * 360;
@@ -398,6 +411,7 @@ class Shape extends DisplayObject {
         let cos = Math.cos;
         let v1 = Vec3.zero();
         let v2 = Vec3.zero();
+
         if (eAngle < 90 && eAngle > sAngle) {
             let o1 = Util.deg2rad(sAngle);
             let o2 = Util.deg2rad(eAngle);
@@ -457,13 +471,13 @@ class Shape extends DisplayObject {
         let x = point[0],
             y = point[1];
 
-        for (let i = 0, j = vs.length - 1; i < vs.length; j = i++) {
+        for (let i = 0, j = vs.length - 1; i < vs.length; j = i += 1) {
             let xi = vs[i][0],
                 yi = vs[i][1];
             let xj = vs[j][0],
                 yj = vs[j][1];
 
-            let intersect = ((yi > y) != (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+            let intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
             if (intersect) {
                 isInside = !isInside;
             }
@@ -484,5 +498,3 @@ class Shape extends DisplayObject {
         return Math.abs(bounds.ev.y - bounds.sv.y);
     }
 }
-
-Moco.Shape = Shape;

@@ -9,7 +9,7 @@
             padding: 0;
         }
     </style>
-    <script src="../dist/Moco.min.js"></script>
+    <script src="../dist/Moco.js"></script>
 </head>
 <body>
 <div id="wrap1" style="position:absolute;top:0;left:0;background:red;width:1000px;height:1000px;overflow: hidden;">
@@ -18,28 +18,29 @@
     </div>
 </div>
 <script>
+    var Moco = require("Moco");
     var wrap1 = document.getElementById("wrap1");
     var wrap2 = document.getElementById("wrap2");
     var canvas = document.getElementById("canvas");
 
    var dispatcher = new Moco.EventDispatcher();
 
-   dispatcher.on(wrap1,"click",function(ev){
+   dispatcher.bind(wrap1,"click",function(ev){
     console.log("wrap1 useCapture");
    },true);
-   dispatcher.on(wrap1,"click",function(ev){
+   dispatcher.bind(wrap1,"click",function(ev){
     console.log("wrap1 propagation");
    },false);
-   dispatcher.on(wrap2,"click",function(ev){
+   dispatcher.bind(wrap2,"click",function(ev){
     console.log("wrap2 propagation");
    },false);
-   dispatcher.on(wrap2,"click",function(ev){
+   dispatcher.bind(wrap2,"click",function(ev){
     console.log("wrap211 propagation");
    },false);
-   dispatcher.on(canvas,"click",function(ev){
+   dispatcher.bind(canvas,"click",function(ev){
     console.log("canvas useCapture");
    },true); 
-   dispatcher.on(canvas,"click",function(ev){
+   dispatcher.bind(canvas,"click",function(ev){
     console.log("canvas propagation");
    },false); 
 
@@ -48,7 +49,7 @@
 
    // var dispatcher = new Moco.EventDispatcher();
    // var obj = {};
-   // dispatcher.on(obj,"someEvent",function(){
+   // dispatcher.bind(obj,"someEvent",function(){
    //      console.log("my event");
    // },false);
 
@@ -57,10 +58,10 @@
    // var dispatcher = new Moco.EventDispatcher();
    // var body = document.getElementsByTagName("body")[0];
    // var wrap1 = document.getElementById("wrap1");
-   // dispatcher.on(body,"someEvent",function(){
+   // dispatcher.bind(body,"someEvent",function(){
    //      console.log("body");
    // },false);
-   //  dispatcher.on(wrap1,"someEvent",function(){
+   //  dispatcher.bind(wrap1,"someEvent",function(){
    //      console.log("wrap1");
    // },false);
    // dispatcher.trigger(wrap1,"someEvent",{},true,true);

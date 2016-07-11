@@ -1,9 +1,8 @@
-let URLLoaderEvent = {
-    COMPLETE: "complete",
-    ERROR: "error"
-};
+import EventDispatcher from './EventDispatcher';
+import Util from './Util';
+import URLLoaderEvent from './URLLoaderEvent';
 
-class URLLoader extends EventDispatcher {
+export default class URLLoader extends EventDispatcher {
     constructor(request) {
         super();
         this._request = request;
@@ -21,14 +20,14 @@ class URLLoader extends EventDispatcher {
     }
 
     load(request) {
-        var _me = this;
-        var xhr = false;
-        var params = [];
+        let _me = this;
+        let xhr = false;
+        let params = [];
         request = request || _me._request;
         request.method = request.method.toUpperCase();
 
-        if (request == null) {
-            console.error("URLLoader need URLRequest instance");
+        if (request === null) {
+            console.error('URLLoader need URLRequest instance'); // jshint ignore:line
             return xhr;
         }
 
@@ -37,40 +36,42 @@ class URLLoader extends EventDispatcher {
             return xhr;
         }
 
+        // jshint ignore:start
         try {
             xhr = new XMLHttpRequest();
         } catch (e) {
             try {
-                xhr = new ActiveXObject("Msxml2.XMLHTTP");
+                xhr = new ActiveXObject('Msxml2.XMLHTTP');
             } catch (e) {
                 try {
-                    xhr = new ActiveXObject("Microsoft.XMLHTTP");
+                    xhr = new ActiveXObject('Microsoft.XMLHTTP');
                 } catch (failed) {
                     xhr = false;
                 }
             }
         }
+        // jshint ignore:end
 
-        if (xhr == false) {
-            console.error("xhr cant be init");
+        if (xhr === false) {
+            console.error('xhr cant be init'); // jshint ignore:line
             return xhr;
         }
 
         _me._xhr = xhr;
 
-        var url = request.url;
-        var data = request.data;
-        var keys = Util.keys(request.data);
+        let url = request.url;
+        let data = request.data;
+        let keys = Util.keys(request.data);
         if (keys.length) {
             params = Util.map(request.data, function (val, key) {
-                return key + "=" + encodeURIComponent(val);
+                return key + '=' + encodeURIComponent(val);
             });
-            data = params.join("&");
+            data = params.join('&');
         }
 
-        if (request.method == "GET") {
+        if (request.method === 'GET') {
             if (keys.length) {
-                url += "?" + data;
+                url += '?' + data;
             }
             data = null;
         }
@@ -81,7 +82,7 @@ class URLLoader extends EventDispatcher {
         };
 
         if (request.contentType) {
-            request.requestHeaders["Content-Type"] = request.contentType;
+            request.requestHeaders['Content-Type'] = request.contentType;
         }
 
         Util.each(request.requestHeaders, function (val, key) {
@@ -98,13 +99,13 @@ class URLLoader extends EventDispatcher {
     }
 
     _onreadystatechange() {
-        var _me = this;
-        var xhr = _me._xhr;
-        var eventName = '';
+        let _me = this;
+        let xhr = _me._xhr;
+        let eventName = '';
 
-        if (xhr.readyState == 4) {
+        if (xhr.readyState === 4) {
             if (!_me._close) {
-                if (xhr.status == 200) {
+                if (xhr.status === 200) {
                     eventName = URLLoaderEvent.COMPLETE;
                 } else {
                     eventName = URLLoaderEvent.ERROR;
@@ -122,12 +123,9 @@ class URLLoader extends EventDispatcher {
     }
 
     _next() {
-        var _me = this;
+        let _me = this;
         if (_me._queue.length) {
             _me.load(_me._queue.shift());
         }
     }
 }
-
-Moco.URLLoader = URLLoader;
-Moco.URLLoaderEvent = URLLoaderEvent;

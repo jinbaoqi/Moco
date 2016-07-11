@@ -1,11 +1,13 @@
-class Timer {
+import Util from './Util';
+
+export default class Timer {
     static add(timerObject) {
         let _me = this;
         let index = Util.inArray(timerObject, _me._list, (obj, item) => {
-            return obj.aIndex == item.aIndex;
+            return obj.aIndex === item.aIndex;
         });
 
-        if (index == -1) {
+        if (index === -1) {
             _me._list.push(timerObject);
         }
 
@@ -15,10 +17,10 @@ class Timer {
     static remove(timerObject) {
         let _me = this;
         let index = Util.inArray(timerObject, _me._list, (obj, item) => {
-            return obj.aIndex == item.aIndex;
+            return obj.aIndex === item.aIndex;
         });
 
-        if (index != -1) {
+        if (index !== -1) {
             _me._list.splice(index, 1);
         }
 
@@ -57,11 +59,12 @@ class Timer {
         let vendors = ['webkit', 'moz'];
         let requestAnimationFrame = window.requestAnimationFrame;
         let cancelAnimationFrame = window.cancelAnimationFrame;
-        let i = vendors.length;
+        let i = vendors.length - 1;
 
-        while (--i >= 0 && !requestAnimationFrame) {
+        while (i >= 0 && !requestAnimationFrame) {
             requestAnimationFrame = window[vendors[i] + 'RequestAnimationFrame'];
             cancelAnimationFrame = window[vendors[i] + 'CancelAnimationFrame'];
+            i -= 1;
         }
 
         if (!requestAnimationFrame || !cancelAnimationFrame) {
@@ -85,7 +88,7 @@ class Timer {
         let _me = this;
         let callback = () => {
             let list = _me._list;
-            for (let i = 0, len = list.length; i < len; i++) {
+            for (let i = 0, len = list.length; i < len; i += 1) {
                 let item = list[i];
                 if (item.tick) {
                     item.tick();
@@ -151,5 +154,3 @@ class Timer {
         this._cancelAnimationFrame_ = cancelAnimationFrame;
     }
 }
-
-Moco.Timer = Timer;

@@ -1,9 +1,9 @@
-let loaderEvent = {
-    COMPLETE: "complete",
-    ERROR: "error"
-};
+import DisplayObjectContainer from './DisplayObjectContainer';
+import LoaderEvent from './LoaderEvent';
+import Util from './Util';
+import BitmapData from './BitmapData';
 
-class Loader extends DisplayObjectContainer {
+export default class Loader extends DisplayObjectContainer {
     constructor() {
         super();
         this.content = new Image();
@@ -33,8 +33,8 @@ class Loader extends DisplayObjectContainer {
 
         request.method = request.method.toUpperCase();
 
-        if (request == null) {
-            console.error("Loader need URLRequest instance");
+        if (request === null) {
+            console.error('Loader need URLRequest instance'); // jshint ignore:line
             return;
         }
 
@@ -48,14 +48,14 @@ class Loader extends DisplayObjectContainer {
         var keys = Util.keys(request.data);
         if (keys.length) {
             params = Util.map(request.data, function (val, key) {
-                return key + "=" + encodeURIComponent(val);
+                return key + '=' + encodeURIComponent(val);
             });
-            data = params.join("&");
+            data = params.join('&');
         }
 
-        if (request.method == "GET") {
+        if (request.method === 'GET') {
             if (keys.length) {
-                url += "?" + data;
+                url += '?' + data;
             }
             data = null;
         }
@@ -79,7 +79,7 @@ class Loader extends DisplayObjectContainer {
     _onload() {
         var _me = this;
         if (!_me._close) {
-            _me.trigger(_me, loaderEvent.COMPLETE, {
+            _me.trigger(_me, LoaderEvent.COMPLETE, {
                 target: _me
             });
         }
@@ -92,7 +92,7 @@ class Loader extends DisplayObjectContainer {
     _onerror() {
         var _me = this;
         if (!_me._close) {
-            _me.trigger(_me, loaderEvent.ERROR);
+            _me.trigger(_me, LoaderEvent.ERROR);
         }
 
         _me._close = false;
@@ -107,6 +107,3 @@ class Loader extends DisplayObjectContainer {
         }
     }
 }
-
-Moco.Loader = Loader;
-Moco.LoaderEvent = loaderEvent;

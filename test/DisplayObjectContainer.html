@@ -9,7 +9,7 @@
             padding: 0;
         }
     </style>
-    <script src="../dist/Moco.min.js"></script>
+    <script src="../dist/Moco.js"></script>
 </head>
 <body>
 <div id="wrap1" style="position:absolute;top:0;left:0;background:red;width:1000px;height:1000px;overflow: hidden;">
@@ -18,76 +18,77 @@
     </div>
 </div>
 <script>
-    // var object1 = new Moco.DisplayObject();
-    // var object2 = new Moco.DisplayObject();
-    // var container = new Moco.DisplayObjectContainer();
+    var Moco = require("Moco");
+     var object1 = new Moco.DisplayObject();
+     var object2 = new Moco.DisplayObject();
+     var container = new Moco.DisplayObjectContainer();
 
-    // container.on(Moco.MouseEvent.CLICK,()=>{
-    //     console.log("container");
-    // },false);
+     container.on(Moco.MouseEvent.CLICK,()=>{
+         console.log("container");
+     },false);
 
-    // object1.on(Moco.MouseEvent.CLICK,()=>{
-    //     console.log("------------------");
-    //     console.log("object1");
-    // },false);
+     object1.on(Moco.MouseEvent.CLICK,()=>{
+         console.log("------------------");
+         console.log("object1");
+     },false);
 
-    // object2.on(Moco.MouseEvent.CLICK,()=>{
-    //     console.log("------------------");
-    //     console.log("object2");
-    // },false);
+     object2.on(Moco.MouseEvent.CLICK,()=>{
+         console.log("------------------");
+         console.log("object2");
+     },false);
 
-    // container.addChild(object1);
-    // container.addChild(object1);
-    // container.addChild(object2);
+     container.addChild(object1);
+     container.addChild(object1);
+     container.addChild(object2);
 
-    // object1.trigger(Moco.MouseEvent.CLICK,{});
-    // object2.trigger(Moco.MouseEvent.CLICK,{});
+     object1.trigger(Moco.MouseEvent.CLICK,{});
+     object2.trigger(Moco.MouseEvent.CLICK,{});
 
-    // console.log(container.getChildAt(0));
+     console.log(container.getChildAt(0));
 
-    // container.removeChild(object1);
-    // object2.trigger(Moco.MouseEvent.CLICK,{});
+     container.removeChild(object1);
+     object2.trigger(Moco.MouseEvent.CLICK,{});
 
-    // console.log(container.contains(object1));
-    // console.log(container.getAllChild());
+     console.log(container.contains(object1));
+     console.log(container.getAllChild());
 
 
-    // var container1 = new Moco.DisplayObjectContainer();
-    // var container2 = new Moco.DisplayObjectContainer();
-    // var object1 = new Moco.DisplayObject();
+     var container1 = new Moco.DisplayObjectContainer();
+     var container2 = new Moco.DisplayObjectContainer();
+     var object1 = new Moco.DisplayObject();
 
-    // container1.on("click",()=>{
-    //     console.log("container1 useCapture");
-    // },true);
+     container1.on("click",()=>{
+         console.log("container1 useCapture");
+     },true);
 
-    // container2.on("click",(ev)=>{
-    //     console.log("container2 useCapture 1");
-    //     //ev.stopPropagation();
-    //     //ev.stopImmediatePropagation();
-    // },true);
+     container2.on("click",(ev)=>{
+         console.log("container2 useCapture 1");
+         //ev.stopPropagation();
+         //ev.stopImmediatePropagation();
+     },true);
 
-    // container2.on("click",(ev)=>{
-    //     console.log("container2 useCapture 2");
-    //     //ev.stopPropagation();
-    // },true);
+     container2.on("click",(ev)=>{
+         console.log("container2 useCapture 2");
+         //ev.stopPropagation();
+     },true);
 
-    // object1.on("click",(ev)=>{
-    //     console.log("object");
-    // },false);
+     object1.on("click",(ev)=>{
+         console.log("object");
+     },false);
 
-    // container1.on("click",(ev)=>{
-    //     console.log("container1 propagation");
-    // },false);
+     container1.on("click",(ev)=>{
+         console.log("container1 propagation");
+     },false);
 
-    // container2.on("click",(ev)=>{
-    //     console.log("container2 propagation");
-    //     ev.stopPropagation();
-    // },false);
+     container2.on("click",(ev)=>{
+         console.log("container2 propagation");
+         ev.stopPropagation();
+     },false);
 
-    // container1.addChild(container2);
-    // container2.addChild(object1);
+     container1.addChild(container2);
+     container2.addChild(object1);
 
-    // object1.trigger("click",{});
+     object1.trigger("click",{});
 
 </script>
 </body>

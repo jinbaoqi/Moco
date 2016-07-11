@@ -1,10 +1,15 @@
-class DisplayObject extends EventDispatcher {
+import Global from './Global';
+import Matrix3 from './Matrix3';
+import Util from './Util';
+import EventDispatcher from './EventDispatcher';
+
+export default class DisplayObject extends EventDispatcher {
     constructor() {
         super();
-        this.name = "DisplayObject";
+        this.name = 'DisplayObject';
         this.mask = null;
         this.parent = null;
-        this.globalCompositeOperation = "";
+        this.globalCompositeOperation = '';
         this._x = 0;
         this._y = 0;
         this._rotate = 0;
@@ -13,11 +18,11 @@ class DisplayObject extends EventDispatcher {
         this._height = 0;
         this._width = 0;
         this._alpha = 1;
-        this.parent = null;
         this.visible = true;
-        this.aIndex = this.objectIndex = "" + (guid++);
         this._isSaved = false;
         this._matrix = Matrix3.identity();
+        this.aIndex = this.objectIndex = '' + Global.guid;
+        Global.guid += 1;
     }
 
     on() {
@@ -39,19 +44,19 @@ class DisplayObject extends EventDispatcher {
         }
 
         if (
-            (_me.mask != null && _me.mask.show) ||
-            _me.rotate != 0 ||
-            _me.scaleX != 1 ||
-            _me.scaleY != 1 ||
-            _me.x != 0 ||
-            _me.y != 0 ||
-            _me.globalCompositeOperation != ""
+            (_me.mask !== null && _me.mask.show) ||
+            _me.rotate !== 0 ||
+            _me.scaleX !== 1 ||
+            _me.scaleY !== 1 ||
+            _me.x !== 0 ||
+            _me.y !== 0 ||
+            _me.globalCompositeOperation !== ''
         ) {
             _me._isSaved = true;
             ctx.save();
         }
 
-        if (_me.mask != null && _me.mask.show) {
+        if (_me.mask !== null && _me.mask.show) {
             _me.mask.show();
             ctx.clip();
         }
@@ -62,20 +67,20 @@ class DisplayObject extends EventDispatcher {
 
         _me._matrix.multi(matrix);
 
-        if (_me.x != 0 || _me.y != 0) {
+        if (_me.x !== 0 || _me.y !== 0) {
             let x = _me.x;
             let y = _me.y;
             _me._matrix.multi(Matrix3.translation(x, y));
             ctx.translate(x, y);
         }
 
-        if (_me.rotate != 0) {
+        if (_me.rotate !== 0) {
             let angle = _me.rotate;
             _me._matrix.multi(Matrix3.rotation(angle));
             ctx.rotate(Util.deg2rad(angle));
         }
 
-        if (_me.scaleX != 1 || _me.scaleY != 1) {
+        if (_me.scaleX !== 1 || _me.scaleY !== 1) {
             let scaleX = _me.scaleX;
             let scaleY = _me.scaleY;
             _me._matrix.multi(Matrix3.scaling(scaleX, scaleY));
@@ -157,5 +162,3 @@ class DisplayObject extends EventDispatcher {
         this._alpha = alpha;
     }
 }
-
-Moco.DisplayObject = DisplayObject;

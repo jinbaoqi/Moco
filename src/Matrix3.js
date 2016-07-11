@@ -1,4 +1,4 @@
-class Matrix3 {
+export default class Matrix3 {
     constructor(m) {
         this._matrix = m || [
                 1.0, 0.0, 0.0,
@@ -125,14 +125,14 @@ class Matrix3 {
         let matrix = m.getMatrix();
         let tmp = [];
 
-        for (let i = 0, len = matrix.length; i < len; i++) {
+        for (let i = 0, len = matrix.length; i < len; i += 1) {
             tmp[i] = matrix[i];
         }
 
         return new Matrix3(tmp);
     }
 
-    static copy(m) {
+    static copy(m1, m2) {
         let clone = Matrix3.clone(m2);
         m1.setMatrix(clone.getMatrix());
     }
@@ -180,9 +180,8 @@ class Matrix3 {
 
     static transpose(m) {
         let matrix = m.getMatrix();
-        let tmp = null;
+        let tmp = matrix[1];
 
-        tmp = matrix[1];
         matrix[1] = matrix[3];
         matrix[3] = tmp;
 
@@ -237,5 +236,3 @@ class Matrix3 {
         return matrix;
     }
 }
-
-Moco.Matrix3 = Matrix3;

@@ -1,14 +1,19 @@
-class InteractiveObject extends DisplayObject {
+import DisplayObject from './DisplayObject';
+import Util from './Util';
+import KeyboardEvent from './KeyboardEvent';
+import MouseEvent from './MouseEvent';
+
+export default class InteractiveObject extends DisplayObject {
     constructor() {
         super();
-        this.name = "InteractiveObject";
+        this.name = 'InteractiveObject';
     }
 
     on(eventName, callback, useCapture) {
         let _me = this;
         let eventNameUpperCase = eventName.toUpperCase();
-        let isMouseEvent = Util.inArray(eventNameUpperCase, MouseEvent.nameList) != -1;
-        let isKeyboardEvent = Util.inArray(eventNameUpperCase, KeyboardEvent.nameList) != -1;
+        let isMouseEvent = Util.inArray(eventNameUpperCase, MouseEvent.nameList) !== -1;
+        let isKeyboardEvent = Util.inArray(eventNameUpperCase, KeyboardEvent.nameList) !== -1;
 
         if (!isMouseEvent && !isKeyboardEvent) {
             return;
@@ -24,8 +29,8 @@ class InteractiveObject extends DisplayObject {
     off(eventName, callback) {
         let _me = this;
         let eventNameUpperCase = eventName.toUpperCase();
-        let isMouseEvent = Util.inArray(eventNameUpperCase, MouseEvent.nameList) != -1;
-        let isKeyboardEvent = Util.inArray(eventNameUpperCase, KeyboardEvent.nameList) != -1;
+        let isMouseEvent = Util.inArray(eventNameUpperCase, MouseEvent.nameList) !== -1;
+        let isKeyboardEvent = Util.inArray(eventNameUpperCase, KeyboardEvent.nameList) !== -1;
 
         if (!isMouseEvent && !isKeyboardEvent) {
             return;
@@ -38,5 +43,3 @@ class InteractiveObject extends DisplayObject {
         super.unbind(_me, eventName, callback);
     }
 }
-
-Moco.InteractiveObject = InteractiveObject;

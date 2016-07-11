@@ -1,12 +1,14 @@
-class Bitmap extends DisplayObject {
+import DisplayObject from './DisplayObject';
+
+export default class Bitmap extends DisplayObject {
     constructor(bitmapData) {
         if (!bitmapData) {
-            console.error("bitmapData must not be empty");
+            console.error('bitmapData must not be empty'); // jshint ignore:line
             return;
         }
 
         super();
-        this.name = "Bitmap";
+        this.name = 'Bitmap';
         this._bitmapData = bitmapData;
     }
 
@@ -31,8 +33,5 @@ class Bitmap extends DisplayObject {
         ctx.restore();
 
         return isShow;
-
     }
 }
-
-Moco.Bitmap = Bitmap;

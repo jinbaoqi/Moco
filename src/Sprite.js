@@ -1,13 +1,17 @@
-class Sprite extends DisplayObjectContainer {
+import DisplayObjectContainer from './DisplayObjectContainer';
+import DisplayObject from './DisplayObject';
+import Shape from './Shape';
+
+export default class Sprite extends DisplayObjectContainer {
     constructor() {
         super();
-        this.name = "Sprite";
+        this.name = 'Sprite';
         this.graphics = null;
     }
 
     addChild(child) {
         if (child instanceof Shape) {
-            console.error("shape object should be linked to Sprite's graphics property");
+            console.error('shape object should be linked to Sprite\'s graphics property'); // jshint ignore:line
         } else {
             super.addChild(child);
         }
@@ -15,7 +19,7 @@ class Sprite extends DisplayObjectContainer {
 
     removeChild(child) {
         if (child instanceof Shape) {
-            console.error("shape object should be linked to Sprite's graphics property");
+            console.error('shape object should be linked to Sprite\'s graphics property'); // jshint ignore:line
         } else {
             super.removeChild(child);
         }
@@ -86,5 +90,3 @@ class Sprite extends DisplayObjectContainer {
         return Math.abs(bounds.ev.y - bounds.sv.y);
     }
 }
-
-Moco.Sprite = Sprite;

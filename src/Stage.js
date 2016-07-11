@@ -1,18 +1,26 @@
-class Stage extends DisplayObjectContainer {
+import DisplayObjectContainer from './DisplayObjectContainer';
+import Util from './Util';
+import EventDispatcher from './EventDispatcher';
+import Timer from './Timer';
+import KeyboardEvent from './KeyboardEvent';
+import MouseEvent from './MouseEvent';
+import Sprite from './Sprite';
+
+export default class Stage extends DisplayObjectContainer {
     constructor(canvasId, fn) {
         super();
 
-        this.name = "Stage";
+        this.name = 'Stage';
         this.domElem = document.getElementById(canvasId);
-        this._width = parseFloat(this.domElem.getAttribute("width"), 10);
-        this._height = parseFloat(this.domElem.getAttribute("height"), 10);
-        this.ctx = this.domElem.getContext("2d");
+        this._width = parseFloat(this.domElem.getAttribute('width'), 10);
+        this._height = parseFloat(this.domElem.getAttribute('height'), 10);
+        this.ctx = this.domElem.getContext('2d');
 
         let offset = this._getOffset();
         this._x = offset.left;
         this._y = offset.top;
 
-        if (typeof fn == "function") {
+        if (typeof fn === 'function') {
             fn(this);
         }
 
@@ -60,7 +68,7 @@ class Stage extends DisplayObjectContainer {
             if (child instanceof Sprite && child.graphics) {
                 child.graphics.stage = _me;
                 child.graphics.parent = child;
-                child.graphics.objectIndex = child.objectIndex + ".0";
+                child.graphics.objectIndex = child.objectIndex + '.0';
             }
         };
 
@@ -76,7 +84,7 @@ class Stage extends DisplayObjectContainer {
         super.addChild(child);
     }
 
-    isMouseon(cord) {
+    isMouseon() {
         return true;
     }
 
@@ -87,7 +95,7 @@ class Stage extends DisplayObjectContainer {
             y: 0
         };
 
-        if (event.clientX != null) {
+        if (event.clientX !== null) {
             cord.x = event.pageX - _me.x;
             cord.y = event.pageY - _me.y;
         }
@@ -116,9 +124,9 @@ class Stage extends DisplayObjectContainer {
         return {
             top: 0,
             left: 0
-        }
+        };
     }
-    
+
     get width() {
         return this._width;
     }
@@ -128,5 +136,3 @@ class Stage extends DisplayObjectContainer {
     }
 
 }
-
-Moco.Stage = Stage;

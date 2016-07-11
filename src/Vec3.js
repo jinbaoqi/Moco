@@ -1,4 +1,4 @@
-class Vec3 {
+export default class Vec3 {
     constructor(x, y, z) {
         this.x = x || 0;
         this.y = y || 0;
@@ -20,11 +20,9 @@ class Vec3 {
 
             return this.x * x + this.y * y + this.z * z;
         } else {
-            let x = y = z = k;
-
-            this.x *= x;
-            this.y *= y;
-            this.z *= z;
+            this.x *= k;
+            this.y *= k;
+            this.z *= k;
         }
 
         return this;
@@ -38,11 +36,9 @@ class Vec3 {
 
             return this.x / x + this.y / y + this.z / z;
         } else {
-            let x = y = z = k;
-
-            this.x /= x;
-            this.y /= y;
-            this.z /= z;
+            this.x /= k;
+            this.y /= k;
+            this.z /= k;
         }
 
         return this;
@@ -89,7 +85,7 @@ class Vec3 {
     }
 
     static equal(v1, v2) {
-        return v1.x == v2.x && v1.y == v2.y && v1.z == v2.z;
+        return v1.x === v2.x && v1.y === v2.y && v1.z === v2.z;
     }
 
     static crossProduct(v1, v2) {
@@ -113,9 +109,7 @@ class Vec3 {
         if (distance) {
             return clone.multi(1 / distance);
         } else {
-            throw new Exception("zero vec3 can't be norm");
+            throw new Error('zero vec3 cant be norm');
         }
     }
 }
-
-Moco.Vec3 = Vec3;

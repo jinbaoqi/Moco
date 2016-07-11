@@ -1,15 +1,18 @@
-class EventDispatcher {
+import Global from './Global';
+import Util from './Util';
+
+export default class EventDispatcher {
     bind(target, eventName, callback, useCapture) {
         let _me = this;
 
-        if (typeof target == "string") {
+        if (typeof target === 'string') {
             [target, eventName, callback, useCapture] = [_me, target, eventName, callback];
         }
 
         if (eventName && callback) {
             useCapture = useCapture ? useCapture : false;
 
-            if (Util.isType(eventName, "Array")) {
+            if (Util.isType(eventName, 'Array')) {
                 Util.each(eventName, (item) => {
                     _me.bind(item, callback, useCapture);
                 });
@@ -19,20 +22,21 @@ class EventDispatcher {
                     let callbacks = handlers[eventName];
                     let ev = _me._fixEvent(event);
 
-                    for (let i = 0, len = callbacks.length; i < len; i++) {
+                    for (let i = 0, len = callbacks.length; i < len; i += 1) {
                         let item = callbacks[i];
                         if (ev.isImmediatePropagationStopped()) {
                             break;
-                        } else if (item._guid == fn._guid) {
+                        } else if (item._guid === fn._guid) {
                             item._callback.call(_me, ev);
                         }
                     }
                 };
 
-                fn._fnStr = callback._fntStr ? callback._fnStr : callback.toString().replace(fnRegExp, '');
+                fn._fnStr = callback._fntStr ? callback._fnStr : callback.toString().replace(Global.fnRegExp, '');
                 fn._callback = callback;
                 fn._useCapture = useCapture;
-                fn._guid = guid++;
+                fn._guid = Global.guid;
+                Global.guid += 1;
 
                 if (!handlers) {
                     handlers = target.handlers = {};
@@ -59,12 +63,12 @@ class EventDispatcher {
 
     unbind(target, eventName, callback) {
         let _me = this;
-        if (typeof target == "string") {
+        if (typeof target === 'string') {
             [target, eventName, callback] = [_me, target, eventName];
         }
 
         if (eventName || callback) {
-            if (Util.isType(eventName, "Array")) {
+            if (Util.isType(eventName, 'Array')) {
                 Util.each(eventName, function (item) {
                     _me.unbind(target, item, callback);
                 });
@@ -81,12 +85,12 @@ class EventDispatcher {
                 let handlers = target.handlers;
 
                 if (handlers) {
-                    let fnStr = callback._fnStr ? callback._fnStr : callback.toString().replace(fnRegExp, '');
+                    let fnStr = callback._fnStr ? callback._fnStr : callback.toString().replace(Global.fnRegExp, '');
                     let callbacks = handlers[eventName] ? handlers[eventName] : [];
 
-                    for (let i = callbacks.length - 1; i >= 0; i--) {
+                    for (let i = callbacks.length - 1; i >= 0; i -= 1) {
                         let item = callbacks[i];
-                        if (item._fnStr == fnStr) {
+                        if (item._fnStr === fnStr) {
                             Array.prototype.splice.call(callbacks, i, 1);
                         }
                     }
@@ -100,7 +104,7 @@ class EventDispatcher {
     once(target, eventName, callback, useCapture) {
         var _me = this;
 
-        if (typeof target == "string") {
+        if (typeof target === 'string') {
             [target, eventName, callback, useCapture] = [_me, target, eventName, callback];
         }
 
@@ -112,7 +116,7 @@ class EventDispatcher {
             }
 
             if (useCapture) {
-                if (event.eventPhase == 0) {
+                if (event.eventPhase === 0) {
                     _me.unbind(target, eventName, fn);
                 }
             } else {
@@ -120,7 +124,7 @@ class EventDispatcher {
             }
         };
 
-        fn._fnStr = callback.toString().replace(fnRegExp, '');
+        fn._fnStr = callback.toString().replace(Global.fnRegExp, '');
 
         return _me.bind(target, eventName, fn, useCapture);
     }
@@ -130,7 +134,7 @@ class EventDispatcher {
 
         if (!target && !eventName) {
             return;
-        } else if (typeof target == "string") {
+        } else if (typeof target === 'string') {
             [target, eventName, event] = [_me, target, eventName];
         }
 
@@ -144,7 +148,7 @@ class EventDispatcher {
 
         //自定义事件trigger的时候需要修正target和currentTarget
         let ev = event || {};
-        if (ev.target == null) {
+        if (ev.target === null) {
             ev.target = ev.currentTarget = target;
         }
 
@@ -158,10 +162,10 @@ class EventDispatcher {
         };
 
         while (parent) {
-            let handlers = null;
-            if (handlers = parent.handlers) {
+            let handlers = parent.handlers;
+            if (handlers) {
                 let callbacks = handlers[eventName] ? handlers[eventName] : [];
-                for (let i = 0, len = callbacks.length; i < len; i++) {
+                for (let i = 0, len = callbacks.length; i < len; i += 1) {
                     let useCapture = callbacks[i]._useCapture;
                     if (!useCapture) {
                         handlerList.propagations.push({
@@ -174,7 +178,11 @@ class EventDispatcher {
                             callback: callbacks[i]
                         };
 
-                        !i ? handlerList.useCaptures.unshift(tmp) : handlerList.useCaptures.splice(1, 0, tmp);
+                        if (!i) {
+                            handlerList.useCaptures.unshift(tmp);
+                        } else {
+                            handlerList.useCaptures.splice(1, 0, tmp);
+                        }
                     }
                 }
             }
@@ -185,13 +193,13 @@ class EventDispatcher {
         let useCaptures = handlerList.useCaptures;
         let prevTarget = null;
         ev.eventPhase = 0;
-        for (let i = 0, len = useCaptures.length; i < len; i++) {
+        for (let i = 0, len = useCaptures.length; i < len; i += 1) {
             let handler = useCaptures[i];
             target = handler.target;
 
             if (ev.isImmediatePropagationStopped()) {
                 break;
-            } else if (prevTarget == target && ev.isPropagationStopped()) {
+            } else if (prevTarget === target && ev.isPropagationStopped()) {
                 handler.callback.call(_me, ev);
             } else {
                 handler.callback.call(_me, ev);
@@ -207,7 +215,7 @@ class EventDispatcher {
 
         // 目标阶段
         ev.eventPhase = 1;
-        for (let i = 0, len = callbacks.length; i < len; i++) {
+        for (let i = 0, len = callbacks.length; i < len; i += 1) {
             let item = callbacks[i];
             if (isUseCapturePhaseStopped) {
                 break;
@@ -220,7 +228,7 @@ class EventDispatcher {
         let propagations = handlerList.propagations;
         prevTarget = null;
         ev.eventPhase = 2;
-        for (let i = 0, len = propagations.length; i < len; i++) {
+        for (let i = 0, len = propagations.length; i < len; i += 1) {
             let handler = propagations[i];
             target = handler.target;
             ev.target = target;
@@ -235,7 +243,7 @@ class EventDispatcher {
                 if (ev.isImmediatePropagationStopped()) {
                     break;
                 } else if (ev.isPropagationStopped()) {
-                    if (prevTarget == target) {
+                    if (prevTarget === target) {
                         handler.callback.call(_me, ev);
                     } else {
                         break;
@@ -251,10 +259,10 @@ class EventDispatcher {
     _fixEvent(event) {
         let _me = this;
         let returnTrue = () => {
-            return true
+            return true;
         };
         let returnFalse = () => {
-            return false
+            return false;
         };
 
         if (!event || !event.isPropagationStopped) {
@@ -309,7 +317,7 @@ class EventDispatcher {
 
             event.isImmediatePropagationStopped = returnFalse;
 
-            if (event.clientX != null) {
+            if (event.clientX !== null) {
                 let doc = document.documentElement,
                     body = document.body;
 
@@ -328,5 +336,3 @@ class EventDispatcher {
         return event;
     }
 }
-
-Moco.EventDispatcher = EventDispatcher;
