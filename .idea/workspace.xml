@@ -2,38 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3894964d-577d-42c6-b64b-b6cf49c67cd1" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/index.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/intro.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/outro.js" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Gruntfile.js" afterPath="$PROJECT_DIR$/Gruntfile.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/Moco.js" afterPath="$PROJECT_DIR$/dist/Moco.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/Moco.min.js" afterPath="$PROJECT_DIR$/dist/Moco.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Bitmap.js" afterPath="$PROJECT_DIR$/src/Bitmap.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/BitmapData.js" afterPath="$PROJECT_DIR$/src/BitmapData.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DisplayObject.js" afterPath="$PROJECT_DIR$/src/DisplayObject.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DisplayObjectContainer.js" afterPath="$PROJECT_DIR$/src/DisplayObjectContainer.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/EventDispatcher.js" afterPath="$PROJECT_DIR$/src/EventDispatcher.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InteractiveEvent.js" afterPath="$PROJECT_DIR$/src/InteractiveEvent.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InteractiveObject.js" afterPath="$PROJECT_DIR$/src/InteractiveObject.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/KeyboardEvent.js" afterPath="$PROJECT_DIR$/src/KeyboardEvent.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Loader.js" afterPath="$PROJECT_DIR$/src/Loader.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Matrix3.js" afterPath="$PROJECT_DIR$/src/Matrix3.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/MouseEvent.js" afterPath="$PROJECT_DIR$/src/MouseEvent.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Shape.js" afterPath="$PROJECT_DIR$/src/Shape.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Sprite.js" afterPath="$PROJECT_DIR$/src/Sprite.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Stage.js" afterPath="$PROJECT_DIR$/src/Stage.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Timer.js" afterPath="$PROJECT_DIR$/src/Timer.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/URLLoader.js" afterPath="$PROJECT_DIR$/src/URLLoader.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/URLRequest.js" afterPath="$PROJECT_DIR$/src/URLRequest.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Util.js" afterPath="$PROJECT_DIR$/src/Util.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Vec3.js" afterPath="$PROJECT_DIR$/src/Vec3.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/global.js" afterPath="$PROJECT_DIR$/src/global.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/Bitmap.html" afterPath="$PROJECT_DIR$/test/Bitmap.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/DisplayObjectContainer.html" afterPath="$PROJECT_DIR$/test/DisplayObjectContainer.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/EventDispatcher.html" afterPath="$PROJECT_DIR$/test/EventDispatcher.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/InteractiveEvent.html" afterPath="$PROJECT_DIR$/test/InteractiveEvent.html" />
     </list>
     <ignored path="Moco.js.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -231,7 +200,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="dist" />
+              <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -760,7 +729,7 @@
       <workItem from="1467982989998" duration="10967000" />
       <workItem from="1467998948394" duration="4245000" />
       <workItem from="1468034122098" duration="219000" />
-      <workItem from="1468232335131" duration="339000" />
+      <workItem from="1468232335131" duration="399000" />
     </task>
     <task id="LOCAL-00001" summary="complete Bitmap code">
       <created>1467984783227</created>
@@ -787,11 +756,11 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="39246000" />
+    <option name="totallyTimeSpent" value="39306000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="62" y="23" width="1313" height="745" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -804,7 +773,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32824427" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24704957" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24704957" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
       <window_info id="Grunt " active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
