@@ -28,13 +28,26 @@
                 var bm = new Moco.Bitmap(bmd);
                 container.addChild(bm);
 
-                console.time("a");
-                Moco.Animate.fromTo(container, {
+                Moco.Animate.from(container, {
                     x: 800
-                }, {
-                    x: 100
                 }, Moco.Easing.easeInOutExpo, 1000, function () {
-                    console.timeEnd("a");
+                    Moco.Animate.to(container, {
+                        x: 800
+                    }, Moco.Easing.easeInOutQuart, 1500, function () {
+                        Moco.Animate.fromTo(container, {
+                            x: 800,
+                            y: 0,
+                            scaleX: 1,
+                            scaleY: 1,
+                            rotate: 0
+                        }, {
+                            x: 500,
+                            y: 500,
+                            scaleX: 0.2,
+                            scaleY: 0.2,
+                            rotate: 180
+                        }, Moco.Easing.easeInOutBack, 2000);
+                    });
                 });
             }
     );
