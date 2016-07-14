@@ -410,12 +410,6 @@ var BitmapData = (function () {
         this._imageData = null;
         this.width = width || 0;
         this.height = height || 0;
-        this.rect = {
-            x: 0,
-            y: 0,
-            width: this.width,
-            height: this.height
-        };
     }
 
     _createClass(BitmapData, [{
@@ -433,12 +427,6 @@ var BitmapData = (function () {
             this._locked = false;
             this.width = 0;
             this.height = 0;
-            this.rect = {
-                x: 0,
-                y: 0,
-                width: 0,
-                height: 0
-            };
         }
     }, {
         key: 'draw',
