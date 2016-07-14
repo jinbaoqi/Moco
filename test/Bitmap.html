@@ -14,7 +14,7 @@
 <body>
 <div id="wrap1" style="position:absolute;top:0;left:0;width:1000px;height:1000px;overflow: hidden;">
     <div id="wrap2" style="position:absolute;top:0;left:0;width:400px;height:300px;overflow:hidden;">
-        <canvas id="canvas" width="400" height="300"></canvas>
+        <canvas id="canvas" width="800" height="600"></canvas>
     </div>
 </div>
 <script>
@@ -26,7 +26,7 @@
     loader.on(Moco.LoaderEvent.COMPLETE, function (ev) {
         var target = ev.target;
         var translateMreix = Moco.Matrix3.translation(100, 100);
-        var scaleMatrix = Moco.Matrix3.scaling(0.5, 0.5);
+        var scaleMatrix = Moco.Matrix3.scaling(1, 1);
         var rotateMatrix = Moco.Matrix3.rotation(0);
         rotateMatrix.multi(scaleMatrix);
         translateMreix.multi(rotateMatrix);
@@ -38,14 +38,20 @@
         sprite.addChild(bm);
         stage.addChild(sprite);
 
-//        for (var i = 0; i < bmd.width; i++) {
-//            for (var j = 0; j < bmd.height; j++) {
-//                bmd.setPixel32(i, j, new ImageData(new Uint8ClampedArray([255, 0, 0, 0.2 * 255], 0, 4), 1, 1));
-//            }
-//        }
-//
-//        var tmp = bmd.getPixels(20, 20, 80, 80);
-//        bmd.setPixels(0, 0, 100, 100, tmp);
+        sprite.on(Moco.MouseEvent.CLICK, function () {
+            console.log("in?");
+        });
+
+        console.time("def");
+        bmd.lock();
+        //for (var i = 0; i < 10000; i++) {
+            var x = Math.random() * 800;
+            var y = Math.random() * 600;
+            var tmp = bmd.getPixel(x, y);
+            bmd.setPixel(x, y, tmp);
+        //}
+        bmd.unlock();
+        console.timeEnd("def");
     });
     loader.on(Moco.LoaderEvent.ERROR, function () {
         console.log("load img error");

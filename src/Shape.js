@@ -172,6 +172,7 @@ export default class Shape extends DisplayObject {
 
     drawRect(thickness, lineColor, rectArgs, isFill, color) {
         let _me = this;
+        
         _me._showList.push(function () {
             let ctx = _me.ctx || _me.stage.ctx;
             ctx.beginPath();

@@ -36,53 +36,52 @@ export default class DisplayObject extends EventDispatcher {
     show(matrix) {
         let _me = this;
         let ctx = _me.ctx || _me.stage.ctx;
+        let {
+            x, y, scaleX, scaleY, alpha, rotate, visible, mask
+        } = _me;
 
         _me._matrix = Matrix3.identity();
 
-        if (!_me.visible || !_me.alpha) {
+        if (!visible || !alpha) {
             return false;
         }
 
+
         if (
             (_me.mask !== null && _me.mask.show) ||
-            _me.rotate !== 0 ||
-            _me.scaleX !== 1 ||
-            _me.scaleY !== 1 ||
-            _me.x !== 0 ||
-            _me.y !== 0 ||
-            _me.globalCompositeOperation !== ''
+            _me.globalCompositeOperation !== '' ||
+            rotate !== 0 ||
+            scaleX !== 1 ||
+            scaleY !== 1 ||
+            x !== 0 ||
+            y !== 0
         ) {
             _me._isSaved = true;
             ctx.save();
         }
 
-        if (_me.mask !== null && _me.mask.show) {
-            _me.mask.show();
+        if (mask !== null && mask.show) {
+            mask.show();
             ctx.clip();
         }
 
-        if (_me.alpha < 1) {
-            ctx.globalAlpha = _me._alpha;
+        if (alpha < 1) {
+            ctx.globalAlpha = alpha;
         }
 
         _me._matrix.multi(matrix);
 
-        if (_me.x !== 0 || _me.y !== 0) {
-            let x = _me.x;
-            let y = _me.y;
+        if (x !== 0 || y !== 0) {
             _me._matrix.multi(Matrix3.translation(x, y));
             ctx.translate(x, y);
         }
 
-        if (_me.rotate !== 0) {
-            let angle = _me.rotate;
-            _me._matrix.multi(Matrix3.rotation(angle));
-            ctx.rotate(Util.deg2rad(angle));
+        if (rotate !== 0) {
+            _me._matrix.multi(Matrix3.rotation(rotate));
+            ctx.rotate(Util.deg2rad(rotate));
         }
 
-        if (_me.scaleX !== 1 || _me.scaleY !== 1) {
-            let scaleX = _me.scaleX;
-            let scaleY = _me.scaleY;
+        if (scaleX !== 1 || scaleY !== 1) {
             _me._matrix.multi(Matrix3.scaling(scaleX, scaleY));
             ctx.scale(scaleX, scaleY);
         }

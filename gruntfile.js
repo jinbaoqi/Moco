@@ -13,7 +13,6 @@ module.exports = function (grunt) {
                     transform: [['babelify', {
                         blacklist: ['useStrict']
                     }]],
-                    require: ['babelify/polyfill'],
                     alias: {
                         Moco: './src/Moco.js'
                     }

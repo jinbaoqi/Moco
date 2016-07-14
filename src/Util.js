@@ -142,6 +142,14 @@ export default class Util {
         return obj;
     }
 
+    static toArray(argv) {
+        if (argv && argv.length && argv[0]) {
+            return Array.prototype.slice.call(argv, 0, argv.length);
+        } else {
+            return [];
+        }
+    }
+
     static clone(obj) {
         let _me = this;
 

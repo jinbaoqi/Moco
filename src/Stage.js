@@ -108,7 +108,7 @@ export default class Stage extends DisplayObjectContainer {
         }
 
         event.cord = cord;
-
+        
         let eventName = event.type;
         let item = MouseEvent.getTopItem(eventName, cord);
         if (item) {

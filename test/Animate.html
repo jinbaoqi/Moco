@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <script src="../dist/Moco.js"></script>
+</head>
+<body>
+<div id="wrap1" style="position:absolute;top:0;left:0;background:red;width:1000px;height:1000px;overflow: hidden;">
+    <canvas id="canvas" width="1000px" height="1000px"></canvas>
+</div>
+<script>
+    var Moco = require("Moco");
+    var stage = new Moco.Stage("canvas");
+    var container = new Moco.Sprite();
+    stage.addChild(container);
+
+    var loader = new Moco.Loader();
+    loader.on(Moco.LoaderEvent.COMPLETE, function (ev) {
+                var target = ev.target;
+                var bmd = target.toBitmapData();
+
+                for (var i = 0; i < 1000; i++) {
+                    var bm = new Moco.Bitmap(bmd);
+                    bm.scaleX = bm.scaleY = Math.random();
+                    bm.x = Math.random() * stage.width;
+                    bm.y = Math.random() * stage.height;
+                    container.addChild(bm);
+                    (function (bm) {
+                        setInterval(function () {
+                            Moco.Animate.to(bm, {
+                                x: 500,
+                                y: 500
+                            }, '', 1000)
+                        });
+                    }(bm));
+                }
+            }
+    );
+    loader.load(new Moco.URLRequest("../images/qr-weixin.png"));
+</script>
+</body>
+</html>
