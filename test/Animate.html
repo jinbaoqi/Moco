@@ -27,21 +27,15 @@
                 var bmd = target.toBitmapData();
                 var bm = new Moco.Bitmap(bmd);
                 container.addChild(bm);
-                Moco.Animate.to(container, {
-                    x: 800,
-                    onComplete: function (obj) {
-                        console.log(obj);
-                    },
-                    onCompleteParam: {
-                        name: "test"
-                    }
-                }, Moco.Easing.easeInBack, 1000);
-                setTimeout(function () {
-                    Moco.Animate.pause(container);
-                    setTimeout(function () {
-                        Moco.Animate.resume(container);
-                    }, 500);
-                }, 500);
+
+                console.time("a");
+                Moco.Animate.fromTo(container, {
+                    x: 800
+                }, {
+                    x: 100
+                }, Moco.Easing.easeInOutExpo, 1000, function () {
+                    console.timeEnd("a");
+                });
             }
     );
     loader.load(new Moco.URLRequest("../images/qr-weixin.png"));

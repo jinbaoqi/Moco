@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3894964d-577d-42c6-b64b-b6cf49c67cd1" name="Default" comment="fix BitmapData getImageData and putImageData method">
+    <list default="true" id="3894964d-577d-42c6-b64b-b6cf49c67cd1" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/Moco.js" afterPath="$PROJECT_DIR$/dist/Moco.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Animate.js" afterPath="$PROJECT_DIR$/src/Animate.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Easing.js" afterPath="$PROJECT_DIR$/src/Easing.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/Animate.html" afterPath="$PROJECT_DIR$/test/Animate.html" />
     </list>
     <ignored path="Moco.js.iws" />
@@ -68,11 +67,21 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="Bitmap.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/Bitmap.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="205">
+              <caret line="39" column="0" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="Animate.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Animate.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-397">
-              <caret line="83" column="9" selection-start-line="83" selection-start-column="9" selection-end-line="83" selection-end-column="9" />
+            <state relative-caret-position="169">
+              <caret line="118" column="34" selection-start-line="118" selection-start-column="34" selection-end-line="118" selection-end-column="34" />
               <folding />
             </state>
           </provider>
@@ -81,8 +90,8 @@
       <file leaf-file-name="Animate.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/Animate.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="316">
-              <caret line="43" column="24" selection-start-line="38" selection-start-column="16" selection-end-line="43" selection-end-column="24" />
+            <state relative-caret-position="181">
+              <caret line="27" column="37" selection-start-line="27" selection-start-column="37" selection-end-line="27" selection-end-column="37" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
               </folding>
@@ -108,8 +117,8 @@
   <component name="Git.Settings">
     <option name="PREVIOUS_COMMIT_AUTHORS">
       <list>
-        <option value="zhaoyang" />
         <option value="zyEros &lt;395693101@qq.com&gt;" />
+        <option value="zhaoyang" />
       </list>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -807,7 +816,7 @@
       <workItem from="1468340553007" duration="4086000" />
       <workItem from="1468369605534" duration="1027000" />
       <workItem from="1468385835815" duration="333000" />
-      <workItem from="1468389205498" duration="8095000" />
+      <workItem from="1468389205498" duration="8661000" />
     </task>
     <task id="LOCAL-00001" summary="complete Bitmap code">
       <created>1467984783227</created>
@@ -851,11 +860,18 @@
       <option name="project" value="LOCAL" />
       <updated>1468244157829</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="add Animate resume/pause method, and fix start and stop method">
+      <created>1468469449754</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1468469449754</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="87426000" />
+    <option name="totallyTimeSpent" value="87992000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="53" y="23" width="1313" height="745" extended-state="6" />
@@ -917,7 +933,8 @@
     <MESSAGE value="import all" />
     <MESSAGE value="add class method to achieve" />
     <MESSAGE value="fix BitmapData getImageData and putImageData method" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix BitmapData getImageData and putImageData method" />
+    <MESSAGE value="add Animate resume/pause method, and fix start and stop method" />
+    <option name="LAST_COMMIT_MESSAGE" value="add Animate resume/pause method, and fix start and stop method" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1232,7 +1249,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test/Bitmap.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="181">
+        <state relative-caret-position="205">
           <caret line="39" column="0" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
           <folding />
         </state>
@@ -1240,8 +1257,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test/Animate.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="316">
-          <caret line="43" column="24" selection-start-line="38" selection-start-column="16" selection-end-line="43" selection-end-column="24" />
+        <state relative-caret-position="181">
+          <caret line="27" column="37" selection-start-line="27" selection-start-column="37" selection-end-line="27" selection-end-column="37" />
           <folding>
             <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>
@@ -1250,8 +1267,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Animate.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-397">
-          <caret line="83" column="9" selection-start-line="83" selection-start-column="9" selection-end-line="83" selection-end-column="9" />
+        <state relative-caret-position="169">
+          <caret line="118" column="34" selection-start-line="118" selection-start-column="34" selection-end-line="118" selection-end-column="34" />
           <folding />
         </state>
       </provider>

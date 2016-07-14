@@ -115,7 +115,7 @@ export default class Animate {
         let type = {};
         let speed = 0;
         let val = [];
-
+        
         for (var item in params) {
             if (params.hasOwnProperty(item)) {
                 if (item === 'onComplete') {
@@ -132,8 +132,8 @@ export default class Animate {
         if (typeof type === 'object' && type.a && type.b) {
             type = arguments[2] || Easing.easeInSine;
             speed = arguments[3] || 1000;
-            fn = fn || arguments[3];
-            fnParams = fnParams || arguments[4];
+            fn = fn || arguments[4];
+            fnParams = fnParams || arguments[5];
         }
         else {
             type = Easing.easeInSine;

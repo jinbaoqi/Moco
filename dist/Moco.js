@@ -175,8 +175,8 @@ var Animate = (function () {
             if (typeof type === 'object' && type.a && type.b) {
                 type = arguments[2] || _Easing2['default'].easeInSine;
                 speed = arguments[3] || 1000;
-                fn = fn || arguments[3];
-                fnParams = fnParams || arguments[4];
+                fn = fn || arguments[4];
+                fnParams = fnParams || arguments[5];
             } else {
                 type = _Easing2['default'].easeInSine;
                 speed = arguments[2] || 1000;
