@@ -70,7 +70,36 @@ export default class Animate {
         }
     }
 
+    static resume(target) {
+        let _me = this;
+        let index = Util.inArray(target, _me._pausedAnimators, (target, item)=> {
+            return target === item.target;
+        });
+
+        if (index > -1) {
+            let item = _me._pausedAnimators.splice(index, 1);
+            item[0].timestamp = +new Date();
+            _me._animators.push(item[0]);
+            _me._animate();
+        }
+    }
+
+    static pause(target) {
+        let _me = this;
+        let index = Util.inArray(target, _me._animators, (target, item)=> {
+            return target === item.target;
+        });
+
+        if (index > -1) {
+            let item = _me._animators.splice(index, 1);
+            _me._pausedAnimators.push(item[0]);
+        }
+    }
+
     static start() {
+        Util.each(this._animators, (animators)=> {
+            animators.timestamp = +new Date();
+        });
         this._animate();
     }
 
@@ -83,7 +112,7 @@ export default class Animate {
         let attr = {};
         let fn = null;
         let fnParams = [];
-        let type = '';
+        let type = {};
         let speed = 0;
         let val = [];
 
@@ -99,17 +128,18 @@ export default class Animate {
             }
         }
 
-        if (typeof arguments[2] === 'string') {
-            type = Easing[arguments[2]] || Easing.easeInSine;
+        type = arguments[2];
+        if (typeof type === 'object' && type.a && type.b) {
+            type = arguments[2] || Easing.easeInSine;
             speed = arguments[3] || 1000;
-            fn = arguments[4];
-            fnParams = arguments[5];
+            fn = fn || arguments[3];
+            fnParams = fnParams || arguments[4];
         }
         else {
             type = Easing.easeInSine;
             speed = arguments[2] || 1000;
-            fn = arguments[3];
-            fnParams = arguments[4];
+            fn = fn || arguments[3];
+            fnParams = fnParams || arguments[4];
         }
 
         val.push(target, attr, type, speed, fn, fnParams);
@@ -171,7 +201,6 @@ export default class Animate {
             let shouldStop = animator.shouldStop = speed - timeCount <= renderTime || timeCount > speed;
             let origin = animator.origin;
             let scale = _me._cubicBezier(type, shouldStop ? 1 : timeCount / speed);
-
             for (let key in attrs) {
                 if (attrs.hasOwnProperty(key)) {
                     target[key] = origin[key] + (attrs[key] - origin[key]) * scale.y;
@@ -180,7 +209,7 @@ export default class Animate {
 
             if (shouldStop) {
                 if (typeof fn === 'function') {
-                    fn.apply(target, fnParams);
+                    fn.call(target, fnParams);
                 }
             }
 
@@ -199,6 +228,11 @@ export default class Animate {
         return this._animators_;
     }
 
+    static get _pausedAnimators() {
+        this._pausedAnimators_ = this._pausedAnimators_ || [];
+        return this._pausedAnimators_;
+    }
+
     static get _isAnimated() {
         this._isAnimated_ = this._isAnimated_ || false;
         return this._isAnimated_;
@@ -207,5 +241,4 @@ export default class Animate {
     static set _isAnimated(isAnimated) {
         this._isAnimated_ = isAnimated;
     }
-
 }

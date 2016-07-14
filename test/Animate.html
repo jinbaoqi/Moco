@@ -25,22 +25,23 @@
     loader.on(Moco.LoaderEvent.COMPLETE, function (ev) {
                 var target = ev.target;
                 var bmd = target.toBitmapData();
-
-                for (var i = 0; i < 1000; i++) {
-                    var bm = new Moco.Bitmap(bmd);
-                    bm.scaleX = bm.scaleY = Math.random();
-                    bm.x = Math.random() * stage.width;
-                    bm.y = Math.random() * stage.height;
-                    container.addChild(bm);
-                    (function (bm) {
-                        setInterval(function () {
-                            Moco.Animate.to(bm, {
-                                x: 500,
-                                y: 500
-                            }, '', 1000)
-                        });
-                    }(bm));
-                }
+                var bm = new Moco.Bitmap(bmd);
+                container.addChild(bm);
+                Moco.Animate.to(container, {
+                    x: 800,
+                    onComplete: function (obj) {
+                        console.log(obj);
+                    },
+                    onCompleteParam: {
+                        name: "test"
+                    }
+                }, Moco.Easing.easeInBack, 1000);
+                setTimeout(function () {
+                    Moco.Animate.pause(container);
+                    setTimeout(function () {
+                        Moco.Animate.resume(container);
+                    }, 500);
+                }, 500);
             }
     );
     loader.load(new Moco.URLRequest("../images/qr-weixin.png"));

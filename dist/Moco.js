@@ -108,8 +108,39 @@ var Animate = (function () {
             }
         }
     }, {
+        key: 'resume',
+        value: function resume(target) {
+            var _me = this;
+            var index = _Util2['default'].inArray(target, _me._pausedAnimators, function (target, item) {
+                return target === item.target;
+            });
+
+            if (index > -1) {
+                var item = _me._pausedAnimators.splice(index, 1);
+                item[0].timestamp = +new Date();
+                _me._animators.push(item[0]);
+                _me._animate();
+            }
+        }
+    }, {
+        key: 'pause',
+        value: function pause(target) {
+            var _me = this;
+            var index = _Util2['default'].inArray(target, _me._animators, function (target, item) {
+                return target === item.target;
+            });
+
+            if (index > -1) {
+                var item = _me._animators.splice(index, 1);
+                _me._pausedAnimators.push(item[0]);
+            }
+        }
+    }, {
         key: 'start',
         value: function start() {
+            _Util2['default'].each(this._animators, function (animators) {
+                animators.timestamp = +new Date();
+            });
             this._animate();
         }
     }, {
@@ -124,7 +155,7 @@ var Animate = (function () {
             var attr = {};
             var fn = null;
             var fnParams = [];
-            var type = '';
+            var type = {};
             var speed = 0;
             var val = [];
 
@@ -140,16 +171,17 @@ var Animate = (function () {
                 }
             }
 
-            if (typeof arguments[2] === 'string') {
-                type = _Easing2['default'][arguments[2]] || _Easing2['default'].easeInSine;
+            type = arguments[2];
+            if (typeof type === 'object' && type.a && type.b) {
+                type = arguments[2] || _Easing2['default'].easeInSine;
                 speed = arguments[3] || 1000;
-                fn = arguments[4];
-                fnParams = arguments[5];
+                fn = fn || arguments[3];
+                fnParams = fnParams || arguments[4];
             } else {
                 type = _Easing2['default'].easeInSine;
                 speed = arguments[2] || 1000;
-                fn = arguments[3];
-                fnParams = arguments[4];
+                fn = fn || arguments[3];
+                fnParams = fnParams || arguments[4];
             }
 
             val.push(target, attr, type, speed, fn, fnParams);
@@ -223,7 +255,6 @@ var Animate = (function () {
                 var shouldStop = animator.shouldStop = speed - timeCount <= renderTime || timeCount > speed;
                 var origin = animator.origin;
                 var scale = _me._cubicBezier(type, shouldStop ? 1 : timeCount / speed);
-
                 for (var key in attrs) {
                     if (attrs.hasOwnProperty(key)) {
                         target[key] = origin[key] + (attrs[key] - origin[key]) * scale.y;
@@ -232,7 +263,7 @@ var Animate = (function () {
 
                 if (shouldStop) {
                     if (typeof fn === 'function') {
-                        fn.apply(target, fnParams);
+                        fn.call(target, fnParams);
                     }
                 }
 
@@ -250,6 +281,12 @@ var Animate = (function () {
         get: function get() {
             this._animators_ = this._animators_ || [];
             return this._animators_;
+        }
+    }, {
+        key: '_pausedAnimators',
+        get: function get() {
+            this._pausedAnimators_ = this._pausedAnimators_ || [];
+            return this._pausedAnimators_;
         }
     }, {
         key: '_isAnimated',
@@ -1023,36 +1060,36 @@ exports['default'] = DisplayObjectContainer;
 module.exports = exports['default'];
 
 },{"./DisplayObject":4,"./Global":8,"./InteractiveObject":10,"./Matrix3":15,"./Util":25,"./Vec3":26}],6:[function(require,module,exports){
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = {
-    'easeInSine': { a: { x: 0.47, y: 0 }, b: { x: 0.745, y: 0.715 } },
-    'easeOutSine': { a: { x: 0.39, y: 0.575 }, b: { x: 0.565, y: 1 } },
-    'easeInOutSine': { a: { x: 0.445, y: 0.05 }, b: { x: 0.55, y: 0.95 } },
-    'easeInQuad': { a: { x: 0.55, y: 0.085 }, b: { x: 0.68, y: 0.53 } },
-    'easeOutQuad': { a: { x: 0.25, y: 0.46 }, b: { x: 0.45, y: 0.94 } },
-    'easeInOutQuad': { a: { x: 0.455, y: 0.03 }, b: { x: 0.515, y: 0.955 } },
-    'easeInCubic': { a: { x: 0.55, y: 0.055 }, b: { x: 0.675, y: 0.19 } },
-    'easeOutCubic': { a: { x: 0.215, y: 0.61 }, b: { x: 0.355, y: 1 } },
-    'easeInOutCubic': { a: { x: 0.645, y: 0.045 }, b: { x: 0.355, y: 1 } },
-    'easeInQuart': { a: { x: 0.895, y: 0.03 }, b: { x: 0.685, y: 0.22 } },
-    'easeOutQuart': { a: { x: 0.165, y: 0.84 }, b: { x: 0.44, y: 1 } },
-    'easeInOutQuart': { a: { x: 0.77, y: 0 }, b: { x: 0.0175, y: 1 } },
-    'easeInQuint': { a: { x: 0.755, y: 0.05 }, b: { x: 0.855, y: 0.06 } },
-    'easeOutQuint': { a: { x: 0.23, y: 1 }, b: { x: 0.32, y: 1 } },
-    'easeInOutQuint': { a: { x: 0.86, y: 0 }, b: { x: 0.07, y: 1 } },
-    'easeInExpo': { a: { x: 0.95, y: 0.05 }, b: { x: 0.795, y: 0.035 } },
-    'easeOutExpo': { a: { x: 0.19, y: 1 }, b: { x: 0.22, y: 1 } },
-    'easeInOutExpo': { a: { x: 1, y: 0 }, b: { x: 0, y: 1 } },
-    'easeInCirc': { a: { x: 0.6, y: 0.04 }, b: { x: 0.98, y: 0.335 } },
-    'easeOutCirc': { a: { x: 0.075, y: 0.82 }, b: { x: 0.165, y: 1 } },
-    'easeInOutCirc': { a: { x: 0.785, y: 0.135 }, b: { x: 0.15, y: 0.86 } },
-    'easeInBack': { a: { x: 0.6, y: -0.28 }, b: { x: 0.735, y: 0.045 } },
-    'easeOutBack': { a: { x: 0.175, y: 0.885 }, b: { x: 0.32, y: 1.275 } },
-    'easeInOutBack': { a: { x: 0.68, y: -0.55 }, b: { x: 0.265, y: 1.55 } }
+exports["default"] = {
+    easeInSine: { a: { x: 0.47, y: 0 }, b: { x: 0.745, y: 0.715 } },
+    easeOutSine: { a: { x: 0.39, y: 0.575 }, b: { x: 0.565, y: 1 } },
+    easeInOutSine: { a: { x: 0.445, y: 0.05 }, b: { x: 0.55, y: 0.95 } },
+    easeInQuad: { a: { x: 0.55, y: 0.085 }, b: { x: 0.68, y: 0.53 } },
+    easeOutQuad: { a: { x: 0.25, y: 0.46 }, b: { x: 0.45, y: 0.94 } },
+    easeInOutQuad: { a: { x: 0.455, y: 0.03 }, b: { x: 0.515, y: 0.955 } },
+    easeInCubic: { a: { x: 0.55, y: 0.055 }, b: { x: 0.675, y: 0.19 } },
+    easeOutCubic: { a: { x: 0.215, y: 0.61 }, b: { x: 0.355, y: 1 } },
+    easeInOutCubic: { a: { x: 0.645, y: 0.045 }, b: { x: 0.355, y: 1 } },
+    easeInQuart: { a: { x: 0.895, y: 0.03 }, b: { x: 0.685, y: 0.22 } },
+    easeOutQuart: { a: { x: 0.165, y: 0.84 }, b: { x: 0.44, y: 1 } },
+    easeInOutQuart: { a: { x: 0.77, y: 0 }, b: { x: 0.0175, y: 1 } },
+    easeInQuint: { a: { x: 0.755, y: 0.05 }, b: { x: 0.855, y: 0.06 } },
+    easeOutQuint: { a: { x: 0.23, y: 1 }, b: { x: 0.32, y: 1 } },
+    easeInOutQuint: { a: { x: 0.86, y: 0 }, b: { x: 0.07, y: 1 } },
+    easeInExpo: { a: { x: 0.95, y: 0.05 }, b: { x: 0.795, y: 0.035 } },
+    easeOutExpo: { a: { x: 0.19, y: 1 }, b: { x: 0.22, y: 1 } },
+    easeInOutExpo: { a: { x: 1, y: 0 }, b: { x: 0, y: 1 } },
+    easeInCirc: { a: { x: 0.6, y: 0.04 }, b: { x: 0.98, y: 0.335 } },
+    easeOutCirc: { a: { x: 0.075, y: 0.82 }, b: { x: 0.165, y: 1 } },
+    easeInOutCirc: { a: { x: 0.785, y: 0.135 }, b: { x: 0.15, y: 0.86 } },
+    easeInBack: { a: { x: 0.6, y: -0.28 }, b: { x: 0.735, y: 0.045 } },
+    easeOutBack: { a: { x: 0.175, y: 0.885 }, b: { x: 0.32, y: 1.275 } },
+    easeInOutBack: { a: { x: 0.68, y: -0.55 }, b: { x: 0.265, y: 1.55 } }
 };
-module.exports = exports['default'];
+module.exports = exports["default"];
 
 },{}],7:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
