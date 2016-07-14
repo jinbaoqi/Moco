@@ -44,12 +44,12 @@
 
         console.time("def");
         bmd.lock();
-        //for (var i = 0; i < 10000; i++) {
+        for (var i = 0; i < 500; i++) {
             var x = Math.random() * 800;
             var y = Math.random() * 600;
             var tmp = bmd.getPixel(x, y);
             bmd.setPixel(x, y, tmp);
-        //}
+        }
         bmd.unlock();
         console.timeEnd("def");
     });
