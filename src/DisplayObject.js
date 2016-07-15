@@ -2,14 +2,15 @@ import Global from './Global';
 import Matrix3 from './Matrix3';
 import Util from './Util';
 import EventDispatcher from './EventDispatcher';
+import Event from './Event';
 
 export default class DisplayObject extends EventDispatcher {
     constructor() {
         super();
         this.name = 'DisplayObject';
-        this.mask = null;
         this.parent = null;
         this.globalCompositeOperation = '';
+        this._mask = null;
         this._x = 0;
         this._y = 0;
         this._rotate = 0;
@@ -20,17 +21,18 @@ export default class DisplayObject extends EventDispatcher {
         this._alpha = 1;
         this.visible = true;
         this._isSaved = false;
+        this._addedToStage = false;
         this._matrix = Matrix3.identity();
         this.aIndex = this.objectIndex = '' + Global.guid;
         Global.guid += 1;
     }
 
     on() {
-        super.bind.apply(this, arguments);
+        super.on.apply(this, arguments);
     }
 
     off() {
-        super.bind.apply(this, arguments);
+        super.off.apply(this, arguments);
     }
 
     show(matrix) {
@@ -43,9 +45,9 @@ export default class DisplayObject extends EventDispatcher {
         _me._matrix = Matrix3.identity();
 
         if (!visible || !alpha) {
+            _me._triggerAddToStageEvent();
             return false;
         }
-
 
         if (
             (_me.mask !== null && _me.mask.show) ||
@@ -61,7 +63,7 @@ export default class DisplayObject extends EventDispatcher {
         }
 
         if (mask !== null && mask.show) {
-            mask.show();
+            mask.show(matrix);
             ctx.clip();
         }
 
@@ -86,6 +88,8 @@ export default class DisplayObject extends EventDispatcher {
             ctx.scale(scaleX, scaleY);
         }
 
+        _me._triggerAddToStageEvent();
+
         return true;
     }
 
@@ -104,7 +108,17 @@ export default class DisplayObject extends EventDispatcher {
     dispose() {
         let _me = this;
         let eventNames = Util.keys(_me._handlers);
-        _me.off(eventNames);
+        if (eventNames.length) {
+            _me.off(eventNames);
+        }
+        _me._mask = null;
+    }
+
+    _triggerAddToStageEvent() {
+        if (!this._addedToStage) {
+            this._addedToStage = true;
+            this.trigger(Event.ADD_TO_STAGE);
+        }
     }
 
     get width() {
@@ -166,5 +180,23 @@ export default class DisplayObject extends EventDispatcher {
             alpha = 0;
         }
         this._alpha = alpha;
+    }
+
+    get mask() {
+        return this._mask;
+    }
+
+    set mask(mask) {
+        let _me = this;
+
+        if (_me._mask) {
+            _me.parent.removeChild(_me._mask);
+            _me._mask.dispose();
+        }
+
+        if (mask) {
+            _me._mask = mask;
+            _me.parent.addChild(mask);
+        }
     }
 }

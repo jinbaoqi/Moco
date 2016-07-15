@@ -12,11 +12,11 @@ export default class URLLoader extends EventDispatcher {
     }
 
     on(eventName, callback) {
-        super.bind.apply(this, [this, eventName, callback, false]);
+        super.on.apply(this, [this, eventName, callback, false]);
     }
 
     off(eventName, callback) {
-        super.bind.apply(this, [this, eventName, callback]);
+        super.off.apply(this, [this, eventName, callback]);
     }
 
     load(request) {

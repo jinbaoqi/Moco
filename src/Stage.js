@@ -33,14 +33,14 @@ export default class Stage extends DisplayObjectContainer {
 
         Util.each(MouseEvent.nameList, (eventName) => {
             eventName = MouseEvent[eventName];
-            EventDispatcher.prototype.bind.call(_me, _me.domElem, eventName, (event) => {
+            EventDispatcher.prototype.on.call(_me, _me.domElem, eventName, (event) => {
                 _me._mouseEvent(event);
             }, false);
         });
 
         Util.each(KeyboardEvent.nameList, (eventName) => {
             eventName = KeyboardEvent[eventName];
-            EventDispatcher.prototype.bind.call(_me, document, eventName, (event) => {
+            EventDispatcher.prototype.off.call(_me, document, eventName, (event) => {
                 _me._keyboardEvent(event);
             });
         }, false);
@@ -108,7 +108,7 @@ export default class Stage extends DisplayObjectContainer {
         }
 
         event.cord = cord;
-        
+
         let eventName = event.type;
         let item = MouseEvent.getTopItem(eventName, cord);
         if (item) {

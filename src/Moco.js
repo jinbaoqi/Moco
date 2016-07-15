@@ -2,6 +2,7 @@ import Vec3 from './Vec3';
 import Matrix3 from './Matrix3';
 import Util from './Util';
 import Timer from './Timer';
+import Event from './Event';
 import InteractiveEvent from './InteractiveEvent';
 import MouseEvent from './MouseEvent';
 import KeyboardEvent from './KeyboardEvent';
@@ -29,6 +30,7 @@ export default {
     Matrix3: Matrix3,
     Util: Util,
     Timer: Timer,
+    Event: Event,
     InteractiveEvent: InteractiveEvent,
     MouseEvent: MouseEvent,
     KeyboardEvent: KeyboardEvent,

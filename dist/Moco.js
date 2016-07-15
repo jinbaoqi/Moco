@@ -305,7 +305,7 @@ var Animate = (function () {
 exports['default'] = Animate;
 module.exports = exports['default'];
 
-},{"./Easing":6,"./Timer":21,"./Util":25}],2:[function(require,module,exports){
+},{"./Easing":6,"./Timer":22,"./Util":26}],2:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -442,7 +442,7 @@ var Bitmap = (function (_DisplayObject) {
 exports['default'] = Bitmap;
 module.exports = exports['default'];
 
-},{"./DisplayObject":4,"./Global":8,"./Matrix3":15,"./Util":25,"./Vec3":26}],3:[function(require,module,exports){
+},{"./DisplayObject":4,"./Global":9,"./Matrix3":16,"./Util":26,"./Vec3":27}],3:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -692,7 +692,7 @@ var BitmapData = (function () {
 exports['default'] = BitmapData;
 module.exports = exports['default'];
 
-},{"./Matrix3":15}],4:[function(require,module,exports){
+},{"./Matrix3":16}],4:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -723,6 +723,10 @@ var _EventDispatcher2 = require('./EventDispatcher');
 
 var _EventDispatcher3 = _interopRequireDefault(_EventDispatcher2);
 
+var _Event = require('./Event');
+
+var _Event2 = _interopRequireDefault(_Event);
+
 var DisplayObject = (function (_EventDispatcher) {
     _inherits(DisplayObject, _EventDispatcher);
 
@@ -731,9 +735,9 @@ var DisplayObject = (function (_EventDispatcher) {
 
         _get(Object.getPrototypeOf(DisplayObject.prototype), 'constructor', this).call(this);
         this.name = 'DisplayObject';
-        this.mask = null;
         this.parent = null;
         this.globalCompositeOperation = '';
+        this._mask = null;
         this._x = 0;
         this._y = 0;
         this._rotate = 0;
@@ -744,6 +748,7 @@ var DisplayObject = (function (_EventDispatcher) {
         this._alpha = 1;
         this.visible = true;
         this._isSaved = false;
+        this._addedToStage = false;
         this._matrix = _Matrix32['default'].identity();
         this.aIndex = this.objectIndex = '' + _Global2['default'].guid;
         _Global2['default'].guid += 1;
@@ -752,12 +757,12 @@ var DisplayObject = (function (_EventDispatcher) {
     _createClass(DisplayObject, [{
         key: 'on',
         value: function on() {
-            _get(Object.getPrototypeOf(DisplayObject.prototype), 'bind', this).apply(this, arguments);
+            _get(Object.getPrototypeOf(DisplayObject.prototype), 'on', this).apply(this, arguments);
         }
     }, {
         key: 'off',
         value: function off() {
-            _get(Object.getPrototypeOf(DisplayObject.prototype), 'bind', this).apply(this, arguments);
+            _get(Object.getPrototypeOf(DisplayObject.prototype), 'off', this).apply(this, arguments);
         }
     }, {
         key: 'show',
@@ -776,6 +781,7 @@ var DisplayObject = (function (_EventDispatcher) {
             _me._matrix = _Matrix32['default'].identity();
 
             if (!visible || !alpha) {
+                _me._triggerAddToStageEvent();
                 return false;
             }
 
@@ -785,7 +791,7 @@ var DisplayObject = (function (_EventDispatcher) {
             }
 
             if (mask !== null && mask.show) {
-                mask.show();
+                mask.show(matrix);
                 ctx.clip();
             }
 
@@ -810,6 +816,8 @@ var DisplayObject = (function (_EventDispatcher) {
                 ctx.scale(scaleX, scaleY);
             }
 
+            _me._triggerAddToStageEvent();
+
             return true;
         }
 
@@ -832,7 +840,18 @@ var DisplayObject = (function (_EventDispatcher) {
         value: function dispose() {
             var _me = this;
             var eventNames = _Util2['default'].keys(_me._handlers);
-            _me.off(eventNames);
+            if (eventNames.length) {
+                _me.off(eventNames);
+            }
+            _me._mask = null;
+        }
+    }, {
+        key: '_triggerAddToStageEvent',
+        value: function _triggerAddToStageEvent() {
+            if (!this._addedToStage) {
+                this._addedToStage = true;
+                this.trigger(_Event2['default'].ADD_TO_STAGE);
+            }
         }
     }, {
         key: 'width',
@@ -897,6 +916,23 @@ var DisplayObject = (function (_EventDispatcher) {
             }
             this._alpha = alpha;
         }
+    }, {
+        key: 'mask',
+        get: function get() {
+            return this._mask;
+        },
+        set: function set(mask) {
+            var _me = this;
+            if (_me._mask) {
+                _me.parent.removeChild(_me._mask);
+                _me._mask.dispose();
+            }
+            if (mask) {
+
+                _me._mask = mask;
+                _me.parent.addChild(mask);
+            }
+        }
     }]);
 
     return DisplayObject;
@@ -905,7 +941,7 @@ var DisplayObject = (function (_EventDispatcher) {
 exports['default'] = DisplayObject;
 module.exports = exports['default'];
 
-},{"./EventDispatcher":7,"./Global":8,"./Matrix3":15,"./Util":25}],5:[function(require,module,exports){
+},{"./Event":7,"./EventDispatcher":8,"./Global":9,"./Matrix3":16,"./Util":26}],5:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -943,6 +979,10 @@ var _Vec32 = _interopRequireDefault(_Vec3);
 var _Global = require('./Global');
 
 var _Global2 = _interopRequireDefault(_Global);
+
+var _Event = require('./Event');
+
+var _Event2 = _interopRequireDefault(_Event);
 
 var DisplayObjectContainer = (function (_InteractiveObject) {
     _inherits(DisplayObjectContainer, _InteractiveObject);
@@ -1035,6 +1075,7 @@ var DisplayObjectContainer = (function (_InteractiveObject) {
                     if (item.show) {
                         item.show(_me._matrix);
                     }
+                    item.trigger(_Event2['default'].ENTER_FRAME);
                 }
 
                 if (_me._isSaved) {
@@ -1044,7 +1085,21 @@ var DisplayObjectContainer = (function (_InteractiveObject) {
                 }
             }
 
+            _me.trigger(_Event2['default'].ENTER_FRAME);
+
             return isDrew;
+        }
+    }, {
+        key: 'dispose',
+        value: function dispose() {
+            var _me = this;
+            _Util2['default'].each(_me._childList, function (child) {
+                _me.removeChild(child);
+                if (child.dispose) {
+                    child.dispose();
+                }
+            });
+            _get(Object.getPrototypeOf(DisplayObjectContainer.prototype), 'dispose', this).call(this);
         }
     }, {
         key: 'isMouseOn',
@@ -1109,7 +1164,7 @@ var DisplayObjectContainer = (function (_InteractiveObject) {
 exports['default'] = DisplayObjectContainer;
 module.exports = exports['default'];
 
-},{"./DisplayObject":4,"./Global":8,"./InteractiveObject":10,"./Matrix3":15,"./Util":25,"./Vec3":26}],6:[function(require,module,exports){
+},{"./DisplayObject":4,"./Event":7,"./Global":9,"./InteractiveObject":11,"./Matrix3":16,"./Util":26,"./Vec3":27}],6:[function(require,module,exports){
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
@@ -1145,6 +1200,16 @@ module.exports = exports["default"];
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
+exports['default'] = {
+    ADD_TO_STAGE: 'add_to_stage',
+    ENTER_FRAME: 'enter_frame'
+};
+module.exports = exports['default'];
+
+},{}],8:[function(require,module,exports){
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -1166,8 +1231,8 @@ var EventDispatcher = (function () {
     }
 
     _createClass(EventDispatcher, [{
-        key: 'bind',
-        value: function bind(target, eventName, callback, useCapture) {
+        key: 'on',
+        value: function on(target, eventName, callback, useCapture) {
             var _me = this;
 
             if (typeof target === 'string') {
@@ -1183,7 +1248,7 @@ var EventDispatcher = (function () {
 
                 if (_Util2['default'].isType(eventName, 'Array')) {
                     _Util2['default'].each(eventName, function (item) {
-                        _me.bind(item, callback, useCapture);
+                        EventDispatcher.prototype.on.call(_me, item, callback, useCapture);
                     });
                 } else {
                     (function () {
@@ -1232,8 +1297,8 @@ var EventDispatcher = (function () {
             return _me;
         }
     }, {
-        key: 'unbind',
-        value: function unbind(target, eventName, callback) {
+        key: 'off',
+        value: function off(target, eventName, callback) {
             var _me = this;
             if (typeof target === 'string') {
                 var _ref2 = [_me, target, eventName];
@@ -1245,7 +1310,7 @@ var EventDispatcher = (function () {
             if (eventName || callback) {
                 if (_Util2['default'].isType(eventName, 'Array')) {
                     _Util2['default'].each(eventName, function (item) {
-                        _me.unbind(target, item, callback);
+                        EventDispatcher.prototype.off.call(_me, target, item, callback);
                     });
                 } else if (!callback) {
                     var handlers = target.handlers;
@@ -1253,7 +1318,7 @@ var EventDispatcher = (function () {
                     if (handlers) {
                         var callbacks = handlers[eventName] ? handlers[eventName] : [];
                         _Util2['default'].each(callbacks, function (item) {
-                            _me.unbind(target, eventName, item);
+                            EventDispatcher.prototype.off.call(_me, target, eventName, item);
                         });
                     }
                 } else {
@@ -1292,21 +1357,21 @@ var EventDispatcher = (function () {
                 callback.call(_me, event);
 
                 if (event.isImmediatePropagationStopped()) {
-                    _me.unbind(target, eventName, fn);
+                    _me.off(target, eventName, fn);
                 }
 
                 if (useCapture) {
                     if (event.eventPhase === 0) {
-                        _me.unbind(target, eventName, fn);
+                        _me.off(target, eventName, fn);
                     }
                 } else {
-                    _me.unbind(target, eventName, fn);
+                    _me.off(target, eventName, fn);
                 }
             };
 
             fn._fnStr = callback.toString().replace(_Global2['default'].fnRegExp, '');
 
-            return _me.bind(target, eventName, fn, useCapture);
+            return _me.on(target, eventName, fn, useCapture);
         }
     }, {
         key: 'trigger',
@@ -1522,7 +1587,7 @@ var EventDispatcher = (function () {
 exports['default'] = EventDispatcher;
 module.exports = exports['default'];
 
-},{"./Global":8,"./Util":25}],8:[function(require,module,exports){
+},{"./Global":9,"./Util":26}],9:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -1587,7 +1652,7 @@ var Global = (function () {
 exports['default'] = Global;
 module.exports = exports['default'];
 
-},{"./Vec3":26}],9:[function(require,module,exports){
+},{"./Vec3":27}],10:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -1665,7 +1730,7 @@ var InteractiveEvent = (function () {
 exports['default'] = InteractiveEvent;
 module.exports = exports['default'];
 
-},{"./EventDispatcher":7,"./Util":25}],10:[function(require,module,exports){
+},{"./EventDispatcher":8,"./Util":26}],11:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -1711,36 +1776,28 @@ var InteractiveObject = (function (_DisplayObject) {
         value: function on(eventName, callback, useCapture) {
             var _me = this;
             var eventNameUpperCase = eventName.toUpperCase();
-            var isMouseEvent = _Util2['default'].inArray(eventNameUpperCase, _MouseEvent2['default'].nameList) !== -1;
-            var isKeyboardEvent = _Util2['default'].inArray(eventNameUpperCase, _KeyboardEvent2['default'].nameList) !== -1;
 
-            if (!isMouseEvent && !isKeyboardEvent) {
-                return;
-            } else if (isMouseEvent) {
+            if (_Util2['default'].inArray(eventNameUpperCase, _MouseEvent2['default'].nameList) !== -1) {
                 _MouseEvent2['default'].add(eventName, _me);
-            } else if (isKeyboardEvent) {
+            } else if (_Util2['default'].inArray(eventNameUpperCase, _KeyboardEvent2['default'].nameList) !== -1) {
                 _KeyboardEvent2['default'].add(eventName, _me);
             }
 
-            _get(Object.getPrototypeOf(InteractiveObject.prototype), 'bind', this).call(this, _me, eventName, callback, useCapture);
+            _get(Object.getPrototypeOf(InteractiveObject.prototype), 'on', this).call(this, _me, eventName, callback, useCapture);
         }
     }, {
         key: 'off',
         value: function off(eventName, callback) {
             var _me = this;
             var eventNameUpperCase = eventName.toUpperCase();
-            var isMouseEvent = _Util2['default'].inArray(eventNameUpperCase, _MouseEvent2['default'].nameList) !== -1;
-            var isKeyboardEvent = _Util2['default'].inArray(eventNameUpperCase, _KeyboardEvent2['default'].nameList) !== -1;
 
-            if (!isMouseEvent && !isKeyboardEvent) {
-                return;
-            } else if (isMouseEvent) {
+            if (_Util2['default'].inArray(eventNameUpperCase, _MouseEvent2['default'].nameList) !== -1) {
                 _MouseEvent2['default'].remove(eventName, _me);
-            } else if (isKeyboardEvent) {
+            } else if (_Util2['default'].inArray(eventNameUpperCase, _KeyboardEvent2['default'].nameList) !== -1) {
                 _KeyboardEvent2['default'].remove(eventName, _me);
             }
 
-            _get(Object.getPrototypeOf(InteractiveObject.prototype), 'unbind', this).call(this, _me, eventName, callback);
+            _get(Object.getPrototypeOf(InteractiveObject.prototype), 'off', this).call(this, _me, eventName, callback);
         }
     }]);
 
@@ -1750,7 +1807,7 @@ var InteractiveObject = (function (_DisplayObject) {
 exports['default'] = InteractiveObject;
 module.exports = exports['default'];
 
-},{"./DisplayObject":4,"./KeyboardEvent":11,"./MouseEvent":16,"./Util":25}],11:[function(require,module,exports){
+},{"./DisplayObject":4,"./KeyboardEvent":12,"./MouseEvent":17,"./Util":26}],12:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -1810,7 +1867,7 @@ for (var key in keyboardEvents) {
 KeyboardEvent.nameList = _Util2['default'].keys(keyboardEvents);
 module.exports = exports['default'];
 
-},{"./InteractiveEvent":9,"./Util":25}],12:[function(require,module,exports){
+},{"./InteractiveEvent":10,"./Util":26}],13:[function(require,module,exports){
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -1824,7 +1881,7 @@ var Label = function Label() {
 exports["default"] = Label;
 module.exports = exports["default"];
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -1871,12 +1928,12 @@ var Loader = (function (_DisplayObjectContainer) {
     _createClass(Loader, [{
         key: 'on',
         value: function on(eventName, callback) {
-            _get(Object.getPrototypeOf(Loader.prototype), 'bind', this).apply(this, [this, eventName, callback, false]);
+            _get(Object.getPrototypeOf(Loader.prototype), 'on', this).call(this, eventName, callback, false);
         }
     }, {
         key: 'off',
         value: function off(eventName, callback) {
-            _get(Object.getPrototypeOf(Loader.prototype), 'bind', this).apply(this, [this, eventName, callback]);
+            _get(Object.getPrototypeOf(Loader.prototype), 'off', this).call(this, eventName, callback);
         }
     }, {
         key: 'toBitmapData',
@@ -1979,7 +2036,7 @@ var Loader = (function (_DisplayObjectContainer) {
 exports['default'] = Loader;
 module.exports = exports['default'];
 
-},{"./BitmapData":3,"./DisplayObjectContainer":5,"./LoaderEvent":14,"./Util":25}],14:[function(require,module,exports){
+},{"./BitmapData":3,"./DisplayObjectContainer":5,"./LoaderEvent":15,"./Util":26}],15:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -1989,7 +2046,7 @@ exports['default'] = {
 };
 module.exports = exports['default'];
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -2262,7 +2319,7 @@ var Matrix3 = (function () {
 exports['default'] = Matrix3;
 module.exports = exports['default'];
 
-},{"./Util":25}],16:[function(require,module,exports){
+},{"./Util":26}],17:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -2345,7 +2402,7 @@ for (var key in mouseEvents) {
 MouseEvent.nameList = _Util2['default'].keys(mouseEvents);
 module.exports = exports['default'];
 
-},{"./InteractiveEvent":9,"./Util":25}],17:[function(require,module,exports){
+},{"./InteractiveEvent":10,"./Util":26}],18:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -2879,7 +2936,7 @@ var Shape = (function (_DisplayObject) {
 exports['default'] = Shape;
 module.exports = exports['default'];
 
-},{"./DisplayObject":4,"./Global":8,"./Matrix3":15,"./Util":25,"./Vec3":26}],18:[function(require,module,exports){
+},{"./DisplayObject":4,"./Global":9,"./Matrix3":16,"./Util":26,"./Vec3":27}],19:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -3012,7 +3069,7 @@ var Sprite = (function (_DisplayObjectContainer) {
 exports['default'] = Sprite;
 module.exports = exports['default'];
 
-},{"./DisplayObject":4,"./DisplayObjectContainer":5,"./Shape":17}],19:[function(require,module,exports){
+},{"./DisplayObject":4,"./DisplayObjectContainer":5,"./Shape":18}],20:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -3091,14 +3148,14 @@ var Stage = (function (_DisplayObjectContainer) {
 
             _Util2['default'].each(_MouseEvent2['default'].nameList, function (eventName) {
                 eventName = _MouseEvent2['default'][eventName];
-                _EventDispatcher2['default'].prototype.bind.call(_me, _me.domElem, eventName, function (event) {
+                _EventDispatcher2['default'].prototype.on.call(_me, _me.domElem, eventName, function (event) {
                     _me._mouseEvent(event);
                 }, false);
             });
 
             _Util2['default'].each(_KeyboardEvent2['default'].nameList, function (eventName) {
                 eventName = _KeyboardEvent2['default'][eventName];
-                _EventDispatcher2['default'].prototype.bind.call(_me, document, eventName, function (event) {
+                _EventDispatcher2['default'].prototype.off.call(_me, document, eventName, function (event) {
                     _me._keyboardEvent(event);
                 });
             }, false);
@@ -3217,7 +3274,7 @@ var Stage = (function (_DisplayObjectContainer) {
 exports['default'] = Stage;
 module.exports = exports['default'];
 
-},{"./DisplayObjectContainer":5,"./EventDispatcher":7,"./KeyboardEvent":11,"./MouseEvent":16,"./Sprite":18,"./Timer":21,"./Util":25,"./Vec3":26}],20:[function(require,module,exports){
+},{"./DisplayObjectContainer":5,"./EventDispatcher":8,"./KeyboardEvent":12,"./MouseEvent":17,"./Sprite":19,"./Timer":22,"./Util":26,"./Vec3":27}],21:[function(require,module,exports){
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -3231,7 +3288,7 @@ var TextField = function TextField() {
 exports["default"] = TextField;
 module.exports = exports["default"];
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -3419,7 +3476,7 @@ var Timer = (function () {
 exports['default'] = Timer;
 module.exports = exports['default'];
 
-},{"./Util":25}],22:[function(require,module,exports){
+},{"./Util":26}],23:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -3462,12 +3519,12 @@ var URLLoader = (function (_EventDispatcher) {
     _createClass(URLLoader, [{
         key: 'on',
         value: function on(eventName, callback) {
-            _get(Object.getPrototypeOf(URLLoader.prototype), 'bind', this).apply(this, [this, eventName, callback, false]);
+            _get(Object.getPrototypeOf(URLLoader.prototype), 'on', this).apply(this, [this, eventName, callback, false]);
         }
     }, {
         key: 'off',
         value: function off(eventName, callback) {
-            _get(Object.getPrototypeOf(URLLoader.prototype), 'bind', this).apply(this, [this, eventName, callback]);
+            _get(Object.getPrototypeOf(URLLoader.prototype), 'off', this).apply(this, [this, eventName, callback]);
         }
     }, {
         key: 'load',
@@ -3590,7 +3647,7 @@ var URLLoader = (function (_EventDispatcher) {
 exports['default'] = URLLoader;
 module.exports = exports['default'];
 
-},{"./EventDispatcher":7,"./URLLoaderEvent":23,"./Util":25}],23:[function(require,module,exports){
+},{"./EventDispatcher":8,"./URLLoaderEvent":24,"./Util":26}],24:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -3600,7 +3657,7 @@ exports['default'] = {
 };
 module.exports = exports['default'];
 
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -3620,7 +3677,7 @@ var URLRequest = function URLRequest(url) {
 exports['default'] = URLRequest;
 module.exports = exports['default'];
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -3852,7 +3909,7 @@ var Util = (function () {
 exports['default'] = Util;
 module.exports = exports['default'];
 
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -4020,6 +4077,10 @@ var _Timer = require('./Timer');
 
 var _Timer2 = _interopRequireDefault(_Timer);
 
+var _Event = require('./Event');
+
+var _Event2 = _interopRequireDefault(_Event);
+
 var _InteractiveEvent = require('./InteractiveEvent');
 
 var _InteractiveEvent2 = _interopRequireDefault(_InteractiveEvent);
@@ -4109,6 +4170,7 @@ exports['default'] = {
     Matrix3: _Matrix32['default'],
     Util: _Util2['default'],
     Timer: _Timer2['default'],
+    Event: _Event2['default'],
     InteractiveEvent: _InteractiveEvent2['default'],
     MouseEvent: _MouseEvent2['default'],
     KeyboardEvent: _KeyboardEvent2['default'],
@@ -4133,4 +4195,4 @@ exports['default'] = {
 };
 module.exports = exports['default'];
 
-},{"./Animate":1,"./Bitmap":2,"./BitmapData":3,"./DisplayObject":4,"./DisplayObjectContainer":5,"./Easing":6,"./EventDispatcher":7,"./InteractiveEvent":9,"./InteractiveObject":10,"./KeyboardEvent":11,"./Label":12,"./Loader":13,"./LoaderEvent":14,"./Matrix3":15,"./MouseEvent":16,"./Shape":17,"./Sprite":18,"./Stage":19,"./TextField":20,"./Timer":21,"./URLLoader":22,"./URLLoaderEvent":23,"./URLRequest":24,"./Util":25,"./Vec3":26}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,"Moco",16,17,18,19,20,21,22,23,24,25,26]);
+},{"./Animate":1,"./Bitmap":2,"./BitmapData":3,"./DisplayObject":4,"./DisplayObjectContainer":5,"./Easing":6,"./Event":7,"./EventDispatcher":8,"./InteractiveEvent":10,"./InteractiveObject":11,"./KeyboardEvent":12,"./Label":13,"./Loader":14,"./LoaderEvent":15,"./Matrix3":16,"./MouseEvent":17,"./Shape":18,"./Sprite":19,"./Stage":20,"./TextField":21,"./Timer":22,"./URLLoader":23,"./URLLoaderEvent":24,"./URLRequest":25,"./Util":26,"./Vec3":27}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,"Moco",17,18,19,20,21,22,23,24,25,26,27]);

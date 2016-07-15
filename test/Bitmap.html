@@ -34,13 +34,31 @@
         var bm = new Moco.Bitmap(bmd);
         var sprite = new Moco.Sprite();
         sprite.addChild(bm);
-        sprite.x = sprite.y = 50;
         stage.addChild(sprite);
 
-        bm.x = bm.y = 50;
-        bm.scaleX = bm.scaleY = 1;
-        bm.rotate = 15;
-        setTimeout(function () {
+        var shape = new Moco.Shape();
+        shape.drawRect(1, 1, [0, 0, 30, 119], false, 0xffffff);
+        var mask = new Moco.Sprite();
+        mask.graphics = shape;
+        sprite.mask = mask;
+
+        animate();
+
+        function animate() {
+            Moco.Animate.to(mask, {
+                x: 89,
+                onComplete: function () {
+                    Moco.Animate.to(mask, {
+                        x: 0,
+                        onComplete: function () {
+                           sprite.mask = null;
+                        }
+                    });
+                }
+            });
+        }
+
+        sprite.on(Moco.Event.ADD_TO_STAGE, function () {
             console.log(sprite.getBounds());
         });
 

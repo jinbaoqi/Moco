@@ -4,6 +4,7 @@ import Util from './Util';
 import Matrix3 from './Matrix3';
 import Vec3 from './Vec3';
 import Global from './Global';
+import Event from './Event';
 
 export default class DisplayObjectContainer extends InteractiveObject {
     constructor() {
@@ -85,6 +86,7 @@ export default class DisplayObjectContainer extends InteractiveObject {
                 if (item.show) {
                     item.show(_me._matrix);
                 }
+                item.trigger(Event.ENTER_FRAME);
             }
 
             if (_me._isSaved) {
@@ -94,7 +96,20 @@ export default class DisplayObjectContainer extends InteractiveObject {
             }
         }
 
+        _me.trigger(Event.ENTER_FRAME);
+
         return isDrew;
+    }
+
+    dispose() {
+        let _me = this;
+        Util.each(_me._childList, (child) => {
+            _me.removeChild(child);
+            if (child.dispose) {
+                child.dispose();
+            }
+        });
+        super.dispose();
     }
 
     isMouseOn(cord) {

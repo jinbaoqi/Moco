@@ -2,9 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3894964d-577d-42c6-b64b-b6cf49c67cd1" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dist/Moco.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Event.js" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dist/Moco.min.js" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/index.html" afterPath="$PROJECT_DIR$/doc/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/Moco.js" afterPath="$PROJECT_DIR$/dist/Moco.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DisplayObject.js" afterPath="$PROJECT_DIR$/src/DisplayObject.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DisplayObjectContainer.js" afterPath="$PROJECT_DIR$/src/DisplayObjectContainer.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/EventDispatcher.js" afterPath="$PROJECT_DIR$/src/EventDispatcher.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/InteractiveObject.js" afterPath="$PROJECT_DIR$/src/InteractiveObject.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Loader.js" afterPath="$PROJECT_DIR$/src/Loader.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Moco.js" afterPath="$PROJECT_DIR$/src/Moco.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Stage.js" afterPath="$PROJECT_DIR$/src/Stage.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/URLLoader.js" afterPath="$PROJECT_DIR$/src/URLLoader.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/Bitmap.html" afterPath="$PROJECT_DIR$/test/Bitmap.html" />
     </list>
     <ignored path="Moco.js.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,8 +40,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JavaScript File" />
         <option value="HTML File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -57,7 +67,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/es6/global.js" />
         <option value="$PROJECT_DIR$/es6/InteractiveObject.js" />
         <option value="$PROJECT_DIR$/es6/intro.js" />
         <option value="$PROJECT_DIR$/es6/Matrix3.js" />
@@ -74,7 +83,6 @@
         <option value="$PROJECT_DIR$/es6/BitmapData.js" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/src/URLRequest.js" />
-        <option value="$PROJECT_DIR$/src/InteractiveObject.js" />
         <option value="$PROJECT_DIR$/gruntfile.js" />
         <option value="$PROJECT_DIR$/src/InteractiveEvent.js" />
         <option value="$PROJECT_DIR$/test/Shape.html" />
@@ -82,7 +90,6 @@
         <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/src/TextField.js" />
         <option value="$PROJECT_DIR$/src/Label.js" />
-        <option value="$PROJECT_DIR$/src/Moco.js" />
         <option value="$PROJECT_DIR$/test/Loader.html" />
         <option value="$PROJECT_DIR$/test/URLLoader.html" />
         <option value="$PROJECT_DIR$/src/Animator.js" />
@@ -93,21 +100,24 @@
         <option value="$PROJECT_DIR$/src/Vec3.js" />
         <option value="$PROJECT_DIR$/test/Animate.html" />
         <option value="$PROJECT_DIR$/src/Animate.js" />
-        <option value="$PROJECT_DIR$/src/EventDispatcher.js" />
-        <option value="$PROJECT_DIR$/src/Loader.js" />
         <option value="$PROJECT_DIR$/src/Timer.js" />
-        <option value="$PROJECT_DIR$/src/URLLoader.js" />
         <option value="$PROJECT_DIR$/src/Matrix3.js" />
         <option value="$PROJECT_DIR$/test/Sprite.html" />
         <option value="$PROJECT_DIR$/src/Util.js" />
-        <option value="$PROJECT_DIR$/test/Bitmap.html" />
         <option value="$PROJECT_DIR$/src/Bitmap.js" />
-        <option value="$PROJECT_DIR$/src/DisplayObject.js" />
-        <option value="$PROJECT_DIR$/src/DisplayObjectContainer.js" />
         <option value="$PROJECT_DIR$/src/MouseEvent.js" />
         <option value="$PROJECT_DIR$/src/Shape.js" />
         <option value="$PROJECT_DIR$/src/Sprite.js" />
+        <option value="$PROJECT_DIR$/src/EventDispatcher.js" />
         <option value="$PROJECT_DIR$/src/Stage.js" />
+        <option value="$PROJECT_DIR$/src/URLLoader.js" />
+        <option value="$PROJECT_DIR$/src/Loader.js" />
+        <option value="$PROJECT_DIR$/src/InteractiveObject.js" />
+        <option value="$PROJECT_DIR$/src/Event.js" />
+        <option value="$PROJECT_DIR$/src/DisplayObjectContainer.js" />
+        <option value="$PROJECT_DIR$/src/Moco.js" />
+        <option value="$PROJECT_DIR$/test/Bitmap.html" />
+        <option value="$PROJECT_DIR$/src/DisplayObject.js" />
       </list>
     </option>
   </component>
@@ -193,15 +203,15 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="dist" />
+              <option name="myItemId" value="test" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
       <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -733,6 +743,8 @@
       <workItem from="1468549440109" duration="6039000" />
       <workItem from="1468584114206" duration="1536000" />
       <workItem from="1468588613933" duration="92000" />
+      <workItem from="1468589215703" duration="360000" />
+      <workItem from="1468594333051" duration="3969000" />
     </task>
     <task id="LOCAL-00001" summary="complete Bitmap code">
       <created>1467984783227</created>
@@ -822,7 +834,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="98864000" />
+    <option name="totallyTimeSpent" value="103193000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="53" y="23" width="1313" height="745" extended-state="6" />
@@ -839,9 +851,10 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32519084" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28638867" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29583004" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
       <window_info id="Grunt " active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32824427" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24940991" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
@@ -856,7 +869,6 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32824427" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -930,7 +942,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/test/index.html" />
     <entry file="file://$PROJECT_DIR$/src/intro.js" />
     <entry file="file://$PROJECT_DIR$/src/Loader.js">
       <provider selected="true" editor-type-id="text-editor">
@@ -980,13 +991,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="10" column="15" selection-start-line="10" selection-start-column="15" selection-end-line="10" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/InteractiveObject.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="40" selection-start-line="0" selection-start-column="40" selection-end-line="0" selection-end-column="40" />
         </state>
       </provider>
     </entry>
@@ -1055,24 +1059,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/DisplayObject.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="359">
-          <caret line="24" column="7" selection-start-line="0" selection-start-column="0" selection-end-line="24" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Global.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
           <caret line="3" column="23" selection-start-line="3" selection-start-column="23" selection-end-line="3" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Moco.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="39" column="19" selection-start-line="39" selection-start-column="19" selection-end-line="39" selection-end-column="19" />
         </state>
       </provider>
     </entry>
@@ -1139,31 +1129,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/EventDispatcher.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="110" column="25" selection-start-line="110" selection-start-column="25" selection-end-line="110" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Loader.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="241">
-          <caret line="69" column="0" selection-start-line="69" selection-start-column="0" selection-end-line="69" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Timer.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="73" column="39" selection-start-line="73" selection-start-column="39" selection-end-line="73" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/URLLoader.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="87" column="55" selection-start-line="87" selection-start-column="55" selection-end-line="87" selection-end-column="55" />
         </state>
       </provider>
     </entry>
@@ -1202,34 +1171,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/Bitmap.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="41" column="22" selection-start-line="41" selection-start-column="22" selection-end-line="41" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bitmap.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="128">
-          <caret line="41" column="13" selection-start-line="41" selection-start-column="13" selection-end-line="41" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/DisplayObject.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="137">
-          <caret line="93" column="13" selection-start-line="93" selection-start-column="13" selection-end-line="93" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/DisplayObjectContainer.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="137">
-          <caret line="104" column="48" selection-start-line="104" selection-start-column="48" selection-end-line="104" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/MouseEvent.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -1251,10 +1192,107 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/test/DisplayObject.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="24" column="7" selection-start-line="0" selection-start-column="0" selection-end-line="24" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/URLLoader.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="182">
+          <caret line="17" column="23" selection-start-line="17" selection-start-column="23" selection-end-line="17" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/InteractiveObject.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="30" column="27" selection-start-line="30" selection-start-column="27" selection-end-line="30" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#44#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Loader.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="5" column="41" selection-start-line="5" selection-start-column="41" selection-end-line="5" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/EventDispatcher.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4218">
+          <caret line="20" column="37" selection-start-line="20" selection-start-column="37" selection-end-line="20" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#30#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Stage.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="137">
-          <caret line="86" column="17" selection-start-line="86" selection-start-column="17" selection-end-line="86" selection-end-column="17" />
+        <state relative-caret-position="242">
+          <caret line="42" column="41" selection-start-line="42" selection-start-column="41" selection-end-line="42" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Moco.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-426">
+          <caret line="4" column="28" selection-start-line="4" selection-start-column="28" selection-end-line="4" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DisplayObject.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2865">
+          <caret line="191" column="8" selection-start-line="191" selection-start-column="8" selection-end-line="191" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#30#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Event.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="2" selection-start-line="3" selection-start-column="2" selection-end-line="3" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DisplayObjectContainer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1470">
+          <caret line="98" column="39" selection-start-line="98" selection-start-column="39" selection-end-line="98" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#52#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Bitmap.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="555">
+          <caret line="41" column="13" selection-start-line="41" selection-start-column="13" selection-end-line="41" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/Bitmap.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="53" column="46" selection-start-line="53" selection-start-column="46" selection-end-line="53" selection-end-column="46" />
+          <folding />
         </state>
       </provider>
     </entry>

@@ -12,34 +12,26 @@ export default class InteractiveObject extends DisplayObject {
     on(eventName, callback, useCapture) {
         let _me = this;
         let eventNameUpperCase = eventName.toUpperCase();
-        let isMouseEvent = Util.inArray(eventNameUpperCase, MouseEvent.nameList) !== -1;
-        let isKeyboardEvent = Util.inArray(eventNameUpperCase, KeyboardEvent.nameList) !== -1;
 
-        if (!isMouseEvent && !isKeyboardEvent) {
-            return;
-        } else if (isMouseEvent) {
+        if (Util.inArray(eventNameUpperCase, MouseEvent.nameList) !== -1) {
             MouseEvent.add(eventName, _me);
-        } else if (isKeyboardEvent) {
+        } else if (Util.inArray(eventNameUpperCase, KeyboardEvent.nameList) !== -1) {
             KeyboardEvent.add(eventName, _me);
         }
 
-        super.bind(_me, eventName, callback, useCapture);
+        super.on(_me, eventName, callback, useCapture);
     }
 
     off(eventName, callback) {
         let _me = this;
         let eventNameUpperCase = eventName.toUpperCase();
-        let isMouseEvent = Util.inArray(eventNameUpperCase, MouseEvent.nameList) !== -1;
-        let isKeyboardEvent = Util.inArray(eventNameUpperCase, KeyboardEvent.nameList) !== -1;
 
-        if (!isMouseEvent && !isKeyboardEvent) {
-            return;
-        } else if (isMouseEvent) {
+        if (Util.inArray(eventNameUpperCase, MouseEvent.nameList) !== -1) {
             MouseEvent.remove(eventName, _me);
-        } else if (isKeyboardEvent) {
+        } else if (Util.inArray(eventNameUpperCase, KeyboardEvent.nameList) !== -1) {
             KeyboardEvent.remove(eventName, _me);
         }
-
-        super.unbind(_me, eventName, callback);
+        
+        super.off(_me, eventName, callback);
     }
 }

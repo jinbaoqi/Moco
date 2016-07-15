@@ -13,11 +13,11 @@ export default class Loader extends DisplayObjectContainer {
     }
 
     on(eventName, callback) {
-        super.bind.apply(this, [this, eventName, callback, false]);
+        super.on.call(this, eventName, callback, false);
     }
 
     off(eventName, callback) {
-        super.bind.apply(this, [this, eventName, callback]);
+        super.off.call(this, eventName, callback);
     }
 
     toBitmapData(matrix) {

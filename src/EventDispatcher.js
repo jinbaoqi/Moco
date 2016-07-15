@@ -2,7 +2,7 @@ import Global from './Global';
 import Util from './Util';
 
 export default class EventDispatcher {
-    bind(target, eventName, callback, useCapture) {
+    on(target, eventName, callback, useCapture) {
         let _me = this;
 
         if (typeof target === 'string') {
@@ -14,7 +14,7 @@ export default class EventDispatcher {
 
             if (Util.isType(eventName, 'Array')) {
                 Util.each(eventName, (item) => {
-                    _me.bind(item, callback, useCapture);
+                    EventDispatcher.prototype.on.call(_me, item, callback, useCapture);
                 });
             } else {
                 let handlers = target.handlers;
@@ -61,7 +61,7 @@ export default class EventDispatcher {
         return _me;
     }
 
-    unbind(target, eventName, callback) {
+    off(target, eventName, callback) {
         let _me = this;
         if (typeof target === 'string') {
             [target, eventName, callback] = [_me, target, eventName];
@@ -70,7 +70,7 @@ export default class EventDispatcher {
         if (eventName || callback) {
             if (Util.isType(eventName, 'Array')) {
                 Util.each(eventName, (item) => {
-                    _me.unbind(target, item, callback);
+                    EventDispatcher.prototype.off.call(_me, target, item, callback);
                 });
             } else if (!callback) {
                 let handlers = target.handlers;
@@ -78,7 +78,7 @@ export default class EventDispatcher {
                 if (handlers) {
                     let callbacks = handlers[eventName] ? handlers[eventName] : [];
                     Util.each(callbacks, (item) => {
-                        _me.unbind(target, eventName, item);
+                        EventDispatcher.prototype.off.call(_me, target, eventName, item);
                     });
                 }
             } else {
@@ -112,21 +112,21 @@ export default class EventDispatcher {
             callback.call(_me, event);
 
             if (event.isImmediatePropagationStopped()) {
-                _me.unbind(target, eventName, fn);
+                _me.off(target, eventName, fn);
             }
 
             if (useCapture) {
                 if (event.eventPhase === 0) {
-                    _me.unbind(target, eventName, fn);
+                    _me.off(target, eventName, fn);
                 }
             } else {
-                _me.unbind(target, eventName, fn);
+                _me.off(target, eventName, fn);
             }
         };
 
         fn._fnStr = callback.toString().replace(Global.fnRegExp, '');
 
-        return _me.bind(target, eventName, fn, useCapture);
+        return _me.on(target, eventName, fn, useCapture);
     }
 
     trigger(target, eventName, event) {
