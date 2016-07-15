@@ -3704,7 +3704,7 @@ var Util = (function () {
             for (var i = 1, _length = arguments.length; i < _length; i += 1) {
                 var source = arguments[i];
                 for (var prop in source) {
-                    if (hasOwnProperty.call(source, prop)) {
+                    if (source.hasOwnProperty(prop)) {
                         obj[prop] = source[prop];
                     }
                 }

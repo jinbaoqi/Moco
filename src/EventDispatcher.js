@@ -102,7 +102,7 @@ export default class EventDispatcher {
     }
 
     once(target, eventName, callback, useCapture) {
-        var _me = this;
+        let _me = this;
 
         if (typeof target === 'string') {
             [target, eventName, callback, useCapture] = [_me, target, eventName, callback];

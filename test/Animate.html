@@ -23,32 +23,36 @@
 
     var loader = new Moco.Loader();
     loader.on(Moco.LoaderEvent.COMPLETE, function (ev) {
-                var target = ev.target;
-                var bmd = target.toBitmapData();
-                var bm = new Moco.Bitmap(bmd);
-                container.addChild(bm);
+                for (var i = 0; i < 1000; i++) {
+                    var target = ev.target;
+                    var bmd = target.toBitmapData();
+                    var bm = new Moco.Bitmap(bmd);
+                    container.addChild(bm);
 
-                Moco.Animate.from(container, {
-                    x: 800
-                }, Moco.Easing.easeInOutExpo, 1000, function () {
-                    Moco.Animate.to(container, {
-                        x: 800
-                    }, Moco.Easing.easeInOutQuart, 1500, function () {
-                        Moco.Animate.fromTo(container, {
-                            x: 800,
-                            y: 0,
-                            scaleX: 1,
-                            scaleY: 1,
-                            rotate: 0
-                        }, {
-                            x: 500,
-                            y: 500,
-                            scaleX: 0.2,
-                            scaleY: 0.2,
-                            rotate: 180
-                        }, Moco.Easing.easeInOutSine, 2000);
-                    });
-                });
+                    (function (bm) {
+                        Moco.Animate.from(bm, {
+                            x: 800
+                        }, Moco.Easing.easeInOutExpo, 1000, function () {
+                            Moco.Animate.to(bm, {
+                                x: 800
+                            }, Moco.Easing.easeInOutQuart, 1500, function () {
+                                Moco.Animate.fromTo(bm, {
+                                    x: 800,
+                                    y: 0,
+                                    scaleX: 1,
+                                    scaleY: 1,
+                                    rotate: 0
+                                }, {
+                                    x: 500,
+                                    y: 500,
+                                    scaleX: 0.2,
+                                    scaleY: 0.2,
+                                    rotate: 180
+                                }, Moco.Easing.easeInOutSine, 2000);
+                            });
+                        });
+                    }(bm))
+                }
             }
     );
     loader.load(new Moco.URLRequest("../images/qr-weixin.png"));

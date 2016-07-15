@@ -9,11 +9,11 @@ export default class Util {
         if (_me.isType(arr, 'Array') && Array.prototype.forEach) {
             Array.prototype.forEach.call(arr, callback);
         } else if (_me.isType(arr, 'Array')) {
-            for (var i = 0, len = arr.length; i < len; i += 1) {
+            for (let i = 0, len = arr.length; i < len; i += 1) {
                 callback(arr[i], i, arr);
             }
         } else if (_me.isType(arr, 'Object')) {
-            for (var key in arr) {
+            for (let key in arr) {
                 if (arr.hasOwnProperty(key)) {
                     callback(arr[key], key, arr);
                 }
@@ -92,13 +92,13 @@ export default class Util {
     }
 
     static keys(obj) {
-        var keys = [];
+        let keys = [];
 
         if (obj) {
             if (Object.keys) {
                 return Object.keys(obj);
             } else {
-                for (var key in obj) {
+                for (let key in obj) {
                     if (obj.hasOwnProperty(key)) {
                         keys.push(key);
                     }
@@ -124,7 +124,7 @@ export default class Util {
     }
 
     static extends(obj) {
-        var _me = this;
+        let _me = this;
 
         if (!_me.isType(obj, 'Object')) {
             return obj;
@@ -133,7 +133,7 @@ export default class Util {
         for (let i = 1, length = arguments.length; i < length; i += 1) {
             let source = arguments[i];
             for (let prop in source) {
-                if (hasOwnProperty.call(source, prop)) {
+                if (source.hasOwnProperty(prop)) {
                     obj[prop] = source[prop];
                 }
             }

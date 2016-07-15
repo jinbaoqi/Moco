@@ -30,7 +30,7 @@ export default class Vec3 {
 
     divi(k) {
         if (k instanceof Vec3) {
-            var {
+            let {
                 x, y, z
             } = k;
 

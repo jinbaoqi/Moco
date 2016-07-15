@@ -69,7 +69,7 @@ export default class Timer {
 
         if (!requestAnimationFrame || !cancelAnimationFrame) {
             requestAnimationFrame = (callback) => {
-                var now = +new Date(),
+                let now = +new Date(),
                     nextTime = Math.max(lastTime + 16, now);
                 return setTimeout(function () {
                     callback(lastTime = nextTime);

@@ -28,8 +28,8 @@ export default class Loader extends DisplayObjectContainer {
     }
 
     load(request) {
-        var _me = this;
-        var params = [];
+        let _me = this;
+        let params = [];
 
         request.method = request.method.toUpperCase();
 
@@ -43,9 +43,9 @@ export default class Loader extends DisplayObjectContainer {
             return;
         }
 
-        var url = request.url;
-        var data = request.data;
-        var keys = Util.keys(request.data);
+        let url = request.url;
+        let data = request.data;
+        let keys = Util.keys(request.data);
         if (keys.length) {
             params = Util.map(request.data, function (val, key) {
                 return key + '=' + encodeURIComponent(val);
@@ -77,7 +77,7 @@ export default class Loader extends DisplayObjectContainer {
     }
 
     _onload() {
-        var _me = this;
+        let _me = this;
         if (!_me._close) {
             _me.trigger(_me, LoaderEvent.COMPLETE, {
                 target: _me
@@ -90,7 +90,7 @@ export default class Loader extends DisplayObjectContainer {
     }
 
     _onerror() {
-        var _me = this;
+        let _me = this;
         if (!_me._close) {
             _me.trigger(_me, LoaderEvent.ERROR);
         }
@@ -101,7 +101,7 @@ export default class Loader extends DisplayObjectContainer {
     }
 
     _next() {
-        var _me = this;
+        let _me = this;
         if (_me._queue.length) {
             _me.load(_me._queue.shift());
         }

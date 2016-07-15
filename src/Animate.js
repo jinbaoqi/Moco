@@ -116,7 +116,7 @@ export default class Animate {
         let speed = 0;
         let val = [];
         
-        for (var item in params) {
+        for (let item in params) {
             if (params.hasOwnProperty(item)) {
                 if (item === 'onComplete') {
                     fn = params[item];
