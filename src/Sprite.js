@@ -45,15 +45,15 @@ export default class Sprite extends DisplayObjectContainer {
         return isDrew;
     }
 
-    isMouseon(cord) {
+    isMouseOn(cord) {
         let _me = this;
-        let isOn = super.isMouseon(cord);
+        let isMouseOn = super.isMouseOn(cord);
 
-        if (!isOn && _me.graphics && _me.graphics instanceof Shape) {
-            isOn = _me.graphics.isMouseon && _me.graphics.isMouseon(cord);
+        if (!isMouseOn && _me.graphics && _me.graphics instanceof Shape) {
+            isMouseOn = _me.graphics.isMouseOn && _me.graphics.isMouseOn(cord);
         }
 
-        return isOn;
+        return isMouseOn;
     }
 
     get width() {

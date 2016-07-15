@@ -45,7 +45,7 @@ export default class Shape extends DisplayObject {
 
     lineWidth(thickness) {
         let _me = this;
-        _me._showList.push(function () {
+        _me._showList.push(() => {
             let ctx = _me.ctx || _me.stage.ctx;
             ctx.lineWidth = thickness;
         });
@@ -53,7 +53,7 @@ export default class Shape extends DisplayObject {
 
     strokeStyle(color) {
         let _me = this;
-        _me._showList.push(function () {
+        _me._showList.push(() => {
             let ctx = _me.ctx || _me.stage.ctx;
             ctx.strokeStyle = color;
         });
@@ -61,7 +61,7 @@ export default class Shape extends DisplayObject {
 
     stroke() {
         let _me = this;
-        _me._showList.push(function () {
+        _me._showList.push(() => {
             let ctx = _me.ctx || _me.stage.ctx;
             ctx.stroke();
         });
@@ -69,7 +69,7 @@ export default class Shape extends DisplayObject {
 
     beginPath() {
         let _me = this;
-        _me._showList.push(function () {
+        _me._showList.push(() => {
             let ctx = _me.ctx || _me.stage.ctx;
             ctx.beginPath();
         });
@@ -77,7 +77,7 @@ export default class Shape extends DisplayObject {
 
     closePath() {
         let _me = this;
-        _me._showList.push(function () {
+        _me._showList.push(() => {
             let ctx = _me.ctx || _me.stage.ctx;
             ctx.closePath();
         });
@@ -85,7 +85,7 @@ export default class Shape extends DisplayObject {
 
     moveTo(x, y) {
         let _me = this;
-        _me._showList.push(function () {
+        _me._showList.push(() => {
             let ctx = _me.ctx || _me.stage.ctx;
             ctx.moveTo(x, y);
         });
@@ -93,7 +93,7 @@ export default class Shape extends DisplayObject {
 
     lineTo(x, y) {
         let _me = this;
-        _me._showList.push(function () {
+        _me._showList.push(() => {
             let ctx = _me.ctx || _me.stage.ctx;
             ctx.lineTo(x, y);
         });
@@ -107,7 +107,7 @@ export default class Shape extends DisplayObject {
 
     rect(x, y, width, height) {
         let _me = this;
-        _me._showList.push(function () {
+        _me._showList.push(() => {
             let ctx = _me.ctx || _me.stage.ctx;
             ctx.rect(x, y, width, height);
         });
@@ -120,7 +120,7 @@ export default class Shape extends DisplayObject {
 
     fillStyle(color) {
         let _me = this;
-        _me._showList.push(function () {
+        _me._showList.push(() => {
             let ctx = _me.ctx || _me.stage.ctx;
             ctx.fillStyle = color;
         });
@@ -128,7 +128,7 @@ export default class Shape extends DisplayObject {
 
     fill() {
         let _me = this;
-        _me._showList.push(function () {
+        _me._showList.push(() => {
             let ctx = _me.ctx || _me.stage.ctx;
             ctx.fill();
         });
@@ -136,7 +136,7 @@ export default class Shape extends DisplayObject {
 
     arc(x, y, r, sAngle, eAngle, direct) {
         let _me = this;
-        _me._showList.push(function () {
+        _me._showList.push(() => {
             let ctx = _me.ctx || _me.stage.ctx;
             ctx.arc(x, y, r, sAngle, eAngle, direct);
         });
@@ -149,7 +149,7 @@ export default class Shape extends DisplayObject {
 
     drawArc(thickness, lineColor, arcArgs, isFill, color) {
         let _me = this;
-        _me._showList.push(function () {
+        _me._showList.push(() => {
             let ctx = _me.ctx || _me.stage.ctx;
             ctx.beginPath();
             ctx.arc(arcArgs[0], arcArgs[1], arcArgs[2], arcArgs[3], arcArgs[4], arcArgs[5]);
@@ -172,8 +172,8 @@ export default class Shape extends DisplayObject {
 
     drawRect(thickness, lineColor, rectArgs, isFill, color) {
         let _me = this;
-        
-        _me._showList.push(function () {
+
+        _me._showList.push(() => {
             let ctx = _me.ctx || _me.stage.ctx;
             ctx.beginPath();
             ctx.rect(rectArgs[0], rectArgs[1], rectArgs[2], rectArgs[3]);
@@ -202,7 +202,7 @@ export default class Shape extends DisplayObject {
             return;
         }
 
-        _me._showList.push(function () {
+        _me._showList.push(() => {
             let ctx = _me.ctx || _me.stage.ctx;
             ctx.beginPath();
             ctx.moveTo(vertices[0][0], vertices[0][1]);
@@ -234,7 +234,7 @@ export default class Shape extends DisplayObject {
     drawLine(thickness, lineColor, points) {
         let _me = this;
 
-        _me._showList.push(function () {
+        _me._showList.push(() => {
             let ctx = _me.ctx || _me.stage.ctx;
             ctx.beginPath();
             ctx.moveTo(points[0], points[1]);
@@ -253,7 +253,7 @@ export default class Shape extends DisplayObject {
             _me.alpha = alpha;
         }
 
-        _me._showList.push(function () {
+        _me._showList.push(() => {
             let ctx = _me.ctx || _me.stage.ctx;
             ctx.lineWidth = thickness;
             ctx.strokeStyle = color;
@@ -262,12 +262,12 @@ export default class Shape extends DisplayObject {
 
     add(fn) {
         let _me = this;
-        _me._showList.push(function () {
+        _me._showList.push(() => {
             fn.call(_me);
         });
     }
 
-    isMouseon(cord) {
+    isMouseOn(cord) {
         let _me = this;
         let vec = new Vec3(cord.x, cord.y, 1);
         let inverse = Matrix3.inverse(_me._matrix);

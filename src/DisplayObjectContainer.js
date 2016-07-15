@@ -64,7 +64,7 @@ export default class DisplayObjectContainer extends InteractiveObject {
     contains(child) {
         let _me = this;
         if (child instanceof DisplayObject) {
-            return Util.inArray(child, _me._childList, function (child, item) {
+            return Util.inArray(child, _me._childList, (child, item) => {
                     return child.aIndex === item.aIndex;
                 }) !== -1;
         }
@@ -97,12 +97,12 @@ export default class DisplayObjectContainer extends InteractiveObject {
         return isDrew;
     }
 
-    isMouseon(cord) {
+    isMouseOn(cord) {
         let _me = this;
 
         for (let i = 0, len = _me._childList.length; i < len; i += 1) {
             let item = _me._childList[i];
-            if (item.isMouseon && item.isMouseon(cord)) {
+            if (item.isMouseOn && item.isMouseOn(cord)) {
                 return true;
             }
         }
@@ -122,7 +122,7 @@ export default class DisplayObjectContainer extends InteractiveObject {
                 sv.x = bounds.sv.x < sv.x ? bounds.sv.x : sv.x;
                 sv.y = bounds.sv.y < sv.y ? bounds.sv.y : sv.y;
                 ev.x = bounds.ev.x > ev.x ? bounds.ev.x : ev.x;
-                sv.x = bounds.ev.y > ev.y ? bounds.ev.y : ev.y;
+                ev.y = bounds.ev.y > ev.y ? bounds.ev.y : ev.y;
             }
         });
 

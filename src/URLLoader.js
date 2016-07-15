@@ -63,7 +63,7 @@ export default class URLLoader extends EventDispatcher {
         let data = request.data;
         let keys = Util.keys(request.data);
         if (keys.length) {
-            params = Util.map(request.data, function (val, key) {
+            params = Util.map(request.data, (val, key) => {
                 return key + '=' + encodeURIComponent(val);
             });
             data = params.join('&');
@@ -77,7 +77,7 @@ export default class URLLoader extends EventDispatcher {
         }
 
         xhr.open(request.method, url, true);
-        xhr.onreadystatechange = function () {
+        xhr.onreadystatechange = () => {
             _me._onreadystatechange();
         };
 
@@ -85,7 +85,7 @@ export default class URLLoader extends EventDispatcher {
             request.requestHeaders['Content-Type'] = request.contentType;
         }
 
-        Util.each(request.requestHeaders, function (val, key) {
+        Util.each(request.requestHeaders, (val, key) => {
             xhr.setRequestHeader(key, val);
         });
 

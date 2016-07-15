@@ -25,18 +25,24 @@
     var loader = new Moco.Loader();
     loader.on(Moco.LoaderEvent.COMPLETE, function (ev) {
         var target = ev.target;
-        var translateMreix = Moco.Matrix3.translation(100, 100);
+        var translateMreix = Moco.Matrix3.translation(0, 0);
         var scaleMatrix = Moco.Matrix3.scaling(1, 1);
         var rotateMatrix = Moco.Matrix3.rotation(0);
         rotateMatrix.multi(scaleMatrix);
         translateMreix.multi(rotateMatrix);
         var bmd = target.toBitmapData(translateMreix);
         var bm = new Moco.Bitmap(bmd);
-        bm.rotate = 15;
         var sprite = new Moco.Sprite();
-        sprite.rotate = 15;
         sprite.addChild(bm);
+        sprite.x = sprite.y = 50;
         stage.addChild(sprite);
+
+        bm.x = bm.y = 50;
+        bm.scaleX = bm.scaleY = 1;
+        bm.rotate = 15;
+        setTimeout(function () {
+            console.log(sprite.getBounds());
+        });
 
         sprite.on(Moco.MouseEvent.CLICK, function () {
             console.log("in?");

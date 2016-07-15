@@ -91,7 +91,7 @@ export default class DisplayObject extends EventDispatcher {
 
     // jshint ignore:start
 
-    isMouseon(cord) {
+    isMouseOn(cord) {
         // abstrct method, child class need to realize
     }
 

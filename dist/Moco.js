@@ -324,6 +324,22 @@ var _DisplayObject2 = require('./DisplayObject');
 
 var _DisplayObject3 = _interopRequireDefault(_DisplayObject2);
 
+var _Global = require('./Global');
+
+var _Global2 = _interopRequireDefault(_Global);
+
+var _Util = require('./Util');
+
+var _Util2 = _interopRequireDefault(_Util);
+
+var _Vec3 = require('./Vec3');
+
+var _Vec32 = _interopRequireDefault(_Vec3);
+
+var _Matrix3 = require('./Matrix3');
+
+var _Matrix32 = _interopRequireDefault(_Matrix3);
+
 var Bitmap = (function (_DisplayObject) {
     _inherits(Bitmap, _DisplayObject);
 
@@ -365,13 +381,59 @@ var Bitmap = (function (_DisplayObject) {
             return isShow;
         }
     }, {
-        key: 'isMouseon',
-        value: function isMouseon() {
-            return true;
+        key: 'isMouseOn',
+        value: function isMouseOn(cord) {
+            var _me = this;
+            var vec = new _Vec32['default'](cord.x, cord.y, 1);
+            var matrix = _me._matrix.multi(_me._bitmapData._matrix);
+            var inverse = _Matrix32['default'].inverse(matrix);
+            var area = [[0, 0], [_me.width, 0], [_me.width, _me.height], [0, _me.height]];
+
+            vec.multiMatrix3(inverse);
+            return _Util2['default'].pip([vec.x, vec.y], area);
         }
     }, {
         key: 'getBounds',
-        value: function getBounds() {}
+        value: function getBounds() {
+            var _me = this;
+            var sx = _Global2['default'].maxNumber;
+            var ex = _Global2['default'].minNumber;
+            var sy = _Global2['default'].maxNumber;
+            var ey = _Global2['default'].minNumber;
+            var area = [[0, 0], [_me.width, 0], [_me.width, _me.height], [0, _me.height]];
+
+            var matrix = _me._matrix.multi(_me._bitmapData._matrix);
+            var vec3s = _Util2['default'].map(area, function (item) {
+                var vec = new _Vec32['default'](item[0], item[1], 1);
+                return vec.multiMatrix3(matrix);
+            });
+
+            _Util2['default'].each(vec3s, function (item) {
+                sx = item.x < sx ? item.x : sx;
+                ex = item.x > ex ? item.x : ex;
+                sy = item.y < sy ? item.y : sy;
+                ey = item.y > ey ? item.y : ey;
+            });
+
+            if (sx === _Global2['default'].maxNumber || ex === _Global2['default'].minNumber || sy === _Global2['default'].maxNumber || ey === _Global2['default'].minNumber) {
+                sx = sy = ex = ey = 0;
+            }
+
+            return {
+                sv: new _Vec32['default'](sx, sy, 1),
+                ev: new _Vec32['default'](ex, ey, 1)
+            };
+        }
+    }, {
+        key: 'width',
+        get: function get() {
+            return this._bitmapData.width;
+        }
+    }, {
+        key: 'height',
+        get: function get() {
+            return this._bitmapData.height;
+        }
     }]);
 
     return Bitmap;
@@ -380,7 +442,7 @@ var Bitmap = (function (_DisplayObject) {
 exports['default'] = Bitmap;
 module.exports = exports['default'];
 
-},{"./DisplayObject":4}],3:[function(require,module,exports){
+},{"./DisplayObject":4,"./Global":8,"./Matrix3":15,"./Util":25,"./Vec3":26}],3:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -754,8 +816,8 @@ var DisplayObject = (function (_EventDispatcher) {
         // jshint ignore:start
 
     }, {
-        key: 'isMouseon',
-        value: function isMouseon(cord) {
+        key: 'isMouseOn',
+        value: function isMouseOn(cord) {
             // abstrct method, child class need to realize
         }
     }, {
@@ -985,13 +1047,13 @@ var DisplayObjectContainer = (function (_InteractiveObject) {
             return isDrew;
         }
     }, {
-        key: 'isMouseon',
-        value: function isMouseon(cord) {
+        key: 'isMouseOn',
+        value: function isMouseOn(cord) {
             var _me = this;
 
             for (var i = 0, len = _me._childList.length; i < len; i += 1) {
                 var item = _me._childList[i];
-                if (item.isMouseon && item.isMouseon(cord)) {
+                if (item.isMouseOn && item.isMouseOn(cord)) {
                     return true;
                 }
             }
@@ -1012,7 +1074,7 @@ var DisplayObjectContainer = (function (_InteractiveObject) {
                     sv.x = bounds.sv.x < sv.x ? bounds.sv.x : sv.x;
                     sv.y = bounds.sv.y < sv.y ? bounds.sv.y : sv.y;
                     ev.x = bounds.ev.x > ev.x ? bounds.ev.x : ev.x;
-                    sv.x = bounds.ev.y > ev.y ? bounds.ev.y : ev.y;
+                    ev.y = bounds.ev.y > ev.y ? bounds.ev.y : ev.y;
                 }
             });
 
@@ -1928,13 +1990,19 @@ exports['default'] = {
 module.exports = exports['default'];
 
 },{}],15:[function(require,module,exports){
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
     value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _Util = require('./Util');
+
+var _Util2 = _interopRequireDefault(_Util);
 
 var Matrix3 = (function () {
     function Matrix3(m) {
@@ -1944,18 +2012,18 @@ var Matrix3 = (function () {
     }
 
     _createClass(Matrix3, [{
-        key: "setMatrix",
+        key: 'setMatrix',
         value: function setMatrix(matrix) {
             this._matrix = matrix;
             return this;
         }
     }, {
-        key: "getMatrix",
+        key: 'getMatrix',
         value: function getMatrix() {
             return this._matrix;
         }
     }, {
-        key: "add",
+        key: 'add',
         value: function add(matrix3) {
             var matrix = matrix3._matrix;
 
@@ -1974,7 +2042,7 @@ var Matrix3 = (function () {
             return this;
         }
     }, {
-        key: "sub",
+        key: 'sub',
         value: function sub(matrix3) {
             var matrix = matrix3._matrix;
 
@@ -1993,7 +2061,7 @@ var Matrix3 = (function () {
             return this;
         }
     }, {
-        key: "multi",
+        key: 'multi',
         value: function multi(matrix3) {
             var matrix = matrix3._matrix;
 
@@ -2038,7 +2106,7 @@ var Matrix3 = (function () {
             return this;
         }
     }, {
-        key: "translate",
+        key: 'translate',
         value: function translate(x, y) {
             this._matrix[6] = x;
             this._matrix[7] = y;
@@ -2046,7 +2114,7 @@ var Matrix3 = (function () {
             return this;
         }
     }, {
-        key: "rotate",
+        key: 'rotate',
         value: function rotate(angle) {
             var cosa = Math.cos(angle * Math.PI / 180);
             var sina = Math.sin(angle * Math.PI / 180);
@@ -2058,7 +2126,7 @@ var Matrix3 = (function () {
             return this;
         }
     }, {
-        key: "scale",
+        key: 'scale',
         value: function scale(scaleX, scaleY) {
             this._matrix[0] = scaleX;
             this._matrix[4] = scaleY;
@@ -2066,7 +2134,7 @@ var Matrix3 = (function () {
             return this;
         }
     }], [{
-        key: "clone",
+        key: 'clone',
         value: function clone(m) {
             var matrix = m.getMatrix();
             var tmp = [];
@@ -2078,40 +2146,60 @@ var Matrix3 = (function () {
             return new Matrix3(tmp);
         }
     }, {
-        key: "copy",
+        key: 'copy',
         value: function copy(m1, m2) {
             var clone = Matrix3.clone(m2);
             m1.setMatrix(clone.getMatrix());
         }
     }, {
-        key: "zero",
+        key: 'zero',
         value: function zero() {
             return new Matrix3([0, 0, 0, 0, 0, 0, 0, 0, 0]);
         }
     }, {
-        key: "identity",
+        key: 'isZero',
+        value: function isZero(matrix) {
+            matrix = matrix.getMatrix();
+            return _Util2['default'].every(matrix, function (item) {
+                return item === 0;
+            });
+        }
+    }, {
+        key: 'identity',
         value: function identity() {
             return new Matrix3([1, 0, 0, 0, 1, 0, 0, 0, 1]);
         }
     }, {
-        key: "translation",
+        key: 'isIdentity',
+        value: function isIdentity(matrix) {
+            matrix = matrix.getMatrix();
+            return _Util2['default'].every(matrix, function (item, index) {
+                if (index % 4 === 0) {
+                    return item === 1;
+                } else {
+                    return item === 0;
+                }
+            });
+        }
+    }, {
+        key: 'translation',
         value: function translation(x, y) {
             return new Matrix3([1, 0, 0, 0, 1, 0, x, y, 1]);
         }
     }, {
-        key: "rotation",
+        key: 'rotation',
         value: function rotation(angle) {
             var cosa = Math.cos(angle * Math.PI / 180);
             var sina = Math.sin(angle * Math.PI / 180);
             return new Matrix3([cosa, sina, 0, -sina, cosa, 0, 0, 0, 1]);
         }
     }, {
-        key: "scaling",
+        key: 'scaling',
         value: function scaling(scaleX, scaleY) {
             return new Matrix3([scaleX, 0, 0, 0, scaleY, 0, 0, 0, 1]);
         }
     }, {
-        key: "transpose",
+        key: 'transpose',
         value: function transpose(m) {
             var matrix = m.getMatrix();
             var tmp = matrix[1];
@@ -2130,7 +2218,7 @@ var Matrix3 = (function () {
             m.setMatrix(matrix);
         }
     }, {
-        key: "inverse",
+        key: 'inverse',
         value: function inverse(m) {
             var matrix = m.getMatrix();
 
@@ -2171,10 +2259,10 @@ var Matrix3 = (function () {
     return Matrix3;
 })();
 
-exports["default"] = Matrix3;
-module.exports = exports["default"];
+exports['default'] = Matrix3;
+module.exports = exports['default'];
 
-},{}],16:[function(require,module,exports){
+},{"./Util":25}],16:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -2213,7 +2301,7 @@ var MouseEvent = (function (_InteractiveEvent) {
             var items = _me._list[eventName] || [];
 
             items = _Util2['default'].filter(items, function (item) {
-                if (item.isMouseon && item.isMouseon(cord)) {
+                if (item.isMouseOn && item.isMouseOn(cord)) {
                     return true;
                 }
             });
@@ -2581,8 +2669,8 @@ var Shape = (function (_DisplayObject) {
             });
         }
     }, {
-        key: 'isMouseon',
-        value: function isMouseon(cord) {
+        key: 'isMouseOn',
+        value: function isMouseOn(cord) {
             var _me = this;
             var vec = new _Vec32['default'](cord.x, cord.y, 1);
             var inverse = _Matrix32['default'].inverse(_me._matrix);
@@ -2869,16 +2957,16 @@ var Sprite = (function (_DisplayObjectContainer) {
             return isDrew;
         }
     }, {
-        key: 'isMouseon',
-        value: function isMouseon(cord) {
+        key: 'isMouseOn',
+        value: function isMouseOn(cord) {
             var _me = this;
-            var isOn = _get(Object.getPrototypeOf(Sprite.prototype), 'isMouseon', this).call(this, cord);
+            var isMouseOn = _get(Object.getPrototypeOf(Sprite.prototype), 'isMouseOn', this).call(this, cord);
 
-            if (!isOn && _me.graphics && _me.graphics instanceof _Shape2['default']) {
-                isOn = _me.graphics.isMouseon && _me.graphics.isMouseon(cord);
+            if (!isMouseOn && _me.graphics && _me.graphics instanceof _Shape2['default']) {
+                isMouseOn = _me.graphics.isMouseOn && _me.graphics.isMouseOn(cord);
             }
 
-            return isOn;
+            return isMouseOn;
         }
     }, {
         key: 'width',
@@ -3057,8 +3145,8 @@ var Stage = (function (_DisplayObjectContainer) {
             _get(Object.getPrototypeOf(Stage.prototype), 'addChild', this).call(this, child);
         }
     }, {
-        key: 'isMouseon',
-        value: function isMouseon() {
+        key: 'isMouseOn',
+        value: function isMouseOn() {
             return true;
         }
     }, {
@@ -3742,7 +3830,7 @@ var Util = (function () {
             var x = point[0],
                 y = point[1];
 
-            for (var i = 0, j = vs.length - 1; i < vs.length; j = i += 1) {
+            for (var i = 0, j = vs.length - 1; i < vs.length; j = i, i += 1) {
                 var xi = vs[i][0],
                     yi = vs[i][1];
                 var xj = vs[j][0],

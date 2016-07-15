@@ -1,4 +1,8 @@
 import DisplayObject from './DisplayObject';
+import Global from './Global';
+import Util from './Util';
+import Vec3 from './Vec3';
+import Matrix3 from './Matrix3';
 
 export default class Bitmap extends DisplayObject {
     constructor(bitmapData) {
@@ -35,11 +39,66 @@ export default class Bitmap extends DisplayObject {
         return isShow;
     }
 
-    isMouseon() {
-        return true;
+    isMouseOn(cord) {
+        let _me = this;
+        let vec = new Vec3(cord.x, cord.y, 1);
+        let matrix = _me._matrix.multi(_me._bitmapData._matrix);
+        let inverse = Matrix3.inverse(matrix);
+        let area = [
+            [0, 0],
+            [_me.width, 0],
+            [_me.width, _me.height],
+            [0, _me.height]
+        ];
+
+        vec.multiMatrix3(inverse);
+        return Util.pip([vec.x, vec.y], area);
     }
 
     getBounds() {
+        let _me = this;
+        let sx = Global.maxNumber;
+        let ex = Global.minNumber;
+        let sy = Global.maxNumber;
+        let ey = Global.minNumber;
+        let area = [
+            [0, 0],
+            [_me.width, 0],
+            [_me.width, _me.height],
+            [0, _me.height]
+        ];
 
+        let matrix = _me._matrix.multi(_me._bitmapData._matrix);
+        let vec3s = Util.map(area, (item) => {
+            let vec = new Vec3(item[0], item[1], 1);
+            return vec.multiMatrix3(matrix);
+        });
+
+        Util.each(vec3s, (item) => {
+            sx = item.x < sx ? item.x : sx;
+            ex = item.x > ex ? item.x : ex;
+            sy = item.y < sy ? item.y : sy;
+            ey = item.y > ey ? item.y : ey;
+        });
+
+        if (sx === Global.maxNumber ||
+            ex === Global.minNumber ||
+            sy === Global.maxNumber ||
+            ey === Global.minNumber) {
+            sx = sy = ex = ey = 0;
+        }
+
+        return {
+            sv: new Vec3(sx, sy, 1),
+            ev: new Vec3(ex, ey, 1)
+        };
+    }
+
+    get width() {
+        return this._bitmapData.width;
+    }
+
+    get height() {
+        return this._bitmapData.height;
     }
 }

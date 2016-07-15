@@ -84,7 +84,7 @@ export default class Stage extends DisplayObjectContainer {
         super.addChild(child);
     }
 
-    isMouseon() {
+    isMouseOn() {
         return true;
     }
 

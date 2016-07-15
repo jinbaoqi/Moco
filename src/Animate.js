@@ -61,7 +61,7 @@ export default class Animate {
     }
 
     static remove(animator) {
-        let index = Util.inArray(animator, this._animators, function (animator, item) {
+        let index = Util.inArray(animator, this._animators, (animator, item) => {
             return animator === item.target;
         });
 
@@ -115,7 +115,7 @@ export default class Animate {
         let type = {};
         let speed = 0;
         let val = [];
-        
+
         for (let item in params) {
             if (params.hasOwnProperty(item)) {
                 if (item === 'onComplete') {

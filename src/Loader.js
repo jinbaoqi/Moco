@@ -47,7 +47,7 @@ export default class Loader extends DisplayObjectContainer {
         let data = request.data;
         let keys = Util.keys(request.data);
         if (keys.length) {
-            params = Util.map(request.data, function (val, key) {
+            params = Util.map(request.data, (val, key) => {
                 return key + '=' + encodeURIComponent(val);
             });
             data = params.join('&');
@@ -60,11 +60,11 @@ export default class Loader extends DisplayObjectContainer {
             data = null;
         }
 
-        _me.content.onload = function () {
+        _me.content.onload = () => {
             _me._onload();
         };
 
-        _me.content.onerror = function () {
+        _me.content.onerror = () => {
             _me._onerror();
         };
 

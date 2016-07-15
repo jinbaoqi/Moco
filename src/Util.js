@@ -28,7 +28,7 @@ export default class Util {
             return Array.prototype.filter.call(arr, callback);
         } else {
             let tmp = [];
-            _me.each(arr, function (item, index, arr) {
+            _me.each(arr, (item, index, arr) => {
                 if (callback.call(arr, item, index, arr) === true) {
                     tmp.push(item);
                 }
@@ -44,7 +44,7 @@ export default class Util {
             return Array.prototype.map.call(arr, callback);
         } else {
             let tmp = [];
-            _me.each(arr, function (item, index, arr) {
+            _me.each(arr, (item, index, arr) => {
                 tmp.push(callback.call(arr, item, index, arr));
             });
             return tmp;
@@ -58,7 +58,7 @@ export default class Util {
             return Array.prototype.some.call(arr, callback);
         } else {
             let bol = false;
-            _me.each(arr, function (item, index, arr) {
+            _me.each(arr, (item, index, arr) => {
                 if (callback.call(arr, item, index, arr) === true) {
                     bol = true;
                 }
@@ -74,7 +74,7 @@ export default class Util {
             return Array.prototype.some.call(arr, callback);
         } else {
             let bol = true;
-            _me.each(arr, function (item, index, arr) {
+            _me.each(arr, (item, index, arr) => {
                 if (!callback.call(arr, item, index, arr)) {
                     bol = false;
                 }
@@ -167,7 +167,7 @@ export default class Util {
         let x = point[0],
             y = point[1];
 
-        for (let i = 0, j = vs.length - 1; i < vs.length; j = i += 1) {
+        for (let i = 0, j = vs.length - 1; i < vs.length; j = i, i += 1) {
             let xi = vs[i][0],
                 yi = vs[i][1];
             let xj = vs[j][0],

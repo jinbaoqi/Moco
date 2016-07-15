@@ -1,3 +1,5 @@
+import Util from './Util';
+
 export default class Matrix3 {
     constructor(m) {
         this._matrix = m || [
@@ -145,12 +147,30 @@ export default class Matrix3 {
         ]);
     }
 
+    static isZero(matrix) {
+        matrix = matrix.getMatrix();
+        return Util.every(matrix, (item)=> {
+            return item === 0;
+        });
+    }
+
     static identity() {
         return new Matrix3([
             1, 0, 0,
             0, 1, 0,
             0, 0, 1
         ]);
+    }
+
+    static isIdentity(matrix) {
+        matrix = matrix.getMatrix();
+        return Util.every(matrix, (item, index)=> {
+            if (index % 4 === 0) {
+                return item === 1;
+            } else {
+                return item === 0;
+            }
+        });
     }
 
     static translation(x, y) {
