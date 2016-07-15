@@ -21,11 +21,11 @@ export default class Stage extends DisplayObjectContainer {
         this._x = offset.left;
         this._y = offset.top;
 
+        this.initialize();
+
         if (typeof fn === 'function') {
             fn(this);
         }
-
-        this.initialize();
     }
 
     initialize() {
@@ -53,6 +53,10 @@ export default class Stage extends DisplayObjectContainer {
         let _me = this;
         _me.ctx.clearRect(0, 0, _me._width, _me._height);
         super.show(matrix);
+    }
+
+    dispose() {
+
     }
 
     tick() {

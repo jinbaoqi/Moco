@@ -923,12 +923,13 @@ var DisplayObject = (function (_EventDispatcher) {
         },
         set: function set(mask) {
             var _me = this;
+
             if (_me._mask) {
                 _me.parent.removeChild(_me._mask);
                 _me._mask.dispose();
             }
-            if (mask) {
 
+            if (mask) {
                 _me._mask = mask;
                 _me.parent.addChild(mask);
             }
@@ -3134,11 +3135,10 @@ var Stage = (function (_DisplayObjectContainer) {
         this._x = offset.left;
         this._y = offset.top;
 
+        this.initialize();
         if (typeof fn === 'function') {
             fn(this);
         }
-
-        this.initialize();
     }
 
     _createClass(Stage, [{
@@ -3170,6 +3170,9 @@ var Stage = (function (_DisplayObjectContainer) {
             _me.ctx.clearRect(0, 0, _me._width, _me._height);
             _get(Object.getPrototypeOf(Stage.prototype), 'show', this).call(this, matrix);
         }
+    }, {
+        key: 'dispose',
+        value: function dispose() {}
     }, {
         key: 'tick',
         value: function tick() {
