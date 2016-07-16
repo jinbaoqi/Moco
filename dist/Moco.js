@@ -795,6 +795,10 @@ var DisplayObject = (function (_EventDispatcher) {
                 ctx.clip();
             }
 
+            if (_me.globalCompositeOperation !== '') {
+                ctx.globalCompositeOperation = _me.globalCompositeOperation;
+            }
+
             if (alpha < 1) {
                 ctx.globalAlpha = alpha;
             }
@@ -922,17 +926,7 @@ var DisplayObject = (function (_EventDispatcher) {
             return this._mask;
         },
         set: function set(mask) {
-            var _me = this;
-
-            if (_me._mask) {
-                _me.parent.removeChild(_me._mask);
-                _me._mask.dispose();
-            }
-
-            if (mask) {
-                _me._mask = mask;
-                _me.parent.addChild(mask);
-            }
+            this._mask = mask;
         }
     }]);
 
@@ -1071,16 +1065,20 @@ var DisplayObjectContainer = (function (_InteractiveObject) {
             var isDrew = _get(Object.getPrototypeOf(DisplayObjectContainer.prototype), 'show', this).call(this, matrix);
 
             if (isDrew) {
+                var ctx = _me.ctx || _me.stage.ctx;
                 for (var i = 0, len = _me._childList.length; i < len; i += 1) {
                     var item = _me._childList[i];
                     if (item.show) {
                         item.show(_me._matrix);
+                        if (item._isSaved) {
+                            item._isSaved = false;
+                            ctx.restore();
+                        }
                     }
                     item.trigger(_Event2['default'].ENTER_FRAME);
                 }
 
                 if (_me._isSaved) {
-                    var ctx = _me.ctx || _me.stage.ctx;
                     _me._isSaved = false;
                     ctx.restore();
                 }
@@ -3136,6 +3134,7 @@ var Stage = (function (_DisplayObjectContainer) {
         this._y = offset.top;
 
         this.initialize();
+
         if (typeof fn === 'function') {
             fn(this);
         }

@@ -81,16 +81,20 @@ export default class DisplayObjectContainer extends InteractiveObject {
         let isDrew = super.show(matrix);
 
         if (isDrew) {
+            let ctx = _me.ctx || _me.stage.ctx;
             for (let i = 0, len = _me._childList.length; i < len; i += 1) {
                 let item = _me._childList[i];
                 if (item.show) {
                     item.show(_me._matrix);
+                    if (item._isSaved) {
+                        item._isSaved = false;
+                        ctx.restore();
+                    }
                 }
                 item.trigger(Event.ENTER_FRAME);
             }
 
             if (_me._isSaved) {
-                let ctx = _me.ctx || _me.stage.ctx;
                 _me._isSaved = false;
                 ctx.restore();
             }

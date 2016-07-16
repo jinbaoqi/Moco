@@ -32,50 +32,56 @@
         translateMreix.multi(rotateMatrix);
         var bmd = target.toBitmapData(translateMreix);
         var bm = new Moco.Bitmap(bmd);
-        var sprite = new Moco.Sprite();
-        sprite.addChild(bm);
-        stage.addChild(sprite);
 
         var shape = new Moco.Shape();
-        shape.drawRect(1, 1, [0, 0, 30, 119], false, 0xffffff);
+        shape.drawRect(30, 0xffffff, [15, 0, 0, 119], false, 0xffffff);
         var mask = new Moco.Sprite();
         mask.graphics = shape;
-        sprite.mask = mask;
+        mask.globalCompositeOperation = "destination-in";
+        mask.apha = 0.8;
 
-        animate();
+        for (var i = 0; i < 1; i++) {
+            var sprite = new Moco.Sprite();
+            sprite.addChild(bm);
+            stage.addChild(sprite);
 
-        function animate() {
-            Moco.Animate.to(mask, {
-                x: 89,
-                onComplete: function () {
-                    Moco.Animate.to(mask, {
-                        x: 0,
-                        onComplete: function () {
-                           sprite.mask = null;
-                        }
-                    });
-                }
-            });
+            animate();
+
+            function animate() {
+                Moco.Animate.to(mask, {
+                    x: 89,
+                    onComplete: function () {
+                        Moco.Animate.to(mask, {
+                            x: 0,
+                            onComplete: function () {
+                                animate();
+                            }
+                        });
+                    }
+                });
+            }
         }
 
-        sprite.on(Moco.Event.ADD_TO_STAGE, function () {
-            console.log(sprite.getBounds());
-        });
+        stage.addChild(mask);
 
-        sprite.on(Moco.MouseEvent.CLICK, function () {
-            console.log("in?");
-        });
+//        sprite.on(Moco.Event.ADD_TO_STAGE, function () {
+//            console.log(sprite.getBounds());
+//        });
+//
+//        sprite.on(Moco.MouseEvent.CLICK, function () {
+//            console.log("in?");
+//        });
 
-        console.time("def");
-        bmd.lock();
-        for (var i = 0; i < 500; i++) {
-            var x = Math.random() * 800;
-            var y = Math.random() * 600;
-            var tmp = bmd.getPixel(x, y);
-            bmd.setPixel(x, y, tmp);
-        }
-        bmd.unlock();
-        console.timeEnd("def");
+//        console.time("def");
+//        bmd.lock();
+//        for (var i = 0; i < 500; i++) {
+//            var x = Math.random() * 800;
+//            var y = Math.random() * 600;
+//            var tmp = bmd.getPixel(x, y);
+//            bmd.setPixel(x, y, tmp);
+//        }
+//        bmd.unlock();
+//        console.timeEnd("def");
     });
     loader.on(Moco.LoaderEvent.ERROR, function () {
         console.log("load img error");

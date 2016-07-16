@@ -66,6 +66,10 @@ export default class DisplayObject extends EventDispatcher {
             mask.show(matrix);
             ctx.clip();
         }
+        
+        if (_me.globalCompositeOperation !== '') {
+            ctx.globalCompositeOperation = _me.globalCompositeOperation;
+        }
 
         if (alpha < 1) {
             ctx.globalAlpha = alpha;
@@ -187,16 +191,6 @@ export default class DisplayObject extends EventDispatcher {
     }
 
     set mask(mask) {
-        let _me = this;
-
-        if (_me._mask) {
-            _me.parent.removeChild(_me._mask);
-            _me._mask.dispose();
-        }
-
-        if (mask) {
-            _me._mask = mask;
-            _me.parent.addChild(mask);
-        }
+        this._mask = mask;
     }
 }
