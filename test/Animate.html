@@ -23,7 +23,7 @@
 
     var loader = new Moco.Loader();
     loader.on(Moco.LoaderEvent.COMPLETE, function (ev) {
-                for (var i = 0; i < 100; i++) {
+                for (var i = 0; i < 1000; i++) {
                     var target = ev.target;
                     var bmd = target.toBitmapData();
                     var bm = new Moco.Bitmap(bmd);
@@ -32,7 +32,7 @@
                     (function (bm) {
                         Moco.Animate.from(bm, {
                             x: 800
-                        }, Moco.Easing.easeInOutExpo, 1000, function () {
+                        }, Moco.Easing.easeInOutQuint, 1000, function () {
                             Moco.Animate.to(bm, {
                                 x: 800
                             }, Moco.Easing.easeInOutQuart, 1500, function () {

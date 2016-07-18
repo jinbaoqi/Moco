@@ -85,24 +85,23 @@ export default class Timer {
     }
 
     static _raf() {
-        let _me = this;
-        let callback = () => {
-            let list = _me._list;
-            for (let i = 0, len = list.length; i < len; i += 1) {
-                let item = list[i];
-                if (item.tick) {
-                    item.tick();
-                }
-            }
-            _me._raf();
-        };
-
-        _me._timer = _me._requestAnimationFrame.call(window, callback);
+        this._timer = this._requestAnimationFrame.call(window, this._callback.bind(this));
     }
 
     static _craf() {
+        this._cancelAnimationFrame.call(window, this._timer);
+    }
+
+    static _callback() {
         let _me = this;
-        _me._cancelAnimationFrame.call(window, _me._timer);
+        let list = _me._list;
+        for (let i = 0, len = list.length; i < len; i += 1) {
+            let item = list[i];
+            if (item.tick) {
+                item.tick();
+            }
+        }
+        _me._raf();
     }
 
     static get isStoped() {

@@ -11,7 +11,6 @@ export default class EventDispatcher {
 
         if (eventName && callback) {
             useCapture = useCapture ? useCapture : false;
-
             if (Util.isType(eventName, 'Array')) {
                 Util.each(eventName, (item) => {
                     EventDispatcher.prototype.on.call(_me, item, callback, useCapture);
@@ -74,7 +73,6 @@ export default class EventDispatcher {
                 });
             } else if (!callback) {
                 let handlers = target.handlers;
-
                 if (handlers) {
                     let callbacks = handlers[eventName] ? handlers[eventName] : [];
                     Util.each(callbacks, (item) => {
@@ -83,7 +81,6 @@ export default class EventDispatcher {
                 }
             } else {
                 let handlers = target.handlers;
-
                 if (handlers) {
                     let fnStr = callback._fnStr ? callback._fnStr : callback.toString().replace(Global.fnRegExp, '');
                     let callbacks = handlers[eventName] ? handlers[eventName] : [];
@@ -112,21 +109,21 @@ export default class EventDispatcher {
             callback.call(_me, event);
 
             if (event.isImmediatePropagationStopped()) {
-                _me.off(target, eventName, fn);
+                EventDispatcher.prototype.off.call(target, eventName, fn);
             }
 
             if (useCapture) {
                 if (event.eventPhase === 0) {
-                    _me.off(target, eventName, fn);
+                    EventDispatcher.prototype.off.call(target, eventName, fn);
                 }
             } else {
-                _me.off(target, eventName, fn);
+                EventDispatcher.prototype.off.call(target, eventName, fn);
             }
         };
 
         fn._fnStr = callback.toString().replace(Global.fnRegExp, '');
-
-        return _me.on(target, eventName, fn, useCapture);
+        EventDispatcher.prototype.on.call(target, eventName, fn, useCapture);
+        return _me;
     }
 
     trigger(target, eventName, event) {
@@ -139,14 +136,15 @@ export default class EventDispatcher {
         }
 
         let handlers = target && target.handlers;
-
         if (!handlers) {
             return _me;
         }
 
         let callbacks = handlers[eventName] ? handlers[eventName] : [];
+        if (!callbacks.length) {
+            return _me;
+        }
 
-        //自定义事件trigger的时候需要修正target和currentTarget
         let ev = event || {};
         if (ev.target === null) {
             ev.target = ev.currentTarget = target;
@@ -154,7 +152,6 @@ export default class EventDispatcher {
 
         ev = _me._fixEvent(ev);
 
-        // 此处分开冒泡阶段函数和捕获阶段函数
         let parent = target.parent || target.parentNode;
         let handlerList = {
             propagations: [],
@@ -189,7 +186,6 @@ export default class EventDispatcher {
             parent = parent.parent || parent.parentNode;
         }
 
-        // 捕获阶段的模拟
         let useCaptures = handlerList.useCaptures;
         let prevTarget = null;
         ev.eventPhase = 0;
@@ -213,7 +209,6 @@ export default class EventDispatcher {
             isUseCapturePhaseStopped = ev.isImmediatePropagationStopped() || ev.isPropagationStopped();
         }
 
-        // 目标阶段
         ev.eventPhase = 1;
         for (let i = 0, len = callbacks.length; i < len; i += 1) {
             let item = callbacks[i];
@@ -224,7 +219,6 @@ export default class EventDispatcher {
             }
         }
 
-        // 冒泡的模拟
         let propagations = handlerList.propagations;
         prevTarget = null;
         ev.eventPhase = 2;

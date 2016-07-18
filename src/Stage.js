@@ -18,17 +18,17 @@ export default class Stage extends DisplayObjectContainer {
         this.ctx = this.domElem.getContext('2d');
 
         let offset = this._getOffset();
-        this._x = offset.left;
-        this._y = offset.top;
+        this.x = offset.left;
+        this.y = offset.top;
 
-        this.initialize();
+        this._initialize();
 
         if (typeof fn === 'function') {
             fn(this);
         }
     }
 
-    initialize() {
+    _initialize() {
         let _me = this;
 
         Util.each(MouseEvent.nameList, (eventName) => {
@@ -40,10 +40,12 @@ export default class Stage extends DisplayObjectContainer {
 
         Util.each(KeyboardEvent.nameList, (eventName) => {
             eventName = KeyboardEvent[eventName];
-            EventDispatcher.prototype.off.call(_me, document, eventName, (event) => {
+            EventDispatcher.prototype.on.call(_me, document, eventName, (event) => {
                 _me._keyboardEvent(event);
             });
         }, false);
+
+        _me.show(_me._matrix);
 
         Timer.add(_me);
         Timer.start();
@@ -60,8 +62,7 @@ export default class Stage extends DisplayObjectContainer {
     }
 
     tick() {
-        let _me = this;
-        _me.show(_me._matrix);
+        this.show(this._matrix);
     }
 
     addChild(child) {

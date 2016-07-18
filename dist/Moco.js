@@ -305,7 +305,7 @@ var Animate = (function () {
 exports['default'] = Animate;
 module.exports = exports['default'];
 
-},{"./Easing":6,"./Timer":22,"./Util":26}],2:[function(require,module,exports){
+},{"./Easing":6,"./Timer":23,"./Util":27}],2:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -366,13 +366,14 @@ var Bitmap = (function (_DisplayObject) {
 
             var _me = this;
             var ctx = _me.ctx || _me.stage.ctx;
+            var bitmapData = _me._bitmapData;
+            var source = bitmapData._source;
 
-            matrix = _me._bitmapData._matrix.getMatrix();
-
-            if (_me._bitmapData._source) {
+            if (source) {
                 ctx.save();
+                matrix = bitmapData._matrix.getMatrix();
                 ctx.transform(matrix[0], matrix[1], matrix[3], matrix[4], matrix[6], matrix[7]);
-                ctx.drawImage(_me._bitmapData._source, 0, 0);
+                ctx.drawImage(source, 0, 0);
                 ctx.restore();
             }
 
@@ -442,7 +443,7 @@ var Bitmap = (function (_DisplayObject) {
 exports['default'] = Bitmap;
 module.exports = exports['default'];
 
-},{"./DisplayObject":4,"./Global":9,"./Matrix3":16,"./Util":26,"./Vec3":27}],3:[function(require,module,exports){
+},{"./DisplayObject":4,"./Global":9,"./Matrix3":16,"./Util":27,"./Vec3":28}],3:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -936,7 +937,7 @@ var DisplayObject = (function (_EventDispatcher) {
 exports['default'] = DisplayObject;
 module.exports = exports['default'];
 
-},{"./Event":7,"./EventDispatcher":8,"./Global":9,"./Matrix3":16,"./Util":26}],5:[function(require,module,exports){
+},{"./Event":7,"./EventDispatcher":8,"./Global":9,"./Matrix3":16,"./Util":27}],5:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -1163,7 +1164,7 @@ var DisplayObjectContainer = (function (_InteractiveObject) {
 exports['default'] = DisplayObjectContainer;
 module.exports = exports['default'];
 
-},{"./DisplayObject":4,"./Event":7,"./Global":9,"./InteractiveObject":11,"./Matrix3":16,"./Util":26,"./Vec3":27}],6:[function(require,module,exports){
+},{"./DisplayObject":4,"./Event":7,"./Global":9,"./InteractiveObject":11,"./Matrix3":16,"./Util":27,"./Vec3":28}],6:[function(require,module,exports){
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
@@ -1244,7 +1245,6 @@ var EventDispatcher = (function () {
 
             if (eventName && callback) {
                 useCapture = useCapture ? useCapture : false;
-
                 if (_Util2['default'].isType(eventName, 'Array')) {
                     _Util2['default'].each(eventName, function (item) {
                         EventDispatcher.prototype.on.call(_me, item, callback, useCapture);
@@ -1313,7 +1313,6 @@ var EventDispatcher = (function () {
                     });
                 } else if (!callback) {
                     var handlers = target.handlers;
-
                     if (handlers) {
                         var callbacks = handlers[eventName] ? handlers[eventName] : [];
                         _Util2['default'].each(callbacks, function (item) {
@@ -1322,7 +1321,6 @@ var EventDispatcher = (function () {
                     }
                 } else {
                     var handlers = target.handlers;
-
                     if (handlers) {
                         var fnStr = callback._fnStr ? callback._fnStr : callback.toString().replace(_Global2['default'].fnRegExp, '');
                         var callbacks = handlers[eventName] ? handlers[eventName] : [];
@@ -1356,21 +1354,21 @@ var EventDispatcher = (function () {
                 callback.call(_me, event);
 
                 if (event.isImmediatePropagationStopped()) {
-                    _me.off(target, eventName, fn);
+                    EventDispatcher.prototype.off.call(target, eventName, fn);
                 }
 
                 if (useCapture) {
                     if (event.eventPhase === 0) {
-                        _me.off(target, eventName, fn);
+                        EventDispatcher.prototype.off.call(target, eventName, fn);
                     }
                 } else {
-                    _me.off(target, eventName, fn);
+                    EventDispatcher.prototype.off.call(target, eventName, fn);
                 }
             };
 
             fn._fnStr = callback.toString().replace(_Global2['default'].fnRegExp, '');
-
-            return _me.on(target, eventName, fn, useCapture);
+            EventDispatcher.prototype.on.call(target, eventName, fn, useCapture);
+            return _me;
         }
     }, {
         key: 'trigger',
@@ -1387,14 +1385,15 @@ var EventDispatcher = (function () {
             }
 
             var handlers = target && target.handlers;
-
             if (!handlers) {
                 return _me;
             }
 
             var callbacks = handlers[eventName] ? handlers[eventName] : [];
+            if (!callbacks.length) {
+                return _me;
+            }
 
-            //自定义事件trigger的时候需要修正target和currentTarget
             var ev = event || {};
             if (ev.target === null) {
                 ev.target = ev.currentTarget = target;
@@ -1402,7 +1401,6 @@ var EventDispatcher = (function () {
 
             ev = _me._fixEvent(ev);
 
-            // 此处分开冒泡阶段函数和捕获阶段函数
             var parent = target.parent || target.parentNode;
             var handlerList = {
                 propagations: [],
@@ -1437,7 +1435,6 @@ var EventDispatcher = (function () {
                 parent = parent.parent || parent.parentNode;
             }
 
-            // 捕获阶段的模拟
             var useCaptures = handlerList.useCaptures;
             var prevTarget = null;
             ev.eventPhase = 0;
@@ -1460,7 +1457,6 @@ var EventDispatcher = (function () {
                 isUseCapturePhaseStopped = ev.isImmediatePropagationStopped() || ev.isPropagationStopped();
             }
 
-            // 目标阶段
             ev.eventPhase = 1;
             for (var i = 0, len = callbacks.length; i < len; i += 1) {
                 var item = callbacks[i];
@@ -1471,7 +1467,6 @@ var EventDispatcher = (function () {
                 }
             }
 
-            // 冒泡的模拟
             var propagations = handlerList.propagations;
             prevTarget = null;
             ev.eventPhase = 2;
@@ -1586,7 +1581,7 @@ var EventDispatcher = (function () {
 exports['default'] = EventDispatcher;
 module.exports = exports['default'];
 
-},{"./Global":9,"./Util":26}],9:[function(require,module,exports){
+},{"./Global":9,"./Util":27}],9:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -1651,7 +1646,7 @@ var Global = (function () {
 exports['default'] = Global;
 module.exports = exports['default'];
 
-},{"./Vec3":27}],10:[function(require,module,exports){
+},{"./Vec3":28}],10:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -1729,7 +1724,7 @@ var InteractiveEvent = (function () {
 exports['default'] = InteractiveEvent;
 module.exports = exports['default'];
 
-},{"./EventDispatcher":8,"./Util":26}],11:[function(require,module,exports){
+},{"./EventDispatcher":8,"./Util":27}],11:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -1774,26 +1769,36 @@ var InteractiveObject = (function (_DisplayObject) {
         key: 'on',
         value: function on(eventName, callback, useCapture) {
             var _me = this;
-            var eventNameUpperCase = eventName.toUpperCase();
+            if (arguments.length > 1) {
+                var eventNameUpperCase = eventName.toUpperCase();
+                if (_Util2['default'].inArray(eventNameUpperCase, _MouseEvent2['default'].nameList) !== -1) {
+                    _MouseEvent2['default'].add(eventName, _me);
+                } else if (_Util2['default'].inArray(eventNameUpperCase, _KeyboardEvent2['default'].nameList) !== -1) {
+                    _KeyboardEvent2['default'].add(eventName, _me);
+                }
 
-            if (_Util2['default'].inArray(eventNameUpperCase, _MouseEvent2['default'].nameList) !== -1) {
-                _MouseEvent2['default'].add(eventName, _me);
-            } else if (_Util2['default'].inArray(eventNameUpperCase, _KeyboardEvent2['default'].nameList) !== -1) {
-                _KeyboardEvent2['default'].add(eventName, _me);
+                _get(Object.getPrototypeOf(InteractiveObject.prototype), 'on', this).call(this, _me, eventName, callback, useCapture);
             }
-
-            _get(Object.getPrototypeOf(InteractiveObject.prototype), 'on', this).call(this, _me, eventName, callback, useCapture);
         }
     }, {
         key: 'off',
         value: function off(eventName, callback) {
             var _me = this;
-            var eventNameUpperCase = eventName.toUpperCase();
 
-            if (_Util2['default'].inArray(eventNameUpperCase, _MouseEvent2['default'].nameList) !== -1) {
-                _MouseEvent2['default'].remove(eventName, _me);
-            } else if (_Util2['default'].inArray(eventNameUpperCase, _KeyboardEvent2['default'].nameList) !== -1) {
-                _KeyboardEvent2['default'].remove(eventName, _me);
+            if (arguments.length) {
+                var eventNameUpperCase = eventName.toUpperCase();
+                if (_Util2['default'].inArray(eventNameUpperCase, _MouseEvent2['default'].nameList) !== -1) {
+                    _MouseEvent2['default'].remove(eventName, _me);
+                } else if (_Util2['default'].inArray(eventNameUpperCase, _KeyboardEvent2['default'].nameList) !== -1) {
+                    _KeyboardEvent2['default'].remove(eventName, _me);
+                }
+            } else {
+                _Util2['default'].each(_MouseEvent2['default'].nameList, function (item) {
+                    _MouseEvent2['default'].remove(item, _me);
+                });
+                _Util2['default'].each(_KeyboardEvent2['default'].nameList, function (item) {
+                    _KeyboardEvent2['default'].remove(item, _me);
+                });
             }
 
             _get(Object.getPrototypeOf(InteractiveObject.prototype), 'off', this).call(this, _me, eventName, callback);
@@ -1806,7 +1811,7 @@ var InteractiveObject = (function (_DisplayObject) {
 exports['default'] = InteractiveObject;
 module.exports = exports['default'];
 
-},{"./DisplayObject":4,"./KeyboardEvent":12,"./MouseEvent":17,"./Util":26}],12:[function(require,module,exports){
+},{"./DisplayObject":4,"./KeyboardEvent":12,"./MouseEvent":17,"./Util":27}],12:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -1866,7 +1871,7 @@ for (var key in keyboardEvents) {
 KeyboardEvent.nameList = _Util2['default'].keys(keyboardEvents);
 module.exports = exports['default'];
 
-},{"./InteractiveEvent":10,"./Util":26}],13:[function(require,module,exports){
+},{"./InteractiveEvent":10,"./Util":27}],13:[function(require,module,exports){
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -2035,7 +2040,7 @@ var Loader = (function (_DisplayObjectContainer) {
 exports['default'] = Loader;
 module.exports = exports['default'];
 
-},{"./BitmapData":3,"./DisplayObjectContainer":5,"./LoaderEvent":15,"./Util":26}],15:[function(require,module,exports){
+},{"./BitmapData":3,"./DisplayObjectContainer":5,"./LoaderEvent":15,"./Util":27}],15:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -2318,7 +2323,7 @@ var Matrix3 = (function () {
 exports['default'] = Matrix3;
 module.exports = exports['default'];
 
-},{"./Util":26}],17:[function(require,module,exports){
+},{"./Util":27}],17:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -2401,7 +2406,7 @@ for (var key in mouseEvents) {
 MouseEvent.nameList = _Util2['default'].keys(mouseEvents);
 module.exports = exports['default'];
 
-},{"./InteractiveEvent":10,"./Util":26}],18:[function(require,module,exports){
+},{"./InteractiveEvent":10,"./Util":27}],18:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -2935,7 +2940,7 @@ var Shape = (function (_DisplayObject) {
 exports['default'] = Shape;
 module.exports = exports['default'];
 
-},{"./DisplayObject":4,"./Global":9,"./Matrix3":16,"./Util":26,"./Vec3":27}],19:[function(require,module,exports){
+},{"./DisplayObject":4,"./Global":9,"./Matrix3":16,"./Util":27,"./Vec3":28}],19:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -3130,10 +3135,10 @@ var Stage = (function (_DisplayObjectContainer) {
         this.ctx = this.domElem.getContext('2d');
 
         var offset = this._getOffset();
-        this._x = offset.left;
-        this._y = offset.top;
+        this.x = offset.left;
+        this.y = offset.top;
 
-        this.initialize();
+        this._initialize();
 
         if (typeof fn === 'function') {
             fn(this);
@@ -3141,8 +3146,8 @@ var Stage = (function (_DisplayObjectContainer) {
     }
 
     _createClass(Stage, [{
-        key: 'initialize',
-        value: function initialize() {
+        key: '_initialize',
+        value: function _initialize() {
             var _me = this;
 
             _Util2['default'].each(_MouseEvent2['default'].nameList, function (eventName) {
@@ -3154,10 +3159,12 @@ var Stage = (function (_DisplayObjectContainer) {
 
             _Util2['default'].each(_KeyboardEvent2['default'].nameList, function (eventName) {
                 eventName = _KeyboardEvent2['default'][eventName];
-                _EventDispatcher2['default'].prototype.off.call(_me, document, eventName, function (event) {
+                _EventDispatcher2['default'].prototype.on.call(_me, document, eventName, function (event) {
                     _me._keyboardEvent(event);
                 });
             }, false);
+
+            _me.show(_me._matrix);
 
             _Timer2['default'].add(_me);
             _Timer2['default'].start();
@@ -3175,8 +3182,7 @@ var Stage = (function (_DisplayObjectContainer) {
     }, {
         key: 'tick',
         value: function tick() {
-            var _me = this;
-            _me.show(_me._matrix);
+            this.show(this._matrix);
         }
     }, {
         key: 'addChild',
@@ -3276,21 +3282,314 @@ var Stage = (function (_DisplayObjectContainer) {
 exports['default'] = Stage;
 module.exports = exports['default'];
 
-},{"./DisplayObjectContainer":5,"./EventDispatcher":8,"./KeyboardEvent":12,"./MouseEvent":17,"./Sprite":19,"./Timer":22,"./Util":26,"./Vec3":27}],21:[function(require,module,exports){
-Object.defineProperty(exports, "__esModule", {
-  value: true
+},{"./DisplayObjectContainer":5,"./EventDispatcher":8,"./KeyboardEvent":12,"./MouseEvent":17,"./Sprite":19,"./Timer":23,"./Util":27,"./Vec3":28}],21:[function(require,module,exports){
+Object.defineProperty(exports, '__esModule', {
+    value: true
 });
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var TextField = function TextField() {
-  _classCallCheck(this, TextField);
+var _set = function set(object, property, value, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent !== null) { set(parent, property, value, receiver); } } else if ('value' in desc && desc.writable) { desc.value = value; } else { var setter = desc.set; if (setter !== undefined) { setter.call(receiver, value); } } return value; };
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _InteractiveObject2 = require('./InteractiveObject');
+
+var _InteractiveObject3 = _interopRequireDefault(_InteractiveObject2);
+
+var _TextFieldEvent = require('./TextFieldEvent');
+
+var _TextFieldEvent2 = _interopRequireDefault(_TextFieldEvent);
+
+var _MouseEvent = require('./MouseEvent');
+
+var _MouseEvent2 = _interopRequireDefault(_MouseEvent);
+
+var _EventDispatcher = require('./EventDispatcher');
+
+var _EventDispatcher2 = _interopRequireDefault(_EventDispatcher);
+
+var _Event = require('./Event');
+
+var _Event2 = _interopRequireDefault(_Event);
+
+var TextField = (function (_InteractiveObject) {
+    _inherits(TextField, _InteractiveObject);
+
+    function TextField() {
+        _classCallCheck(this, TextField);
+
+        _get(Object.getPrototypeOf(TextField.prototype), 'constructor', this).call(this);
+        this.name = 'TextField';
+        this._input = this._createInputElement();
+        this._color = 0x000000;
+        this._textAlign = 'left';
+        this._text = '';
+        this._textBaseline = 'middle';
+        this._font = 'arial';
+        this._size = 12;
+        this._wordWrap = false;
+        this._fontHeight = 0;
+        this._areas = [];
+        this._bindEvents();
+    }
+
+    _createClass(TextField, [{
+        key: 'show',
+        value: function show(matrix) {
+            _get(Object.getPrototypeOf(TextField.prototype), 'show', this).call(this, matrix);
+        }
+    }, {
+        key: 'isMouseOn',
+        value: function isMouseOn() {}
+    }, {
+        key: 'getBounds',
+        value: function getBounds() {}
+    }, {
+        key: 'dispose',
+        value: function dispose() {}
+    }, {
+        key: '_bindEvents',
+        value: function _bindEvents() {
+            var _me = this;
+            var DispatcherProtoOnMethod = _EventDispatcher2['default'].prototype.on;
+
+            _me.on(_MouseEvent2['default'].CLICK, function () {});
+
+            DispatcherProtoOnMethod.call(_me._input, _TextFieldEvent2['default'].BLUR, function () {}, false);
+
+            DispatcherProtoOnMethod.call(_me._input, _TextFieldEvent2['default'].CHANGE, function () {}, false);
+
+            _me.on(_Event2['default'].ADD_TO_STAGE, function () {
+                _me._compute();
+            });
+        }
+    }, {
+        key: '_createInputElement',
+        value: function _createInputElement() {
+            var _me = this;
+            var $input = document.createElement('INPUT');
+
+            $input.style.font = _me.size + 'px ' + _me.font;
+            $input.style.width = '0px';
+            $input.style.height = '0px';
+            $input.style.position = 'absolute';
+            $input.style.top = '0px';
+            $input.style.left = '0px';
+            $input.style.display = 'none';
+
+            document.body.appendChild($input);
+
+            return $input;
+        }
+    }, {
+        key: '_compute',
+        value: function _compute() {
+            var _me = this;
+            _me._fontHeight = _me._computeFontHeight();
+            if (_me._wordWrap) {
+                _me._areas = _me._computeAreas();
+            } else {
+                _me._areas = [];
+            }
+        }
+    }, {
+        key: '_computeFontHeight',
+        value: function _computeFontHeight() {
+            var _me = this;
+            var $span = document.createElement('span');
+            $span.innerHTML = 'Hg';
+            $span.style.font = _me.size + 'px ' + _me.font;
+
+            var $block = document.createElement('div');
+            $block.style.display = 'inline-block';
+            $block.style.width = '1px';
+            $block.style.height = '0px';
+
+            var $container = document.createElement('div');
+            $container.appendChild($span);
+            $container.appendChild($block);
+
+            document.body.appendChild($container);
+
+            var height = -1;
+            try {
+                $block.style.verticalAlign = 'bottom';
+                height = $block.offsetTop - $span.offsetTop;
+            } finally {
+                document.body.removeChild($container);
+            }
+
+            return height;
+        }
+    }, {
+        key: '_computeAreas',
+        value: function _computeAreas() {
+            var _me = this;
+            var cache = {};
+            var ctx = _me.ctx || _me.stage.ctx;
+            var text = _me._text;
+            var tWidth = _me._width;
+            var count = 0;
+            var areas = [];
+
+            for (var i = 0, len = text.length; i < len; i += 1) {
+                var char = text.charAt(i);
+                var width = 0;
+
+                if (char === '\n') {
+                    count = 0;
+                    areas.push(i);
+                    continue;
+                }
+
+                if (cache[char]) {
+                    width = cache[char];
+                } else {
+                    width = ctx.measureText(char).width;
+                }
+
+                count += width;
+                if (count >= tWidth) {
+                    count = 0;
+                    areas.push(i);
+                }
+            }
+
+            return areas;
+        }
+    }, {
+        key: 'color',
+        get: function get() {
+            return this._color;
+        },
+        set: function set(color) {
+            var _me = this;
+            _me._color = color;
+            _me._input.style.color = color;
+        }
+    }, {
+        key: 'textAlign',
+        get: function get() {
+            return this._textAlign;
+        },
+        set: function set(textAlign) {
+            var _me = this;
+            _me._textAlign = textAlign;
+            _me._input.style.textAlign = textAlign;
+        }
+    }, {
+        key: 'textBaseline',
+        get: function get() {
+            return this._textBaseline;
+        },
+        set: function set(textBaseline) {
+            var _me = this;
+            _me._textBaseline = textBaseline;
+            _me._input.style.verticalAlign = textBaseline;
+        }
+    }, {
+        key: 'size',
+        get: function get() {
+            return this._size;
+        },
+        set: function set(size) {
+            var _me = this;
+            _me._size = size;
+            _me._input.style.font = size + 'px ' + _me._font;
+            if (_me._addedToStage) {
+                _me._compute();
+            }
+        }
+    }, {
+        key: 'font',
+        get: function get() {
+            return this._font;
+        },
+        set: function set(font) {
+            var _me = this;
+            _me._font = font;
+            _me._input.style.font = _me.size + 'px ' + font;
+            if (_me._addedToStage) {
+                _me._compute();
+            }
+        }
+    }, {
+        key: 'wordWrap',
+        get: function get() {
+            return this._wordWrap;
+        },
+        set: function set(wordWrap) {
+            var _me = this;
+            _me._wordWrap = wordWrap;
+            if (_me._addedToStage) {
+                _me._compute();
+            }
+        }
+    }, {
+        key: 'text',
+        get: function get() {
+            return this._text;
+        },
+        set: function set(text) {
+            var _me = this;
+            _me._text = text.replace('\r\n', '\n');
+            if (_me._addedToStage) {
+                _me._compute();
+            }
+        }
+
+        // jshint ignore: start
+
+    }, {
+        key: 'width',
+        set: function set(width) {
+            this._width = width;
+            this._input.style.width = width + 'px';
+        }
+    }, {
+        key: 'height',
+        set: function set(height) {
+            this._height = height;
+            this._input.style.height = height + 'px';
+        }
+    }, {
+        key: 'rotate',
+        set: function set(rotate) {
+            _set(Object.getPrototypeOf(TextField.prototype), 'rotate', rotate, this);
+            if (rotate % 360 !== 0) {
+                this.visible = false;
+            }
+        }
+
+        // jshint ignore: end
+
+    }]);
+
+    return TextField;
+})(_InteractiveObject3['default']);
+
+exports['default'] = TextField;
+module.exports = exports['default'];
+
+},{"./Event":7,"./EventDispatcher":8,"./InteractiveObject":11,"./MouseEvent":17,"./TextFieldEvent":22}],22:[function(require,module,exports){
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+exports['default'] = {
+    'FOCUS': 'focus',
+    'BLUR': 'blur',
+    'CHANGE': 'change'
 };
+module.exports = exports['default'];
 
-exports["default"] = TextField;
-module.exports = exports["default"];
-
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -3401,25 +3700,25 @@ var Timer = (function () {
     }, {
         key: '_raf',
         value: function _raf() {
-            var _me = this;
-            var callback = function callback() {
-                var list = _me._list;
-                for (var i = 0, len = list.length; i < len; i += 1) {
-                    var item = list[i];
-                    if (item.tick) {
-                        item.tick();
-                    }
-                }
-                _me._raf();
-            };
-
-            _me._timer = _me._requestAnimationFrame.call(window, callback);
+            this._timer = this._requestAnimationFrame.call(window, this._callback.bind(this));
         }
     }, {
         key: '_craf',
         value: function _craf() {
+            this._cancelAnimationFrame.call(window, this._timer);
+        }
+    }, {
+        key: '_callback',
+        value: function _callback() {
             var _me = this;
-            _me._cancelAnimationFrame.call(window, _me._timer);
+            var list = _me._list;
+            for (var i = 0, len = list.length; i < len; i += 1) {
+                var item = list[i];
+                if (item.tick) {
+                    item.tick();
+                }
+            }
+            _me._raf();
         }
     }, {
         key: 'isStoped',
@@ -3478,7 +3777,7 @@ var Timer = (function () {
 exports['default'] = Timer;
 module.exports = exports['default'];
 
-},{"./Util":26}],23:[function(require,module,exports){
+},{"./Util":27}],24:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -3649,7 +3948,7 @@ var URLLoader = (function (_EventDispatcher) {
 exports['default'] = URLLoader;
 module.exports = exports['default'];
 
-},{"./EventDispatcher":8,"./URLLoaderEvent":24,"./Util":26}],24:[function(require,module,exports){
+},{"./EventDispatcher":8,"./URLLoaderEvent":25,"./Util":27}],25:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -3659,7 +3958,7 @@ exports['default'] = {
 };
 module.exports = exports['default'];
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -3679,7 +3978,7 @@ var URLRequest = function URLRequest(url) {
 exports['default'] = URLRequest;
 module.exports = exports['default'];
 
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -3911,7 +4210,7 @@ var Util = (function () {
 exports['default'] = Util;
 module.exports = exports['default'];
 
-},{}],27:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -4197,4 +4496,4 @@ exports['default'] = {
 };
 module.exports = exports['default'];
 
-},{"./Animate":1,"./Bitmap":2,"./BitmapData":3,"./DisplayObject":4,"./DisplayObjectContainer":5,"./Easing":6,"./Event":7,"./EventDispatcher":8,"./InteractiveEvent":10,"./InteractiveObject":11,"./KeyboardEvent":12,"./Label":13,"./Loader":14,"./LoaderEvent":15,"./Matrix3":16,"./MouseEvent":17,"./Shape":18,"./Sprite":19,"./Stage":20,"./TextField":21,"./Timer":22,"./URLLoader":23,"./URLLoaderEvent":24,"./URLRequest":25,"./Util":26,"./Vec3":27}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,"Moco",17,18,19,20,21,22,23,24,25,26,27]);
+},{"./Animate":1,"./Bitmap":2,"./BitmapData":3,"./DisplayObject":4,"./DisplayObjectContainer":5,"./Easing":6,"./Event":7,"./EventDispatcher":8,"./InteractiveEvent":10,"./InteractiveObject":11,"./KeyboardEvent":12,"./Label":13,"./Loader":14,"./LoaderEvent":15,"./Matrix3":16,"./MouseEvent":17,"./Shape":18,"./Sprite":19,"./Stage":20,"./TextField":21,"./Timer":23,"./URLLoader":24,"./URLLoaderEvent":25,"./URLRequest":26,"./Util":27,"./Vec3":28}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,"Moco",17,18,19,20,21,22,23,24,25,26,27,28]);

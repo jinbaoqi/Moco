@@ -66,7 +66,7 @@ export default class DisplayObject extends EventDispatcher {
             mask.show(matrix);
             ctx.clip();
         }
-        
+
         if (_me.globalCompositeOperation !== '') {
             ctx.globalCompositeOperation = _me.globalCompositeOperation;
         }

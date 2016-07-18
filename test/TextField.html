@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <script src="../dist/Moco.js"></script>
+</head>
+<body>
+<div id="wrap1" style="position:absolute;top:0;left:0;width:1000px;height:1000px;overflow: hidden;">
+    <div id="wrap2" style="position:absolute;top:0;left:0;width:400px;height:300px;overflow:hidden;">
+        <canvas id="canvas" width="800" height="600"></canvas>
+    </div>
+</div>
+<script>
+    var Moco = require("Moco");
+    var stage = new Moco.Stage("canvas");
+    var textField = new Moco.TextField;
+    textField.size = 32;
+    textField.width = 50;
+    textField.height = 100;
+    textField.text = "你们好啊!我就是来测试一下!你们好啊!我就是来测试一下!你们好啊!我就是来测试一下!你们好啊!我就是来测试一下!";
+    textField.wordWrap = true;
+    stage.addChild(textField);
+    textField.on(Moco.Event.ADD_TO_STAGE, function () {
+        console.log(this._fontHeight);
+        console.log(this._areas);
+    });
+</script>
+</body>
+</html>

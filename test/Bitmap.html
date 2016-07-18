@@ -40,12 +40,13 @@
         mask.globalCompositeOperation = "destination-in";
         mask.apha = 0.8;
 
-        for (var i = 0; i < 1000; i++) {
+        for (var i = 0; i < 666; i++) {
             var sprite = new Moco.Sprite();
             sprite.addChild(bm);
             stage.addChild(sprite);
-
-            animate();
+            sprite.once(Moco.Event.ADD_TO_STAGE, function () {
+                animate();
+            });
 
             function animate() {
                 Moco.Animate.to(mask, {

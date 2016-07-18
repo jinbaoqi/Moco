@@ -24,13 +24,14 @@ export default class Bitmap extends DisplayObject {
 
         let _me = this;
         let ctx = _me.ctx || _me.stage.ctx;
+        let bitmapData = _me._bitmapData;
+        let source = bitmapData._source;
 
-        matrix = _me._bitmapData._matrix.getMatrix();
-
-        if (_me._bitmapData._source) {
+        if (source) {
             ctx.save();
+            matrix = bitmapData._matrix.getMatrix();
             ctx.transform(matrix[0], matrix[1], matrix[3], matrix[4], matrix[6], matrix[7]);
-            ctx.drawImage(_me._bitmapData._source, 0, 0);
+            ctx.drawImage(source, 0, 0);
             ctx.restore();
         }
 
