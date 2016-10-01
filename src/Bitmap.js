@@ -45,9 +45,9 @@ export default class Bitmap extends DisplayObject {
         let inverse = Matrix3.inverse(matrix);
         let area = [
             [0, 0],
-            [_me.width, 0],
-            [_me.width, _me.height],
-            [0, _me.height]
+            [_me._width, 0],
+            [_me._width, _me._height],
+            [0, _me._height]
         ];
 
         vec.multiMatrix3(inverse);
@@ -62,9 +62,9 @@ export default class Bitmap extends DisplayObject {
         let ey = Global.minNumber;
         let area = [
             [0, 0],
-            [_me.width, 0],
-            [_me.width, _me.height],
-            [0, _me.height]
+            [_me._width, 0],
+            [_me._width, _me._height],
+            [0, _me._height]
         ];
 
         let matrix = _me._matrix.multi(_me._bitmapData._matrix);

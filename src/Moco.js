@@ -20,7 +20,6 @@ import BitmapData from './BitmapData';
 import URLLoaderEvent from './URLLoaderEvent';
 import URLLoader from './URLLoader';
 import URLRequest from './URLRequest';
-import TextField from './TextField';
 import Label from './Label';
 import Easing from './Easing';
 import Animate from './Animate';
@@ -48,7 +47,6 @@ export default {
     URLLoaderEvent: URLLoaderEvent,
     URLLoader: URLLoader,
     URLRequest: URLRequest,
-    TextField: TextField,
     Label: Label,
     Easing: Easing,
     Animate: Animate

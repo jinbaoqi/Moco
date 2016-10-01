@@ -20,17 +20,22 @@
 <script>
     var Moco = require("Moco");
     var stage = new Moco.Stage("canvas");
-    var textField = new Moco.TextField;
-    textField.size = 32;
-    textField.width = 50;
-    textField.height = 100;
-    textField.text = "你们好啊!我就是来测试一下!你们好啊!我就是来测试一下!你们好啊!我就是来测试一下!你们好啊!我就是来测试一下!";
-    textField.wordWrap = true;
-    stage.addChild(textField);
-    textField.on(Moco.Event.ADD_TO_STAGE, function () {
-        console.log(this._fontHeight);
-        console.log(this._areas);
+    var label = new Moco.Label;
+    label.size = 14;
+    label.width = 250;
+    label.height = 200;
+    label.text = "你们好啊!我就是来测试一下!你们好啊!我就是来测试一下!你们好啊!我就是来测试一下!你们好啊!我就是来测试一下!";
+    label.wordWrap = true;
+    label.textAlign = 'left';
+
+    label.on(Moco.MouseEvent.CLICK, function () {
+        label.color = ['#00ff00', '#ff0000', '#0000ff'][Math.floor(Math.random() * 3)];
     });
+    stage.addChild(label);
+
+    var shape = new Moco.Shape;
+    shape.drawRect(1, "#0000ff", [0, 0, 250, 200], false, "#00ff00");
+    stage.addChild(shape);
 </script>
 </body>
 </html>

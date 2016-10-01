@@ -305,7 +305,7 @@ var Animate = (function () {
 exports['default'] = Animate;
 module.exports = exports['default'];
 
-},{"./Easing":6,"./Timer":23,"./Util":27}],2:[function(require,module,exports){
+},{"./Easing":6,"./Timer":22,"./Util":26}],2:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -386,7 +386,7 @@ var Bitmap = (function (_DisplayObject) {
             var vec = new _Vec32['default'](cord.x, cord.y, 1);
             var matrix = _me._matrix.multi(_me._bitmapData._matrix);
             var inverse = _Matrix32['default'].inverse(matrix);
-            var area = [[0, 0], [_me.width, 0], [_me.width, _me.height], [0, _me.height]];
+            var area = [[0, 0], [_me._width, 0], [_me._width, _me._height], [0, _me._height]];
 
             vec.multiMatrix3(inverse);
             return _Util2['default'].pip([vec.x, vec.y], area);
@@ -399,7 +399,7 @@ var Bitmap = (function (_DisplayObject) {
             var ex = _Global2['default'].minNumber;
             var sy = _Global2['default'].maxNumber;
             var ey = _Global2['default'].minNumber;
-            var area = [[0, 0], [_me.width, 0], [_me.width, _me.height], [0, _me.height]];
+            var area = [[0, 0], [_me._width, 0], [_me._width, _me._height], [0, _me._height]];
 
             var matrix = _me._matrix.multi(_me._bitmapData._matrix);
             var vec3s = _Util2['default'].map(area, function (item) {
@@ -441,7 +441,7 @@ var Bitmap = (function (_DisplayObject) {
 exports['default'] = Bitmap;
 module.exports = exports['default'];
 
-},{"./DisplayObject":4,"./Global":9,"./Matrix3":16,"./Util":27,"./Vec3":28}],3:[function(require,module,exports){
+},{"./DisplayObject":4,"./Global":9,"./Matrix3":16,"./Util":26,"./Vec3":27}],3:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -935,7 +935,7 @@ var DisplayObject = (function (_EventDispatcher) {
 exports['default'] = DisplayObject;
 module.exports = exports['default'];
 
-},{"./Event":7,"./EventDispatcher":8,"./Global":9,"./Matrix3":16,"./Util":27}],5:[function(require,module,exports){
+},{"./Event":7,"./EventDispatcher":8,"./Global":9,"./Matrix3":16,"./Util":26}],5:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -1162,7 +1162,7 @@ var DisplayObjectContainer = (function (_InteractiveObject) {
 exports['default'] = DisplayObjectContainer;
 module.exports = exports['default'];
 
-},{"./DisplayObject":4,"./Event":7,"./Global":9,"./InteractiveObject":11,"./Matrix3":16,"./Util":27,"./Vec3":28}],6:[function(require,module,exports){
+},{"./DisplayObject":4,"./Event":7,"./Global":9,"./InteractiveObject":11,"./Matrix3":16,"./Util":26,"./Vec3":27}],6:[function(require,module,exports){
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
@@ -1579,7 +1579,7 @@ var EventDispatcher = (function () {
 exports['default'] = EventDispatcher;
 module.exports = exports['default'];
 
-},{"./Global":9,"./Util":27}],9:[function(require,module,exports){
+},{"./Global":9,"./Util":26}],9:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -1644,7 +1644,7 @@ var Global = (function () {
 exports['default'] = Global;
 module.exports = exports['default'];
 
-},{"./Vec3":28}],10:[function(require,module,exports){
+},{"./Vec3":27}],10:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -1722,7 +1722,7 @@ var InteractiveEvent = (function () {
 exports['default'] = InteractiveEvent;
 module.exports = exports['default'];
 
-},{"./EventDispatcher":8,"./Util":27}],11:[function(require,module,exports){
+},{"./EventDispatcher":8,"./Util":26}],11:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -1809,7 +1809,7 @@ var InteractiveObject = (function (_DisplayObject) {
 exports['default'] = InteractiveObject;
 module.exports = exports['default'];
 
-},{"./DisplayObject":4,"./KeyboardEvent":12,"./MouseEvent":17,"./Util":27}],12:[function(require,module,exports){
+},{"./DisplayObject":4,"./KeyboardEvent":12,"./MouseEvent":17,"./Util":26}],12:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -1869,21 +1869,374 @@ for (var key in keyboardEvents) {
 KeyboardEvent.nameList = _Util2['default'].keys(keyboardEvents);
 module.exports = exports['default'];
 
-},{"./InteractiveEvent":10,"./Util":27}],13:[function(require,module,exports){
-Object.defineProperty(exports, "__esModule", {
-  value: true
+},{"./InteractiveEvent":10,"./Util":26}],13:[function(require,module,exports){
+Object.defineProperty(exports, '__esModule', {
+    value: true
 });
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var Label = function Label() {
-  _classCallCheck(this, Label);
-};
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-exports["default"] = Label;
-module.exports = exports["default"];
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-},{}],14:[function(require,module,exports){
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _InteractiveObject2 = require('./InteractiveObject');
+
+var _InteractiveObject3 = _interopRequireDefault(_InteractiveObject2);
+
+var _Event = require('./Event');
+
+var _Event2 = _interopRequireDefault(_Event);
+
+var _Util = require('./Util');
+
+var _Util2 = _interopRequireDefault(_Util);
+
+var _Matrix3 = require('./Matrix3');
+
+var _Matrix32 = _interopRequireDefault(_Matrix3);
+
+var _Vec3 = require('./Vec3');
+
+var _Vec32 = _interopRequireDefault(_Vec3);
+
+var _Global = require('./Global');
+
+var _Global2 = _interopRequireDefault(_Global);
+
+var Label = (function (_InteractiveObject) {
+    _inherits(Label, _InteractiveObject);
+
+    function Label() {
+        _classCallCheck(this, Label);
+
+        _get(Object.getPrototypeOf(Label.prototype), 'constructor', this).call(this);
+        this.name = 'Label';
+        this._input = this._createInputElement();
+        this._color = '#000000';
+        this._textAlign = 'left';
+        this._text = '';
+        this._textBaseline = 'alphabetic'; // equal to baseline
+        this._font = 'arial';
+        this._size = 12;
+        this._wordWrap = false;
+        this._fontHeight = 0;
+        this._fontAscent = 0;
+        this._fillX = 0;
+        this._areas = [];
+        this._bindEvents();
+    }
+
+    _createClass(Label, [{
+        key: 'show',
+        value: function show(matrix) {
+            var isDrew = _get(Object.getPrototypeOf(Label.prototype), 'show', this).call(this, matrix);
+            if (!isDrew) {
+                return isDrew;
+            }
+
+            var _me = this;
+            var ctx = _me.ctx || _me.stage.ctx;
+
+            ctx.strokeStyle = _me._color;
+            ctx.fillStyle = _me._color;
+            ctx.font = _me._size + 'px ' + _me._font;
+            ctx.textAlign = _me._textAlign;
+            ctx.textBaseline = _me._textBaseline;
+
+            var fontHeight = _me._fontHeight;
+            var fontAscent = _me._fontAscent;
+            var text = _me._text;
+            var areas = _me._areas;
+            for (var i = 1, len = _me._areas.length; i < len; i += 1) {
+                ctx.fillText(text.slice(areas[i - 1], areas[i]), _me._fillX, fontAscent + (i - 1) * fontHeight);
+            }
+
+            ctx.restore();
+
+            return isDrew;
+        }
+    }, {
+        key: 'isMouseOn',
+        value: function isMouseOn(cord) {
+            var _me = this;
+            var vec = new _Vec32['default'](cord.x, cord.y, 1);
+            var inverse = _Matrix32['default'].inverse(_me._matrix);
+            var area = [[0, 0], [_me._width, 0], [_me._width, _me._height], [0, _me._height]];
+
+            vec.multiMatrix3(inverse);
+            return _Util2['default'].pip([vec.x, vec.y], area);
+        }
+    }, {
+        key: 'getBounds',
+        value: function getBounds() {
+            var _me = this;
+            var sx = _Global2['default'].maxNumber;
+            var ex = _Global2['default'].minNumber;
+            var sy = _Global2['default'].maxNumber;
+            var ey = _Global2['default'].minNumber;
+            var area = [[0, 0], [_me._width, 0], [_me._width, _me._height], [0, _me._height]];
+
+            var matrix = _me._matrix;
+            var vec3s = _Util2['default'].map(area, function (item) {
+                var vec = new _Vec32['default'](item[0], item[1], 1);
+                return vec.multiMatrix3(matrix);
+            });
+
+            _Util2['default'].each(vec3s, function (item) {
+                sx = item.x < sx ? item.x : sx;
+                ex = item.x > ex ? item.x : ex;
+                sy = item.y < sy ? item.y : sy;
+                ey = item.y > ey ? item.y : ey;
+            });
+
+            if (sx === _Global2['default'].maxNumber || ex === _Global2['default'].minNumber || sy === _Global2['default'].maxNumber || ey === _Global2['default'].minNumber) {
+                sx = sy = ex = ey = 0;
+            }
+
+            return {
+                sv: new _Vec32['default'](sx, sy, 1),
+                ev: new _Vec32['default'](ex, ey, 1)
+            };
+        }
+    }, {
+        key: '_bindEvents',
+        value: function _bindEvents() {
+            var _me = this;
+            _me.on(_Event2['default'].ADD_TO_STAGE, function () {
+                _me._compute();
+            });
+        }
+    }, {
+        key: '_createInputElement',
+        value: function _createInputElement() {
+            var _me = this;
+            var $input = document.createElement('INPUT');
+
+            $input.style.font = _me._size + 'px ' + _me._font;
+            $input.style.width = '0px';
+            $input.style.height = '0px';
+            $input.style.position = 'absolute';
+            $input.style.top = '0px';
+            $input.style.left = '0px';
+            $input.style.display = 'none';
+
+            document.body.appendChild($input);
+
+            return $input;
+        }
+    }, {
+        key: '_compute',
+        value: function _compute() {
+            var _me = this;
+            var textLen = _me._text.length;
+            _me._computeFontBox();
+            _me._areas = [];
+            if (_me._wordWrap) {
+                _me._areas = _me._areas.concat(0, _me._computeAreas(), textLen);
+            } else {
+                _me._areas.push(0, _me._text.length);
+            }
+        }
+    }, {
+        key: '_computeFontBox',
+        value: function _computeFontBox() {
+            var _me = this;
+            var $span = document.createElement('span');
+            $span.innerHTML = 'Hg';
+            $span.style.font = _me._size + 'px ' + _me._font;
+
+            var $block = document.createElement('div');
+            $block.style.display = 'inline-block';
+            $block.style.width = '1px';
+            $block.style.height = '0px';
+
+            var $container = document.createElement('div');
+            $container.appendChild($span);
+            $container.appendChild($block);
+
+            document.body.appendChild($container);
+
+            try {
+                $block.style.verticalAlign = 'baseline';
+                _me._fontAscent = $block.offsetTop - $span.offsetTop;
+                $block.style.verticalAlign = 'bottom';
+                _me._fontHeight = $block.offsetTop - $span.offsetTop;
+            } finally {
+                document.body.removeChild($container);
+            }
+        }
+    }, {
+        key: '_computeAreas',
+        value: function _computeAreas() {
+            var _me = this;
+            var cache = {};
+            var ctx = _me.ctx || _me.stage.ctx;
+            var text = _me._text;
+            var tWidth = _me._width;
+            var count = 0;
+            var areas = [];
+
+            ctx.strokeStyle = _me._color;
+            ctx.fillStyle = _me._color;
+            ctx.font = _me._size + 'px ' + _me._font;
+            ctx.textAlign = _me._textAlign;
+            ctx.textBaseline = _me._textBaseline;
+
+            for (var i = 0, len = text.length; i < len; i += 1) {
+                var char = text.charAt(i);
+                var width = 0;
+
+                if (char === '\n') {
+                    count = 0;
+                    areas.push(i);
+                    continue;
+                }
+
+                if (cache[char]) {
+                    width = cache[char];
+                } else {
+                    width = ctx.measureText(char).width;
+                }
+
+                count += width;
+                if (count >= tWidth) {
+                    count = 0;
+                    areas.push(i -= 1);
+                }
+            }
+
+            return areas;
+        }
+    }, {
+        key: 'color',
+        get: function get() {
+            return this._color;
+        },
+        set: function set(color) {
+            var _me = this;
+            _me._color = color;
+            _me._input.style.color = color;
+        }
+    }, {
+        key: 'textAlign',
+        get: function get() {
+            return this._textAlign;
+        },
+        set: function set(textAlign) {
+            var _me = this;
+            _me._textAlign = textAlign;
+            _me._input.style.textAlign = textAlign;
+
+            // jshint ignore: start
+            switch (textAlign) {
+                case 'end':
+                case 'right':
+                    _me._fillX = _me._width;
+                    break;
+                case 'center':
+                    _me._fillX = _me._width / 2;
+                    break;
+                case 'start':
+                case 'left':
+                default:
+                    _me._fillX = 0;
+                    break;
+            }
+            // jshint ignore: end
+        }
+    }, {
+        key: 'textBaseline',
+        get: function get() {
+            return this._textBaseline;
+        },
+        set: function set(textBaseline) {
+            var _me = this;
+            _me._textBaseline = textBaseline;
+            _me._input.style.verticalAlign = textBaseline;
+        }
+    }, {
+        key: 'size',
+        get: function get() {
+            return this._size;
+        },
+        set: function set(size) {
+            var _me = this;
+            _me._size = size;
+            _me._input.style.font = size + 'px ' + _me._font;
+            if (_me._addedToStage) {
+                _me._compute();
+            }
+        }
+    }, {
+        key: 'font',
+        get: function get() {
+            return this._font;
+        },
+        set: function set(font) {
+            var _me = this;
+            _me._font = font;
+            _me._input.style.font = _me.size + 'px ' + font;
+            if (_me._addedToStage) {
+                _me._compute();
+            }
+        }
+    }, {
+        key: 'wordWrap',
+        get: function get() {
+            return this._wordWrap;
+        },
+        set: function set(wordWrap) {
+            var _me = this;
+            _me._wordWrap = wordWrap;
+            if (_me._addedToStage) {
+                _me._compute();
+            }
+        }
+    }, {
+        key: 'text',
+        get: function get() {
+            return this._text;
+        },
+        set: function set(text) {
+            var _me = this;
+            _me._text = text.replace('\r\n', '\n');
+            if (_me._addedToStage) {
+                _me._compute();
+            }
+        }
+
+        // jshint ignore: start
+
+    }, {
+        key: 'width',
+        set: function set(width) {
+            this._width = width;
+            this._input.style.width = width + 'px';
+            this.textAlign = this._textAlign;
+        }
+    }, {
+        key: 'height',
+        set: function set(height) {
+            this._height = height;
+            this._input.style.height = height + 'px';
+        }
+
+        // jshint ignore: end
+
+    }]);
+
+    return Label;
+})(_InteractiveObject3['default']);
+
+exports['default'] = Label;
+module.exports = exports['default'];
+
+},{"./Event":7,"./Global":9,"./InteractiveObject":11,"./Matrix3":16,"./Util":26,"./Vec3":27}],14:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -2038,7 +2391,7 @@ var Loader = (function (_DisplayObjectContainer) {
 exports['default'] = Loader;
 module.exports = exports['default'];
 
-},{"./BitmapData":3,"./DisplayObjectContainer":5,"./LoaderEvent":15,"./Util":27}],15:[function(require,module,exports){
+},{"./BitmapData":3,"./DisplayObjectContainer":5,"./LoaderEvent":15,"./Util":26}],15:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -2321,7 +2674,7 @@ var Matrix3 = (function () {
 exports['default'] = Matrix3;
 module.exports = exports['default'];
 
-},{"./Util":27}],17:[function(require,module,exports){
+},{"./Util":26}],17:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -2404,7 +2757,7 @@ for (var key in mouseEvents) {
 MouseEvent.nameList = _Util2['default'].keys(mouseEvents);
 module.exports = exports['default'];
 
-},{"./InteractiveEvent":10,"./Util":27}],18:[function(require,module,exports){
+},{"./InteractiveEvent":10,"./Util":26}],18:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -2938,7 +3291,7 @@ var Shape = (function (_DisplayObject) {
 exports['default'] = Shape;
 module.exports = exports['default'];
 
-},{"./DisplayObject":4,"./Global":9,"./Matrix3":16,"./Util":27,"./Vec3":28}],19:[function(require,module,exports){
+},{"./DisplayObject":4,"./Global":9,"./Matrix3":16,"./Util":26,"./Vec3":27}],19:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -3281,318 +3634,7 @@ var Stage = (function (_DisplayObjectContainer) {
 exports['default'] = Stage;
 module.exports = exports['default'];
 
-},{"./DisplayObjectContainer":5,"./EventDispatcher":8,"./KeyboardEvent":12,"./MouseEvent":17,"./Sprite":19,"./Timer":23,"./Util":27,"./Vec3":28}],21:[function(require,module,exports){
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-var _set = function set(object, property, value, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent !== null) { set(parent, property, value, receiver); } } else if ('value' in desc && desc.writable) { desc.value = value; } else { var setter = desc.set; if (setter !== undefined) { setter.call(receiver, value); } } return value; };
-
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var _InteractiveObject2 = require('./InteractiveObject');
-
-var _InteractiveObject3 = _interopRequireDefault(_InteractiveObject2);
-
-var _TextFieldEvent = require('./TextFieldEvent');
-
-var _TextFieldEvent2 = _interopRequireDefault(_TextFieldEvent);
-
-var _MouseEvent = require('./MouseEvent');
-
-var _MouseEvent2 = _interopRequireDefault(_MouseEvent);
-
-var _EventDispatcher = require('./EventDispatcher');
-
-var _EventDispatcher2 = _interopRequireDefault(_EventDispatcher);
-
-var _Event = require('./Event');
-
-var _Event2 = _interopRequireDefault(_Event);
-
-var TextField = (function (_InteractiveObject) {
-    _inherits(TextField, _InteractiveObject);
-
-    function TextField() {
-        _classCallCheck(this, TextField);
-
-        _get(Object.getPrototypeOf(TextField.prototype), 'constructor', this).call(this);
-        this.name = 'TextField';
-        this._input = this._createInputElement();
-        this._color = 0x000000;
-        this._textAlign = 'left';
-        this._text = '';
-        this._textBaseline = 'middle';
-        this._font = 'arial';
-        this._size = 12;
-        this._wordWrap = false;
-        this._fontHeight = 0;
-        this._areas = [];
-        this._bindEvents();
-    }
-
-    _createClass(TextField, [{
-        key: 'show',
-        value: function show(matrix) {
-            var isDrew = _get(Object.getPrototypeOf(TextField.prototype), 'show', this).call(this, matrix);
-            if (!isDrew) {
-                return isDrew;
-            }
-
-            var _me = this;
-            var ctx = _me.ctx || _me.stage.ctx;
-
-            ctx.strokeStyle = _me._color;
-            ctx.font = _me._size + 'px ' + _me._font;
-            ctx.textAlign = _me._textAlign;
-            ctx.textBaseline = _me._textBaseline;
-
-            ctx.restore();
-
-            return isDrew;
-        }
-    }, {
-        key: 'isMouseOn',
-        value: function isMouseOn() {}
-    }, {
-        key: 'getBounds',
-        value: function getBounds() {}
-    }, {
-        key: 'dispose',
-        value: function dispose() {}
-    }, {
-        key: '_bindEvents',
-        value: function _bindEvents() {
-            var _me = this;
-            var DispatcherProtoOnMethod = _EventDispatcher2['default'].prototype.on;
-
-            _me.on(_MouseEvent2['default'].CLICK, function () {});
-
-            DispatcherProtoOnMethod.call(_me._input, _TextFieldEvent2['default'].BLUR, function () {}, false);
-
-            DispatcherProtoOnMethod.call(_me._input, _TextFieldEvent2['default'].CHANGE, function () {}, false);
-
-            _me.on(_Event2['default'].ADD_TO_STAGE, function () {
-                _me._compute();
-            });
-        }
-    }, {
-        key: '_createInputElement',
-        value: function _createInputElement() {
-            var _me = this;
-            var $input = document.createElement('INPUT');
-
-            $input.style.font = _me.size + 'px ' + _me.font;
-            $input.style.width = '0px';
-            $input.style.height = '0px';
-            $input.style.position = 'absolute';
-            $input.style.top = '0px';
-            $input.style.left = '0px';
-            $input.style.display = 'none';
-
-            document.body.appendChild($input);
-
-            return $input;
-        }
-    }, {
-        key: '_compute',
-        value: function _compute() {
-            var _me = this;
-            _me._fontHeight = _me._computeFontHeight();
-            if (_me._wordWrap) {
-                _me._areas = _me._computeAreas();
-            } else {
-                _me._areas = [];
-            }
-        }
-    }, {
-        key: '_computeFontHeight',
-        value: function _computeFontHeight() {
-            var _me = this;
-            var $span = document.createElement('span');
-            $span.innerHTML = 'Hg';
-            $span.style.font = _me.size + 'px ' + _me.font;
-
-            var $block = document.createElement('div');
-            $block.style.display = 'inline-block';
-            $block.style.width = '1px';
-            $block.style.height = '0px';
-
-            var $container = document.createElement('div');
-            $container.appendChild($span);
-            $container.appendChild($block);
-
-            document.body.appendChild($container);
-
-            var height = -1;
-            try {
-                $block.style.verticalAlign = 'bottom';
-                height = $block.offsetTop - $span.offsetTop;
-            } finally {
-                document.body.removeChild($container);
-            }
-
-            return height;
-        }
-    }, {
-        key: '_computeAreas',
-        value: function _computeAreas() {
-            var _me = this;
-            var cache = {};
-            var ctx = _me.ctx || _me.stage.ctx;
-            var text = _me._text;
-            var tWidth = _me._width;
-            var count = 0;
-            var areas = [];
-
-            for (var i = 0, len = text.length; i < len; i += 1) {
-                var char = text.charAt(i);
-                var width = 0;
-
-                if (char === '\n') {
-                    count = 0;
-                    areas.push(i);
-                    continue;
-                }
-
-                if (cache[char]) {
-                    width = cache[char];
-                } else {
-                    width = ctx.measureText(char).width;
-                }
-
-                count += width;
-                if (count >= tWidth) {
-                    count = 0;
-                    areas.push(i);
-                }
-            }
-
-            return areas;
-        }
-    }, {
-        key: 'color',
-        get: function get() {
-            return this._color;
-        },
-        set: function set(color) {
-            var _me = this;
-            _me._color = color;
-            _me._input.style.color = color;
-        }
-    }, {
-        key: 'textAlign',
-        get: function get() {
-            return this._textAlign;
-        },
-        set: function set(textAlign) {
-            var _me = this;
-            _me._textAlign = textAlign;
-            _me._input.style.textAlign = textAlign;
-        }
-    }, {
-        key: 'textBaseline',
-        get: function get() {
-            return this._textBaseline;
-        },
-        set: function set(textBaseline) {
-            var _me = this;
-            _me._textBaseline = textBaseline;
-            _me._input.style.verticalAlign = textBaseline;
-        }
-    }, {
-        key: 'size',
-        get: function get() {
-            return this._size;
-        },
-        set: function set(size) {
-            var _me = this;
-            _me._size = size;
-            _me._input.style.font = size + 'px ' + _me._font;
-            if (_me._addedToStage) {
-                _me._compute();
-            }
-        }
-    }, {
-        key: 'font',
-        get: function get() {
-            return this._font;
-        },
-        set: function set(font) {
-            var _me = this;
-            _me._font = font;
-            _me._input.style.font = _me.size + 'px ' + font;
-            if (_me._addedToStage) {
-                _me._compute();
-            }
-        }
-    }, {
-        key: 'wordWrap',
-        get: function get() {
-            return this._wordWrap;
-        },
-        set: function set(wordWrap) {
-            var _me = this;
-            _me._wordWrap = wordWrap;
-            if (_me._addedToStage) {
-                _me._compute();
-            }
-        }
-    }, {
-        key: 'text',
-        get: function get() {
-            return this._text;
-        },
-        set: function set(text) {
-            var _me = this;
-            _me._text = text.replace('\r\n', '\n');
-            if (_me._addedToStage) {
-                _me._compute();
-            }
-        }
-
-        // jshint ignore: start
-
-    }, {
-        key: 'width',
-        set: function set(width) {
-            this._width = width;
-            this._input.style.width = width + 'px';
-        }
-    }, {
-        key: 'height',
-        set: function set(height) {
-            this._height = height;
-            this._input.style.height = height + 'px';
-        }
-    }, {
-        key: 'rotate',
-        set: function set(rotate) {
-            _set(Object.getPrototypeOf(TextField.prototype), 'rotate', rotate, this);
-            if (rotate % 360 !== 0) {
-                this.visible = false;
-            }
-        }
-
-        // jshint ignore: end
-
-    }]);
-
-    return TextField;
-})(_InteractiveObject3['default']);
-
-exports['default'] = TextField;
-module.exports = exports['default'];
-
-},{"./Event":7,"./EventDispatcher":8,"./InteractiveObject":11,"./MouseEvent":17,"./TextFieldEvent":22}],22:[function(require,module,exports){
+},{"./DisplayObjectContainer":5,"./EventDispatcher":8,"./KeyboardEvent":12,"./MouseEvent":17,"./Sprite":19,"./Timer":22,"./Util":26,"./Vec3":27}],21:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -3603,7 +3645,7 @@ exports['default'] = {
 };
 module.exports = exports['default'];
 
-},{}],23:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -3791,7 +3833,7 @@ var Timer = (function () {
 exports['default'] = Timer;
 module.exports = exports['default'];
 
-},{"./Util":27}],24:[function(require,module,exports){
+},{"./Util":26}],23:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -3962,7 +4004,7 @@ var URLLoader = (function (_EventDispatcher) {
 exports['default'] = URLLoader;
 module.exports = exports['default'];
 
-},{"./EventDispatcher":8,"./URLLoaderEvent":25,"./Util":27}],25:[function(require,module,exports){
+},{"./EventDispatcher":8,"./URLLoaderEvent":24,"./Util":26}],24:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -3972,7 +4014,7 @@ exports['default'] = {
 };
 module.exports = exports['default'];
 
-},{}],26:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -3992,7 +4034,7 @@ var URLRequest = function URLRequest(url) {
 exports['default'] = URLRequest;
 module.exports = exports['default'];
 
-},{}],27:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -4224,7 +4266,7 @@ var Util = (function () {
 exports['default'] = Util;
 module.exports = exports['default'];
 
-},{}],28:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -4464,10 +4506,6 @@ var _URLRequest = require('./URLRequest');
 
 var _URLRequest2 = _interopRequireDefault(_URLRequest);
 
-var _TextField = require('./TextField');
-
-var _TextField2 = _interopRequireDefault(_TextField);
-
 var _Label = require('./Label');
 
 var _Label2 = _interopRequireDefault(_Label);
@@ -4503,11 +4541,10 @@ exports['default'] = {
     URLLoaderEvent: _URLLoaderEvent2['default'],
     URLLoader: _URLLoader2['default'],
     URLRequest: _URLRequest2['default'],
-    TextField: _TextField2['default'],
     Label: _Label2['default'],
     Easing: _Easing2['default'],
     Animate: _Animate2['default']
 };
 module.exports = exports['default'];
 
-},{"./Animate":1,"./Bitmap":2,"./BitmapData":3,"./DisplayObject":4,"./DisplayObjectContainer":5,"./Easing":6,"./Event":7,"./EventDispatcher":8,"./InteractiveEvent":10,"./InteractiveObject":11,"./KeyboardEvent":12,"./Label":13,"./Loader":14,"./LoaderEvent":15,"./Matrix3":16,"./MouseEvent":17,"./Shape":18,"./Sprite":19,"./Stage":20,"./TextField":21,"./Timer":23,"./URLLoader":24,"./URLLoaderEvent":25,"./URLRequest":26,"./Util":27,"./Vec3":28}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,"Moco",17,18,19,20,21,22,23,24,25,26,27,28]);
+},{"./Animate":1,"./Bitmap":2,"./BitmapData":3,"./DisplayObject":4,"./DisplayObjectContainer":5,"./Easing":6,"./Event":7,"./EventDispatcher":8,"./InteractiveEvent":10,"./InteractiveObject":11,"./KeyboardEvent":12,"./Label":13,"./Loader":14,"./LoaderEvent":15,"./Matrix3":16,"./MouseEvent":17,"./Shape":18,"./Sprite":19,"./Stage":20,"./Timer":22,"./URLLoader":23,"./URLLoaderEvent":24,"./URLRequest":25,"./Util":26,"./Vec3":27}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,"Moco",17,18,19,20,21,22,23,24,25,26,27]);
