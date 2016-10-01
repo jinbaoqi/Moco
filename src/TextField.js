@@ -22,7 +22,24 @@ export default class TextField extends InteractiveObject {
     }
 
     show(matrix) {
-        super.show(matrix);
+        let isDrew = super.show(matrix);
+        if (!isDrew) {
+            return isDrew;
+        }
+
+        let _me = this;
+        let ctx = _me.ctx || _me.stage.ctx;
+
+        ctx.strokeStyle = _me._color;
+        ctx.font = _me._size + 'px ' + _me._font;
+        ctx.textAlign = _me._textAlign;
+        ctx.textBaseline = _me._textBaseline;
+
+        // fill text with area here...
+
+        ctx.restore();
+
+        return isDrew;
     }
 
     isMouseOn() {

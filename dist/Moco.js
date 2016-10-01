@@ -359,9 +359,9 @@ var Bitmap = (function (_DisplayObject) {
     _createClass(Bitmap, [{
         key: 'show',
         value: function show(matrix) {
-            var isShow = _get(Object.getPrototypeOf(Bitmap.prototype), 'show', this).call(this, matrix);
-            if (!isShow) {
-                return isShow;
+            var isDrew = _get(Object.getPrototypeOf(Bitmap.prototype), 'show', this).call(this, matrix);
+            if (!isDrew) {
+                return isDrew;
             }
 
             var _me = this;
@@ -370,16 +370,14 @@ var Bitmap = (function (_DisplayObject) {
             var source = bitmapData._source;
 
             if (source) {
-                ctx.save();
                 matrix = bitmapData._matrix.getMatrix();
                 ctx.transform(matrix[0], matrix[1], matrix[3], matrix[4], matrix[6], matrix[7]);
                 ctx.drawImage(source, 0, 0);
-                ctx.restore();
             }
 
             ctx.restore();
 
-            return isShow;
+            return isDrew;
         }
     }, {
         key: 'isMouseOn',
@@ -2999,20 +2997,21 @@ var Sprite = (function (_DisplayObjectContainer) {
     }, {
         key: 'show',
         value: function show(matrix) {
-            var _me = this;
             var isDrew = _get(Object.getPrototypeOf(Sprite.prototype), 'show', this).call(this, matrix);
+            if (!isDrew) {
+                return isDrew;
+            }
 
-            if (isDrew) {
-                if (_me.graphics && _me.graphics.show) {
-                    _DisplayObject2['default'].prototype.show.call(_me, matrix);
-                    _me.graphics.show(_me._matrix);
-                }
+            var _me = this;
+            if (_me.graphics && _me.graphics.show) {
+                _DisplayObject2['default'].prototype.show.call(_me, matrix);
+                _me.graphics.show(_me._matrix);
+            }
 
-                if (_me._isSaved) {
-                    var ctx = _me.ctx || _me.stage.ctx;
-                    _me._isSaved = false;
-                    ctx.restore();
-                }
+            if (_me._isSaved) {
+                var ctx = _me.ctx || _me.stage.ctx;
+                _me._isSaved = false;
+                ctx.restore();
             }
 
             return isDrew;
@@ -3343,7 +3342,22 @@ var TextField = (function (_InteractiveObject) {
     _createClass(TextField, [{
         key: 'show',
         value: function show(matrix) {
-            _get(Object.getPrototypeOf(TextField.prototype), 'show', this).call(this, matrix);
+            var isDrew = _get(Object.getPrototypeOf(TextField.prototype), 'show', this).call(this, matrix);
+            if (!isDrew) {
+                return isDrew;
+            }
+
+            var _me = this;
+            var ctx = _me.ctx || _me.stage.ctx;
+
+            ctx.strokeStyle = _me._color;
+            ctx.font = _me._size + 'px ' + _me._font;
+            ctx.textAlign = _me._textAlign;
+            ctx.textBaseline = _me._textBaseline;
+
+            ctx.restore();
+
+            return isDrew;
         }
     }, {
         key: 'isMouseOn',

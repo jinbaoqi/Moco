@@ -26,20 +26,21 @@ export default class Sprite extends DisplayObjectContainer {
     }
 
     show(matrix) {
-        let _me = this;
         let isDrew = super.show(matrix);
+        if (!isDrew) {
+            return isDrew;
+        }
 
-        if (isDrew) {
-            if (_me.graphics && _me.graphics.show) {
-                DisplayObject.prototype.show.call(_me, matrix);
-                _me.graphics.show(_me._matrix);
-            }
+        let _me = this;
+        if (_me.graphics && _me.graphics.show) {
+            DisplayObject.prototype.show.call(_me, matrix);
+            _me.graphics.show(_me._matrix);
+        }
 
-            if (_me._isSaved) {
-                let ctx = _me.ctx || _me.stage.ctx;
-                _me._isSaved = false;
-                ctx.restore();
-            }
+        if (_me._isSaved) {
+            let ctx = _me.ctx || _me.stage.ctx;
+            _me._isSaved = false;
+            ctx.restore();
         }
 
         return isDrew;

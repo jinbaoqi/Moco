@@ -17,9 +17,9 @@ export default class Bitmap extends DisplayObject {
     }
 
     show(matrix) {
-        let isShow = super.show(matrix);
-        if (!isShow) {
-            return isShow;
+        let isDrew = super.show(matrix);
+        if (!isDrew) {
+            return isDrew;
         }
 
         let _me = this;
@@ -28,16 +28,14 @@ export default class Bitmap extends DisplayObject {
         let source = bitmapData._source;
 
         if (source) {
-            ctx.save();
             matrix = bitmapData._matrix.getMatrix();
             ctx.transform(matrix[0], matrix[1], matrix[3], matrix[4], matrix[6], matrix[7]);
             ctx.drawImage(source, 0, 0);
-            ctx.restore();
         }
 
         ctx.restore();
 
-        return isShow;
+        return isDrew;
     }
 
     isMouseOn(cord) {

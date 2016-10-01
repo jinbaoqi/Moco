@@ -23,7 +23,7 @@
 
     var loader = new Moco.Loader();
     loader.on(Moco.LoaderEvent.COMPLETE, function (ev) {
-                for (var i = 0; i < 1000; i++) {
+                for (var i = 0; i < 160; i++) {
                     var target = ev.target;
                     var bmd = target.toBitmapData();
                     var bm = new Moco.Bitmap(bmd);
@@ -41,7 +41,7 @@
                                     y: 0,
                                     scaleX: 1,
                                     scaleY: 1,
-                                    rotate: 0
+                                    rotate: 0,
                                 }, {
                                     x: 500,
                                     y: 500,
