@@ -9,7 +9,7 @@
             padding: 0;
         }
     </style>
-    <script src="http://7xp7a9.com1.z0.glb.clouddn.com/Moco.js"></script>
+    <script src="../dist/Moco.js"></script>
 </head>
 <body>
 <div id="wrap1" style="position:absolute;top:0;left:0;background:red;width:1000px;height:1000px;overflow: hidden;">
@@ -23,39 +23,35 @@
 
     var loader = new Moco.Loader();
     loader.on(Moco.LoaderEvent.COMPLETE, function (ev) {
-                for (var i = 0; i < 160; i++) {
-                    var target = ev.target;
-                    var bmd = target.toBitmapData();
-                    var bm = new Moco.Bitmap(bmd);
-                    container.addChild(bm);
+                var target = ev.target;
+                var bmd = target.toBitmapData();
+                var bm = new Moco.Bitmap(bmd);
+                container.addChild(bm);
 
-                    (function (bm) {
-                        Moco.Animate.from(bm, {
-                            x: 800
-                        }, Moco.Easing.easeInOutQuint, 1000, function () {
-                            Moco.Animate.to(bm, {
-                                x: 800
-                            }, Moco.Easing.easeInOutQuart, 1500, function () {
-                                Moco.Animate.fromTo(bm, {
-                                    x: 800,
-                                    y: 0,
-                                    scaleX: 1,
-                                    scaleY: 1,
-                                    rotate: 0,
-                                }, {
-                                    x: 500,
-                                    y: 500,
-                                    scaleX: 0.2,
-                                    scaleY: 0.2,
-                                    rotate: 180
-                                }, Moco.Easing.easeInOutSine, 2000);
-                            });
-                        });
-                    }(bm))
-                }
+                Moco.Animate.from(container, {
+                    x: 800
+                }, Moco.Easing.easeInOutExpo, 1000, function () {
+                    Moco.Animate.to(container, {
+                        x: 800
+                    }, Moco.Easing.easeInOutQuart, 1500, function () {
+                        Moco.Animate.fromTo(container, {
+                            x: 800,
+                            y: 0,
+                            scaleX: 1,
+                            scaleY: 1,
+                            rotate: 0
+                        }, {
+                            x: 500,
+                            y: 500,
+                            scaleX: 0.2,
+                            scaleY: 0.2,
+                            rotate: 180
+                        }, Moco.Easing.easeInOutSine, 2000);
+                    });
+                });
             }
     );
-    loader.load(new Moco.URLRequest("https://ss1.bdstatic.com/5eN1bjq8AAUYm2zgoY3K/r/www/cache/static/protocol/https/home/img/qrcode/nuomi_510f7472.png"));
+    loader.load(new Moco.URLRequest("../images/qr-weixin.png"));
 </script>
 </body>
 </html>
