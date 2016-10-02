@@ -1,3 +1,3 @@
 # Moco.js
 
-Abandoned Already
+THIS LIBRARY IS EXPERIMENT, CreateJS IS A BEST CHOICE TO INSTEAD
