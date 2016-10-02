@@ -2,7 +2,7 @@ import Matrix3 from './Matrix3';
 
 export default class BitmapData {
     constructor(width, height) {
-        let canvas = document.createElement('CANVAS');
+        let canvas = document.createElement('canvas');
         canvas.width = width;
         canvas.height = height;
 

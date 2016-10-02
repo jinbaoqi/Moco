@@ -305,7 +305,7 @@ var Animate = (function () {
 exports['default'] = Animate;
 module.exports = exports['default'];
 
-},{"./Easing":6,"./Timer":22,"./Util":26}],2:[function(require,module,exports){
+},{"./Easing":6,"./Timer":21,"./Util":25}],2:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -354,6 +354,8 @@ var Bitmap = (function (_DisplayObject) {
         _get(Object.getPrototypeOf(Bitmap.prototype), 'constructor', this).call(this);
         this.name = 'Bitmap';
         this._bitmapData = bitmapData;
+        this._height = bitmapData.height || 0;
+        this._width = bitmapData.width || 0;
     }
 
     _createClass(Bitmap, [{
@@ -441,7 +443,7 @@ var Bitmap = (function (_DisplayObject) {
 exports['default'] = Bitmap;
 module.exports = exports['default'];
 
-},{"./DisplayObject":4,"./Global":9,"./Matrix3":16,"./Util":26,"./Vec3":27}],3:[function(require,module,exports){
+},{"./DisplayObject":4,"./Global":9,"./Matrix3":16,"./Util":25,"./Vec3":26}],3:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -460,7 +462,7 @@ var BitmapData = (function () {
     function BitmapData(width, height) {
         _classCallCheck(this, BitmapData);
 
-        var canvas = document.createElement('CANVAS');
+        var canvas = document.createElement('canvas');
         canvas.width = width;
         canvas.height = height;
 
@@ -935,7 +937,7 @@ var DisplayObject = (function (_EventDispatcher) {
 exports['default'] = DisplayObject;
 module.exports = exports['default'];
 
-},{"./Event":7,"./EventDispatcher":8,"./Global":9,"./Matrix3":16,"./Util":26}],5:[function(require,module,exports){
+},{"./Event":7,"./EventDispatcher":8,"./Global":9,"./Matrix3":16,"./Util":25}],5:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -1162,7 +1164,7 @@ var DisplayObjectContainer = (function (_InteractiveObject) {
 exports['default'] = DisplayObjectContainer;
 module.exports = exports['default'];
 
-},{"./DisplayObject":4,"./Event":7,"./Global":9,"./InteractiveObject":11,"./Matrix3":16,"./Util":26,"./Vec3":27}],6:[function(require,module,exports){
+},{"./DisplayObject":4,"./Event":7,"./Global":9,"./InteractiveObject":11,"./Matrix3":16,"./Util":25,"./Vec3":26}],6:[function(require,module,exports){
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
@@ -1579,7 +1581,7 @@ var EventDispatcher = (function () {
 exports['default'] = EventDispatcher;
 module.exports = exports['default'];
 
-},{"./Global":9,"./Util":26}],9:[function(require,module,exports){
+},{"./Global":9,"./Util":25}],9:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -1644,7 +1646,7 @@ var Global = (function () {
 exports['default'] = Global;
 module.exports = exports['default'];
 
-},{"./Vec3":27}],10:[function(require,module,exports){
+},{"./Vec3":26}],10:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -1722,7 +1724,7 @@ var InteractiveEvent = (function () {
 exports['default'] = InteractiveEvent;
 module.exports = exports['default'];
 
-},{"./EventDispatcher":8,"./Util":26}],11:[function(require,module,exports){
+},{"./EventDispatcher":8,"./Util":25}],11:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -1809,7 +1811,7 @@ var InteractiveObject = (function (_DisplayObject) {
 exports['default'] = InteractiveObject;
 module.exports = exports['default'];
 
-},{"./DisplayObject":4,"./KeyboardEvent":12,"./MouseEvent":17,"./Util":26}],12:[function(require,module,exports){
+},{"./DisplayObject":4,"./KeyboardEvent":12,"./MouseEvent":17,"./Util":25}],12:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -1869,7 +1871,7 @@ for (var key in keyboardEvents) {
 KeyboardEvent.nameList = _Util2['default'].keys(keyboardEvents);
 module.exports = exports['default'];
 
-},{"./InteractiveEvent":10,"./Util":26}],13:[function(require,module,exports){
+},{"./InteractiveEvent":10,"./Util":25}],13:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -2236,7 +2238,7 @@ var Label = (function (_InteractiveObject) {
 exports['default'] = Label;
 module.exports = exports['default'];
 
-},{"./Event":7,"./Global":9,"./InteractiveObject":11,"./Matrix3":16,"./Util":26,"./Vec3":27}],14:[function(require,module,exports){
+},{"./Event":7,"./Global":9,"./InteractiveObject":11,"./Matrix3":16,"./Util":25,"./Vec3":26}],14:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -2391,7 +2393,7 @@ var Loader = (function (_DisplayObjectContainer) {
 exports['default'] = Loader;
 module.exports = exports['default'];
 
-},{"./BitmapData":3,"./DisplayObjectContainer":5,"./LoaderEvent":15,"./Util":26}],15:[function(require,module,exports){
+},{"./BitmapData":3,"./DisplayObjectContainer":5,"./LoaderEvent":15,"./Util":25}],15:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -2674,7 +2676,7 @@ var Matrix3 = (function () {
 exports['default'] = Matrix3;
 module.exports = exports['default'];
 
-},{"./Util":26}],17:[function(require,module,exports){
+},{"./Util":25}],17:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -2757,7 +2759,7 @@ for (var key in mouseEvents) {
 MouseEvent.nameList = _Util2['default'].keys(mouseEvents);
 module.exports = exports['default'];
 
-},{"./InteractiveEvent":10,"./Util":26}],18:[function(require,module,exports){
+},{"./InteractiveEvent":10,"./Util":25}],18:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -3291,7 +3293,7 @@ var Shape = (function (_DisplayObject) {
 exports['default'] = Shape;
 module.exports = exports['default'];
 
-},{"./DisplayObject":4,"./Global":9,"./Matrix3":16,"./Util":26,"./Vec3":27}],19:[function(require,module,exports){
+},{"./DisplayObject":4,"./Global":9,"./Matrix3":16,"./Util":25,"./Vec3":26}],19:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -3634,18 +3636,7 @@ var Stage = (function (_DisplayObjectContainer) {
 exports['default'] = Stage;
 module.exports = exports['default'];
 
-},{"./DisplayObjectContainer":5,"./EventDispatcher":8,"./KeyboardEvent":12,"./MouseEvent":17,"./Sprite":19,"./Timer":22,"./Util":26,"./Vec3":27}],21:[function(require,module,exports){
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-exports['default'] = {
-    'FOCUS': 'focus',
-    'BLUR': 'blur',
-    'CHANGE': 'change'
-};
-module.exports = exports['default'];
-
-},{}],22:[function(require,module,exports){
+},{"./DisplayObjectContainer":5,"./EventDispatcher":8,"./KeyboardEvent":12,"./MouseEvent":17,"./Sprite":19,"./Timer":21,"./Util":25,"./Vec3":26}],21:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -3833,7 +3824,7 @@ var Timer = (function () {
 exports['default'] = Timer;
 module.exports = exports['default'];
 
-},{"./Util":26}],23:[function(require,module,exports){
+},{"./Util":25}],22:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -4004,7 +3995,7 @@ var URLLoader = (function (_EventDispatcher) {
 exports['default'] = URLLoader;
 module.exports = exports['default'];
 
-},{"./EventDispatcher":8,"./URLLoaderEvent":24,"./Util":26}],24:[function(require,module,exports){
+},{"./EventDispatcher":8,"./URLLoaderEvent":23,"./Util":25}],23:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -4014,7 +4005,7 @@ exports['default'] = {
 };
 module.exports = exports['default'];
 
-},{}],25:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -4034,7 +4025,7 @@ var URLRequest = function URLRequest(url) {
 exports['default'] = URLRequest;
 module.exports = exports['default'];
 
-},{}],26:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -4266,7 +4257,7 @@ var Util = (function () {
 exports['default'] = Util;
 module.exports = exports['default'];
 
-},{}],27:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
@@ -4547,4 +4538,4 @@ exports['default'] = {
 };
 module.exports = exports['default'];
 
-},{"./Animate":1,"./Bitmap":2,"./BitmapData":3,"./DisplayObject":4,"./DisplayObjectContainer":5,"./Easing":6,"./Event":7,"./EventDispatcher":8,"./InteractiveEvent":10,"./InteractiveObject":11,"./KeyboardEvent":12,"./Label":13,"./Loader":14,"./LoaderEvent":15,"./Matrix3":16,"./MouseEvent":17,"./Shape":18,"./Sprite":19,"./Stage":20,"./Timer":22,"./URLLoader":23,"./URLLoaderEvent":24,"./URLRequest":25,"./Util":26,"./Vec3":27}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,"Moco",17,18,19,20,21,22,23,24,25,26,27]);
+},{"./Animate":1,"./Bitmap":2,"./BitmapData":3,"./DisplayObject":4,"./DisplayObjectContainer":5,"./Easing":6,"./Event":7,"./EventDispatcher":8,"./InteractiveEvent":10,"./InteractiveObject":11,"./KeyboardEvent":12,"./Label":13,"./Loader":14,"./LoaderEvent":15,"./Matrix3":16,"./MouseEvent":17,"./Shape":18,"./Sprite":19,"./Stage":20,"./Timer":21,"./URLLoader":22,"./URLLoaderEvent":23,"./URLRequest":24,"./Util":25,"./Vec3":26}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,"Moco",17,18,19,20,21,22,23,24,25,26]);

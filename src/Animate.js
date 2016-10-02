@@ -24,7 +24,11 @@ export default class Animate {
         }
 
         for (let key in params) {
-            if (params.hasOwnProperty(key) && key !== 'onComplete' && key !== 'onCompleteParam') {
+            if (
+                params.hasOwnProperty(key) &&
+                key !== 'onComplete' &&
+                key !== 'onCompleteParam'
+            ) {
                 let tmp = parseFloat(target[key]);
                 target[key] = params[key];
                 params[key] = tmp;
@@ -47,7 +51,11 @@ export default class Animate {
         }
 
         for (let key in fParams) {
-            if (fParams.hasOwnProperty(key) && key !== 'onComplete' && key !== 'onCompleteParam') {
+            if (
+                fParams.hasOwnProperty(key) &&
+                key !== 'onComplete' &&
+                key !== 'onCompleteParam'
+            ) {
                 target[key] = fParams[key];
             }
         }

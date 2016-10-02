@@ -14,6 +14,8 @@ export default class Bitmap extends DisplayObject {
         super();
         this.name = 'Bitmap';
         this._bitmapData = bitmapData;
+        this._height = bitmapData.height || 0;
+        this._width = bitmapData.width || 0;
     }
 
     show(matrix) {
